@@ -1,0 +1,27 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="50dp"
+    android:viewportWidth="200"
+    android:viewportHeight="100">
+
+    <path
+        android:fillColor="#f98d67"
+        android:pathData="M 8 0 L 200 00 L 185 230 L 1 100 Z" />
+</vector>
+    <!--<vector xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:width="100dp"-->
+    <!--android:height="50dp"-->
+    <!--android:viewportWidth="200"-->
+    <!--android:viewportHeight="100">-->
+
+    <!--<path-->
+    <!--    android:fillColor="#6653cfa5"-->
+    <!--    android:pathData="M 50 0 L 200 0 L 150 100 L 0 100 Z" />-->
+    <!--</vector>-->
+    <!--    android:pathData="M 50 0 L 200 0 L 150 50 L 0 50 Z"-->
+
+    <!--last and second last ones moves the thing to the right-->
+    <!--third/fourth last adjust the parallelogram on the right-->
+    <!--fifth moves the top right corner up and down-->
+    <!--second one moves the left corner up and down-->
+    <!--first one adjust the parallelogram on the left-->
