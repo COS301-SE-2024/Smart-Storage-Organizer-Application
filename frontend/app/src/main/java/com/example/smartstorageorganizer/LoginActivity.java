@@ -45,7 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateForm();
+//                validateForm();
+                Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                startActivity(intent);
             }
         });
 

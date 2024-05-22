@@ -13,9 +13,11 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".ProfileManagementActivity"
             android:exported="false" />
-        <!-- <activity -->
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="false" /> <!-- <activity -->
         <!-- android:name=".LoginActivity" -->
         <!-- android:exported="false" /> -->
         <activity

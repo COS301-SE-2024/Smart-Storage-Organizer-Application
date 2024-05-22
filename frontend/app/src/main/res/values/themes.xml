@@ -22,4 +22,11 @@
         <item name="boxStrokeColor">@color/colorPrimary</item> <!-- Optional: Set the stroke color -->
         <item name="hintTextColor">@color/colorPrimary</item> <!-- Optional: Set the hint text color -->
     </style>
+
+    <style name="RoundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
+
 </resources>
