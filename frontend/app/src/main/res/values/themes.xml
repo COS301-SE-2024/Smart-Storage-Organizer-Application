@@ -10,7 +10,8 @@
     <style name="CustomTextInputOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundMode">outline</item>
         <item name="boxStrokeColor">@color/colorPrimary</item> <!-- Change this to your desired color -->
-        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">1dp</item>
         <item name="boxCornerRadiusTopStart">32dp</item> <!-- Adjust radius as needed -->
         <item name="boxCornerRadiusTopEnd">32dp</item>
         <item name="boxCornerRadiusBottomEnd">32dp</item>
@@ -18,9 +19,10 @@
     </style>
 
     <style name="CustomTextInputFilledBox.White" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="boxBackgroundColor">@android:color/white</item> <!-- Set the box background color to white -->
+        <item name="boxBackgroundColor">@color/background</item> <!-- Set the box background color to white -->
         <item name="boxStrokeColor">@color/colorPrimary</item> <!-- Optional: Set the stroke color -->
         <item name="hintTextColor">@color/colorPrimary</item> <!-- Optional: Set the hint text color -->
+        <item name="boxStrokeErrorColor">@color/red</item>
     </style>
 
     <style name="RoundedCorners">

@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         // If all validations pass
         // Proceed with further logic (e.g., submit data to server)
         Toast.makeText(this, "Form Submitted Successfully", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
     }
 }

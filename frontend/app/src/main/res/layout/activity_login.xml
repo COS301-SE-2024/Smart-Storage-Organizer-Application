@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F2F2F2"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:id="@+id/iconImageView"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/logo_two"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"/>
 
@@ -33,10 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="24dp"
-        android:fontFamily="@font/alfa_slab_one"
+        android:fontFamily="@font/alata"
         android:text="WELCOME"
-        android:textColor="#0C0A0F"
-        android:textSize="48dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="54dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
@@ -46,10 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:fontFamily="@font/alfa_slab_one"
+        android:layout_marginTop="-24dp"
+        android:fontFamily="@font/alata"
         android:text="BACK!"
-        android:textColor="#f98d67"
-        android:textSize="48dp"
+        android:textColor="@color/colorSecondary"
+        android:textSize="54dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcometext" />
@@ -199,7 +200,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginBottom="16dp"
                 android:text="Don't have an account yet? "
-                android:textColor="#05122D"
+                android:textColor="@color/colorSecondary"
                 android:textStyle="bold"
                 android:textSize="13dp"/>
 
@@ -213,7 +214,7 @@
                 android:text="Join Now"
                 android:textStyle="bold"
                 android:clickable="true"
-                android:textColor="#f98d67"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16dp" />
         </LinearLayout>
 
