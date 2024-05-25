@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iconImageView"
+            android:id="@+id/registerBackButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/baseline_arrow_back_24"
@@ -236,7 +236,7 @@
                 android:textSize="13dp"/>
 
             <TextView
-                android:id="@+id/signUpLink"
+                android:id="@+id/loginLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="63dp"

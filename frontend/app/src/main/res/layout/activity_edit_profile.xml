@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/editProfileBackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Edit Profile"
-            android:textColor="@color/black"
+            android:textColor="@color/colorSecondary"
             android:textSize="24dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="John Doe"
-                android:textColor="@color/black"
+                android:textColor="@color/colorSecondary"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -80,6 +80,7 @@
                 android:layout_below="@id/Username"
                 android:text="San Francisco, CA"
                 android:textSize="16dp"
+                android:textColor="@color/gray"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -91,7 +92,7 @@
                 android:background="@drawable/button_border"
                 android:backgroundTint="@color/colorPrimary"
                 android:text="Delete"
-                android:textColor="@color/black" />
+                android:textColor="@color/colorSecondary" />
 
         </RelativeLayout>
 
