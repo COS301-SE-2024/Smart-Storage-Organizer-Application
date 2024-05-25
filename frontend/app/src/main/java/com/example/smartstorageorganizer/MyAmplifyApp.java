@@ -16,6 +16,7 @@ public class MyAmplifyApp extends Application {
         super.onCreate();
 
         try {
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.configure(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
