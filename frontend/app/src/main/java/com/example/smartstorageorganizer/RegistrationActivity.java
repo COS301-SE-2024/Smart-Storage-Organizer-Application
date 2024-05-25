@@ -61,23 +61,23 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
     }
+    public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
+    {
+        ArrayList<AuthUserAttribute> attributes = new ArrayList<AuthUserAttribute>();
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.email(), email));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey. familyName(), Surname));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey. firstName(), Name));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
+
+
+        Amplify.Auth.signUp(
+                email,
+                Password,
+                AuthSignUpOptions.builder().userAttributes(attributes).build(),
+                result -> Log.i("AuthQuickstart", result.toString()),
+                error -> Log.e("AuthQuickstart", error.toString())
+        );
+    }
 }
 
-public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
-{
-    ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey.email(), email));
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey. familyName(), Surname));
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey. firstName(), Name));
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
-
-
-    Amplify.Auth.signUp(
-            email,
-            Password,
-            AuthSignUpOptions.builder().userAttributes(attributes).build(),
-            result -> Log.i("AuthQuickstart", result.toString()),
-            error -> Log.e("AuthQuickstart", error.toString())
-    );
-}
