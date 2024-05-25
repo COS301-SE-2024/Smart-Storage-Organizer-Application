@@ -1,13 +1,13 @@
 {
-  "projectName": "frontend",
+  "providers": [
+    "awscloudformation"
+  ],
+  "projectName": "smart",
   "version": "3.1",
   "frontend": "android",
   "android": {
     "config": {
       "ResDir": "app/src/main/res"
     }
-  },
-  "providers": [
-    "awscloudformation"
-  ]
+  }
 }
