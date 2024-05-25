@@ -63,6 +63,10 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 }
 
+
+
+
+
 public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
 {
     ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
