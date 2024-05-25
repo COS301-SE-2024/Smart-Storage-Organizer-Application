@@ -68,11 +68,14 @@ public void SignUp(String email, String CellNumber, String Name, String Surname,
     ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
     attributes.add(new AuthUserAttribute(AuthUserAttributeKey.email(), email));
     attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
-    attributes.add(new AuthUserAttribute(AuthUserAttributeKey., Name))
+    attributes.add(new AuthUserAttribute(AuthUserAttributeKey. familyName(), Surname));
+    attributes.add(new AuthUserAttribute(AuthUserAttributeKey. firstName(), Name));
+    attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
+
 
     Amplify.Auth.signUp(
-            "username",
-            "Password123",
+            email,
+            Password,
             AuthSignUpOptions.builder().userAttributes(attributes).build(),
             result -> Log.i("AuthQuickstart", result.toString()),
             error -> Log.e("AuthQuickstart", error.toString())
