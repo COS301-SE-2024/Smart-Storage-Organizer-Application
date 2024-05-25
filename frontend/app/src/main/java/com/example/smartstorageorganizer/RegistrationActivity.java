@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
-import com.amplifyframework.core.Amplify;
+//import com.amplifyframework.auth.AuthUserAttribute;
+//import com.amplifyframework.auth.AuthUserAttributeKey;
+//import com.amplifyframework.auth.options.AuthSignUpOptions;
+//import com.amplifyframework.core.Amplify;
 
 import java.util.ArrayList;
 
