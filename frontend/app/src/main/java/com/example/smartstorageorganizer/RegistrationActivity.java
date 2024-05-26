@@ -62,8 +62,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                // Log.i("bonganizungu889@gmail.com "+ "+27864545691"+ "Test1"+ "Subject"+ "856 Ohio"+ "Uber1235#", "");
-                //SignUp("bonganizungu889@gmail.com", "+27864545691", "Test1", "Subject","856 Ohio" , "Uber1235#");
-               // ConfimSignUp("bonganizungu889@gmail.com","138227" );
+                //SignUp("fonew24803@javnoi.com", "+278523697", "Eze", "Testing","" , "Smart301!");
+                //ConfimSignUp("fonew24803@javnoi.com","265892" );
             }
         });
 

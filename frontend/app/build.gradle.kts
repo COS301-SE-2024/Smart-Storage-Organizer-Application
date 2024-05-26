@@ -48,6 +48,5 @@ dependencies {
     implementation("com.amplifyframework.ui:authenticator:1.2.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
-
-
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
 }

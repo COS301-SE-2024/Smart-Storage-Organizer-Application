@@ -16,12 +16,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
+import com.amplifyframework.auth.exceptions.InvalidStateException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import org.json.JSONException;
+import org.json.JSONObject;
+//import com.amplifyframework.auth.result.authResult;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout registerButton;
     TextInputEditText inputLoginEmployeeID;
     TextInputEditText inputLoginPassword;
+
+    String Result;
+    String  Error;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
-                //SignIn("bonganizungu889@gmail.com", "Uber1235#");
+                //JSONObject j=SignIn("fonew24803@javnoi.com", "Smart301!");
+               // Log.i("Testing J", Result);
             }
         });
     }
@@ -100,16 +112,44 @@ public class LoginActivity extends AppCompatActivity {
 //        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //        startActivity(intent);
     }
+    public void SetErrorAndResult(String error, String Result)
+    {
+        this.Error=error;
+        this.Result=Result;
+    }
 
-    public void SignIn(String email, String Password) {
+    public JSONObject SignIn(String email, String Password) {
+
 
         Amplify.Auth.signIn(
                 email,
                 Password,
-                result -> Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete"),
-                error -> Log.e("AuthQuickstart", error.toString())
+                result -> {
+                    Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
+                    if (result.isSignedIn()) {
+                        SetErrorAndResult("","Sign in succeeded");
+                    } else {
+                        SetErrorAndResult("","Sign in not complete Verify Email" );
+                    }
+                },
+                error -> {
+                    Log.e("AuthQuickstart", error.toString());
+                    SetErrorAndResult(error.toString(), "");
+                }
         );
+
+        String Jsonstring="{\"result\": "+Result+", \"error\" : "+Error+"}";
+        JSONObject json=null;
+        try {
+            json = new JSONObject(Jsonstring);
+        }catch(JSONException r){
+            Log.i("Json Error ",r.toString());
+        }
+        //AuthResultCallback callback
+        return json;
     }
+
+
 
 }
 
