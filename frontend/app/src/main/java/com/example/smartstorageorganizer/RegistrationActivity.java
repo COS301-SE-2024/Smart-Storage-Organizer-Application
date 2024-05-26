@@ -61,7 +61,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
                 //startActivity(intent);
                 //finish();
-                SignUp("bonganizungu889@gmail.com", "0586454569", "Test1", "Subject", "856 Ohio", "Uber1235#");
+               // Log.i("bonganizungu889@gmail.com "+ "+27864545691"+ "Test1"+ "Subject"+ "856 Ohio"+ "Uber1235#", "");
+                SignUp("bonganizungu889@gmail.com", "+27864545691", "Test1", "Subject","856 Ohio" , "Uber1235#");
             }
         });
 
@@ -72,20 +73,25 @@ public class RegistrationActivity extends AppCompatActivity {
     public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
     {
         // Add this line, to include the Auth plugin.
-
+        ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), "msiya"));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), "myom"));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "6420 ohio"));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), "+27825641238"));
        // Log.i("AuthQuickstart1", "");
-        AuthSignUpOptions options = AuthSignUpOptions.builder()
-                .userAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber)
-                .userAttribute(AuthUserAttributeKey.name(), Name)
-                .userAttribute(AuthUserAttributeKey.familyName(), Surname)
-                .userAttribute(AuthUserAttributeKey.address(), Address)
-                .build();
-        //Log.i("AuthQuickstart2", "");
+//        AuthSignUpOptions options = AuthSignUpOptions.builder()
+//                .userAttribute(AuthUserAttributeKey.email(), email)
+//                .userAttribute(AuthUserAttributeKey.name(), Name)
+//                .userAttribute(AuthUserAttributeKey.familyName(), Surname)
+//                .userAttribute(AuthUserAttributeKey.address(), Address)
+//                .userAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber)
+//                .build();
+        Log.i("AuthQuickstart2", "");
         try {
             Amplify.Auth.signUp(
                     email,
                     Password,
-                    options,
+                    AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> Log.i("AuthQuickstart", result.toString()),
                     error -> Log.e("AuthQuickstart", error.toString())
             );
@@ -94,7 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         //runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Exception during sign-up: " + e.getMessage(), Toast.LENGTH_SHORT).show());
          }
 
-        //Log.i("AuthQuickstart3", "");
+        Log.i("AuthQuickstart3", "");
     }
 }
 
