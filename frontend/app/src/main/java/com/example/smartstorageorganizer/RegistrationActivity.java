@@ -58,16 +58,28 @@ public class RegistrationActivity extends AppCompatActivity {
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                //startActivity(intent);
-                //finish();
+                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
                // Log.i("bonganizungu889@gmail.com "+ "+27864545691"+ "Test1"+ "Subject"+ "856 Ohio"+ "Uber1235#", "");
-                SignUp("bonganizungu889@gmail.com", "+27864545691", "Test1", "Subject","856 Ohio" , "Uber1235#");
+                //SignUp("bonganizungu889@gmail.com", "+27864545691", "Test1", "Subject","856 Ohio" , "Uber1235#");
+               // ConfimSignUp("bonganizungu889@gmail.com","138227" );
             }
         });
 
 
     }
+
+    public  void ConfimSignUp(String email , String Code)
+    {
+        Amplify.Auth.confirmSignUp(
+                email,
+                Code,
+                result -> Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete"),
+                error -> Log.e("AuthQuickstart", error.toString())
+        );
+    }
+
 
 
     public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
@@ -86,7 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
 //                .userAttribute(AuthUserAttributeKey.address(), Address)
 //                .userAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber)
 //                .build();
-        Log.i("AuthQuickstart2", "");
+        //Log.i("AuthQuickstart2", "");
         try {
             Amplify.Auth.signUp(
                     email,
@@ -100,7 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
         //runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Exception during sign-up: " + e.getMessage(), Toast.LENGTH_SHORT).show());
          }
 
-        Log.i("AuthQuickstart3", "");
+       // Log.i("AuthQuickstart3", "");
     }
 }
 
