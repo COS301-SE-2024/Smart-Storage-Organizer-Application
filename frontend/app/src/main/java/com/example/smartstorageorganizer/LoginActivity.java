@@ -31,16 +31,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 //import com.amplifyframework.auth.result.authResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class LoginActivity extends AppCompatActivity {
     TextView signUpLink;
     RelativeLayout registerButton;
-    TextInputEditText inputLoginEmployeeID;
-    TextInputEditText inputLoginPassword;
-
+    TextInputEditText Email;
+    TextInputEditText Password;
     String Result;
     String  Error;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
 
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
-        inputLoginEmployeeID = findViewById(R.id.inputLoginEmployeeID);
-        inputLoginPassword = findViewById(R.id.inputLoginPassword);
+        Email = findViewById(R.id.inputLoginEmail);
+        Password = findViewById(R.id.inputLoginPassword);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -62,9 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                validateForm();
-                Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
-                startActivity(intent);
+                if(validateForm()){
+                    String email = Email.getText().toString().trim();
+                    String password = Password.getText().toString().trim();
+                    SignIn(email, password);
+                }
             }
         });
 
@@ -73,46 +76,38 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
-                //JSONObject j=SignIn("fonew24803@javnoi.com", "Smart301!");
-                SignOut();
-               // Log.i("Testing J", Result);
             }
         });
     }
 
-    private void validateForm() {
-        String employeeID = inputLoginEmployeeID.getText().toString().trim();
-        String password = inputLoginPassword.getText().toString().trim();
+    private boolean validateForm() {
+        String email = Email.getText().toString().trim();
+        String password = Password.getText().toString().trim();
 
-        if (TextUtils.isEmpty(employeeID)) {
-            inputLoginEmployeeID.setError("Employee ID is required");
-            inputLoginEmployeeID.requestFocus();
-            return;
+        if (TextUtils.isEmpty(email)) {
+            Email.setError("Employee ID is required.");
+            Email.requestFocus();
+            return false;
         }
-//        !Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        if (employeeID.length() < 8) {
-            inputLoginEmployeeID.setError("Enter a valid employee ID");
-            inputLoginEmployeeID.requestFocus();
-            return;
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Email.setError("Enter a valid email.");
+            Email.requestFocus();
+            return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            inputLoginPassword.setError("Password is required");
-            inputLoginPassword.requestFocus();
-            return;
+            Password.setError("Password is required.");
+            Password.requestFocus();
+            return false;
         }
 
         if (password.length() < 8) {
-            inputLoginPassword.setError("Password should be at least 8 characters long");
-            inputLoginPassword.requestFocus();
-            return;
+            Password.setError("Password should be at least 8 characters long.");
+            Password.requestFocus();
+            return false;
         }
 
-        // If all validations pass
-        // Proceed with further logic (e.g., submit data to server)
-        Toast.makeText(this, "Form Submitted Successfully", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
+        return true;
     }
     public void SetErrorAndResult(String error, String Result)
     {
@@ -121,18 +116,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void SignIn(String email, String Password) {
-
-
         Amplify.Auth.signIn(
                 email,
                 Password,
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
                     //change to new page
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                        finish();
+                    });
                 },
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
                     //remain in the sign in page
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                    });
                 }
         );
 
