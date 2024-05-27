@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +25,15 @@ public class ProfileManagementActivity extends AppCompatActivity {
         AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
         ImageView ProfileBackButton = findViewById(R.id.ProfileBackButton);
         ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
+        TextView email = findViewById(R.id.email);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        email.setText(getIntent().getStringExtra("email"));
 
         ProfileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
