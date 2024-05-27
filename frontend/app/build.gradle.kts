@@ -49,4 +49,20 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
+    // Unit testing dependencies
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.2.0")
+    testImplementation("org.mockito:mockito-inline:4.2.0")
+
+    // AndroidX Test - Core, Runner, and Rules
+    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("androidx.test:runner:1.4.0")
+    testImplementation("androidx.test:rules:1.4.0")
+
+    // AndroidX Test - ExtJUnit for JUnit4 integration
+    testImplementation("androidx.test.ext:junit:1.1.3")
+
+    // AndroidX Test - Espresso
+    testImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }

@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.auth.exceptions.InvalidStateException;
+import com.amplifyframework.auth.result.AuthSignInResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.textfield.TextInputEditText;
@@ -128,10 +129,13 @@ public class LoginActivity extends AppCompatActivity {
                 Password,
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
+                    String nextstep="";
+                    AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
                     //change to new page
                 },
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
+                    AuthSignInResult r= new AuthSignInResult(false, null);
                     //remain in the sign in page
                 }
         );
