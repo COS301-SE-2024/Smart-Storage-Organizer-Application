@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.auth.exceptions.InvalidStateException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
                 //JSONObject j=SignIn("fonew24803@javnoi.com", "Smart301!");
+                SignOut();
                // Log.i("Testing J", Result);
             }
         });
@@ -118,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         this.Result=Result;
     }
 
-    public JSONObject SignIn(String email, String Password) {
+    public void SignIn(String email, String Password) {
 
 
         Amplify.Auth.signIn(
@@ -126,27 +128,40 @@ public class LoginActivity extends AppCompatActivity {
                 Password,
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
-                    if (result.isSignedIn()) {
-                        SetErrorAndResult("","Sign in succeeded");
-                    } else {
-                        SetErrorAndResult("","Sign in not complete Verify Email" );
-                    }
+                    //change to new page
                 },
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
-                    SetErrorAndResult(error.toString(), "");
+                    //remain in the sign in page
                 }
         );
 
-        String Jsonstring="{\"result\": "+Result+", \"error\" : "+Error+"}";
-        JSONObject json=null;
-        try {
-            json = new JSONObject(Jsonstring);
-        }catch(JSONException r){
-            Log.i("Json Error ",r.toString());
-        }
-        //AuthResultCallback callback
-        return json;
+
+    }
+
+
+    public void SignOut()
+    {
+        Amplify.Auth.signOut( signOutResult -> {
+            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                // Sign Out completed fully and without errors.
+                Log.i("AuthQuickStart", "Signed out successfully");
+                //move to a different page
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
+                // Sign Out completed with some errors. User is signed out of the device.
+                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
+                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
+                //move to the different page
+
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
+                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
+                // Sign Out failed with an exception, leaving the user signed in.
+                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
+                //dont move to different oage
+            }
+        });
+
     }
 
 
