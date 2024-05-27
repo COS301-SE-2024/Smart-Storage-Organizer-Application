@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                         (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
-                //dont move to different oage
+                //dont move to different page
             }
         });
 

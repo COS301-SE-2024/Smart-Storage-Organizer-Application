@@ -104,6 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     error -> {
                         Log.e("AuthQuickstart", error.toString());
                         //dont move to different page
+
                     }
             );
         } catch (Exception e) {
