@@ -1,4 +1,6 @@
 package com.example.smartstorageorganizer;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.XMLFormatter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,7 +51,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+    isSignedIn().thenAccept(isSignedIn -> {
+                if (isSignedIn) {
+                    Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                    startActivity(intent);
+                    finish();
 
+                } else {
+                    Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
+                    Log.i("AmplifyQuickstart", "User is not signed in.");
+                }
+            });
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
@@ -80,6 +92,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private CompletableFuture<Boolean> isSignedIn(){
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchAuthSession(
+
+                result->{
+                    if(result.isSignedIn()){
+                        Log.i("AmplifyQuickstart", "User is signed in");
+                        future.complete(true);
+                    }
+                    else {
+                        Log.i("AmplifyQuickstart", "User is not signed in");
+                        future.complete(false);
+                    }},
+                error -> {
+                    Log.e("AmplifyQuickstart", error.toString());
+                    future.completeExceptionally(error);
+                }
+
+        );
+        return future;
+    }
+
 
     private boolean validateForm() {
         String email = Email.getText().toString().trim();
@@ -144,34 +180,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
-
-
-    public void SignOut()
-    {
-        Amplify.Auth.signOut( signOutResult -> {
-            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
-                // Sign Out completed fully and without errors.
-                Log.i("AuthQuickStart", "Signed out successfully");
-                //move to a different page
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                // Sign Out completed with some errors. User is signed out of the device.
-                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
-                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
-                //move to the different page
-
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
-                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
-                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
-                // Sign Out failed with an exception, leaving the user signed in.
-                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
-                //dont move to different page
-            }
-        });
-
-    }
-
-
-
 }
 
 
