@@ -49,7 +49,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-
+    implementation ("com.airbnb.android:lottie:6.4.1")
 
     // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")

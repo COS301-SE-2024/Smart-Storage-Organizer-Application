@@ -58,6 +58,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         setupOTPInputs();
         startCountdown();
+        inputCode1.requestFocus();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.auth.exceptions.InvalidStateException;
@@ -40,10 +42,12 @@ import org.json.JSONObject;
 
 
 public class LoginActivity extends AppCompatActivity {
-    TextView signUpLink;
+    TextView signUpLink, loginButtonText;
+    ImageView loginButtonIcon;
     RelativeLayout registerButton;
     TextInputEditText Email;
     TextInputEditText Password;
+    LottieAnimationView buttonLoader;
     String Result;
     String  Error;
 
@@ -52,21 +56,24 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-    isSignedIn().thenAccept(isSignedIn -> {
-                if (isSignedIn) {
-                    Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
-                    startActivity(intent);
-                    finish();
-
-                } else {
-                    Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-                    Log.i("AmplifyQuickstart", "User is not signed in.");
-                }
-            });
+//    isSignedIn().thenAccept(isSignedIn -> {
+//                if (isSignedIn) {
+//                    Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//
+//                } else {
+//                    Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
+//                    Log.i("AmplifyQuickstart", "User is not signed in.");
+//                }
+//            });
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
         Password = findViewById(R.id.inputLoginPassword);
+        loginButtonIcon = findViewById(R.id.login_button_icon);
+        loginButtonText =findViewById(R.id.login_button_text);
+        buttonLoader = findViewById(R.id.buttonLoader);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -78,6 +85,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateForm()){
+                    buttonLoader.setVisibility(View.VISIBLE);
+                    buttonLoader.playAnimation();
+                    loginButtonText.setVisibility(View.GONE);
+                    loginButtonIcon.setVisibility(View.GONE);
+
                     String email = Email.getText().toString().trim();
                     String password = Password.getText().toString().trim();
                     SignIn(email, password);
@@ -94,28 +106,28 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private CompletableFuture<Boolean> isSignedIn(){
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.fetchAuthSession(
-
-                result->{
-                    if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
-                        future.complete(true);
-                    }
-                    else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
-                        future.complete(false);
-                    }},
-                error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
-                    future.completeExceptionally(error);
-                }
-
-        );
-        return future;
-    }
+//    private CompletableFuture<Boolean> isSignedIn(){
+//        CompletableFuture<Boolean> future=new CompletableFuture<>();
+//
+//        Amplify.Auth.fetchAuthSession(
+//
+//                result->{
+//                    if(result.isSignedIn()){
+//                        Log.i("AmplifyQuickstart", "User is signed in");
+//                        future.complete(true);
+//                    }
+//                    else {
+//                        Log.i("AmplifyQuickstart", "User is not signed in");
+//                        future.complete(false);
+//                    }},
+//                error -> {
+//                    Log.e("AmplifyQuickstart", error.toString());
+//                    future.completeExceptionally(error);
+//                }
+//
+//        );
+//        return future;
+//    }
 
 
     private boolean validateForm() {
@@ -188,14 +200,22 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                            buttonLoader.setVisibility(View.GONE);
+                            buttonLoader.pauseAnimation();
+                            loginButtonText.setVisibility(View.VISIBLE);
+                            loginButtonIcon.setVisibility(View.VISIBLE);
                         });
                     }
                     Log.e("AuthQuickstart", error.toString());
+                    buttonLoader.setVisibility(View.GONE);
+                    buttonLoader.pauseAnimation();
+                    loginButtonText.setVisibility(View.VISIBLE);
+                    loginButtonIcon.setVisibility(View.VISIBLE);
                  //   AuthSignInResult r= new AuthSignInResult(false, null);
                     //remain in the sign in page
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
-                    });
+//                    runOnUiThread(() -> {
+//                        Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+//                    });
                 }
         );
 
