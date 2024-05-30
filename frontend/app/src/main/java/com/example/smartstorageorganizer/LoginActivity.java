@@ -1,4 +1,5 @@
 package com.example.smartstorageorganizer;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.XMLFormatter;
 
@@ -159,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
                     String nextstep="";
-                    AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
+                  //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
                     //change to new page
                     runOnUiThread(() -> {
                         Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
@@ -169,8 +170,20 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 },
                 error -> {
+                    if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "User is not verified. Please verify your account.", Toast.LENGTH_LONG).show();
+                            // You can also redirect the user to a verification page
+                             Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                             startActivity(intent);
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                        });
+                    }
                     Log.e("AuthQuickstart", error.toString());
-                    AuthSignInResult r= new AuthSignInResult(false, null);
+                 //   AuthSignInResult r= new AuthSignInResult(false, null);
                     //remain in the sign in page
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
