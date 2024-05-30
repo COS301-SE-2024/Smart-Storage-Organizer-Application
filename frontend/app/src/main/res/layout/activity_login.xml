@@ -75,10 +75,10 @@
             android:layout_marginEnd="24dp"
             style="@style/CustomTextInputFilledBox.White">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inputLoginEmployeeID"
+                android:id="@+id/inputLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Employee ID"
+                android:hint="Email"
                 android:inputType="textEmailAddress"/>
         </com.google.android.material.textfield.TextInputLayout>
 

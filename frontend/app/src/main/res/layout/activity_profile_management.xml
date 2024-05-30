@@ -83,11 +83,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/location"
+                android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/Username"
-                android:text="San Francisco, CA"
+                android:text=""
                 android:textColor="@color/gray"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:id="@+id/editProfileButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/location"
+                android:layout_below="@id/email"
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="12dp"
                 android:background="@drawable/button_border"
