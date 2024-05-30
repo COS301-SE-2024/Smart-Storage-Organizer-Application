@@ -179,7 +179,6 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
 
         try {
-            Amplify.Auth.
             Amplify.Auth.signUp(
                     email,
                     Password,
