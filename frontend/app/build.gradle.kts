@@ -49,7 +49,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-<<<<<<< HEAD
+
 
     // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")
@@ -65,8 +65,19 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.1.3")
 
     // AndroidX Test - Espresso
-    testImplementation("androidx.test.espresso:espresso-core:3.4.0")
-=======
-    implementation("com.hbb20:ccp:2.5.0")
->>>>>>> 217fd4ecc79a3b4b79ff2124dcf6fbeef59ea9d5
+    testImplementation("androidx.test.espresso:espresso-core:3.4.0");
+
+    // AndroidX Test - Espresso Intents
+    testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
+
+    // AndroidX Test - Espresso Idling Resource
+    testImplementation("androidx.test.espresso:espresso-idling-resource:3.4.0")
+
+    // AndroidX Test - Espresso Contrib
+    testImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
+    // AndroidX Test - Espresso Remote
+    testImplementation("androidx.test.espresso:espresso-remote:3.4.0")
+
+    implementation("com.hbb20:ccp:2.5.0");
+
 }

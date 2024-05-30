@@ -1,4 +1,6 @@
 package com.example.smartstorageorganizer;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.XMLFormatter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,7 +51,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+    isSignedIn().thenAccept(isSignedIn -> {
+                if (isSignedIn) {
+                    Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                    startActivity(intent);
+                    finish();
 
+                } else {
+                    Log.i("AmplifyQuickstart", "User is not signed in");
+                }
+            });
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
@@ -80,6 +91,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private CompletableFuture<Boolean> isSignedIn(){
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchAuthSession(
+
+                result->{
+                    if(result.isSignedIn()){
+                        Log.i("AmplifyQuickstart", "User is signed in");
+                        future.complete(true);
+                    }
+                    else {
+                        Log.i("AmplifyQuickstart", "User is not signed in");
+                        future.complete(false);
+                    }},
+                error -> {
+                    Log.e("AmplifyQuickstart", error.toString());
+                    future.completeExceptionally(error);
+                }
+
+        );
+        return future;
+    }
+
 
     private boolean validateForm() {
         String email = Email.getText().toString().trim();
