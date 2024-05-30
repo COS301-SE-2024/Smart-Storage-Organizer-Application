@@ -79,7 +79,20 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+
+        resendOtpTextView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.i("email", email.getText().toString());
+                Amplify.Auth.resendSignUpCode(
+                        email.getText().toString(),
+                        result -> Log.i("AuthQuickstart", "ResendSignUp succeeded: "),
+                        error -> Log.e("AuthQuickstart", "ResendSignUp failed", error)
+
+                );
+            }
+        });    }
 
     public boolean validateForm(){
         String Code1 = inputCode1.getText().toString().trim();

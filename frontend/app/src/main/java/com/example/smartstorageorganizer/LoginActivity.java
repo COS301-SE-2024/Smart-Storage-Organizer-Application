@@ -174,7 +174,15 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "User is not verified. Please verify your account.", Toast.LENGTH_LONG).show();
                             // You can also redirect the user to a verification page
+                            Amplify.Auth.resendSignUpCode(
+                                    email,
+                                    result -> Log.i("AuthQuickstart", "ResendSignUp succeeded:"),
+                                    errorResendCode -> Log.e("AuthQuickstart", "ResendSignUp failed", errorResendCode)
+
+
+                            );
                              Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                            intent.putExtra("email", email);
                              startActivity(intent);
                         });
                     } else {
