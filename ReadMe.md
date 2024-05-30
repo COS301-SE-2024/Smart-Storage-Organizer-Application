@@ -39,8 +39,7 @@ To set up the project locally, follow these steps:
 
 ### Open Android Studio.
 
-
-
+-run `amplify pull --appId d2fex6mowrw58l --envName staging` on your root folder
 
 
 ## License
