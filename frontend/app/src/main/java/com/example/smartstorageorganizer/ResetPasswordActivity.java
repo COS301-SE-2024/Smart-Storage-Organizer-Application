@@ -8,17 +8,71 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.amplifyframework.auth.AuthException;
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.options.AuthResetPasswordOptions;
+import com.amplifyframework.core.Amplify;
+
+
 public class ResetPasswordActivity extends AppCompatActivity {
+    private EditText etEmail;
+    private Button btnSendResetLink;
+    private EditText etVerificationCode;
+    private EditText etVeriCodedddddd;
+    private EditText etNewPassword;
+    private Button btnResetPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reset_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
+
+        etEmail = findViewById(R.id.etEmail);
+        btnSendResetLink = findViewById(R.id.btnSendResetLink);
+//        etVerificationCode = findViewById(R.id.etVerificationCode);
+        etNewPassword = findViewById(R.id.etNewPassword);
+        btnResetPassword = findViewById(R.id.btnResetPassword);
+
+        btnSendResetLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etEmail.getText().toString().trim();
+                if (!email.isEmpty()) {
+                    sendResetLink(email);
+                } else {
+                    Toast.makeText(ResetPasswordActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
+    }
+    private void sendResetLink(String email) {
+        Amplify.Auth.resetPassword(
+                email,
+                result -> {
+                    runOnUiThread(() -> {
+                        Toast.makeText(ResetPasswordActivity.this, "Verification code sent to " + email, Toast.LENGTH_SHORT).show();
+                        etEmail.setVisibility(View.GONE);
+                        btnSendResetLink.setVisibility(View.GONE);
+                        etVerificationCode.setVisibility(View.VISIBLE);
+                        etNewPassword.setVisibility(View.VISIBLE);
+                        btnResetPassword.setVisibility(View.VISIBLE);
+                    });
+                },
+                error -> runOnUiThread(() -> {
+                    Toast.makeText(ResetPasswordActivity.this, "Failed to send verification code: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                })
+        );
     }
 }

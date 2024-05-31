@@ -37,9 +37,13 @@ android {
 
 dependencies {
 
+    // for Cognito
+    implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
+    implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
+
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.activity)
+    implementation(libs.activity)   
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
