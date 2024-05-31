@@ -1,4 +1,5 @@
 package com.example.smartstorageorganizer;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.XMLFormatter;
@@ -19,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.auth.exceptions.InvalidStateException;
@@ -37,6 +39,14 @@ import org.json.JSONObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -170,6 +180,9 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 },
                 error -> {
+
+                    postAddItem();
+
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "User is not verified. Please verify your account.", Toast.LENGTH_LONG).show();
@@ -201,6 +214,69 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+    private void postTodo()  {
+        String json = "{\"email\":\"example@gmail.com\",\"name\":\"This is an example item\" ,\"surname\":\"This is an example item\",\"address\":\"This is an example item\",\"cell_number\":\"0735553698\",\"role\":\"admin\",\"userid\":\"T52369\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = "https://xrfmhmumye.execute-api.eu-north-1.amazonaws.com/deployment/ss-rest";
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                } else {
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                }
+            }
+        });
+    }
+
+
+    private void postAddItem()  {
+        String json = "{\"item_name\":\"exampl.com\",\"description\":\"This is an example item\" ,\"colourcoding\":\"This is an example item\",\"barcode\":\"This is an example item\",\"qrcode\":\"0735553698\",\"quanity\":55,\"location\":\"T52369\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/AddItem";
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                } else {
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                }
+            }
+        });
+    }
+
 }
 
 
