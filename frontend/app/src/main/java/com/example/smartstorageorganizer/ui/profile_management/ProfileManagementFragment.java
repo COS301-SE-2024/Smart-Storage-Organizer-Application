@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.ui.profile_management;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentProfileManagementBinding;
 
@@ -31,10 +33,18 @@ public class ProfileManagementFragment extends Fragment {
         View root = binding.getRoot();
 
         AppCompatButton editProfileButton = root.findViewById(R.id.editProfileButton);
-        editProfileButton.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_home);
-            navController.navigate(R.id.action_profileFragment_to_editProfileFragment);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(intent);
+            }
         });
+
+//        editProfileButton.setOnClickListener(v -> {
+//            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_home);
+//            navController.navigate(R.id.action_profileFragment_to_editProfileFragment);
+//        });
 
 //        final TextView textView = binding.textGallery;
 //        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
