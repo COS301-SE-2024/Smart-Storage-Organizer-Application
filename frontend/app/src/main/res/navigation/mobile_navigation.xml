@@ -12,14 +12,25 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_profile_management"
         android:name="com.example.smartstorageorganizer.ui.profile_management.ProfileManagementFragment"
         android:label="Profile Management"
-        tools:layout="@layout/fragment_profile_management" />
+        tools:layout="@layout/fragment_profile_management" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/nav_edit_profile" />
+    </fragment>
+
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_notifications"
         android:name="com.example.smartstorageorganizer.ui.notifications.NotificationsFragment"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/nav_edit_profile"
+        android:name="com.example.smartstorageorganizer.ui.edit_profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

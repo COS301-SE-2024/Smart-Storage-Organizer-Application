@@ -10,7 +10,7 @@
             android:title="@string/menu_home"
             android:color="@color/colorPrimary"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_notifications"
             android:icon="@drawable/outline_notifications_24"
             android:title="Notifications"
             android:textColor="@color/colorPrimary"/>
@@ -20,7 +20,7 @@
             android:title="Settings"
             android:textColor="@color/colorPrimary"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_profile_management"
             android:icon="@drawable/outline_person_24"
             android:title="Profile Management"
             android:textColor="@color/colorPrimary"/>
