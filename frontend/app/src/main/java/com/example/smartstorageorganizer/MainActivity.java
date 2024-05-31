@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 isSignedIn().thenAccept(isSignedIn -> {
                     Intent intent;
                     if (isSignedIn) {
-                        intent = new Intent(MainActivity.this, ProfileManagementActivity.class);
+                        intent = new Intent(MainActivity.this, HomeActivity.class);
 
                     } else {
                         intent = new Intent(MainActivity.this, LoginActivity.class);
