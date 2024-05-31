@@ -180,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 },
                 error -> {
-                    PostEditItem();
+                    PostEditItem("Lenovo", "ideapad 110", "orange", "sdf5d", "0110000", "1", "Herold", "17");
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
                         runOnUiThread(() -> {
@@ -277,8 +277,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void PostEditItem() {
-        String json = "{\"item_name\":\"exampl.com\",\"description\":\"This is an example item\" ,\"colourcoding\":\"This is an example item\",\"barcode\":\"This is an example item\",\"qrcode\":\"0735553698\",\"quanity\":45,\"location\":\"T52369\", \"item_id\":\"7\" }";
+    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String item_id ) {
+        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
