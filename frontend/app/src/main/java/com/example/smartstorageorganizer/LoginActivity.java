@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                   //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
                     //change to new page
                     runOnUiThread(() -> {
-                        Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
