@@ -39,15 +39,22 @@ public class ResetPasswordActivity extends AppCompatActivity {
         etNewPassword = findViewById(R.id.etNewPassword);
         btnResetPassword = findViewById(R.id.btnResetPassword);
 
-        btnSendResetLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                if (!email.isEmpty()) {
-                    sendResetLink(email);
-                } else {
-                    Toast.makeText(ResetPasswordActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
-                }
+        btnSendResetLink.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            if (!email.isEmpty()) {
+                sendResetLink(email);
+            } else {
+                Toast.makeText(ResetPasswordActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnResetPassword.setOnClickListener(v -> {
+            String verificationCode = etVerificationCode.getText().toString().trim();
+            String newPassword = etNewPassword.getText().toString().trim();
+            if (!verificationCode.isEmpty() && !newPassword.isEmpty()) {
+                resetPassword(verificationCode, newPassword);
+            } else {
+                Toast.makeText(ResetPasswordActivity.this, "Please enter the verification code and new password", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -55,6 +62,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         Amplify.Auth.resetPassword(
                 email,
                 result -> Log.i("AuthQuickstart", result.toString()),
+                error -> Log.e("AuthQuickstart", error.toString())
+        );
+    }
+
+    private void resetPassword(String verificationCode, String newPassword) {
+        Amplify.Auth.confirmResetPassword(
+                newPassword,
+                verificationCode,
+                "confirmation code you received",
+                () -> Log.i("AuthQuickstart", "New password confirmed"),
                 error -> Log.e("AuthQuickstart", error.toString())
         );
     }
