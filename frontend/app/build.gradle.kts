@@ -94,4 +94,12 @@ dependencies {
 
     implementation("com.hbb20:ccp:2.5.0");
 
+    // Amplify API plugin for REST
+    implementation("com.amplifyframework:aws-api:1.35.4")
+
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+
+
+
+
 }

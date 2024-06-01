@@ -25,8 +25,16 @@ import com.amplifyframework.core.Amplify;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.MediaType;
+import okhttp3.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
 
 public class RegistrationActivity extends AppCompatActivity {
     TextInputEditText Name, Surname, Email, Password, PhoneNumber;
@@ -216,5 +224,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
 
