@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.smartstorageorganizer.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_profile_management"
+        android:name="com.example.smartstorageorganizer.ui.profile_management.ProfileManagementFragment"
+        android:label="Profile Management"
+        tools:layout="@layout/fragment_profile_management" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/nav_edit_profile" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.example.smartstorageorganizer.ui.notifications.NotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/nav_edit_profile"
+        android:name="com.example.smartstorageorganizer.ui.edit_profile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
+</navigation>

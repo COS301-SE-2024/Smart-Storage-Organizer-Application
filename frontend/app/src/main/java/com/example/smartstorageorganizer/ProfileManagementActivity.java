@@ -16,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.AuthUserAttribute;
+
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 
@@ -26,6 +28,16 @@ public class ProfileManagementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile_management);
+        AuthUserAttribute profile=null;
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+                    for (AuthUserAttribute attribute : attributes) {
+
+                        Log.i("AuthDemo", attribute.getKey().getKeyString() + ": " + attribute.getValue());
+                    }
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+        );
 
         AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
         ImageView ProfileBackButton = findViewById(R.id.ProfileBackButton);
