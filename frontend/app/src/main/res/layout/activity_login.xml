@@ -97,9 +97,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
+                android:layout_marginBottom="40dp"
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonLogin"
+            android:orientation="horizontal"
+            android:layout_marginStart="35dp">
+        <TextView
+            android:id="@+id/resetPasswordLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="62dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="16dp"
+            android:text="Forgot Password"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dp" /></LinearLayout>
         <!--        <EditText-->
         <!--            android:id="@+id/inputUsername"-->
         <!--            android:layout_width="match_parent"-->

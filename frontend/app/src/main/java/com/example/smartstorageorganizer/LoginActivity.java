@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText Password;
     String Result;
     String  Error;
+    TextView resetPasswordLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
         Password = findViewById(R.id.inputLoginPassword);
+        resetPasswordLink = findViewById(R.id.resetPasswordLink);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -88,6 +90,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        resetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
             }
         });
