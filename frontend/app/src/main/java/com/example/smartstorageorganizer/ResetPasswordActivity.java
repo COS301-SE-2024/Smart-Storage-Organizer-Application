@@ -18,13 +18,12 @@ import com.amplifyframework.auth.AuthException;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.options.AuthResetPasswordOptions;
 import com.amplifyframework.core.Amplify;
-
+import android.util.Log;
 
 public class ResetPasswordActivity extends AppCompatActivity {
     private EditText etEmail;
     private Button btnSendResetLink;
     private EditText etVerificationCode;
-    private EditText etVeriCodedddddd;
     private EditText etNewPassword;
     private Button btnResetPassword;
 
@@ -33,15 +32,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reset_password);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         etEmail = findViewById(R.id.etEmail);
         btnSendResetLink = findViewById(R.id.btnSendResetLink);
-//        etVerificationCode = findViewById(R.id.etVerificationCode);
+        etVerificationCode = findViewById(R.id.etVerificationCode);
         etNewPassword = findViewById(R.id.etNewPassword);
         btnResetPassword = findViewById(R.id.btnResetPassword);
 
@@ -60,19 +54,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private void sendResetLink(String email) {
         Amplify.Auth.resetPassword(
                 email,
-                result -> {
-                    runOnUiThread(() -> {
-                        Toast.makeText(ResetPasswordActivity.this, "Verification code sent to " + email, Toast.LENGTH_SHORT).show();
-                        etEmail.setVisibility(View.GONE);
-                        btnSendResetLink.setVisibility(View.GONE);
-                        etVerificationCode.setVisibility(View.VISIBLE);
-                        etNewPassword.setVisibility(View.VISIBLE);
-                        btnResetPassword.setVisibility(View.VISIBLE);
-                    });
-                },
-                error -> runOnUiThread(() -> {
-                    Toast.makeText(ResetPasswordActivity.this, "Failed to send verification code: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                })
+                result -> Log.i("AuthQuickstart", result.toString()),
+                error -> Log.e("AuthQuickstart", error.toString())
         );
     }
 }
