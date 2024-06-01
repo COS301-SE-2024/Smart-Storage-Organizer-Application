@@ -14,6 +14,7 @@ import android.util.Patterns;
 import android.view.View;
 import java.io.IOException;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
@@ -46,10 +48,12 @@ import org.json.JSONObject;
 
 
 public class LoginActivity extends AppCompatActivity {
-    TextView signUpLink;
+    TextView signUpLink, loginButtonText;
+    ImageView loginButtonIcon;
     RelativeLayout registerButton;
     TextInputEditText Email;
     TextInputEditText Password;
+    LottieAnimationView buttonLoader;
     String Result;
     String  Error;
 
@@ -60,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     isSignedIn().thenAccept(isSignedIn -> {
                 if (isSignedIn) {
-                    Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
 
@@ -73,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
         Password = findViewById(R.id.inputLoginPassword);
+        buttonLoader = findViewById(R.id.buttonLoader);
+        loginButtonIcon = findViewById(R.id.login_button_icon);
+        loginButtonText = findViewById(R.id.login_button_text);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -84,6 +91,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateForm()){
+                    buttonLoader.setVisibility(View.VISIBLE);
+                    buttonLoader.playAnimation();
+                    loginButtonText.setVisibility(View.GONE);
+                    loginButtonIcon.setVisibility(View.GONE);
                     String email = Email.getText().toString().trim();
                     String password = Password.getText().toString().trim();
                     SignIn(email, password);
@@ -219,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
                   //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
                     //change to new page
                     runOnUiThread(() -> {
-                        Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
@@ -243,15 +254,14 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     } else {
                         runOnUiThread(() -> {
+                            buttonLoader.setVisibility(View.GONE);
+                            buttonLoader.playAnimation();
+                            loginButtonText.setVisibility(View.VISIBLE);
+                            loginButtonIcon.setVisibility(View.VISIBLE);
                             Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
                         });
                     }
                     Log.e("AuthQuickstart", error.toString());
-                 //   AuthSignInResult r= new AuthSignInResult(false, null);
-                    //remain in the sign in page
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
-                    });
                 }
         );
 
