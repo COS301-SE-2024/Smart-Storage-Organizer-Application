@@ -16,13 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -36,7 +42,9 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
+    private List<ItemModel> itemModelList;
+    private ItemAdapter itemAdapter;
+    private RecyclerView itemRecyclerView;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -46,17 +54,39 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
+        itemRecyclerView = root.findViewById(R.id.item_rec);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showAddItemPopup();
-//                postAddItem("Samsung A21", "Cellphone", "blue", "sdr6d", "0111000", "1", "Booth");
             }
         });
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+        itemModelList = new ArrayList<>();
+        //flash sale
+
+        itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
+        itemRecyclerView.setAdapter(itemAdapter);
+
+//        db.collection("FlashSaleProducts")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                FlashSaleModel popularModel = document.toObject(FlashSaleModel.class);
+//                                flashSaleModelListModelList.add(popularModel);
+//                                flashSaleAdapter.notifyDataSetChanged();
+//                            }
+//                        } else {
+//                            Toast.makeText(HomeActivity.this, "Error"+task.getException(), Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+
         return root;
     }
 
@@ -82,7 +112,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 String name = itemName.getText().toString().trim();
                 String description = itemDescription.getText().toString().trim();
-                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary");
+                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", "gayol59229@fincainc.com");
                 alertDialog.dismiss();
             }
         });
@@ -91,8 +121,8 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location )  {
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\" }";
+    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email )  {
+        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/AddItem";
