@@ -133,6 +133,7 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         if (phone.length() < 9|| phone.length() > 10){
+
             PhoneNumber.setError("Enter a valid phone number.");
             PhoneNumber.requestFocus();
             return false;

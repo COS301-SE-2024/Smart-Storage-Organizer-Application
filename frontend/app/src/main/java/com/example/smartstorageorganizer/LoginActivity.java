@@ -27,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+
 import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.auth.exceptions.InvalidStateException;
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText Email;
     TextInputEditText Password;
     LottieAnimationView buttonLoader;
+
     String Result;
     String  Error;
 
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButtonIcon = findViewById(R.id.login_button_icon);
         loginButtonText = findViewById(R.id.login_button_text);
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -95,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     buttonLoader.playAnimation();
                     loginButtonText.setVisibility(View.GONE);
                     loginButtonIcon.setVisibility(View.GONE);
+
                     String email = Email.getText().toString().trim();
                     String password = Password.getText().toString().trim();
                     SignIn(email, password);
@@ -133,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
         );
         return future;
     }
-
 
     private boolean validateForm() {
         String email = Email.getText().toString().trim();
@@ -258,6 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                             buttonLoader.playAnimation();
                             loginButtonText.setVisibility(View.VISIBLE);
                             loginButtonIcon.setVisibility(View.VISIBLE);
+
                             Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
                         });
                     }
