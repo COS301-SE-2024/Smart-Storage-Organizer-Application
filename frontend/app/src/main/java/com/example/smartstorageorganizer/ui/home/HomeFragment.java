@@ -25,6 +25,11 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,6 +60,8 @@ public class HomeFragment extends Fragment {
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
+
+        FetchByEmail("gayol59229@fincainc.com");
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +95,84 @@ public class HomeFragment extends Fragment {
 //                });
 
         return root;
+    }
+
+    public void FetchByEmail(String email)
+    {
+        String json = "{\"email\":\""+email+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/SearchByEmail";
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    requireActivity().runOnUiThread(() -> {
+                        requireActivity().runOnUiThread(() -> Log.e("Response Results", responseData));
+
+//                        String jsonString = "{\"statusCode\": 200, \"status\": \"Fetch Query Successful\", \"body\": \"[{\\\"item_id\\\": 25, \\\"item_name\\\": \\\"Joystick\\\", \\\"description\\\": \\\"Gaming\\\", \\\"colourcoding\\\": \\\"Yellow\\\", \\\"barcode\\\": \\\"asdffd\\\", \\\"qrcode\\\": \\\"00111100\\\", \\\"quanity\\\": 1, \\\"location\\\": \\\"Centinary\\\", \\\"email\\\": \\\"gayol59229@fincainc.com\\\"}, {\\\"item_id\\\": 26, \\\"item_name\\\": \\\"Book\\\", \\\"description\\\": \\\"Textbook\\\", \\\"colourcoding\\\": \\\"Yellow\\\", \\\"barcode\\\": \\\"asdffd\\\", \\\"qrcode\\\": \\\"00111100\\\", \\\"quanity\\\": 1, \\\"location\\\": \\\"Centinary\\\", \\\"email\\\": \\\"gayol59229@fincainc.com\\\"}]\"}";
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+
+                            // Parse the main fields
+                            int statusCode = jsonObject.getInt("statusCode");
+                            String status = jsonObject.getString("status");
+
+                            // Parse the body field (which is a string containing a JSON array)
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+
+                            // Create a list to hold the items
+                            List<ItemModel> items = new ArrayList<>();
+
+                            // Iterate through the array and populate the items list
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                ItemModel item = new ItemModel();
+                                item.setItem_id(itemObject.getString("item_id"));
+                                item.setItem_name(itemObject.getString("item_name"));
+                                item.setDescription(itemObject.getString("description"));
+                                item.setColourcoding(itemObject.getString("colourcoding"));
+                                item.setBarcode(itemObject.getString("barcode"));
+                                item.setQrcode(itemObject.getString("qrcode"));
+                                item.setQuanity(itemObject.getString("quanity"));
+                                item.setLocation(itemObject.getString("location"));
+                                item.setEmail(itemObject.getString("email"));
+
+//                                items.add(item1);
+                                itemModelList.add(item);
+                                itemAdapter.notifyDataSetChanged();
+
+                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_name()));
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                } else {
+                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                }
+            }
+        });
     }
 
     private void showAddItemPopup() {

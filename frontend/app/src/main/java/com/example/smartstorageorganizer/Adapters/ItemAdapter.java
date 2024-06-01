@@ -4,6 +4,7 @@ package com.example.smartstorageorganizer.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
+        Log.i("Adapter", "Adapter function.");
         //Glide.with(context).load(FlashSaleModelList.get(position).getImage()).into(holder.image);
-        holder.name.setText("R"+ItemModelList.get(position).getName());
-        holder.description.setText("R"+ItemModelList.get(position).getDescription());
+        holder.name.setText(ItemModelList.get(position).getItem_name());
+        holder.description.setText(ItemModelList.get(position).getDescription());
 //        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 //        if(!Objects.equals(ItemModelList.get(position).getImg_url_one(), "empty")){
@@ -57,11 +59,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 //                intent.putExtra("price_now", FlashSaleModelList.get(holder.getAdapterPosition()).getPrice_now());
 //                intent.putExtra("price_before", FlashSaleModelList.get(holder.getAdapterPosition()).getPrice_before());
 //                intent.putExtra("img_url_one", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_one());
-//                intent.putExtra("img_url_two", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_two());
-//                intent.putExtra("img_url_three", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_three());
-//                intent.putExtra("img_url_four", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_four());
-//                intent.putExtra("img_url_five", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_five());
-//                intent.putExtra("img_url_six", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_six());
 
 //                context.startActivity(intent);
             }
@@ -77,7 +74,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         ShapeableImageView image;
         TextView name;
         TextView description;
-//        LottieAnimationView image_loader;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
