@@ -19,8 +19,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.EditProfileActivity;
+import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.LoginActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -50,6 +53,7 @@ public class HomeFragment extends Fragment {
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
+    private LottieAnimationView fetchItemsLoader;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -60,6 +64,12 @@ public class HomeFragment extends Fragment {
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
+        fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
+
+        fetchItemsLoader.setVisibility(View.VISIBLE);
+        fetchItemsLoader.playAnimation();
+
+        itemRecyclerView.setVisibility(View.GONE);
 
         FetchByEmail("gayol59229@fincainc.com");
 
@@ -76,23 +86,6 @@ public class HomeFragment extends Fragment {
 
         itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
-
-//        db.collection("FlashSaleProducts")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                FlashSaleModel popularModel = document.toObject(FlashSaleModel.class);
-//                                flashSaleModelListModelList.add(popularModel);
-//                                flashSaleAdapter.notifyDataSetChanged();
-//                            }
-//                        } else {
-//                            Toast.makeText(HomeActivity.this, "Error"+task.getException(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
 
         return root;
     }
@@ -156,12 +149,15 @@ public class HomeFragment extends Fragment {
                                 item.setLocation(itemObject.getString("location"));
                                 item.setEmail(itemObject.getString("email"));
 
-//                                items.add(item1);
                                 itemModelList.add(item);
                                 itemAdapter.notifyDataSetChanged();
 
                                 requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_name()));
                             }
+                                fetchItemsLoader.setVisibility(View.GONE);
+                                fetchItemsLoader.pauseAnimation();
+
+                                itemRecyclerView.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
