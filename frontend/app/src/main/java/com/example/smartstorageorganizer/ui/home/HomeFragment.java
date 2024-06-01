@@ -233,37 +233,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String item_id ) {
-//        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//                requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    final String responseData = response.body().string();
-//                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-//                } else {
-//                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-//                }
-//            }
-//        });
-//    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

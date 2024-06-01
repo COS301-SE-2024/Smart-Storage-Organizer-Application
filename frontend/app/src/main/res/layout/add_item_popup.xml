@@ -11,20 +11,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Item"
+            android:text="Update Item"
             android:textColor="@color/colorSecondary"
             android:textStyle="bold"
             android:textSize="18dp"
             android:layout_gravity="center"/>
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Add Item Details"-->
-<!--            android:textSize="18dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="16dp"/>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -78,7 +69,7 @@
             android:id="@+id/button_add_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="Update"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"/>
