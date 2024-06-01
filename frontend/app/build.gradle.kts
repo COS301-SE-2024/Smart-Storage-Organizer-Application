@@ -73,7 +73,12 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.1.3")
 
     // AndroidX Test - Espresso
-    testImplementation("androidx.test.espresso:espresso-core:3.4.0");
+
+    testImplementation("androidx.test.espresso:espresso-core:3.4.0")
+
+    implementation("com.hbb20:ccp:2.5.0")
+    implementation("com.amplifyframework:aws-api:2.16.1")
+    implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
 
     // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")

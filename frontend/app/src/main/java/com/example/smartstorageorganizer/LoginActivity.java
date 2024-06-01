@@ -1,4 +1,7 @@
 package com.example.smartstorageorganizer;
+
+import java.util.Locale;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.XMLFormatter;
 
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText Password;
     String Result;
     String  Error;
+
     TextView resetPasswordLink;
 
     @Override
@@ -67,7 +71,9 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
         Password = findViewById(R.id.inputLoginPassword);
+
         resetPasswordLink = findViewById(R.id.resetPasswordLink);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -102,6 +108,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private CompletableFuture<Boolean> isSignedIn(){
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchAuthSession(
+
+                result->{
+                    if(result.isSignedIn()){
+                        Log.i("AmplifyQuickstart", "User is signed in");
+                        future.complete(true);
+                    }
+                    else {
+                        Log.i("AmplifyQuickstart", "User is not signed in");
+                        future.complete(false);
+                    }},
+                error -> {
+                    Log.e("AmplifyQuickstart", error.toString());
+                    future.completeExceptionally(error);
+                }
+
+        );
+        return future;
+    }
+
 
     private CompletableFuture<Boolean> isSignedIn(){
         CompletableFuture<Boolean> future=new CompletableFuture<>();
@@ -170,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
                     String nextstep="";
                     AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
+                  //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
                     //change to new page
                     runOnUiThread(() -> {
                         Intent intent = new Intent(LoginActivity.this, ProfileManagementActivity.class);
@@ -181,6 +212,28 @@ public class LoginActivity extends AppCompatActivity {
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
                     AuthSignInResult r= new AuthSignInResult(false, null);
+                    if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "User is not verified. Please verify your account.", Toast.LENGTH_LONG).show();
+                            // You can also redirect the user to a verification page
+                            Amplify.Auth.resendSignUpCode(
+                                    email,
+                                    result -> Log.i("AuthQuickstart", "ResendSignUp succeeded:"),
+                                    errorResendCode -> Log.e("AuthQuickstart", "ResendSignUp failed", errorResendCode)
+
+
+                            );
+                             Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                            intent.putExtra("email", email);
+                             startActivity(intent);
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                        });
+                    }
+                    Log.e("AuthQuickstart", error.toString());
+                 //   AuthSignInResult r= new AuthSignInResult(false, null);
                     //remain in the sign in page
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
