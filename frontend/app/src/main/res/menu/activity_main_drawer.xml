@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/outline_home_24"
+            android:title="@string/menu_home"
+            android:color="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/outline_notifications_24"
+            android:title="Notifications"
+            android:textColor="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/outline_settings_24"
+            android:title="Settings"
+            android:textColor="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_profile_management"
+            android:icon="@drawable/outline_person_24"
+            android:title="Profile Management"
+            android:textColor="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/baseline_question_mark_24"
+            android:title="About"
+            android:textColor="@color/colorPrimary"/>
+
+    </group>
+</menu>
