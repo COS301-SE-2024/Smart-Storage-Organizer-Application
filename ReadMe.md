@@ -35,7 +35,7 @@ Search Functionality: Quickly locate items using the search feature.
 - Android Studio: The primary development environment for building the application.
 - Java: Programming languages used for Android development.
 - PostgresSQL: Database for storing and managing item information.
-- Firebase: For backend support and real-time database functionalities.
+- Amazon Web Service: For backend support and real-time database functionalities.
 
 
 ## Installation
