@@ -54,9 +54,6 @@ Follow the link to instruction to download and install https://www.oracle.com/ja
 -run `amplify pull --appId d2fex6mowrw58l --envName staging` on your root folder
 
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Contributor
 
 ### Siyabonga Mbuyisa
