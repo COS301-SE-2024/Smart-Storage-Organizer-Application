@@ -39,9 +39,15 @@ Search Functionality: Quickly locate items using the search feature.
 ## Installation
 To set up the project locally, follow these steps:
 
+### Download and Install android studio
+Follow the link to instruction to download and install https://developer.android.com/studio
+
+### Install Java 17
+Follow the link to instruction to download and install https://www.oracle.com/java/technologies/downloads/
+
 ### Clone the Repository:
 
-
+-git clone https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application.git
 
 ### Open Android Studio.
 
@@ -70,4 +76,11 @@ I will oversee the design and implementation of the front-end spectrum of the ap
 ### Tshegofatso Mapheto
 I am a highly motivated individual with a strong passion for my work and a relentless drive to excel. My dedication to achieving goals not only fuels my progress but also inspires those who work with me. I possess a robust theoretical and practical understanding of various aspects of statistics and mathematics, with a specific emphasis on their practical applications in problem-solving. My expertise in statistics and application development empowers me to harness the power of data, optimizing solutions and streamlining processes. Furthermore, I am creative in my thinking, able to approach problems from different angles, and I am committed to my ongoing personal development.
 ##### https://www.linkedin.com/in/tshegofatso-mapheto-167678189
+
+
+### Mosa Letswalo
+A skilled full stack developer with a focus on frontend
+development and integration. Strength lies in designing user friendly applications and translating complex concepts into efficient solutions, backed by a solid foundation in various
+programming languages and development methodologies
+#### http://www.linkedin.com/in/mosa-letswalo/
 
