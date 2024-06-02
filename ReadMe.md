@@ -48,6 +48,18 @@ To set up the project locally, follow these steps:
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-
-## Team Name: Syntax Savants
+## Contributor
+### Team Name: Syntax Savants
 Project Email: syntaxsavants98@gmail.com
+
+### Siyabonga Mbuyisa
+Hi. I am a final year Software Developer with a passion for crafting innovative software solutions. I contributed as a services engineering, data engineering, and tester to this project, But really I have also played other roles which I did not plan for. My aim to make the app robustness and scalability. 
+Excited to collaborate and create impactful software experiences!
+https://www.linkedin.com/in/siyabonga-mbuyisa-developer/
+
+### Victor Zhou
+As a dedicated BSc Computer Science student, I possess a profound interest in exploring the transformative power of Computer Science on a global scale. My repertoire includes a versatile array of programming languages, including Android, VB.Net, Python, Java, JavaScript, PHP, C++, HTML, CSS, SQL, and MQL5. My proficiency extends across various dimensions of software development, encompassing both backend and frontend realms. Driven by a commitment to excellence, I am poised to evolve into a seasoned Software Engineer in the near future, leveraging my skills to make meaningful contributions to the field.
+http://www.linkedin.com/in/victor-zhou-343004302
+
+### Ezekiel 
+
