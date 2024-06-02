@@ -17,14 +17,13 @@
             android:textSize="18dp"
             android:layout_gravity="center"/>
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Add Item Details"-->
-<!--            android:textSize="18dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_marginTop="16dp"/>-->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/item_image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/no_image"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -78,7 +77,7 @@
             android:id="@+id/button_add_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="Add"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"/>

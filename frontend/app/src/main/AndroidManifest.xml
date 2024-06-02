@@ -14,6 +14,9 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".ItemInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
@@ -23,9 +26,6 @@
             android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileManagementActivity"
             android:exported="false" />
         <activity
             android:name=".RegistrationActivity"
