@@ -28,9 +28,6 @@
             android:name=".EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileManagementActivity"
-            android:exported="false" />
-        <activity
             android:name=".RegistrationActivity"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".LoginActivity" -->
