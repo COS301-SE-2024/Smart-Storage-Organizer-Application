@@ -23,6 +23,7 @@ import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.ui.profile_management.ProfileManagementFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -58,48 +59,10 @@ public class EditProfileActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_profile);
 
-        getDetails().thenAccept(getDetails->{
+        getDetails().thenAccept(getDetails -> {
             Log.i("AuthDemo", "User is signed in");
             Log.i("AuthEmail", currentEmail);
             Log.i("AuthSurname", currentSurname);
-        });
-
-
-  findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                upDateDetails().thenAccept(updateDetails->{
-                    Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                    Log.i("EditProfileActivity", "Back button clicked");
-
-                });
-                getDetails().thenAccept(getDetails->{
-                    Log.i("AuthDemo", "User is signed in");
-                    Log.i("AuthEmail", currentEmail);
-                    name = findViewById(R.id.name);
-                    surname = findViewById(R.id.surname);
-                    email = findViewById(R.id.email);
-                    address = findViewById(R.id.address);
-                    phone = findViewById(R.id.phone);
-                    cpp = findViewById(R.id.ccp);
-                    //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
-
-                    // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
-
-                    email.setText(currentEmail);
-                    name.setText(currentName);
-                    surname.setText(currentSurname);
-                    phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
-                    Log.i("phoneSet",currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
-                    address.setText(currentAddress);
-                    String country=currentPhone.substring(0, currentPhone.length()-9);
-                    Integer countryiNT=new Integer(country);
-
-                    cpp.setCountryForPhoneCode(Integer.parseInt(country));
-//                       phone.setText(currentPhone);
-                });
-                finish();
-            }
         });
 
         ImageView editProfileBackButton = findViewById(R.id.editProfileBackButton);
@@ -113,7 +76,6 @@ public class EditProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.phone);
         cpp = findViewById(R.id.ccp);
 
-//
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -123,9 +85,6 @@ public class EditProfileActivity extends AppCompatActivity {
         editProfileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
                 finish();
             }
         });
@@ -136,6 +95,48 @@ public class EditProfileActivity extends AppCompatActivity {
                 OpenGallery();
             }
         });
+
+
+        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upDateDetails().thenAccept(updateDetails -> {
+                    Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                    Log.i("EditProfileActivity", "Back button clicked");
+                    Intent intent = new Intent(EditProfileActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+//                getDetails().thenAccept(getDetails -> {
+//                    Log.i("AuthDemo", "User is signed in");
+//                    Log.i("AuthEmail", currentEmail);
+//                    name = findViewById(R.id.name);
+//                    surname = findViewById(R.id.surname);
+//                    email = findViewById(R.id.email);
+//                    address = findViewById(R.id.address);
+//                    phone = findViewById(R.id.phone);
+//                    cpp = findViewById(R.id.ccp);
+                    //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
+
+                    // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
+
+//                    email.setText(currentEmail);
+//                    name.setText(currentName);
+//                    surname.setText(currentSurname);
+//                    phone.setText(currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
+//                    Log.i("phoneSet", currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
+//                    address.setText(currentAddress);
+//                    String country = currentPhone.substring(0, currentPhone.length() - 9);
+//                    Integer countryiNT = new Integer(country);
+//
+//                    cpp.setCountryForPhoneCode(Integer.parseInt(country));
+//                       phone.setText(currentPhone);
+//                });
+
+//                finish();
+            }
+        });
+//
     }
 
     private CompletableFuture<Boolean> getDetails() {

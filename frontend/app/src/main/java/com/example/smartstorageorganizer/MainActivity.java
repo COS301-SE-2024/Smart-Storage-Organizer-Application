@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                    FetchByEmail("gayol59229@fincainc.com");
+//                FetchByEmail("gayol59229@fincainc.com");
                 isSignedIn().thenAccept(isSignedIn -> {
                     Intent intent;
                     if (isSignedIn) {
@@ -91,71 +91,71 @@ public class MainActivity extends AppCompatActivity {
         return future;
     }
 
-    public void FetchByEmail(String email)
-     {
-        String json = "{\"email\":\""+email+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/SearchByEmail";
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        String json1 = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
-                        Log.i("Request Method", "GET request succeeded: " + responseData);
-                        Gson gson = new Gson();
-                    ItemModel item = gson.fromJson(json1, ItemModel.class);
-//                    int itemId = item.getItemId();
-
-                    String itemName = item.getItem_name();
-                    Log.i("itemName", itemName);
-
-                        Gson gson1 = new Gson();
-                        Log.i("countingg1", "Integer.toString(itemList.size())");
-                        // Define the type of the collection
-                        Type collectionType = new TypeToken<List<ItemModel>>(){}.getType();
-                        Log.i("countingg2", "Integer.toString(itemList.size())");
-                        // Convert JSON string to List<Item>
-                        List<ItemModel> itemList = gson1.fromJson(responseData, collectionType);
-
-
-
-//                    String description = item.getDescription();
-//                    Log.i("description", description);
-                    });
-//                    runOnUiThread(() -> Log.i("Request Method", "GET request succeeded: " + responseData));
-//                    String json = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
-//                    Log.i("itemName", "itemName");
-//                    Gson gson = new Gson();
-//                    ItemModel item = gson.fromJson(json, ItemModel.class);
-//                    int itemId = item.getItemId();
+//    public void FetchByEmail(String email)
+//     {
+//        String json = "{\"email\":\""+email+"\" }";
 //
-//                    String itemName = item.getItemName();
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/SearchByEmail";
+//        RequestBody body = RequestBody.create(json, JSON);
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String responseData = response.body().string();
+//                    runOnUiThread(() -> {
+//                        String json1 = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
+//                        Log.i("Request Method", "GET request succeeded: " + responseData);
+//                        Gson gson = new Gson();
+//                    ItemModel item = gson.fromJson(json1, ItemModel.class);
+////                    int itemId = item.getItemId();
+//
+//                    String itemName = item.getItem_name();
 //                    Log.i("itemName", itemName);
-//                    String description = item.getDescription();
-//                    Log.i("description", description);
-// Access other properties as needed...
-
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
-                }
-            }
-        });
-    }
+//
+//                        Gson gson1 = new Gson();
+//                        Log.i("countingg1", "Integer.toString(itemList.size())");
+//                        // Define the type of the collection
+//                        Type collectionType = new TypeToken<List<ItemModel>>(){}.getType();
+//                        Log.i("countingg2", "Integer.toString(itemList.size())");
+//                        // Convert JSON string to List<Item>
+//                        List<ItemModel> itemList = gson1.fromJson(responseData, collectionType);
+//
+//
+//
+////                    String description = item.getDescription();
+////                    Log.i("description", description);
+//                    });
+////                    runOnUiThread(() -> Log.i("Request Method", "GET request succeeded: " + responseData));
+////                    String json = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
+////                    Log.i("itemName", "itemName");
+////                    Gson gson = new Gson();
+////                    ItemModel item = gson.fromJson(json, ItemModel.class);
+////                    int itemId = item.getItemId();
+////
+////                    String itemName = item.getItemName();
+////                    Log.i("itemName", itemName);
+////                    String description = item.getDescription();
+////                    Log.i("description", description);
+//// Access other properties as needed...
+//
+//                } else {
+//                    runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+//                }
+//            }
+//        });
+//    }
 }
