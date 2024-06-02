@@ -61,21 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
             Log.i("AuthEmail", currentEmail);
-            name = findViewById(R.id.name);
-            surname = findViewById(R.id.surname);
-            email = findViewById(R.id.email);
-            address = findViewById(R.id.address);
-            phone = findViewById(R.id.phone);
-            cpp = findViewById(R.id.ccp);
-
-            email.setText(currentEmail);
-            name.setText(currentName);
-            surname.setText(currentSurname);
-            phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
-
-            address.setText(currentAddress);
-            String country=currentPhone.substring(1, currentPhone.length()-9);
-            cpp.setCountryForPhoneCode(27);
+            Log.i("AuthSurname", currentSurname);
         });
 
 
@@ -85,6 +71,12 @@ public class EditProfileActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImage);
         content = findViewById(R.id.content);
         loadingScreen = findViewById(R.id.loadingScreen);
+        name = findViewById(R.id.name);
+        surname = findViewById(R.id.surname);
+        email = findViewById(R.id.email);
+        address = findViewById(R.id.address);
+        phone = findViewById(R.id.phone);
+        cpp = findViewById(R.id.ccp);
 
 //        upDateDetails();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -143,6 +135,14 @@ public class EditProfileActivity extends AppCompatActivity {
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentPhone);
                     runOnUiThread(() -> {
+                        email.setText(currentEmail);
+                        name.setText(currentName);
+                        surname.setText(currentSurname);
+                        phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+
+                        address.setText(currentAddress);
+                        String country=currentPhone.substring(1, currentPhone.length()-9);
+                        cpp.setCountryForPhoneCode(Integer.parseInt(country));
                        loadingScreen.setVisibility(View.GONE);
                        loadingScreen.pauseAnimation();
                        content.setVisibility(View.VISIBLE);

@@ -112,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
-                    android:text=""
+                    android:text="example@gmail.com"
                     android:enabled="false"
                     android:focusable="false"
                     android:inputType="textEmailAddress"/>
