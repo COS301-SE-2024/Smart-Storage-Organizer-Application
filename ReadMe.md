@@ -1,4 +1,5 @@
 # Smart Storage Organization
+![PingPong Status](https://m1bavqqu90.pingpong.host)
 
 ## Project Overview
 Welcome to the Smart Storage Organization project, developed by the Syntax Savants team. This application is designed to assist users in organizing their belongings efficiently and locating them effortlessly. 
