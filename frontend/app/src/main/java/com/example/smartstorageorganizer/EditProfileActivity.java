@@ -65,7 +65,42 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
+  findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upDateDetails().thenAccept(updateDetails->{
+                    Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                    Log.i("EditProfileActivity", "Back button clicked");
 
+                });
+                getDetails().thenAccept(getDetails->{
+                    Log.i("AuthDemo", "User is signed in");
+                    Log.i("AuthEmail", currentEmail);
+                    name = findViewById(R.id.name);
+                    surname = findViewById(R.id.surname);
+                    email = findViewById(R.id.email);
+                    address = findViewById(R.id.address);
+                    phone = findViewById(R.id.phone);
+                    cpp = findViewById(R.id.ccp);
+                    //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
+
+                    // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
+
+                    email.setText(currentEmail);
+                    name.setText(currentName);
+                    surname.setText(currentSurname);
+                    phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+                    Log.i("phoneSet",currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+                    address.setText(currentAddress);
+                    String country=currentPhone.substring(0, currentPhone.length()-9);
+                    Integer countryiNT=new Integer(country);
+
+                    cpp.setCountryForPhoneCode(Integer.parseInt(country));
+//                       phone.setText(currentPhone);
+                });
+                finish();
+            }
+        });
 
         ImageView editProfileBackButton = findViewById(R.id.editProfileBackButton);
         profileImage = findViewById(R.id.profileImage);
@@ -78,7 +113,7 @@ public class EditProfileActivity extends AppCompatActivity {
         phone = findViewById(R.id.phone);
         cpp = findViewById(R.id.ccp);
 
-//        upDateDetails();
+//
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -88,6 +123,9 @@ public class EditProfileActivity extends AppCompatActivity {
         editProfileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
                 finish();
             }
         });
@@ -127,10 +165,6 @@ public class EditProfileActivity extends AppCompatActivity {
                                 customAttribute = attribute.getValue();
                                 break;
                         }
-
-
-
-
                     }
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentPhone);
@@ -165,46 +199,48 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
-//    public CompletableFuture<Boolean>  upDateDetails(){
-//        CompletableFuture<Boolean> future=new CompletableFuture<>();
-//        String Name = Objects.requireNonNull(name.getText()).toString().trim();
-//        String Surname = Objects.requireNonNull(surname.getText()).toString().trim();
-//        String Address = Objects.requireNonNull(address.getText()).toString().trim();
-//        String Phone = Objects.requireNonNull(phone.getText()).toString().trim();
-//        if(!Name.equals(name)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
-//                    result -> Log.i("AuthDemo", "Updated name"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//                    future
-//            );
-//        }
-//
-//        if(!Surname.equals(surname)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
-//                    result -> Log.i("AuthDemo", "Updated surname"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//            );
-//        }
-//        if(!Address.equals(address)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
-//                    result -> Log.i("AuthDemo", "Updated address"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//            );
-//        }
-//        if(!Phone.equals(phone)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
-//                    result -> Log.i("AuthDemo", "Updated phone"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//
-//            );
-//        }
-//
-//        return true;
-//    }
+    public CompletableFuture<Boolean>  upDateDetails(){
+        Log.i("We are here","We are here");
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+        String Name = Objects.requireNonNull(name.getText()).toString().trim();
+        String Surname = Objects.requireNonNull(surname.getText()).toString().trim();
+        String Address = Objects.requireNonNull(address.getText()).toString().trim();
+        String Phone = Objects.requireNonNull(phone.getText()).toString().trim();
+        if(!Name.equals(name)){
+            Amplify.Auth.updateUserAttribute(
+                    new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
+                    result -> Log.i("AuthDemo", "Updated name"),
+                    error -> Log.e("AuthDemo", "Update failed", error)
+                    );
+            future.complete(true);
+        }
+        if(!Surname.equals(surname)){
+            Amplify.Auth.updateUserAttribute(
+                    new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
+                    result -> Log.i("AuthDemo", "Updated surname"),
+                    error -> Log.e("AuthDemo", "Update failed", error)
+            );
+            future.complete(true);
+        }
+        if(!Address.equals(address)){
+            Amplify.Auth.updateUserAttribute(
+                    new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
+                    result -> Log.i("AuthDemo", "Updated address"),
+                    error -> Log.e("AuthDemo", "Update failed", error)
+            );
+            future.complete(true);
+        }
+        if(!Phone.equals(phone)){
+            Amplify.Auth.updateUserAttribute(
+                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
+                    result -> Log.i("AuthDemo", "Updated phone"),
+                    error -> Log.e("AuthDemo", "Update failed", error)
+
+            );
+            future.complete(true);
+        }
+        return future;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

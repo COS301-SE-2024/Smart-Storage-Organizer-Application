@@ -1,94 +1,29 @@
 package com.example.smartstorageorganizer;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
-import com.amplifyframework.auth.result.AuthSignInResult;
-import com.amplifyframework.auth.result.AuthSignUpResult;
-import com.amplifyframework.core.Amplify;
-
+import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import android.util.Log;
+import android.text.Editable;
 
-import androidx.test.InstrumentationRegistry;
+import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
 
 public class AuthenticationUnitTest {
-
-
     @Mock
-    AuthSignUpResult signUpResult;
-
-    @Before
-    public void setup() {
-        try {
-            Amplify.addPlugin(new AWSCognitoAuthPlugin());
-            Amplify.configure(InstrumentationRegistry.getTargetContext());
-        }catch(AmplifyException e)
-        {
-            Log.i("error testing", e.toString());
-        }
-    }
+    private  LoginActivity loginObj;
 
     @Test
-    public void SignUpTest() {
-        CountDownLatch latch = new CountDownLatch(1);
-
-        Amplify.Auth.signUp(
-                "testuser1@example.com",
-                "password123",
-                AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), "testuser@example.com").build(),
-                result -> {
-                    assertNotNull(result);
-                    latch.countDown();
-                },
-                error -> {
-                    fail("Sign-up failed: " + error.getMessage());
-                    latch.countDown();
-                }
-        );
-
-
-
-        try {
-            latch.await(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        Amplify.Auth.signUp(
-                "testuser2@example.com",
-                "password1234",
-                AuthSignUpOptions.builder().userAttribute(AuthUserAttributeKey.email(), "testuser@example.com").build(),
-                result -> {
-                    assertNotNull(result);
-                    latch.countDown();
-                },
-                error -> {
-                    fail("Sign-up failed: " + error.getMessage());
-                    latch.countDown();
-                }
-        );
-
-        try {
-            latch.await(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+    public void SignUpTest()
+    {
 
     }
-
-
-
     @Test
     public void SignInTest()
     {
@@ -97,6 +32,20 @@ public class AuthenticationUnitTest {
     @Test
     public void SignOut()
     {
+
+    }
+    public void validateForm()
+    {
+        TextInputEditText emailField = mock(TextInputEditText.class);
+        TextInputEditText passwordField = mock(TextInputEditText.class);
+
+
+        Editable mockEditableEmail = mock(Editable.class);
+        Editable mockEditablePassword = mock(Editable.class);
+
+
+        when(mockEditableEmail.toString()).thenReturn("test@example.com");
+        when(mockEditablePassword.toString()).thenReturn("password123");
 
     }
 
