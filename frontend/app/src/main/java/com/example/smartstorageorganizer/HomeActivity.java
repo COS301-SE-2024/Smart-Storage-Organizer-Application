@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,10 +27,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 
-public class HomeActivity extends AppCompatActivity {
+import java.util.concurrent.CompletableFuture;
 
+public class HomeActivity extends AppCompatActivity {
+    private TextView fullName;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
+    private String currentName, currentSurname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +43,21 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarHome.toolbar);
-//        binding.appBarHome.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null)
-//                        .setAnchorView(R.id.fab).show();
-//            }
-//        });
+
+        getDetails().thenAccept(getDetails->{
+            Log.i("AuthDemo", "User is signed in");
+        });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         ConstraintLayout logout = binding.logoutButton;
         LottieAnimationView buttonLoader = binding.buttonLoader;
         TextView logoutButtonText = binding.logOutButtonText;
         ImageView logoutButtonIcon = binding.logoutButtonIcon;
+
+        View header = navigationView.getHeaderView(0);
+        fullName = (TextView) header.findViewById(R.id.fullName);
+//        fullName.setText("Ezekiel Makau");
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +96,48 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "name":
+                                currentName = attribute.getValue();
+                                break;
+                            case "family_name":
+                                currentSurname = attribute.getValue();
+                                break;
+//                            case "phone_number":
+//                                currentPhone = attribute.getValue();
+//                                break;
+//                            case "address":
+//                                currentAddress = attribute.getValue();
+//                                break;
+//                            case "custom:myCustomAttribute":
+//                                customAttribute = attribute.getValue();
+//                                break;
+                        }
+
+
+
+
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    runOnUiThread(() -> {
+                        String username = currentName+" "+currentSurname;
+                        fullName.setText(username);
+                    });
+                    future.complete(true);
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+
+        );
+        return future;
     }
 
     public void SignOut()

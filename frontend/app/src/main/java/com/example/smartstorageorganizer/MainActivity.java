@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
+
+import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.gson.Gson;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +18,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.core.Amplify;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                    FetchByEmail("ezetest@gmail.com");
                 isSignedIn().thenAccept(isSignedIn -> {
                     Intent intent;
                     if (isSignedIn) {
@@ -71,5 +85,62 @@ public class MainActivity extends AppCompatActivity {
 
         );
         return future;
+    }
+
+    public void FetchByEmail(String email)
+     {
+        String json = "{\"email\":\""+email+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/SearchByEmail";
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    runOnUiThread(() -> {
+                        String json1 = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
+                        Log.i("Request Method", "GET request succeeded: " + responseData);
+                        Gson gson = new Gson();
+                    ItemModel item = gson.fromJson(json1, ItemModel.class);
+//                    int itemId = item.getItemId();
+
+                    String itemName = item.getItem_name();
+                    Log.i("itemName", itemName);
+//                    String description = item.getDescription();
+//                    Log.i("description", description);
+                    });
+//                    runOnUiThread(() -> Log.i("Request Method", "GET request succeeded: " + responseData));
+//                    String json = "{\"item_id\": 24, \"item_name\": \"samsung\", \"description\": \"A75025\", \"colourcoding\": \"blue\", \"barcode\": \"[plkjihgv]\", \"qrcode\": \"opijyut\", \"quanity\": 50, \"location\": \"booth\", \"email\": \"ezetest@gmail.com\"}";
+//                    Log.i("itemName", "itemName");
+//                    Gson gson = new Gson();
+//                    ItemModel item = gson.fromJson(json, ItemModel.class);
+//                    int itemId = item.getItemId();
+//
+//                    String itemName = item.getItemName();
+//                    Log.i("itemName", itemName);
+//                    String description = item.getDescription();
+//                    Log.i("description", description);
+// Access other properties as needed...
+
+                } else {
+                    runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                }
+            }
+        });
     }
 }

@@ -6,15 +6,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
@@ -30,6 +34,8 @@ import java.util.concurrent.CompletableFuture;
 public class EditProfileActivity extends AppCompatActivity {
 
     TextInputEditText name, surname, email, phone, address;
+    LinearLayout content;
+    LottieAnimationView loadingScreen;
     CountryCodePicker cpp;
     int PICK_IMAGE_MULTIPLE = 1;
     private static final int GALLERY_CODE = 1;
@@ -52,45 +58,25 @@ public class EditProfileActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_profile);
 
-//        if (Amplify.Auth.isSignedIn()) {
-//            // Fetch user attributes only if the user is signed in
-//
-//        } else {
-//            Log.i("AuthDemo", "User is not signed in");
-//        }
-
-
-                   getDetails().thenAccept(getDetails->{
-                       Log.i("AuthDemo", "User is signed in");
-                       Log.i("AuthEmail", currentEmail);
-                       name = findViewById(R.id.name);
-                       surname = findViewById(R.id.surname);
-                       email = findViewById(R.id.email);
-                       address = findViewById(R.id.address);
-                       phone = findViewById(R.id.phone);
-                    cpp = findViewById(R.id.ccp);
-                     //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
-
-                       // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
-
-                       email.setText(currentEmail);
-                       name.setText(currentName);
-                       surname.setText(currentSurname);
-                       phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
-
-                       address.setText(currentAddress);
-                       String country=currentPhone.substring(0, currentPhone.length()-9);
-                       Integer countryiNT=new Integer(country);
-
-                       cpp.setCountryForPhoneCode(Integer.parseInt(country));
-//                       phone.setText(currentPhone);
-                   });
+        getDetails().thenAccept(getDetails->{
+            Log.i("AuthDemo", "User is signed in");
+            Log.i("AuthEmail", currentEmail);
+            Log.i("AuthSurname", currentSurname);
+        });
 
 
 
 
         ImageView editProfileBackButton = findViewById(R.id.editProfileBackButton);
         profileImage = findViewById(R.id.profileImage);
+        content = findViewById(R.id.content);
+        loadingScreen = findViewById(R.id.loadingScreen);
+        name = findViewById(R.id.name);
+        surname = findViewById(R.id.surname);
+        email = findViewById(R.id.email);
+        address = findViewById(R.id.address);
+        phone = findViewById(R.id.phone);
+        cpp = findViewById(R.id.ccp);
 
 //        upDateDetails();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -148,6 +134,19 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentPhone);
+                    runOnUiThread(() -> {
+                        email.setText(currentEmail);
+                        name.setText(currentName);
+                        surname.setText(currentSurname);
+                        phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+
+                        address.setText(currentAddress);
+                        String country=currentPhone.substring(1, currentPhone.length()-9);
+                        cpp.setCountryForPhoneCode(Integer.parseInt(country));
+                        loadingScreen.setVisibility(View.GONE);
+                        loadingScreen.pauseAnimation();
+                        content.setVisibility(View.VISIBLE);
+                   });
                     future.complete(true);
                 },
                 error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
