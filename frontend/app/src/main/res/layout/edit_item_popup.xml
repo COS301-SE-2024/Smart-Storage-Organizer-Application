@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Item"
+        android:text="Edit Item"
         android:textColor="@color/colorSecondary"
         android:textStyle="bold"
         android:textSize="18dp"
@@ -90,7 +90,7 @@
         android:id="@+id/button_edit_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="Update"
         android:layout_gravity="end"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"/>

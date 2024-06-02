@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
@@ -24,6 +25,7 @@ import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hbb20.CountryCodePicker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ import okhttp3.Callback;
 
 public class RegistrationActivity extends AppCompatActivity {
     TextInputEditText Name, Surname, Email, Password, PhoneNumber;
+    TextView registerButtonText;
+    ImageView registerButtonIcon;
+    LottieAnimationView buttonLoader;
+    CountryCodePicker cpp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,12 @@ public class RegistrationActivity extends AppCompatActivity {
         Email = findViewById(R.id.email);
         Password = findViewById(R.id.password);
         PhoneNumber = findViewById(R.id.phone);
+        cpp = findViewById(R.id.cpp);
+        buttonLoader = findViewById(R.id.buttonLoader);
+        registerButtonText = findViewById(R.id.register_button_text);
+        registerButtonIcon = findViewById(R.id.register_button_icon);
+
+        cpp.setCountryForPhoneCode(27);
 
 
         //SignUp("bonganizungu889@gmail.com", "0586454569", "Test1", "Subject", "856 Ohio", "Uber1235#");
@@ -72,15 +84,13 @@ public class RegistrationActivity extends AppCompatActivity {
                     String email = Email.getText().toString().trim();
                     String phone = "+27"+PhoneNumber.getText().toString().trim();
                     String password = Password.getText().toString().trim();
-//                SignUp("gayol59229@fincainc.com", "+27825641238", "Paul", "Pogba", "856 Hydrogen Street", "Storage17@");
-//                    SignUp("gayol59229@fincainc.com", "0586454569", "John", "Stones", "856 Francisco", "Storage17@");
-                    Log.i("Name: ", name);
-                    Log.i("Surname: ", name);
-                    Log.i("Email: ", name);
-                    Log.i("Phone: ", name);
-                    Log.i("Password: ", name);
+
+                    buttonLoader.setVisibility(View.VISIBLE);
+                    buttonLoader.playAnimation();
+                    registerButtonText.setVisibility(View.GONE);
+                    registerButtonIcon.setVisibility(View.GONE);
+
                     SignUp(email, phone, name, surname, "856 Hydrogen Street", password);
-//                    Toast.makeText(this, "Registration Successful", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -221,6 +231,14 @@ public class RegistrationActivity extends AppCompatActivity {
             Log.e("AuthSignUpError", "Exception during sign-up", e);
             //do not change pages
 //            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            runOnUiThread(() -> {
+                buttonLoader.setVisibility(View.GONE);
+                buttonLoader.playAnimation();
+                registerButtonText.setVisibility(View.VISIBLE);
+                registerButtonIcon.setVisibility(View.VISIBLE);
+
+                Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
+            });
         }
 
     }

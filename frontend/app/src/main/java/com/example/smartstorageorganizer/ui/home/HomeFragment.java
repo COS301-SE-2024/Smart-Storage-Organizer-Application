@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment {
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
     private LottieAnimationView fetchItemsLoader;
+    AlertDialog alertDialog;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -185,7 +186,7 @@ public class HomeFragment extends Fragment {
         Button buttonNext = dialogView.findViewById(R.id.button_add_item);
 
         // Create the AlertDialog
-        AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
 
         // Set the button click listener
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -194,7 +195,6 @@ public class HomeFragment extends Fragment {
                 String name = itemName.getText().toString().trim();
                 String description = itemDescription.getText().toString().trim();
                 postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", "gayol59229@fincainc.com");
-                alertDialog.dismiss();
             }
         });
 
@@ -225,7 +225,18 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                    requireActivity().runOnUiThread(() -> {
+                        requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+//                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+//                        startActivity(intent);
+//                        requireActivity().finish();
+                        fetchItemsLoader.setVisibility(View.VISIBLE);
+                        fetchItemsLoader.playAnimation();
+                        itemRecyclerView.setVisibility(View.GONE);
+                        alertDialog.dismiss();
+                        itemModelList.clear();
+                        FetchByEmail("gayol59229@fincainc.com");
+                    });
                 } else {
                     requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
                 }

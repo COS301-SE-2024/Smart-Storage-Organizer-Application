@@ -87,6 +87,11 @@ public class ItemInfoActivity extends AppCompatActivity {
         EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
         Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
 
+        itemName.setText(getIntent().getStringExtra("item_name"));
+        itemDescription.setText(getIntent().getStringExtra("item_description"));
+        itemLocation.setText(getIntent().getStringExtra("location"));
+        itemColorCode.setText(getIntent().getStringExtra("color_code"));
+
         // Create the AlertDialog
         AlertDialog alertDialog = builder.create();
 

@@ -143,9 +143,9 @@ public class EditProfileActivity extends AppCompatActivity {
                         address.setText(currentAddress);
                         String country=currentPhone.substring(1, currentPhone.length()-9);
                         cpp.setCountryForPhoneCode(Integer.parseInt(country));
-                       loadingScreen.setVisibility(View.GONE);
-                       loadingScreen.pauseAnimation();
-                       content.setVisibility(View.VISIBLE);
+                        loadingScreen.setVisibility(View.GONE);
+                        loadingScreen.pauseAnimation();
+                        content.setVisibility(View.VISIBLE);
                    });
                     future.complete(true);
                 },
