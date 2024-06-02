@@ -1,65 +1,82 @@
-package com.example.smartstorageorganizer.ui.profile_management;
+package com.example.smartstorageorganizer;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
-import com.example.smartstorageorganizer.EditProfileActivity;
-import com.example.smartstorageorganizer.LoginActivity;
-import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.databinding.FragmentProfileManagementBinding;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ProfileManagementFragment extends Fragment {
+public class ProfileManagementActivity extends AppCompatActivity {
+
     private TextView email, username;
     ConstraintLayout content;
     LottieAnimationView loadingScreen;
     private String currentEmail, currentName, currentSurname;
-    private FragmentProfileManagementBinding binding;
+    ImageView profileBackButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_profile_management);
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ProfileManagementViewModel profileManagementViewModelViewModel =
-                new ViewModelProvider(this).get(ProfileManagementViewModel.class);
-
-        binding = FragmentProfileManagementBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        email = root.findViewById(R.id.email);
-        username = root.findViewById(R.id.username);
-        content = root.findViewById(R.id.content);
-        loadingScreen = root.findViewById(R.id.loadingScreen);
+        email = findViewById(R.id.email);
+        username = findViewById(R.id.username);
+        content = findViewById(R.id.content);
+        loadingScreen = findViewById(R.id.loadingScreen);
+        profileBackButton = findViewById(R.id.ProfileBackButton);
 
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
             Log.i("AuthEmailFragment", currentEmail);
         });
 
-        AppCompatButton editProfileButton = root.findViewById(R.id.editProfileButton);
+        AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
+        ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
-        return root;
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignOut();
+            }
+        });
+
+        profileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private CompletableFuture<Boolean> getDetails() {
@@ -79,15 +96,6 @@ public class ProfileManagementFragment extends Fragment {
                             case "family_name":
                                 currentSurname = attribute.getValue();
                                 break;
-//                            case "phone_number":
-//                                currentPhone = attribute.getValue();
-//                                break;
-//                            case "address":
-//                                currentAddress = attribute.getValue();
-//                                break;
-//                            case "custom:myCustomAttribute":
-//                                customAttribute = attribute.getValue();
-//                                break;
                         }
 
 
@@ -96,7 +104,7 @@ public class ProfileManagementFragment extends Fragment {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentEmail);
-                    requireActivity().runOnUiThread(() -> {
+                    runOnUiThread(() -> {
                         email.setText(currentEmail);
                         String fullName = currentName+" "+currentSurname;
                         username.setText(fullName);
@@ -119,20 +127,20 @@ public class ProfileManagementFragment extends Fragment {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
                 //move to a different page
-                requireActivity().runOnUiThread(() -> {
-                    Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    requireActivity().finish();
+                    finish();
                 });
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
                 // Sign Out completed with some errors. User is signed out of the device.
                 AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
                         (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
-                requireActivity().runOnUiThread(() -> {
-                    Intent intent = new Intent(requireActivity(), LoginActivity.class);
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    requireActivity().finish();
+                    finish();
                 });
 
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
@@ -141,18 +149,12 @@ public class ProfileManagementFragment extends Fragment {
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
-                requireActivity().runOnUiThread(() -> {
+                runOnUiThread(() -> {
 //                    requireActivity().Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
 
                 });
             }
         });
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
