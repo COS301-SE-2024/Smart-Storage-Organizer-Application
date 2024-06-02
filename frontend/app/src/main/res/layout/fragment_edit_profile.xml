@@ -28,7 +28,7 @@
             android:id="@+id/shapeableImageView"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/profile"
+            android:src="@drawable/no_profile_image"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             app:shapeAppearanceOverlay="@style/RoundedCorners" />

@@ -23,7 +23,7 @@
             android:id="@+id/item_image"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:src="@drawable/profile"
+            android:src="@drawable/no_image"
             android:layout_marginTop="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
