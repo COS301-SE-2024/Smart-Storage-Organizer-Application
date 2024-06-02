@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +18,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.core.Amplify;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                    FetchByEmail("ezetest@gmail.com");
+                    FetchByEmail("gayol59229@fincainc.com");
                 isSignedIn().thenAccept(isSignedIn -> {
                     Intent intent;
                     if (isSignedIn) {
@@ -121,6 +125,17 @@ public class MainActivity extends AppCompatActivity {
 
                     String itemName = item.getItem_name();
                     Log.i("itemName", itemName);
+
+                        Gson gson1 = new Gson();
+                        Log.i("countingg1", "Integer.toString(itemList.size())");
+                        // Define the type of the collection
+                        Type collectionType = new TypeToken<List<ItemModel>>(){}.getType();
+                        Log.i("countingg2", "Integer.toString(itemList.size())");
+                        // Convert JSON string to List<Item>
+                        List<ItemModel> itemList = gson1.fromJson(responseData, collectionType);
+
+
+
 //                    String description = item.getDescription();
 //                    Log.i("description", description);
                     });
