@@ -1,6 +1,9 @@
 # Smart Storage Organization
 [![System Status](https://api.pingpong.one/widget/dot/sp_c00753e7c20f49ceb4e398783439fb67)](https://m1bavqqu90.pingpong.host/)
 
+## Team Name: Syntax Savants
+Project Email: syntaxsavants98@gmail.com
+
 ## Project Overview
 Welcome to the Smart Storage Organization project, developed by the Syntax Savants team. This application is designed to assist users in organizing their belongings efficiently and locating them effortlessly. 
 
@@ -49,17 +52,22 @@ To set up the project locally, follow these steps:
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contributor
-### Team Name: Syntax Savants
-Project Email: syntaxsavants98@gmail.com
 
 ### Siyabonga Mbuyisa
-Hi. I am a final year Software Developer with a passion for crafting innovative software solutions. I contributed as a services engineering, data engineering, and tester to this project, But really I have also played other roles which I did not plan for. My aim to make the app robustness and scalability. 
+Hi. I am a final year Software Developer with a passion for crafting innovative software solutions. I contributed as a services engineering, data engineering, and tester to this project, But really I have also played other roles which I did not plan for. My aim to make the app robustness, scalability and user-friendly. 
 Excited to collaborate and create impactful software experiences!
-https://www.linkedin.com/in/siyabonga-mbuyisa-developer/
+##### https://www.linkedin.com/in/siyabonga-mbuyisa-developer/
 
 ### Victor Zhou
 As a dedicated BSc Computer Science student, I possess a profound interest in exploring the transformative power of Computer Science on a global scale. My repertoire includes a versatile array of programming languages, including Android, VB.Net, Python, Java, JavaScript, PHP, C++, HTML, CSS, SQL, and MQL5. My proficiency extends across various dimensions of software development, encompassing both backend and frontend realms. Driven by a commitment to excellence, I am poised to evolve into a seasoned Software Engineer in the near future, leveraging my skills to make meaningful contributions to the field.
-http://www.linkedin.com/in/victor-zhou-343004302
+##### http://www.linkedin.com/in/victor-zhou-343004302
 
-### Ezekiel 
+### Ezekiel Makau
+I will oversee the design and implementation of the front-end spectrum of the application, leveraging my extensive experience in web development and Android application development. In addition to my technical skills, my expertise in Mathematical Statistics and Mathematics equips me with strong quantitative analysis capabilities.
+#### https://www.linkedin.com/in/ezekiel-makau-397aa92b7
+
+
+### Tshegofatso Mapheto
+I am a highly motivated individual with a strong passion for my work and a relentless drive to excel. My dedication to achieving goals not only fuels my progress but also inspires those who work with me. I possess a robust theoretical and practical understanding of various aspects of statistics and mathematics, with a specific emphasis on their practical applications in problem-solving. My expertise in statistics and application development empowers me to harness the power of data, optimizing solutions and streamlining processes. Furthermore, I am creative in my thinking, able to approach problems from different angles, and I am committed to my ongoing personal development.
+##### https://www.linkedin.com/in/tshegofatso-mapheto-167678189
 
