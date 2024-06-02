@@ -287,17 +287,18 @@
                     android:id="@+id/fetchItemsLoader"
                     android:layout_width="180dp"
                     android:layout_height="180dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_autoPlay="false"
-                    app:lottie_loop="false"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
                     app:lottie_rawRes="@raw/loading" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/item_rec"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

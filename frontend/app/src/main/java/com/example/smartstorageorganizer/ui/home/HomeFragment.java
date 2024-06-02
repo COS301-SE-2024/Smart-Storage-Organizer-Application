@@ -19,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.R;
@@ -35,6 +38,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,10 +50,12 @@ import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
 
+    LottieAnimationView fetchItemsLoader;
     private FragmentHomeBinding binding;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
+    private String currentEmail;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -58,10 +64,13 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        getDetails().thenAccept(getDetails->{
+            Log.i("AuthDemo", "User is signed in");
+        });
+
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
-
-        FetchByEmail("gayol59229@fincainc.com");
+        fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,23 +85,6 @@ public class HomeFragment extends Fragment {
 
         itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
-
-//        db.collection("FlashSaleProducts")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                FlashSaleModel popularModel = document.toObject(FlashSaleModel.class);
-//                                flashSaleModelListModelList.add(popularModel);
-//                                flashSaleAdapter.notifyDataSetChanged();
-//                            }
-//                        } else {
-//                            Toast.makeText(HomeActivity.this, "Error"+task.getException(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
 
         return root;
     }
@@ -156,12 +148,16 @@ public class HomeFragment extends Fragment {
                                 item.setLocation(itemObject.getString("location"));
                                 item.setEmail(itemObject.getString("email"));
 
-//                                items.add(item1);
                                 itemModelList.add(item);
                                 itemAdapter.notifyDataSetChanged();
 
                                 requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_name()));
                             }
+
+                            requireActivity().runOnUiThread(() -> {
+                                fetchItemsLoader.setVisibility(View.GONE);
+                                itemRecyclerView.setVisibility(View.VISIBLE);
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -173,6 +169,35 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "email":
+                                currentEmail = attribute.getValue();
+                                break;
+                        }
+
+
+
+
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    requireActivity().runOnUiThread(() -> {
+                        FetchByEmail(currentEmail);
+                    });
+                    future.complete(true);
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+
+        );
+        return future;
     }
 
     private void showAddItemPopup() {
