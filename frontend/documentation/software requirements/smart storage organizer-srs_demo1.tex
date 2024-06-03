@@ -310,3 +310,51 @@ All of the below-mentioned users are assumed to have knowledge of operating a co
         \item As an employee
     \end{itemize}
     \pagebreak
+
+% WHICH THREE USE CASES ARE WE GOING FOR
+% 1. User registration (Profile management)
+% 2. Add of an item
+% 3. Edit of an item
+
+
+    \section{Subsystems}
+    \subsection{S1. Employee}
+    The Employee subsystem contains all the steps necessary for an employee to gain secure and authorized access to the Smart Storage Organizer application.
+    \subsubsection{Use cases}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=14cm]{Employee subsystem.JPG}
+        \caption{Employee Subsystem use case diagram}
+        \label{fig:EmployeeSubsystemDiagram}
+    \end{figure}
+    \subsubsection{Service contracts}
+    \paragraph{Register user}
+    This use case accepts the user's first name, last name, initials, email address, as well as password when creating an account. The system validates that the email address and password do not yet exist in the database before allowing the continuation of registration.
+    \paragraph{Verify account}
+    This use case is used by the user to validate their account upon registration. An activation code with a specific time limit will be sent to the user's email address for them to use to verify and activate their account.
+    \paragraph{Login user}
+    This use case accepts the user's email address and password as input and validates if they are correct.
+    \paragraph{Edit account information}
+    This use case allows the user to update their information in the system such as first name, last name and email address.
+    \paragraph{Reset password}
+    This use case allows the user to issue a reset password request, upon which a reset code with a specific time limit will be sent to their email address.
+
+    \subsection{S2. Item}
+    The Item subsystem is responsible for adding, deleting and editing the employee's items in the storage. The items will be stored, labelled and filtered accordingly.
+    \subsubsection{Use cases}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=14cm]{ItemManagement.png}
+        \caption{Item Subsystem use case diagram}
+        \label{fig:Item SubsystemDiagram}
+    \end{figure}
+    \subsubsection{Service contracts}
+    \paragraph{Add item}
+    The use case allows the employee to add the item they want to storage.
+    \paragraph{Delete item}
+    The use case allows the employee to delete the item from the storage.
+    \paragraph{Search item}
+    The use case allows the employee to search for an item that they want to either store or retrieve.
+    \paragraph{Edit item}
+    The use case allows the employee to edit and update the item that are already being stored.
+
