@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 String name = itemName.getText().toString().trim();
                 String description = itemDescription.getText().toString().trim();
-                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", "gayol59229@fincainc.com");
+                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
             }
         });
 
