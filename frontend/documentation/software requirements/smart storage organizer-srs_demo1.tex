@@ -503,4 +503,105 @@ All of the below-mentioned users are assumed to have knowledge of operating a co
 %     \end{itemize}
 %     \end{itemize}
 
+    \pagebreak
+    \section{Architectural requirements}
+    \subsection{Quality Requirements}
+% Specify and quantify each of the quality requirements relevant to the system. Examples of quality requirements
+% include performance, reliability, scalability, security maintainability, usability.
+    \begin{itemize}
+        \item \textbf{Q1. Security: }\\
+        The system should be able to defend itself against malicious attacks. User data (passwords) should be encrypted and securely stored in the database.  Uploaded files should be securely stored and only available through the platform to authorized individuals that are defined by the employees responsible to manage the items. Encryption should be used to communicate between the front-end and back-end platforms.Quantification: JWT tokens timeout Validation of newly created users.
+        Strength of encryption algorithms.\\
+
+        \item \textbf{Q2. Scalability: }\\
+        The system should be able to alter performance and cost in response to changes in application demands. As such, as the application becomes more widely used in the business, it should be able to handle an increase in the number of active users and expand its resources without compromising on efficiency.
+        Quantification: ex start with 50 users move on forth.\\
+        Database systems are abstracted, more databases, different ones can be added.\\
+        Amazon RDS for PostgreSQL - Automated Scaling: Adjusts compute and storage resources without downtime.
+        -Read Replicas: Up to 5 read replicas to offload read traffic and improve performance.\\
+        AWS is easily scalable (cloud storage).
+        Bandwith of server/physical requirements of server. We need a way to scale physical performance.\\
+        Solution-host server on cloud services that scale with demand (will be a deployment concern). Hence MVC and layered architecture (frontend and backend can be hosted separately).\\
+
+        \item \textbf{Q3. Performance: }\\
+        The system should react promptly to user inputs and requests with no noticeable delay. Documents should be viewable on the platform without long loading times, as this can negatively affect the user experience, specifically on mobile. Users should be notified sufficiently early of new items requiring action, and updates on
+        Workflow progress.\\
+
+        \item \textbf{Q4. Reliability: }\\
+        The application needs to be reliable in order to gain user trust and confidence. The platform must present the correct information at all times and aim for an up-time of 99\% for users. It must also ensure that in the case of system failure, data integrity is maintained and critical functions are in a safe state with an option to rollback to a previous state.\\
+
+        \item \textbf{Q5. Maintainability: }\\
+        This refers to the ease which a system can be understood, repaired, and enhanced. New features and environments will almost certainly result in unforeseen faults or behaviors that must be fixed over the system's lifetime. When changes are made or faults are detected, they must be logged and documented for the long term maintainability of the system.
+    \end{itemize}
+    \subsection{Architectural Pattern}
+    \subsubsection{Microservices with Layered Architecture}
+    \paragraph{Microservices Structure}
+    \begin{itemize}
+        \item \textbf{Modularity: }\\
+        Labeling and Identification: A microservice dedicated to generating and managing QR codes and color coding.\\
+        Search Functionality: Separate microservices for text search, voice search, and AI-enhanced search.
+
+        \item \textbf{Scalability: }\\
+        Each microservice can be scaled independently based on its specific workload, ensuring efficient resource utilization.
+
+        \item \textbf{Technology Diversity: }\\
+        Allows you to use the best-suited technologies for different components (e.g., AI integration could leverage specific machine learning frameworks).
+
+        \item \textbf{Continuous Deployment: }\\
+        Microservices enable faster deployment cycles, allowing you to update or add features without affecting the entire system.
+
+        \item \textbf{Fault Isolation:}
+        Issues in one microservice won’t necessarily affect others, enhancing the overall reliability of your application
+    \end{itemize}
+
+    \paragraph{Layered Architecture within Each Microservice}
+    \begin{itemize}
+        \item Presentation Layer: Handles user interface and API endpoints.
+        \item Business Logic Layer: Contains the core application logic and processing rules.
+        \item Data Access Layer: Manages interactions with databases or other storage solutions.
+    \end{itemize}
+    \pagebreak
+    \subsection{Design Pattern}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=16cm]{Microservices and Layered Architecure.png}
+        \caption{The Design Pattern of Smart Storage Organizer}
+        \label{fig:Smart Storage Organizer ClassDiagram}
+    \end{figure}
+
+    \paragraph{Implementation Steps}
+    \begin{itemize}
+        \item Identify the core functionalities and create separate microservices for each:
+        \begin{itemize}
+            \item QR Code Service
+            \item Text Search Service
+            \item Voice Search Service
+            \item Color Coding
+            \item AI Search Service
+        \end{itemize}
+        \item Implement Layered Architecture in Each Microservice:
+        \begin{itemize}
+            \item Presentation Layer:
+            \begin{itemize}
+                \item Expose RESTful APIs.
+                \item Use AWS Amplify Amazon Cognito. and Retrofit for handling API requests.
+            \end{itemize}
+            \item Business Logic Layer:
+            \begin{itemize}
+                \item Implement the core logic for QR code generation, search algorithms, voice recognition, and AI processing.
+                \item Use services and controllers to process data and perform business operations.
+            \end{itemize}
+            \item Data Access Layer:
+            \begin{itemize}
+                \item Manage database connections and queries.
+                \item Use AWS SDK for Java and JPA (Java Persistence API) with Hibernate as our ORM library for managing database connections and queries.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \subsection{Constrains}
+    \begin{itemize}
+        \item \textbf{Free cloud services:} We will leverage free tiers of cloud services like AWS to minimize project costs.
+        \item \textbf{Open-source technologies:} We will prioritize the use of open-source technologies whenever possible to ensure cost-effectiveness and wider accessibility.
+    \end{itemize}
+
 
