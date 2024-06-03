@@ -14,10 +14,8 @@ Welcome to the Smart Storage Organization project, developed by the Syntax Savan
 - Features
 - Technologies Used
 - Installation
-- Usage
-- Contributing
-- License
-- Contact
+- Contributors
+- Video Presentation
 
 ## Introduction
 Smart Storage Organization is an intuitive Android application aimed at streamlining the organization items. By leveraging our app, users can easily categorize, locate, and manage their inventory, ensuring a more organized and efficient environment.
@@ -82,4 +80,7 @@ A skilled full stack developer with a focus on frontend
 development and integration. Strength lies in designing user friendly applications and translating complex concepts into efficient solutions, backed by a solid foundation in various
 programming languages and development methodologies
 #### http://www.linkedin.com/in/mosa-letswalo/
+
+## Video Presentation
+https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link
 
