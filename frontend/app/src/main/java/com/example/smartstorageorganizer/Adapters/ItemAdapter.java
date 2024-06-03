@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -50,17 +52,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 //            Glide.with(context).load(ItemModelList.get(position).getImg_url_one()).placeholder(R.drawable.app_name_text).error(R.drawable.app_name_text).into(holder.image);
 //        }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.more_info_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(view.getContext(), Main.class);
-//                intent.putExtra("flash_sale_name", FlashSaleModelList.get(holder.getAdapterPosition()).getName());
-//                intent.putExtra("category", FlashSaleModelList.get(holder.getAdapterPosition()).getType());
-//                intent.putExtra("price_now", FlashSaleModelList.get(holder.getAdapterPosition()).getPrice_now());
-//                intent.putExtra("price_before", FlashSaleModelList.get(holder.getAdapterPosition()).getPrice_before());
-//                intent.putExtra("img_url_one", FlashSaleModelList.get(holder.getAdapterPosition()).getImg_url_one());
+                Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
+                intent.putExtra("item_name", ItemModelList.get(holder.getAdapterPosition()).getItem_name());
+                intent.putExtra("item_description", ItemModelList.get(holder.getAdapterPosition()).getDescription());
+                intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
+                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourcoding());
+                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItem_id());
 
-//                context.startActivity(intent);
+                context.startActivity(intent);
             }
         });
     }
@@ -74,12 +76,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         ShapeableImageView image;
         TextView name;
         TextView description;
+        Button more_info_button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.item_image);
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
+            more_info_button = itemView.findViewById(R.id.more_info_button);
         }
     }
 
