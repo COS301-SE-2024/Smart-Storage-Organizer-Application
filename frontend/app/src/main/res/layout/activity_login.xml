@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
+    android:background="@color/background"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -55,6 +55,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcometext" />
 
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Wrong Credentials!"-->
+<!--        android:textColor="@color/red"-->
+<!--        android:layout_marginStart="86dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/backtext" />-->
+
     <RelativeLayout
         android:id="@+id/LogincardView"
         android:layout_width="match_parent"
@@ -100,36 +109,6 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--        <EditText-->
-        <!--            android:id="@+id/inputUsername"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="52dp"-->
-        <!--            android:layout_marginEnd="16dp"-->
-        <!--            android:layout_marginTop="16dp"-->
-        <!--            android:textColor="#252C4B"-->
-        <!--            android:textColorHint="#4C4A4A"-->
-        <!--            android:backgroundTint="#4C4A4A"-->
-        <!--            android:textStyle="bold"-->
-        <!--            android:hint="Employee ID"-->
-        <!--            android:inputType="textEmailAddress"-->
-        <!--            />-->
-        <!--        <EditText-->
-        <!--            android:id="@+id/inputPassword"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/inputUsername"-->
-        <!--            android:textColor="#252C4B"-->
-        <!--            android:textColorHint="#4C4A4A"-->
-        <!--            android:backgroundTint="#4C4A4A"-->
-        <!--            android:textStyle="bold"-->
-        <!--            android:layout_marginStart="36dp"-->
-        <!--            android:layout_marginEnd="32dp"-->
-        <!--            android:layout_marginTop="32dp"-->
-        <!--            android:hint="Password"-->
-        <!--            android:inputType="textPassword"-->
-        <!--            />-->
-
         <RelativeLayout
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
@@ -171,6 +150,21 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/login_button_text"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/buttonLoader"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_rawRes="@raw/loading"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false"/>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
