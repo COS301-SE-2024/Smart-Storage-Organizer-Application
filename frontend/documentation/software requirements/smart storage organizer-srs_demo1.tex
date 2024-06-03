@@ -358,3 +358,149 @@ All of the below-mentioned users are assumed to have knowledge of operating a co
     \paragraph{Edit item}
     The use case allows the employee to edit and update the item that are already being stored.
 
+
+    \newpage
+    \section{Domain Model}
+% Illustrate the software solution using a valid and correctly formatted UML class diagram. Ensure correct use of
+% association, aggregation, composition and related concepts such as multiplicity.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=16cm]{Domain Model.png}
+        \caption{The Domain Model of Smart Storage Organizer}
+        \label{fig:Smart Storage Organizer ClassDiagram}
+    \end{figure}
+
+    \subsection{Class Descriptions}
+    \subsubsection{Employee}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This class represents a employee of the system and stores all the necessary information to uniquely describe them.
+        \end{itemize}
+        \item  Relationships
+        \begin{itemize}
+            \item An employee must be managed by an admin user.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item id: employee id
+            \item name: the employee's firstname.
+            \item surname: the employee's lastname.
+            \item phone number: the employee's signature.
+            \item password: a salted and hashed string of the employee's password used to identify a employee during the login process.
+            \item email: a valid email address tied to the employee's account used to notify the employee when necessary.
+            \item validateCode: a code that will be used to verify a user's email address.
+            \item tokens: an array of tokens to facilitate logging a user in and out of the system.
+
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Token}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This class holds a value that is used to manage the logout process of a user.
+        \end{itemize}
+        \item Relationships
+        \begin{itemize}
+            \item A token will belong to exactly one user.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item token: a randomly generated string.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Item}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class is the driving class behind the system. It manages the items that are stored, all of the employees that can access the storage, the manager, the history of all changes the employees have made as well as the current Status of the item.
+        \end{itemize}
+        \item  Relationships
+        \begin{itemize}
+            \item An item can stored according to only one color code.
+            \item Item can be managed by one or more users.
+            \item An Item will have only one QR which identifies it's uniqueness.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            % \item \_id: the item's unique id.
+            \item name: the name of the item.
+            \item description: a string that describes the item stored.
+            \item color: specifies the color in which the item is grouped by.
+            \item quantity: it shows the quantity of the items within the storage.
+            \item supplier name: it shows the name of the supplier who provided the item.
+        \end{itemize}
+
+    \end{itemize}
+
+
+    \subsubsection{Storage}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class represents a Storage which all the items are kept and managed.
+        \end{itemize}
+        \item  Relationships
+        \item A Storage can store multiple items.
+        \item Attributes
+        \begin{itemize}
+            \item color: represents the color for a specific group of items.
+            \item items: holds a list of items within the storage.
+            \item capacity: gives the maximum size of the storage.
+        \end{itemize}
+    \end{itemize}
+
+
+
+    \subsubsection{QR}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class is used to manage the item's unique qr code.
+        \end{itemize}
+        \item  Relationships
+        \item Each item has only one QR code.
+        \item Attributes
+        \begin{itemize}
+            \item color: it gives the color in which the item is grouped.
+            \item QR: it assigns an item a unique QR code.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Color}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item The class holds all the colors that are available for a group of specific items.
+        \end{itemize}
+        \item Relationships
+        \begin{itemize}
+            \item A color can only belong to one group of items.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item color: list of colors available that can bet allocated to a specific group of items.
+            \item location: specifies which location is a specific color is placed withing the storage.
+        \end{itemize}
+    \end{itemize}
+
+% \subsubsection{GroupQR}
+% \begin{itemize}
+%     \item Purpose
+%     \begin{itemize}
+%         \item The class holds all grouped items of the same category and assigns them a QR code.
+%     \end{itemize}
+%     \item Relationships
+%     \begin{itemize}
+%         \item Only one QR code can be assigned to each group.
+%     \end{itemize}
+%     \item Attributes
+%     \begin{itemize}
+%         \item setitem: set the item's group's QR.
+%     \end{itemize}
+%     \end{itemize}
+
+
