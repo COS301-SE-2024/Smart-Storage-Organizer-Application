@@ -24,6 +24,8 @@ import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.EditProfileActivity;
+import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -56,6 +58,7 @@ public class HomeFragment extends Fragment {
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
     private String currentEmail;
+    AlertDialog alertDialog;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -214,7 +217,7 @@ public class HomeFragment extends Fragment {
         Button buttonNext = dialogView.findViewById(R.id.button_add_item);
 
         // Create the AlertDialog
-        AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
 
         // Set the button click listener
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -222,8 +225,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 String name = itemName.getText().toString().trim();
                 String description = itemDescription.getText().toString().trim();
-                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", "gayol59229@fincainc.com");
-                alertDialog.dismiss();
+                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
             }
         });
 
@@ -254,7 +256,12 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                    requireActivity().runOnUiThread(() -> {
+                        requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                    });
                 } else {
                     requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
                 }

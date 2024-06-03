@@ -1,14 +1,14 @@
-package com.example.smartstorageorganizer.ui.profile_management;
+package com.example.smartstorageorganizer.ui.settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ProfileManagementViewModel extends ViewModel {
+public class SettingsViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public ProfileManagementViewModel() {
+    public SettingsViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is Profile Management fragment");
     }

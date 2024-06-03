@@ -14,15 +14,15 @@
             android:icon="@drawable/outline_notifications_24"
             android:title="Notifications"
             android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/outline_settings_24"
-            android:title="Settings"
-            android:textColor="@color/colorPrimary"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_settings"-->
+<!--            android:icon="@drawable/outline_settings_24"-->
+<!--            android:title="Settings"-->
+<!--            android:textColor="@color/colorPrimary"/>-->
         <item
             android:id="@+id/nav_profile_management"
-            android:icon="@drawable/outline_person_24"
-            android:title="Profile Management"
+            android:icon="@drawable/outline_settings_24"
+            android:title="Settings"
             android:textColor="@color/colorPrimary"/>
         <item
             android:id="@+id/nav_about"

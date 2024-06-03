@@ -7,23 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
-import com.example.smartstorageorganizer.ui.profile_management.ProfileManagementFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -103,7 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 upDateDetails().thenAccept(updateDetails -> {
                     Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
                     Log.i("EditProfileActivity", "Back button clicked");
-                    Intent intent = new Intent(EditProfileActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
                     startActivity(intent);
                     finish();
                 });
