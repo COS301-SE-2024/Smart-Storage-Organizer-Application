@@ -1,0 +1,80 @@
+\documentclass[hidelinks, 12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{mwe}
+\usepackage{ragged2e}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx, wrapfig}
+\usepackage{pgf}
+\usepackage{pgfpages}
+\usepackage{multirow}
+\usepackage{xcolor}
+
+\title{Smart Storage Organizer}
+\author{Mosa Letswalo, Victor Zhou, Tshegofatso Mapheto,Siyabonga Mbuyisa, Ezekiel Makau }
+
+\pgfpagesdeclarelayout{boxed}
+{
+  \edef\pgfpageoptionborder{0pt}
+}
+{
+  \pgfpagesphysicalpageoptions
+  {%
+    logical pages=1,%
+  }
+  \pgfpageslogicalpageoptions{1}
+  {
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.95\pgfphysicalwidth,%
+    resized height=.95\pgfphysicalheight,%
+    center=\pgfpoint{.5\pgfphysicalwidth}{.5\pgfphysicalheight}%
+  }%
+}
+
+\pgfpagesuselayout{boxed}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{figure}
+    \centering\includegraphics[width=0.35\textwidth]{tuks_logo.png}
+\end{figure}
+\vspace{5mm}
+
+\begin{Large}
+ \begin{center}
+	\textbf{Department of Computer Science}\\
+	\vspace{8mm}
+    \textbf{Software Requirements and Design Specifications}\\
+	\vspace{8mm}
+	{\huge{\bf Smart Storage Organizer}}\\
+	\textbf{Client: DVT/Shamier Chandley}\\
+	\vspace{8mm}
+	{\huge{\bf Team: Syntax Savants}}
+
+	\textbf{Team Members: }
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+
+            \hline
+            Name        &     Surname   &   Student Number  \\ \hline
+            *Siyabonga     &     Mbuyisa     &  u20491621  \\ \hline
+            Tshegofatso      &    Mapheto   &  u20735929        \\ \hline
+            Mosa        &   Letswalo    &   u14168970      \\ \hline
+            Victor     &    Zhou       &   u21525936       \\\hline
+            Ezekiel    &   Makau   &   u20702338       \\ \hline
+        \end{tabular}
+    \end{table}
+    \textit{* - indicates team leader}
+\end{center}
+\end{Large}
+\end{titlepage}
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\tableofcontents
