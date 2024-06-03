@@ -1,5 +1,7 @@
 # Smart Storage Organization
 [![System Status](https://api.pingpong.one/widget/dot/sp_c00753e7c20f49ceb4e398783439fb67)](https://m1bavqqu90.pingpong.host/)
+![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
+![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
 
 ## Team Name: Syntax Savants
 Project Email: syntaxsavants98@gmail.com
