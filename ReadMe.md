@@ -56,30 +56,16 @@ Follow the link to instruction to download and install https://www.oracle.com/ja
 
 ## Contributor
 
-### Siyabonga Mbuyisa
-Hi. I am a final year Software Developer with a passion for crafting innovative software solutions. I contributed as a services engineering, data engineering, and tester to this project, But really I have also played other roles which I did not plan for. My aim to make the app robustness, scalability and user-friendly. 
-Excited to collaborate and create impactful software experiences!
-##### https://www.linkedin.com/in/siyabonga-mbuyisa-developer/
+## Description of each member
 
-### Victor Zhou
-As a dedicated BSc Computer Science student, I possess a profound interest in exploring the transformative power of Computer Science on a global scale. My repertoire includes a versatile array of programming languages, including Android, VB.Net, Python, Java, JavaScript, PHP, C++, HTML, CSS, SQL, and MQL5. My proficiency extends across various dimensions of software development, encompassing both backend and frontend realms. Driven by a commitment to excellence, I am poised to evolve into a seasoned Software Engineer in the near future, leveraging my skills to make meaningful contributions to the field.
-##### http://www.linkedin.com/in/victor-zhou-343004302
+| Picture                                                                       | Roles                                       | Socials                                                                     |
+| :---------------------------------------------------------------------------- | :------------------------------------------ | :-------------------------------------------------------------------------- |
+| <b>Siyabonga Mbuyisa</b><br><br>| <li>Project Manager<li>Service Engineer<li>Data Engineer<li>Testing Engineer | [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/tomosaHub/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/siyabonga-mbuyisa-developer/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](ABOUT-LINK) |
+|<b>Victor Zhou</b><br><br> | <li>Designer <li>DevOps<li>Service Engineer |[![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](GITHUB-LINK) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/victor-zhou-343004302/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](ABOUT-LINK) |
+| <b>Ezekiel Makau</b><br>| <li>UI Engineer<li>Integration Engineer<li>Testing Engineer| [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](GITHUB-LINK) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/ezekiel-makau-397aa92b7/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](ABOUT-LINK) |
+| <b>Tshegofatso Mapheto</b><br>| <li>UI Engineer <li> Data Engineer<li>DevOps| [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](GITHUB-LINK) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/tshegofatso-mapheto-167678189/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](ABOUT-LINK) |
+|<b>Mosa Letswalo</b><br> | <li>Architecture<li>UI Engineer<li>UI Engineer                 | [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](GITHUB-LINK) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/mosa-letswalo/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](ABOUT-LINK) |
 
-### Ezekiel Makau
-I will oversee the design and implementation of the front-end spectrum of the application, leveraging my extensive experience in web development and Android application development. In addition to my technical skills, my expertise in Mathematical Statistics and Mathematics equips me with strong quantitative analysis capabilities.
-#### https://www.linkedin.com/in/ezekiel-makau-397aa92b7
-
-
-### Tshegofatso Mapheto
-I am a highly motivated individual with a strong passion for my work and a relentless drive to excel. My dedication to achieving goals not only fuels my progress but also inspires those who work with me. I possess a robust theoretical and practical understanding of various aspects of statistics and mathematics, with a specific emphasis on their practical applications in problem-solving. My expertise in statistics and application development empowers me to harness the power of data, optimizing solutions and streamlining processes. Furthermore, I am creative in my thinking, able to approach problems from different angles, and I am committed to my ongoing personal development.
-##### https://www.linkedin.com/in/tshegofatso-mapheto-167678189
-
-
-### Mosa Letswalo
-A skilled full stack developer with a focus on frontend
-development and integration. Strength lies in designing user friendly applications and translating complex concepts into efficient solutions, backed by a solid foundation in various
-programming languages and development methodologies
-#### http://www.linkedin.com/in/mosa-letswalo/
 
 ## Video Presentation
 https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link
