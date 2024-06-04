@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a319db56-7654-45a2-9c3e-2259785a4687" name="Changes" comment="Updated team bio">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Ezekiel_Makau.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Ezekiel_Makau.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Mosa_Letswalo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Mosa_Letswalo.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Siyabonga_Mbuyisa.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Siyabonga_Mbuyisa.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Tshegofatso_Mapheto.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Tshegofatso_Mapheto.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Victor_Zhou.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Victor_Zhou.md" afterDir="false" />
+    <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="defined workflow for CI-CD pipeline added dev and main branch">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.idea/misc.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +25,7 @@
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="2hLpumQuFNstGLTuOXqXDYlR5mb" />
+  <component name="ProjectId" id="2h6ECyUImKOzEKyHHTPVdkUvR0s" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -44,45 +40,49 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "feat/documentation",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Chaks Malaks/COS 301/CapStone Project/Smart-Storage-Organizer-Application"
+    "last_opened_file_path": "C:/Users/Chaks Malaks/COS 301/CapStone Project/Smart-Storage-Organizer-Application/frontend"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Chaks Malaks\COS 301\CapStone Project\Smart-Storage-Organizer-Application\Docs" />
-      <recent name="C:\Users\Chaks Malaks\COS 301\CapStone Project\Smart-Storage-Organizer-Application\Docs\Latex source code" />
-    </key>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a319db56-7654-45a2-9c3e-2259785a4687" name="Changes" comment="" />
-      <created>1717383437799</created>
+      <changelist id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="" />
+      <created>1716906004475</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1717383437799</updated>
+      <updated>1716906004475</updated>
     </task>
-    <task id="LOCAL-00001" summary="Updated team bio">
+    <task id="LOCAL-00001" summary="github workflow file">
       <option name="closed" value="true" />
-      <created>1717515470334</created>
+      <created>1716907825703</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1717515470334</updated>
+      <updated>1716907825703</updated>
     </task>
-    <task id="LOCAL-00002" summary="Updated team bio">
+    <task id="LOCAL-00002" summary="defined workflow for CI-CD pipeline">
       <option name="closed" value="true" />
-      <created>1717515498497</created>
+      <created>1716909950015</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1717515498497</updated>
+      <updated>1716909950016</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="defined workflow for CI-CD pipeline added dev and main branch">
+      <option name="closed" value="true" />
+      <created>1716910662577</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716910662578</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated team bio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated team bio" />
+    <MESSAGE value="github workflow file" />
+    <MESSAGE value="defined workflow for CI-CD pipeline" />
+    <MESSAGE value="defined workflow for CI-CD pipeline added dev and main branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="defined workflow for CI-CD pipeline added dev and main branch" />
   </component>
 </project>
