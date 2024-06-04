@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="defined workflow for CI-CD pipeline added dev and main branch">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.idea/misc.xml" afterDir="false" />
-    </list>
+    <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="Updated team bio with pictures" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +35,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "feat/documentation",
+    "git-widget-placeholder": "development",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Chaks Malaks/COS 301/CapStone Project/Smart-Storage-Organizer-Application/frontend"
   }
@@ -83,6 +80,7 @@
     <MESSAGE value="github workflow file" />
     <MESSAGE value="defined workflow for CI-CD pipeline" />
     <MESSAGE value="defined workflow for CI-CD pipeline added dev and main branch" />
-    <option name="LAST_COMMIT_MESSAGE" value="defined workflow for CI-CD pipeline added dev and main branch" />
+    <MESSAGE value="Updated team bio with pictures" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated team bio with pictures" />
   </component>
 </project>
