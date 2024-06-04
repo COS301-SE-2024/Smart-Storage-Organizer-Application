@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a319db56-7654-45a2-9c3e-2259785a4687" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="a319db56-7654-45a2-9c3e-2259785a4687" name="Changes" comment="Updated team bio">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/documentation/software requirements/smart storage organizer-srs_demo1.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Latex source code/smart storage organizer-srs_demo1.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Ezekiel_Makau.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Ezekiel_Makau.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Mosa_Letswalo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Mosa_Letswalo.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Siyabonga_Mbuyisa.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Siyabonga_Mbuyisa.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Tshegofatso_Mapheto.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Tshegofatso_Mapheto.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Docs/Team Biographies/Victor_Zhou.md" beforeDir="false" afterPath="$PROJECT_DIR$/Docs/Team Biographies/Victor_Zhou.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +62,27 @@
       <option name="presentableId" value="Default" />
       <updated>1717383437799</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updated team bio">
+      <option name="closed" value="true" />
+      <created>1717515470334</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717515470334</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Updated team bio">
+      <option name="closed" value="true" />
+      <created>1717515498497</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717515498497</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated team bio" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated team bio" />
   </component>
 </project>
