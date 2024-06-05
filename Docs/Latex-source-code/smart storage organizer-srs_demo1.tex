@@ -1,0 +1,691 @@
+\documentclass[hidelinks, 12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{mwe}
+\usepackage{ragged2e}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx, wrapfig}
+\usepackage{pgf}
+\usepackage{pgfpages}
+\usepackage{multirow}
+\usepackage{xcolor}
+
+\title{Smart Storage Organizer}
+\author{Mosa Letswalo, Victor Zhou, Tshegofatso Mapheto,Siyabonga Mbuyisa, Ezekiel Makau }
+
+\pgfpagesdeclarelayout{boxed}
+{
+  \edef\pgfpageoptionborder{0pt}
+}
+{
+  \pgfpagesphysicalpageoptions
+  {%
+    logical pages=1,%
+  }
+  \pgfpageslogicalpageoptions{1}
+  {
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.95\pgfphysicalwidth,%
+    resized height=.95\pgfphysicalheight,%
+    center=\pgfpoint{.5\pgfphysicalwidth}{.5\pgfphysicalheight}%
+  }%
+}
+
+\pgfpagesuselayout{boxed}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{figure}
+    \centering\includegraphics[width=0.35\textwidth]{tuks_logo.png}
+\end{figure}
+\vspace{5mm}
+
+\begin{Large}
+ \begin{center}
+	\textbf{Department of Computer Science}\\
+	\vspace{8mm}
+    \textbf{Software Requirements and Design Specifications}\\
+	\vspace{8mm}
+	{\huge{\bf Smart Storage Organizer}}\\
+	\textbf{Client: DVT/Shamier Chandley}\\
+	\vspace{8mm}
+	{\huge{\bf Team: Syntax Savants}}
+
+	\textbf{Team Members: }
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+
+            \hline
+            Name        &     Surname   &   Student Number  \\ \hline
+            *Siyabonga     &     Mbuyisa     &  u20491621  \\ \hline
+            Tshegofatso      &    Mapheto   &  u20735929        \\ \hline
+            Mosa        &   Letswalo    &   u14168970      \\ \hline
+            Victor     &    Zhou       &   u21525936       \\\hline
+            Ezekiel    &   Makau   &   u20702338       \\ \hline
+        \end{tabular}
+    \end{table}
+    \textit{* - indicates team leader}
+\end{center}
+\end{Large}
+\end{titlepage}
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\tableofcontents
+\newpage
+
+\section{Introduction}
+% Explain the vision and objectives. State the business need for the application and summarise the scope of the
+% project.
+\subsection{Vision and Objectives}
+Traditional storage organization methods often rely on manual labelling and searching, leading to wasted time and frustration.
+\newline
+This project focuses on creating an application that will help users efficiently organize and easily locate their belongings. It aims to solve the problems associated with traditional storage methods, such as manual labelling and searching, which often result in wasted time and frustration
+\newline
+\newline
+The objective of this project is to design and implement a system that simplifies item labelling and identification using QR codes and color coding. The key features of the system include:
+\begin{itemize}
+    \item Simplify item labeling and identification using QR codes and color coding.
+    \item Enhance searchability through text and voice search functionalities.
+    \item Offer potential for enhanced search accuracy using AI integration.
+\end{itemize}
+% got the description from the project proposal
+
+\subsection{Project Owner}
+Shamier Chandley | Dynamic Visual Technologies (dvt).
+
+\pagebreak
+
+\section{User Characteristics}
+% List all intended users and explain for what purpose each of them would use the system.
+All of the below-mentioned users are assumed to have knowledge of operating a computer and using a smartphone. They should also have access to the internet.
+
+\subsection{Employees}
+\begin{itemize}
+    % \item A person that works for dvt.
+    \item A person that will regularly store, organize and label items.
+\end{itemize}
+\subsection{dvt Admins}
+\begin{itemize}
+    \item A person that we will manage the application.
+    \item A person that will routinely manage both the dvt Employees.
+\end{itemize}
+
+\pagebreak
+
+\section{Functional Requirements}
+
+\subsection{Core Requirements}
+\begin{itemize}
+    % CORE:
+    \item \textbf {R1}: {User Management: Users can register, log in, and manage their profiles}
+
+    % CORE:
+    \item \textbf{R2}: {Item Management: Users can add, edit, and delete items within the application.}
+
+    % CORE:
+    \item \textbf{R3}: {QR Code Integration: Users can generate and associate unique QR codes with individual items or a group of similar items. }
+
+    % CORE:
+    \item \textbf{R4}: {Color Coding: Users can assign color codes to items for categorization and filtering.}
+
+    % CORE:
+    \item \textbf{R5}: {Text Search: Users can search for items using keywords and filter results based on various criteria.}
+
+    % CORE:
+    \item \textbf{R6}: {Voice Search: Users can use voice commands to search for items.}
+
+    % CORE:
+    \item \textbf{R7}: {Push Notifications: Users can receive optional real-time notifications about application updates or item-related alerts.}
+
+    % CORE:
+    \item \textbf{R8}: {Data Persistence: Application data, including item details and user information, is securely stored in a persistent database.}
+
+    % CORE:
+    \item \textbf{R9}: {Advanced search with AI integration: Implement advanced search filters based on additional item details and characteristics.}
+
+    % CORE:
+    \item \textbf{R10}: {Image capture: Allow users to capture images of items for better identification.}
+
+    % CORE:
+    \item \textbf{R11}: {AI Integration: Utilize open-source APIs like ChatGPT to enhance search accuracy and understand user intent.}
+
+    \item \textbf{R12}: {Data Security: User data must be protected through robust security measures.}
+\end{itemize}
+
+\subsection{Nice to have Requirements}
+\begin{itemize}
+    % Nice-to-have:
+    \item \textbf{R13}: {Offline Functionality: The application should function to some extent even without an internet connection (optional).}
+
+    % Nice-to-have:
+    \item \textbf{R14}: {Barcode scanning: Allow users to scan existing barcodes.}
+
+    % Nice-to-have: (Really not though if you ask clients)
+    \item \textbf{R15}: {Location tracking: Enable users to mark the general location of stored items within the application.}
+
+    % Nice-to-have: (Really not though if you ask clients)
+    \item \textbf{R16}: {Multi-language support: Support multiple languages for broader accessibility.}
+
+    % Nice-to-have: (Really not though if you ask clients)
+    \item \textbf{R17}: {Sharing functionality: Enable users to share item information with others.}
+
+    % Nice-to-have: (Really not though if you ask clients)
+    \item \textbf{R18}: {User roles and permissions: Define different user roles with varying access levels.}
+
+    % Nice-to-have: (Really not though if you ask clients)
+    \item \textbf{R19}: {Cloud storage integration: Utilize cloud storage services for backup and disaster
+    recovery.}
+\end{itemize}
+\section{User Stories}
+\begin{itemize}
+    \item \textbf{R1: Employee Management}
+    \begin{itemize}
+        \item \textbf{U1.1 Employee registration}
+        \begin{itemize}
+            \item As an employee
+            \item I want to register my details so that I can use the app.
+            \item I want to be able to manage my profile and be able to update and reset my password.
+        \end{itemize}
+        \item \textbf{U1.2 Employee login}
+        \begin{itemize}
+            \item As an employee
+            \item I want to be able to login to the system in order to manage items in the storage.
+        \end{itemize}
+        \item \textbf{U1.3 Employee profile}
+        \begin{itemize}
+            \item As an employee
+            \item I want to manage my profile. So that I can be able to update my password and my personal details.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{R2: Item management}
+    \begin{itemize}
+        \item \textbf{U2.1 Add item}
+        \begin{itemize}
+            \item As an employee
+            \item I want to add and save the items I'd like to store. So that I can be able to access them at a later stage.
+
+        \end{itemize}
+        \item \textbf{U2.2 Delete item}
+        \begin{itemize}
+            \item I want to delete items that I no longer need in the storage. So that I can create space for new items.
+        \end{itemize}
+        \item \textbf{U2.3 edit item}
+        \begin{itemize}
+            \item As an employee
+            \item I want to edit my existing items. So that I can be able to update any changes on the existing items.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{R3: QR code}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R4: Color Coding }
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R5: Text search}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R6: Voice search}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R7: Push notification}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R8: Data persistence}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R9: Advanced search}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R10: Image capture}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R11: AI integration}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+% Should this be under quality requirements...?
+    \item \textbf{R12: Data security}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+% FOR THE NICE TO HAVE REQUIREMENTS WHICH ONES ARE WE DOING ? Can we choose Wow factor from here ??
+    \item \textbf{R13: Offline functionality}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R14: Barcode scanning}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R15: Location tracking}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R16: Multi-language support}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R17: Sharing functionality}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R18: User roles and permissions}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+
+    \item \textbf{R19: Cloud storage integration}
+    \begin{itemize}
+        \item As an employee
+    \end{itemize}
+    \pagebreak
+
+% WHICH THREE USE CASES ARE WE GOING FOR
+% 1. User registration (Profile management)
+% 2. Add of an item
+% 3. Edit of an item
+
+
+    \section{Subsystems}
+    \subsection{S1. Employee}
+    The Employee subsystem contains all the steps necessary for an employee to gain secure and authorized access to the Smart Storage Organizer application.
+    \subsubsection{Use cases}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=14cm]{Employee subsystem.JPG}
+        \caption{Employee Subsystem use case diagram}
+        \label{fig:EmployeeSubsystemDiagram}
+    \end{figure}
+    \subsubsection{Service contracts}
+    \paragraph{Register user}
+    This use case accepts the user's first name, last name, initials, email address, as well as password when creating an account. The system validates that the email address and password do not yet exist in the database before allowing the continuation of registration.
+    \paragraph{Verify account}
+    This use case is used by the user to validate their account upon registration. An activation code with a specific time limit will be sent to the user's email address for them to use to verify and activate their account.
+    \paragraph{Login user}
+    This use case accepts the user's email address and password as input and validates if they are correct.
+    \paragraph{Edit account information}
+    This use case allows the user to update their information in the system such as first name, last name and email address.
+    \paragraph{Reset password}
+    This use case allows the user to issue a reset password request, upon which a reset code with a specific time limit will be sent to their email address.
+
+    \subsection{S2. Item}
+    The Item subsystem is responsible for adding, deleting and editing the employee's items in the storage. The items will be stored, labelled and filtered accordingly.
+    \subsubsection{Use cases}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=14cm]{ItemManagement.png}
+        \caption{Item Subsystem use case diagram}
+        \label{fig:Item SubsystemDiagram}
+    \end{figure}
+    \subsubsection{Service contracts}
+    \paragraph{Add item}
+    The use case allows the employee to add the item they want to storage.
+    \paragraph{Delete item}
+    The use case allows the employee to delete the item from the storage.
+    \paragraph{Search item}
+    The use case allows the employee to search for an item that they want to either store or retrieve.
+    \paragraph{Edit item}
+    The use case allows the employee to edit and update the item that are already being stored.
+
+
+    \newpage
+    \section{Domain Model}
+% Illustrate the software solution using a valid and correctly formatted UML class diagram. Ensure correct use of
+% association, aggregation, composition and related concepts such as multiplicity.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=16cm]{Domain Model.png}
+        \caption{The Domain Model of Smart Storage Organizer}
+        \label{fig:Smart Storage Organizer ClassDiagram}
+    \end{figure}
+
+    \subsection{Class Descriptions}
+    \subsubsection{Employee}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This class represents a employee of the system and stores all the necessary information to uniquely describe them.
+        \end{itemize}
+        \item  Relationships
+        \begin{itemize}
+            \item An employee must be managed by an admin user.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item id: employee id
+            \item name: the employee's firstname.
+            \item surname: the employee's lastname.
+            \item phone number: the employee's signature.
+            \item password: a salted and hashed string of the employee's password used to identify a employee during the login process.
+            \item email: a valid email address tied to the employee's account used to notify the employee when necessary.
+            \item validateCode: a code that will be used to verify a user's email address.
+            \item tokens: an array of tokens to facilitate logging a user in and out of the system.
+
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Token}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This class holds a value that is used to manage the logout process of a user.
+        \end{itemize}
+        \item Relationships
+        \begin{itemize}
+            \item A token will belong to exactly one user.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item token: a randomly generated string.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Item}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class is the driving class behind the system. It manages the items that are stored, all of the employees that can access the storage, the manager, the history of all changes the employees have made as well as the current Status of the item.
+        \end{itemize}
+        \item  Relationships
+        \begin{itemize}
+            \item An item can stored according to only one color code.
+            \item Item can be managed by one or more users.
+            \item An Item will have only one QR which identifies it's uniqueness.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            % \item \_id: the item's unique id.
+            \item name: the name of the item.
+            \item description: a string that describes the item stored.
+            \item color: specifies the color in which the item is grouped by.
+            \item quantity: it shows the quantity of the items within the storage.
+            \item supplier name: it shows the name of the supplier who provided the item.
+        \end{itemize}
+
+    \end{itemize}
+
+
+    \subsubsection{Storage}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class represents a Storage which all the items are kept and managed.
+        \end{itemize}
+        \item  Relationships
+        \item A Storage can store multiple items.
+        \item Attributes
+        \begin{itemize}
+            \item color: represents the color for a specific group of items.
+            \item items: holds a list of items within the storage.
+            \item capacity: gives the maximum size of the storage.
+        \end{itemize}
+    \end{itemize}
+
+
+
+    \subsubsection{QR}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item This Class is used to manage the item's unique qr code.
+        \end{itemize}
+        \item  Relationships
+        \item Each item has only one QR code.
+        \item Attributes
+        \begin{itemize}
+            \item color: it gives the color in which the item is grouped.
+            \item QR: it assigns an item a unique QR code.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Color}
+    \begin{itemize}
+        \item Purpose
+        \begin{itemize}
+            \item The class holds all the colors that are available for a group of specific items.
+        \end{itemize}
+        \item Relationships
+        \begin{itemize}
+            \item A color can only belong to one group of items.
+        \end{itemize}
+        \item Attributes
+        \begin{itemize}
+            \item color: list of colors available that can bet allocated to a specific group of items.
+            \item location: specifies which location is a specific color is placed withing the storage.
+        \end{itemize}
+    \end{itemize}
+
+% \subsubsection{GroupQR}
+% \begin{itemize}
+%     \item Purpose
+%     \begin{itemize}
+%         \item The class holds all grouped items of the same category and assigns them a QR code.
+%     \end{itemize}
+%     \item Relationships
+%     \begin{itemize}
+%         \item Only one QR code can be assigned to each group.
+%     \end{itemize}
+%     \item Attributes
+%     \begin{itemize}
+%         \item setitem: set the item's group's QR.
+%     \end{itemize}
+%     \end{itemize}
+
+    \pagebreak
+    \section{Architectural requirements}
+    \subsection{Quality Requirements}
+% Specify and quantify each of the quality requirements relevant to the system. Examples of quality requirements
+% include performance, reliability, scalability, security maintainability, usability.
+    \begin{itemize}
+        \item \textbf{Q1. Security: }\\
+        The system should be able to defend itself against malicious attacks. User data (passwords) should be encrypted and securely stored in the database.  Uploaded files should be securely stored and only available through the platform to authorized individuals that are defined by the employees responsible to manage the items. Encryption should be used to communicate between the front-end and back-end platforms.Quantification: JWT tokens timeout Validation of newly created users.
+        Strength of encryption algorithms.\\
+
+        \item \textbf{Q2. Scalability: }\\
+        The system should be able to alter performance and cost in response to changes in application demands. As such, as the application becomes more widely used in the business, it should be able to handle an increase in the number of active users and expand its resources without compromising on efficiency.
+        Quantification: ex start with 50 users move on forth.\\
+        Database systems are abstracted, more databases, different ones can be added.\\
+        Amazon RDS for PostgreSQL - Automated Scaling: Adjusts compute and storage resources without downtime.
+        -Read Replicas: Up to 5 read replicas to offload read traffic and improve performance.\\
+        AWS is easily scalable (cloud storage).
+        Bandwith of server/physical requirements of server. We need a way to scale physical performance.\\
+        Solution-host server on cloud services that scale with demand (will be a deployment concern). Hence MVC and layered architecture (frontend and backend can be hosted separately).\\
+
+        \item \textbf{Q3. Performance: }\\
+        The system should react promptly to user inputs and requests with no noticeable delay. Documents should be viewable on the platform without long loading times, as this can negatively affect the user experience, specifically on mobile. Users should be notified sufficiently early of new items requiring action, and updates on
+        Workflow progress.\\
+
+        \item \textbf{Q4. Reliability: }\\
+        The application needs to be reliable in order to gain user trust and confidence. The platform must present the correct information at all times and aim for an up-time of 99\% for users. It must also ensure that in the case of system failure, data integrity is maintained and critical functions are in a safe state with an option to rollback to a previous state.\\
+
+        \item \textbf{Q5. Maintainability: }\\
+        This refers to the ease which a system can be understood, repaired, and enhanced. New features and environments will almost certainly result in unforeseen faults or behaviors that must be fixed over the system's lifetime. When changes are made or faults are detected, they must be logged and documented for the long term maintainability of the system.
+    \end{itemize}
+    \subsection{Architectural Pattern}
+    \subsubsection{Microservices with Layered Architecture}
+    \paragraph{Microservices Structure}
+    \begin{itemize}
+        \item \textbf{Modularity: }\\
+        Labeling and Identification: A microservice dedicated to generating and managing QR codes and color coding.\\
+        Search Functionality: Separate microservices for text search, voice search, and AI-enhanced search.
+
+        \item \textbf{Scalability: }\\
+        Each microservice can be scaled independently based on its specific workload, ensuring efficient resource utilization.
+
+        \item \textbf{Technology Diversity: }\\
+        Allows you to use the best-suited technologies for different components (e.g., AI integration could leverage specific machine learning frameworks).
+
+        \item \textbf{Continuous Deployment: }\\
+        Microservices enable faster deployment cycles, allowing you to update or add features without affecting the entire system.
+
+        \item \textbf{Fault Isolation:}
+        Issues in one microservice won’t necessarily affect others, enhancing the overall reliability of your application
+    \end{itemize}
+
+    \paragraph{Layered Architecture within Each Microservice}
+    \begin{itemize}
+        \item Presentation Layer: Handles user interface and API endpoints.
+        \item Business Logic Layer: Contains the core application logic and processing rules.
+        \item Data Access Layer: Manages interactions with databases or other storage solutions.
+    \end{itemize}
+    \pagebreak
+    \subsection{Design Pattern}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=16cm]{Microservices and Layered Architecure.png}
+        \caption{The Design Pattern of Smart Storage Organizer}
+        \label{fig:Smart Storage Organizer ClassDiagram}
+    \end{figure}
+
+    \paragraph{Implementation Steps}
+    \begin{itemize}
+        \item Identify the core functionalities and create separate microservices for each:
+        \begin{itemize}
+            \item QR Code Service
+            \item Text Search Service
+            \item Voice Search Service
+            \item Color Coding
+            \item AI Search Service
+        \end{itemize}
+        \item Implement Layered Architecture in Each Microservice:
+        \begin{itemize}
+            \item Presentation Layer:
+            \begin{itemize}
+                \item Expose RESTful APIs.
+                \item Use AWS Amplify Amazon Cognito. and Retrofit for handling API requests.
+            \end{itemize}
+            \item Business Logic Layer:
+            \begin{itemize}
+                \item Implement the core logic for QR code generation, search algorithms, voice recognition, and AI processing.
+                \item Use services and controllers to process data and perform business operations.
+            \end{itemize}
+            \item Data Access Layer:
+            \begin{itemize}
+                \item Manage database connections and queries.
+                \item Use AWS SDK for Java and JPA (Java Persistence API) with Hibernate as our ORM library for managing database connections and queries.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \subsection{Constrains}
+    \begin{itemize}
+        \item \textbf{Free cloud services:} We will leverage free tiers of cloud services like AWS to minimize project costs.
+        \item \textbf{Open-source technologies:} We will prioritize the use of open-source technologies whenever possible to ensure cost-effectiveness and wider accessibility.
+    \end{itemize}
+
+
+    \section{Technology Requirements}
+    \subsection{Backend}
+    \begin{itemize}
+        \item Android studio java was used for the backend development.
+    \end{itemize}
+    \subsection{Frontend}
+    \begin{itemize}
+        \item Android studio xml used for the frontend technology.
+    \end{itemize}
+    \subsection{Database}
+    \begin{itemize}
+        \item PostgreSQL is used for the databade together with AWS RDS.
+    \end{itemize}
+    \subsection{Testing}
+    \begin{itemize}
+% WHAT ARE WE USING FOR OUR TESTING ???
+        \item Junit together with Mockito was used for the unit testing
+    \end{itemize}
+    \subsection{Hosting}
+    \begin{itemize}
+        \item AWS was used for API servers.
+    \end{itemize}
+
+% \subsection{Q6. Availability}
+% Certain app features must remain accessible without an internet connection to ensure continuous usability.
+% Implement local data storage using technologies like SQLite or IndexedDB for web applications.
+% Use service workers to cache essential resources and enable offline access to previously loaded content.
+% Synchronize data with the server once the connection is reestablished to ensure data consistency.
+
+% \section{Trace-ability Matrix}
+% Requirements VS Sub-systems
+% A matrix with requirements numbers as rows and the sub-systems as columns. Include both functional and quality
+% requirements. Indicate with x in the cells which subsystem will implement the solution to satisfy the requirement.
+
+% \begin{table}[H]
+%     \centering
+%     \begin{tabular}{|c|c|c|c|c|c|c|}
+
+%     \hline
+%                                      \multicolumn{7}{|c|}{Subsystems} \\ \hline
+%                                     && S1 & S2  & S3 & S4 & S5  \\ \hline
+%             \multirow{17}{*}{Requirements}  & R1 &X & & & &                                      \\\cline{2-7}
+%                                             & R2 & &X & & &                    \\ \cline{2-7}
+%                                             & R3 & & &X & &                      \\\cline{2-7}
+%                                             & R4 & & & &X &                      \\\cline{2-7}
+%                                             & R5 & &X & & &                      \\\cline{2-7}
+%                                             & R6 & & &X & &
+%                                                 \\ \cline{2-7}
+%                                             & R7 & & &X & &
+%                                                 \\ \cline{2-7}
+%                                             & R8 & & &X & &
+%                                                 \\ \cline{2-7}
+%                                             & R9 & & & &X &
+%                                                 \\ \cline{2-7}
+%                                             & R10 & & & &X &
+%                                                 \\ \cline{2-7}
+%                                             & R11 & & & &X &
+%                                                 \\ \cline{2-7}
+%                                             & R12 & &X & &X &
+%                                                 \\ \cline{2-7}
+%                                             & R13 & & & & &X
+%                                                 \\ \cline{2-7}
+%                                             & R14 & & & & &X
+%                                                 \\ \cline{2-7}
+%                                             & Q1 &X &X &X &X &X
+%                                                 \\ \cline{2-7}
+%                                             & Q2 &X &X &X &X &X
+%                                                 \\ \cline{2-7}
+%                                             & Q3 &X &X &X &X &X
+%                                                 \\ \cline{2-7}
+%                                             & Q4 &X &X &X &X &X
+%                                                 \\ \cline{2-7}
+%                                             & Q5 &X &X &X &X &X
+%                                                 \\ \cline{2-7}
+
+%                                         \hline
+%             \end{tabular}
+%         \caption{Traceability matrix for Document Workflow}
+%         \label{table:SystemTraceability}
+%         \end{table}
+
+\end{document}
+
+

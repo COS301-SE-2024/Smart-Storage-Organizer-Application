@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,21 +15,39 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ProfileManagementActivity extends AppCompatActivity {
 
+    private TextView email, username;
+    ConstraintLayout content;
+    LottieAnimationView loadingScreen;
+    private String currentEmail, currentName, currentSurname;
+    ImageView profileBackButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile_management);
 
+        email = findViewById(R.id.email);
+        username = findViewById(R.id.username);
+        content = findViewById(R.id.content);
+        loadingScreen = findViewById(R.id.loadingScreen);
+        profileBackButton = findViewById(R.id.ProfileBackButton);
+
+        getDetails().thenAccept(getDetails->{
+            Log.i("AuthDemo", "User is signed in");
+            Log.i("AuthEmailFragment", currentEmail);
+        });
+
         AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
-        ImageView ProfileBackButton = findViewById(R.id.ProfileBackButton);
         ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
-        TextView email = findViewById(R.id.email);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -38,11 +55,11 @@ public class ProfileManagementActivity extends AppCompatActivity {
             return insets;
         });
 
-        email.setText(getIntent().getStringExtra("email"));
-
-        ProfileBackButton.setOnClickListener(new View.OnClickListener() {
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -54,13 +71,53 @@ public class ProfileManagementActivity extends AppCompatActivity {
             }
         });
 
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
+        profileBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
+    }
+
+    private CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "email":
+                                currentEmail = attribute.getValue();
+                                break;
+                            case "name":
+                                currentName = attribute.getValue();
+                                break;
+                            case "family_name":
+                                currentSurname = attribute.getValue();
+                                break;
+                        }
+
+
+
+
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    Log.i("progressEmail",currentEmail);
+                    runOnUiThread(() -> {
+                        email.setText(currentEmail);
+                        String fullName = currentName+" "+currentSurname;
+                        username.setText(fullName);
+                        loadingScreen.setVisibility(View.GONE);
+                        loadingScreen.pauseAnimation();
+                        content.setVisibility(View.VISIBLE);
+                    });
+                    future.complete(true);
+                },
+                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+
+        );
+        return future;
     }
 
     public void SignOut()
@@ -93,7 +150,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
+//                    requireActivity().Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
 
                 });
             }

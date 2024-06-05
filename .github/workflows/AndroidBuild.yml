@@ -1,19 +1,14 @@
-name: AndroidBuild
+name: Android CI
 
 on:
-  pull_request:
-    branches:
-      - main
-      - develop
-
   push:
-    branches:
-      - main
-      - develop
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -23,6 +18,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 11
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 30
+          build-tools: 30.0.2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
