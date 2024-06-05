@@ -27,14 +27,18 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./frontend/gradlew
-        working-directory: frontend
-        
+
+      - name: Run Tests
+        run: ./frontend/gradlew test
+
+      - name: Build with Gradle
+        run: ./frontend/gradlew build
+
       - name: Build Project
-        run: ./gradlew assemble
-        working-directory: frontend
+        run: ./frontend/gradlew assemble
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Smart-Storage-Organizer-Application.apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: frontend/app/build/outputs/apk/debug/*.apk
