@@ -27,6 +27,7 @@ jobs:
           
       - name: Build Project
         run: ./gradlew assemble
+        working-directory: frontend
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
