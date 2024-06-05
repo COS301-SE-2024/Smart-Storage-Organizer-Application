@@ -18,22 +18,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 11
-          distribution: 'temurin'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          api-level: 30
-          build-tools: 30.0.2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          distribution: 'adopt'
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./frontend/gradlew build
+
+      - name: Build Project
+        run: ./frontend/gradlew assemble
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Smart-Storage-Organizer-Application.apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: frontend/app/build/outputs/apk/debug/*.apk
