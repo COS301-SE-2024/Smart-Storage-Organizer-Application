@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 import java.io.IOException;
 import java.util.Locale;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.XMLFormatter;
 import okhttp3.OkHttpClient;
@@ -69,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     String Result;
     String  Error;
 
+    TextView resetPasswordLink;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +95,9 @@ public class LoginActivity extends AppCompatActivity {
         buttonLoader = findViewById(R.id.buttonLoader);
         loginButtonIcon = findViewById(R.id.login_button_icon);
         loginButtonText = findViewById(R.id.login_button_text);
+
+
+        resetPasswordLink = findViewById(R.id.resetPasswordLink);
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -122,6 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
             }
+        });
+
+        resetPasswordLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -190,6 +201,8 @@ public class LoginActivity extends AppCompatActivity {
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
                     String nextstep="";
+                    AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
+
                     Amplify.Auth.fetchAuthSession(
                             session -> {
                                 Amplify.Auth.fetchUserAttributes(
@@ -250,6 +263,8 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 },
                 error -> {
+                    Log.e("AuthQuickstart", error.toString());
+                    AuthSignInResult r= new AuthSignInResult(false, null);
 //                    postAddItem("Lenovo", "ideapad 110", "orange", "sdf5d", "0110000", "1", "Herold");
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {

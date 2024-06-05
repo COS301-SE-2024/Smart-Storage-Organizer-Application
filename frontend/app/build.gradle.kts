@@ -41,9 +41,17 @@ android {
 
 dependencies {
 
+    // for Cognito
+    implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
+    implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
+
+    implementation ("com.amplifyframework:core:1.28.4")
+    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
+
+
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.activity)
+    implementation(libs.activity)   
     implementation(libs.constraintlayout)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
@@ -74,12 +82,12 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.1.3")
 
     // AndroidX Test - Espresso
+
     testImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.amplifyframework:aws-api:2.16.1")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
-    testImplementation("androidx.test.espresso:espresso-core:3.4.0");
 
     // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
