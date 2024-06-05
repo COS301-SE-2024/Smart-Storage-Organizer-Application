@@ -1,8 +1,9 @@
 # Smart Storage Organization
 [![System Status](https://api.pingpong.one/widget/dot/sp_c00753e7c20f49ceb4e398783439fb67)](https://m1bavqqu90.pingpong.host/)
+[![codecov](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/branch/main/graph/badge.svg?token=DEFDH7DDQO)](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application)
+![main](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/actions/workflows/UnitTesting.yml/badge.svg?branch=main)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
-
 ## Team Name: Syntax Savants
 Project Email: syntaxsavants98@gmail.com
 
@@ -15,11 +16,12 @@ Welcome to the Smart Storage Organization project, developed by the Syntax Savan
 - Technologies Used
 - Installation
 - Contributors
+- Documentation
 - Video Presentation
 
 ## Introduction
 Smart Storage Organization is an intuitive Android application aimed at streamlining the organization items. By leveraging our app, users can easily categorize, locate, and manage their inventory, ensuring a more organized and efficient environment.
-Follow this link to our Software Requirement Specification https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing
+Follow this link to our Software [Requirement Specification](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
 
 
 ## Features
@@ -40,23 +42,20 @@ Search Functionality: Quickly locate items using the search feature.
 To set up the project locally, follow these steps:
 
 ### Download and Install android studio
-Follow the link to instruction to download and install https://developer.android.com/studio
+Follow the link to instruction to download and install [Android Studio](https://developer.android.com/studio/)
 
 ### Install Java 17
-Follow the link to instruction to download and install https://www.oracle.com/java/technologies/downloads/
+Follow the link to instruction to download and install [Java 17](https://www.oracle.com/java/technologies/downloads/)
 
 ### Clone the Repository:
-
--git clone https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application.git
+[![GitHub](https://img.shields.io/badge/GitHub-Clone-white?style=flat-square&logo=github)]([https://github.com/Siyabonga-Mbuyisa-u20491621/](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application.git))
 
 ### Open Android Studio.
 
 -run `amplify pull --appId d2fex6mowrw58l --envName staging` on your root folder
 
 
-## Contributor
-
-## Description of each member
+## Contributors
 
 | Picture                                                                       | Roles                                       | Socials                                                                     |
 | :---------------------------------------------------------------------------- | :------------------------------------------ | :-------------------------------------------------------------------------- |
@@ -67,6 +66,8 @@ Follow the link to instruction to download and install https://www.oracle.com/ja
 |<img src="./Docs/Team-Biographies/Mosadp.jpg" width="150"> <br><b>Mosa Letswalo</b><br> | <li>Architecture<li>UI Engineer<li>UI Engineer                 | [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/tomosaHub/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/mosa-letswalo/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Mosa_Letswalo.md) |
 
 
+## Documentation
+[Software System Requirements](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
 ## Video Presentation
-https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link
+[Video Demo](https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link/)
 
