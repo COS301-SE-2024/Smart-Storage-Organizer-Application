@@ -23,16 +23,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 11
-          distribution: 'temurin'
+          distribution: 'adopt'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           api-level: 30
           build-tools: 30.0.2
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
