@@ -16,6 +16,7 @@ Welcome to the Smart Storage Organization project, developed by the Syntax Savan
 - Features
 - Technologies Used
 - Installation
+- Project Management
 - Contributors
 - Documentation
 - Video Presentation
@@ -56,7 +57,8 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 ### Open Android Studio.
 
 -run `amplify pull --appId d2fex6mowrw58l --envName staging` on your root folder
-
+## Project Management
+[Project Board](https://github.com/orgs/COS301-SE-2024/Projects/Smart-Storage-Organizer-Project-Board)
 
 ## Contributors
 
