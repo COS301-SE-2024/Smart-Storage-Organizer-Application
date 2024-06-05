@@ -4,6 +4,7 @@
 ![main](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/actions/workflows/UnitTesting.yml/badge.svg?branch=main)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
+
 ## Team Name: Syntax Savants
 Project Email: syntaxsavants98@gmail.com
 
@@ -21,6 +22,7 @@ Welcome to the Smart Storage Organization project, developed by the Syntax Savan
 
 ## Introduction
 Smart Storage Organization is an intuitive Android application aimed at streamlining the organization items. By leveraging our app, users can easily categorize, locate, and manage their inventory, ensuring a more organized and efficient environment.
+
 Follow this link to our Software [Requirement Specification](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
 
 
@@ -42,6 +44,7 @@ Search Functionality: Quickly locate items using the search feature.
 To set up the project locally, follow these steps:
 
 ### Download and Install android studio
+
 Follow the link to instruction to download and install [Android Studio](https://developer.android.com/studio/)
 
 ### Install Java 17
