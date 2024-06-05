@@ -100,12 +100,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        resetPasswordLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
-                startActivity(intent);
-            }
+        resetPasswordLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -131,31 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         );
         return future;
     }
-
-
-    private CompletableFuture<Boolean> isSignedIn(){
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.fetchAuthSession(
-
-                result->{
-                    if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
-                        future.complete(true);
-                    }
-                    else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
-                        future.complete(false);
-                    }},
-                error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
-                    future.completeExceptionally(error);
-                }
-
-        );
-        return future;
-    }
-
 
     private boolean validateForm() {
         String email = Email.getText().toString().trim();
