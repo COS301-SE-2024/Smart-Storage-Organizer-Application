@@ -109,6 +109,10 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.8.8") // Use the latest version
 
+    implementation("com.amplifyframework:aws-storage-s3:2.16.1")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
 
 
 

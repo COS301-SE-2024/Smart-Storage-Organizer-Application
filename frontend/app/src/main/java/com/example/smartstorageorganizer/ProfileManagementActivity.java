@@ -19,7 +19,10 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 public class ProfileManagementActivity extends AppCompatActivity {
@@ -156,5 +159,18 @@ public class ProfileManagementActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void UploadProfilePicture(String ProfilePicturePath)
+    {
+        File ProfilePicture= new File(ProfilePicturePath);
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString("public/ProfilePictures"),
+                ProfilePicture,
+                StorageUploadFileOptions.defaultInstance(),
+                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
+                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
     }
 }
