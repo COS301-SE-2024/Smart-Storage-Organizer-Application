@@ -33,6 +33,7 @@ import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -262,6 +263,10 @@ public class EditProfileActivity extends AppCompatActivity {
             if (data.getData() != null) {
                 ImageUri = data.getData();
                 profileImage.setImageURI(ImageUri);
+//                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+//                Bitmap bitmap = drawable.getBitmap();
+//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
                 BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
 
@@ -289,7 +294,7 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         //File ProfilePicture= new File(ProfilePicturePath);
         Amplify.Storage.uploadFile(
-                StoragePath.fromString("ProfilePictures"),
+                StoragePath.fromString("public/ProfilePicture.png"),
                 ProfilePicture,
                 StorageUploadFileOptions.defaultInstance(),
                 progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
