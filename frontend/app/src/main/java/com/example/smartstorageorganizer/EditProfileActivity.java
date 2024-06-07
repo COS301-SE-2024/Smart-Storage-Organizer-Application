@@ -261,10 +261,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             if (data.getData() != null) {
                 ImageUri = data.getData();
-                Log.i("imagee", ImageUri.getPath());
                 profileImage.setImageURI(ImageUri);
-                File nn= new File(ImageUri.getPath());
-                Log.i("imagee"," profileImage");
                 BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
 
@@ -276,7 +273,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 UploadProfilePicture(file);
 //
 
@@ -293,7 +289,7 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         //File ProfilePicture= new File(ProfilePicturePath);
         Amplify.Storage.uploadFile(
-                StoragePath.fromString("public/ProfilePictures"),
+                StoragePath.fromString("ProfilePictures"),
                 ProfilePicture,
                 StorageUploadFileOptions.defaultInstance(),
                 progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
