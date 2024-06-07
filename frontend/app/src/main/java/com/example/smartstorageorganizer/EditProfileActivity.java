@@ -1,8 +1,13 @@
 package com.example.smartstorageorganizer;
 
+import static android.app.PendingIntent.getActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +24,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -248,13 +256,60 @@ public class EditProfileActivity extends AppCompatActivity {
             if (data.getData() != null) {
                 ImageUri = data.getData();
                 profileImage.setImageURI(ImageUri);
+                String picturePath =ImageUri.getPath();
+
+                UploadProfilePicture(picturePath);
             }
 
             else if (data.getClipData() != null) {
                 ImageUri = data.getClipData().getItemAt(0).getUri();
+                UploadProfilePicture(ImageUri.getPath()
+
+                );
             }
 
         }
+    }
+    public void UploadProfilePicture(String ProfilePicturePath)
+    {
+
+        File ProfilePicture= new File(ProfilePicturePath);
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString("public/ProfilePictures"),
+                ProfilePicture,
+                StorageUploadFileOptions.defaultInstance(),
+                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
+                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
+    }
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        return null;
+    }
+    public static String getPath(Context context, Uri uri ) {
+        String result = null;
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
+        if(cursor != null){
+            if ( cursor.moveToFirst( ) ) {
+                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
+                result = cursor.getString( column_index );
+            }
+            cursor.close( );
+        }
+        if(result == null) {
+            result = "Not found";
+        }
+        return result;
     }
     private CompletableFuture<Boolean> isSignedIn(){
         CompletableFuture<Boolean> future=new CompletableFuture<>();

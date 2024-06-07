@@ -84,7 +84,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
-
+       // UploadProfilePicture("app\\src\\main\\java\\com\\example\\com.example.smartstorageorganizer\\left.jpg");
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
 
@@ -125,6 +125,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     public void SignOut()
     {
+
         Amplify.Auth.signOut(signOutResult -> {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.

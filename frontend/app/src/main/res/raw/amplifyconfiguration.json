@@ -55,7 +55,22 @@
                             "EMAIL"
                         ]
                     }
+                },
+                "S3TransferUtility": {
+                    "Default": {
+                        "Bucket": "smart-storage-f0629f0176059-staging",
+                        "Region": "eu-north-1"
+                    }
                 }
+            }
+        }
+    },
+    "storage": {
+        "plugins": {
+            "awsS3StoragePlugin": {
+                "bucket": "smart-storage-f0629f0176059-staging",
+                "region": "eu-north-1",
+                "defaultAccessLevel": "guest"
             }
         }
     }
