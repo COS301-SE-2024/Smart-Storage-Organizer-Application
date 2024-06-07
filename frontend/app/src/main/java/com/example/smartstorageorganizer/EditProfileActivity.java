@@ -271,7 +271,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Bitmap bitmap = drawable.getBitmap();
 
                 // Create a file to save the image
-                File file = new File(getCacheDir(), "image.png");
+                File file = new File(getCacheDir(), "image.jpeg");
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                     fos.flush();
@@ -290,16 +290,26 @@ public class EditProfileActivity extends AppCompatActivity {
 
         }
     }
+    public void GetUrl(String Path)
+    {
+        Amplify.Storage.getUrl(
+                StoragePath.fromString(Path),
+                result -> Log.i("MyAmplifyApp", "Successfully generated: " + result.getUrl()),
+                error -> Log.e("MyAmplifyApp", "URL generation failure", error)
+        );
+    }
     public void UploadProfilePicture(File ProfilePicture)
     {
         //File ProfilePicture= new File(ProfilePicturePath);
+        //generate unique key for picture - time
+        long Time = System.nanoTime();
+        String key= String.valueOf(Time);
+        String Path="public/ProfilePictures/"+key+".jpeg";
         Amplify.Storage.uploadFile(
-                StoragePath.fromString("public/ProfilePicture.png"),
+                StoragePath.fromString(Path),
                 ProfilePicture,
-                StorageUploadFileOptions.defaultInstance(),
-                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
-                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
-                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+                result -> {Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath()); GetUrl(Path);},
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
         );
     }
     public String getRealPathFromURI(Uri uri) {
