@@ -2,9 +2,13 @@ package com.example.smartstorageorganizer;
 
 import static android.app.PendingIntent.getActivity;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,6 +34,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -255,25 +261,37 @@ public class EditProfileActivity extends AppCompatActivity {
 
             if (data.getData() != null) {
                 ImageUri = data.getData();
+                Log.i("imagee", ImageUri.getPath());
                 profileImage.setImageURI(ImageUri);
-                String picturePath =ImageUri.getPath();
+                File nn= new File(ImageUri.getPath());
+                Log.i("imagee"," profileImage");
+                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
 
-                UploadProfilePicture(picturePath);
+                // Create a file to save the image
+                File file = new File(getCacheDir(), "image.png");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                UploadProfilePicture(file);
+//
+
             }
 
             else if (data.getClipData() != null) {
                 ImageUri = data.getClipData().getItemAt(0).getUri();
-                UploadProfilePicture(ImageUri.getPath()
-
-                );
+                //UploadProfilePicture(nn);
             }
 
         }
     }
-    public void UploadProfilePicture(String ProfilePicturePath)
+    public void UploadProfilePicture(File ProfilePicture)
     {
-
-        File ProfilePicture= new File(ProfilePicturePath);
+        //File ProfilePicture= new File(ProfilePicturePath);
         Amplify.Storage.uploadFile(
                 StoragePath.fromString("public/ProfilePictures"),
                 ProfilePicture,
