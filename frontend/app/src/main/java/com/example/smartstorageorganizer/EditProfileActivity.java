@@ -30,6 +30,7 @@ import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -60,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity {
     String currentSurname = "";
     String currentPhone = "";
     String currentAddress = "";
+    String currentProfileUrl = "";
     String customAttribute = "";
     boolean flag = false;
 
@@ -172,6 +174,9 @@ public class EditProfileActivity extends AppCompatActivity {
                             case "address":
                                 currentAddress = attribute.getValue();
                                 break;
+                            case "picture":
+                                currentProfileUrl = attribute.getValue();
+                                break;
                             case "custom:myCustomAttribute":
                                 customAttribute = attribute.getValue();
                                 break;
@@ -180,6 +185,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentPhone);
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         email.setText(currentEmail);
                         name.setText(currentName);
                         surname.setText(currentSurname);
