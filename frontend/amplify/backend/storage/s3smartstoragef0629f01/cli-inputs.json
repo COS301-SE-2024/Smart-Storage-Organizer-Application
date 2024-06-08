@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3smartstoragef0629f01",
+  "bucketName": "smart-storage-f0629f01",
+  "policyUUID": "62684130",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "READ",
+    "CREATE_AND_UPDATE",
+    "DELETE"
+  ]
+}

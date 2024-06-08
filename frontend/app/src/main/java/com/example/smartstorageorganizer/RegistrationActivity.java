@@ -90,7 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     registerButtonText.setVisibility(View.GONE);
                     registerButtonIcon.setVisibility(View.GONE);
 
-                    SignUp(email, phone, name, surname, "856 Hydrogen Street", password);
+                    SignUp(email, phone, name, surname, "364 Hygrogen, Hatfield", password);
                 }
             }
         });
@@ -196,7 +196,8 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
-
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/617722016757185.jpeg?x-id=GetObject&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA6ODVAP7O5WY3XPVM%2F20240608%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Date=20240608T130412Z&X-Amz-Expires=604800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH0aCmV1LW5vcnRoLTEiRzBFAiEA8Gy1rB9psNYM6qdl2OrjjulB5pd7%2FZW3umnCOziIJGMCIDSpRFgsS0ph4r0XEdKHmz2%2BbgwVa41cf5uL7dw72bj%2FKsoECBYQABoMOTkyMzgyODQ0ODkzIgwVDaZHgOHwnQFFufYqpwSqY5IwAVMBENzuZaWWTLI7JAl32T%2Frl0lGVEzXlwv%2FM1NId3XtEtvv2FCr59i6JuhRItVAvOu7c2x%2BcJqdijjlG23Ya3zxfqn1OeMeNchD1Z2uzxpMBinka0004v8kRnTqIHUieeVIHuVcnXX6du0fN%2FVCexeE%2BmOSDOvTK7yBlxKFC%2BGO%2BB0eGXFoYb%2Fh%2BWAy5IiN3u0NouLWif%2BPSciCLYl7yH%2BM4PZ9yYtjeXDHsi5pUb7X1RhaJKyCdYwtgc2mMsYMlzMElRG6oa6w8ahJrma%2FvnZCH7NGQEiXgF7Vl%2BgLctRRgXQxTRGv2tv2hSjj9nv5HRANsV2pg4tBVBaR6OlzJZSdF%2BSW7KO72JJRCVTGiVKGGjJbv2XUcYLF1NIrVW4%2FN507ydUf7d%2FqLYg%2Fx%2F8YcAi3XhpiJa86wHI1HSsiyzayI6Oz5nQtPZRmBtjYudfwHOjyhXpckrVc5VFTWCA00j4fWbiesmCcIrr4Bgh5QIXjM4s2sINOqS6GHSJKT6Ak0bwdSZCGUd9j3Q4r1FAloIGtX4L%2FmC%2FeSqn%2B1bt1kerabukQJ1mEfiwItshznR8I38gO1LmvsUX59XMG4%2FZ8D%2BZyzLslVHh9hjGDJURoZNahIGJFgRNqejiuwa8VAD4ImFtMZ69aPWvdTLYBqzsX1rnLzQCbbcDdg08r2rBhxgMzvwIN6DYrFC0kRkBI0aGcCPHKAQ30smwlJX0ceiBt1NPZ8TCirZGzBjqFAmqYm5jm3l0aU2zEkpeRTfq%2FnwH2dkTo1PMEARqPhoyxzL4ycqBSEVLI619MMegL4CPRY6OU9OOT3Eitb%2Fum4S85ZZzdm0PKRuikXu1RiJ9PSfkJCLXjWSrp5TAtr0NRkQVM4MYYpVQgSd6mtwJydv36RXhIh6aai6LkMSlScW8nztOqgE4P9uXyjENZIegCekYA%2FyknIIZuFL0G9Oqs8A19yHs%2BuptAYbnT%2F6GFDUkC9xXWhdgiPc4TqG8lEdGFCcgQQPQCvIgVOIf1TTj2Oe1pluxWiu3YWSKbGmx5p4AAQny2N2S06Stylbx9si7sLRXjtwN0r3E%2BMUC9mbA58yleWqUriw%3D%3D&X-Amz-SignedHeaders=host&X-Amz-Signature=0619ddd174294791a53cbd8fa2a33e007e6a2ae90cf200e3b4f6f8dd73eaa80a"));
+        //we need to find a default picure
         try {
             Amplify.Auth.signUp(
                     email,
