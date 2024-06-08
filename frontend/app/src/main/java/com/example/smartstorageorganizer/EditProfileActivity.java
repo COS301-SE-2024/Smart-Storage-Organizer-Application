@@ -33,6 +33,9 @@ import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
+import com.amplifyframework.storage.s3.options.S3UploadFileOptions;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -300,14 +303,17 @@ public class EditProfileActivity extends AppCompatActivity {
     }
     public void UploadProfilePicture(File ProfilePicture)
     {
-        //File ProfilePicture= new File(ProfilePicturePath);
-        //generate unique key for picture - time
+        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                .contentType("image/png") // Adjust based on file type
+                .contentDisposition("inline")
+                .build();
         long Time = System.nanoTime();
         String key= String.valueOf(Time);
-        String Path="public/ProfilePictures/"+key+".jpeg";
+        String Path="public/ProfilePictures/"+key+".png";
         Amplify.Storage.uploadFile(
                 StoragePath.fromString(Path),
                 ProfilePicture,
+                options,
                 result -> {Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath()); GetUrl(Path);},
                 storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
         );
