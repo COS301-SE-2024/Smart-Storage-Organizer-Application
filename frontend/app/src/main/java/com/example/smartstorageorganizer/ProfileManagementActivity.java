@@ -118,10 +118,10 @@ public class ProfileManagementActivity extends AppCompatActivity {
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentEmail);
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentProfileImage).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profilePicture);
                         email.setText(currentEmail);
                         String fullName = currentName+" "+currentSurname;
                         username.setText(fullName);
-                        Glide.with(this).load(currentProfileImage).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profilePicture);
                         loadingScreen.setVisibility(View.GONE);
                         loadingScreen.pauseAnimation();
                         content.setVisibility(View.VISIBLE);

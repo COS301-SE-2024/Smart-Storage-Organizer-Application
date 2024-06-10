@@ -46,9 +46,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.SmartStorageOrganizer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.SmartStorageOrganizer.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
 
-    <style name="Theme.SmartStorageOrganizer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.SmartStorageOrganizer.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
 
 </resources>
