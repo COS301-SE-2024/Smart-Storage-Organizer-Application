@@ -14,6 +14,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.bumptech.glide.Glide;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -31,9 +33,10 @@ import java.util.concurrent.CompletableFuture;
 
 public class HomeActivity extends AppCompatActivity {
     private TextView fullName;
+    private ShapeableImageView profileImage;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
-    private String currentName, currentSurname;
+    private String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View header = navigationView.getHeaderView(0);
         fullName = (TextView) header.findViewById(R.id.fullName);
+        profileImage = header.findViewById(R.id.profileImage);
 //        fullName.setText("Ezekiel Makau");
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -112,9 +116,9 @@ public class HomeActivity extends AppCompatActivity {
                             case "family_name":
                                 currentSurname = attribute.getValue();
                                 break;
-//                            case "phone_number":
-//                                currentPhone = attribute.getValue();
-//                                break;
+                            case "picture":
+                                currentPicture = attribute.getValue();
+                                break;
 //                            case "address":
 //                                currentAddress = attribute.getValue();
 //                                break;
@@ -129,6 +133,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         String username = currentName+" "+currentSurname;
                         fullName.setText(username);
                     });
