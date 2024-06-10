@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
@@ -53,6 +54,7 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
 
     LottieAnimationView fetchItemsLoader;
+    RecyclerView.LayoutManager layoutManager;
     private FragmentHomeBinding binding;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
@@ -74,6 +76,9 @@ public class HomeFragment extends Fragment {
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
+        itemRecyclerView.setHasFixedSize(true);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        itemRecyclerView.setLayoutManager(layoutManager);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +87,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+//        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
         //flash sale
 
