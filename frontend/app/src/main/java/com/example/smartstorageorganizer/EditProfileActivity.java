@@ -34,7 +34,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
-import com.amplifyframework.storage.s3.options.S3UploadFileOptions;
+//import com.amplifyframework.storage.s3.options.S3UploadFileOptions;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 
 import java.io.ByteArrayOutputStream;
@@ -66,7 +66,7 @@ public class EditProfileActivity extends AppCompatActivity {
     String currentAddress = "";
     String currentProfileUrl = "";
     String customAttribute = "";
-    boolean flag = false;
+    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,44 +116,20 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 upDateDetails().thenAccept(updateDetails -> {
-                    Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                    Log.i("EditProfileActivity", "Back button clicked");
-                    Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                    startActivity(intent);
-                    finish();
+                    loadingScreen.setVisibility(View.VISIBLE);
+                    loadingScreen.playAnimation();
+                    content.setVisibility(View.GONE);
+                    if(!file.exists()){
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("EditProfileActivity", "Back button clicked");
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 });
-//                getDetails().thenAccept(getDetails -> {
-//                    Log.i("AuthDemo", "User is signed in");
-//                    Log.i("AuthEmail", currentEmail);
-//                    name = findViewById(R.id.name);
-//                    surname = findViewById(R.id.surname);
-//                    email = findViewById(R.id.email);
-//                    address = findViewById(R.id.address);
-//                    phone = findViewById(R.id.phone);
-//                    cpp = findViewById(R.id.ccp);
-                    //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
-
-                    // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
-
-//                    email.setText(currentEmail);
-//                    name.setText(currentName);
-//                    surname.setText(currentSurname);
-//                    phone.setText(currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
-//                    Log.i("phoneSet", currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
-//                    address.setText(currentAddress);
-//                    String country = currentPhone.substring(0, currentPhone.length() - 9);
-//                    Integer countryiNT = new Integer(country);
-//
-//                    cpp.setCountryForPhoneCode(Integer.parseInt(country));
-//                       phone.setText(currentPhone);
-//                });
-
-//                finish();
             }
         });
-//
     }
-
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
@@ -198,7 +174,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         String country=currentPhone.substring(1, currentPhone.length()-9);
                         cpp.setCountryForPhoneCode(Integer.parseInt(country));
                         loadingScreen.setVisibility(View.GONE);
-                        loadingScreen.pauseAnimation();
+//                        loadingScreen.pauseAnimation();
                         content.setVisibility(View.VISIBLE);
                    });
                     future.complete(true);
@@ -250,15 +226,18 @@ public class EditProfileActivity extends AppCompatActivity {
             );
             future.complete(true);
         }
-        if(!Phone.equals(phone)){
-            Amplify.Auth.updateUserAttribute(
-                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
-                    result -> Log.i("AuthDemo", "Updated phone"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
-
-            );
-            future.complete(true);
+        if(true){
+            UploadProfilePicture(file);
         }
+//        if(!Phone.equals(phone)){
+//            Amplify.Auth.updateUserAttribute(
+//                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
+//                    result -> Log.i("AuthDemo", "Updated phone"),
+//                    error -> Log.e("AuthDemo", "Update failed", error)
+//
+//            );
+//            future.complete(true);
+//        }
         return future;
     }
 
@@ -272,29 +251,33 @@ public class EditProfileActivity extends AppCompatActivity {
             if (data.getData() != null) {
                 ImageUri = data.getData();
                 profileImage.setImageURI(ImageUri);
-//                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-//                Bitmap bitmap = drawable.getBitmap();
-//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
                 BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
 
                 // Create a file to save the image
-                File file = new File(getCacheDir(), "image.jpeg");
+                file = new File(getCacheDir(), "image.jpeg");
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                     fos.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                UploadProfilePicture(file);
-//
-
             }
 
             else if (data.getClipData() != null) {
                 ImageUri = data.getClipData().getItemAt(0).getUri();
-                //UploadProfilePicture(nn);
+                profileImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -303,15 +286,33 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         Amplify.Storage.getUrl(
                 StoragePath.fromString(Path),
-                result -> Log.i("MyAmplifyApp", "Successfully generated: " + result.getUrl()),
-                error -> Log.e("MyAmplifyApp", "URL generation failure", error)
+                result -> {
+                    String url = String.valueOf(result.getUrl());
+                    Amplify.Auth.updateUserAttribute(
+                            new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+                            resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+                            error -> Log.e("AuthDemo", "Update failed", error)
+                    );
+                    Log.i("MyAmplifyApp", "Successfully generated: " + url);
+                    runOnUiThread(() -> {
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
+                },
+                error -> {
+                    Log.e("MyAmplifyApp", "URL generation failure", error);
+                    loadingScreen.setVisibility(View.GONE);
+//                        loadingScreen.pauseAnimation();
+                    content.setVisibility(View.VISIBLE);
+                }
         );
     }
     public void UploadProfilePicture(File ProfilePicture)
     {
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
                 .contentType("image/png") // Adjust based on file type
-                .contentDisposition("inline")
                 .build();
         long Time = System.nanoTime();
         String key= String.valueOf(Time);
