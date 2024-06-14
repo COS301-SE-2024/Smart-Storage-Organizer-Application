@@ -198,7 +198,7 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        //we need to find a default picure
+        //updated and add a build
         try {
             Amplify.Auth.signUp(
                     email,
