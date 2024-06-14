@@ -169,12 +169,13 @@ public class RegistrationActivity extends AppCompatActivity {
             Password.requestFocus();
             return false;
         }
-
+        foo();
         return true;
     }
 
     public  void ConfimSignUp(String email , String Code)
     {
+        foo();
         Amplify.Auth.confirmSignUp(
                 email,
                 Code,
@@ -187,7 +188,10 @@ public class RegistrationActivity extends AppCompatActivity {
         );
     }
 
+    public void foo()
+    {
 
+    }
 
     public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
     {
