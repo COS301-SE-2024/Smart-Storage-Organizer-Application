@@ -24,12 +24,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
+import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -61,6 +63,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView itemRecyclerView;
     private String currentEmail;
     AlertDialog alertDialog;
+
+    private MaterialCardView addCategory;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -76,6 +80,7 @@ public class HomeFragment extends Fragment {
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
+        addCategory = root.findViewById(R.id.addCategory);
         itemRecyclerView.setHasFixedSize(true);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
@@ -84,6 +89,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showAddItemPopup();
+            }
+        });
+
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+                startActivity(intent);
             }
         });
 

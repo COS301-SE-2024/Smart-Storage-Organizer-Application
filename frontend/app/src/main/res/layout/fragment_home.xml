@@ -87,10 +87,11 @@
                 android:layout_marginEnd="16dp">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/addCategory"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/colorSecondary"
-                    app:cardBackgroundColor="@color/colorSecondary">
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/colorPrimary">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -120,8 +121,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
@@ -152,9 +153,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
-                    >
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white">                    >
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -184,8 +184,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
@@ -216,8 +216,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
@@ -233,8 +233,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center"
-                    android:text="Books"
-                    android:textColor="@color/colorSecondary"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     android:textSize="14dp"/>
 
             </LinearLayout>
@@ -248,8 +248,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
@@ -280,8 +280,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
@@ -312,8 +312,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    app:strokeColor="@color/gray"
-                    app:cardBackgroundColor="@color/background"
+                    app:strokeColor="@color/background"
+                    app:cardBackgroundColor="@color/white"
                     >
 
                     <ImageView
