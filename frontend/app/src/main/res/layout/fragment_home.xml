@@ -97,14 +97,14 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:padding="18dp"
-                        android:src="@drawable/all" />
+                        android:src="@drawable/baseline_add_24" />
 
                 </com.google.android.material.card.MaterialCardView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:text="All"
+                    android:text="Category"
                     android:layout_gravity="center"
                     android:textColor="@color/colorSecondary"
                     android:textSize="14dp"/>
