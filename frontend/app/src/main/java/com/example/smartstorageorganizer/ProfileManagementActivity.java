@@ -48,9 +48,6 @@ public class ProfileManagementActivity extends AppCompatActivity {
         profileBackButton = findViewById(R.id.ProfileBackButton);
         profilePicture = findViewById(R.id.profilePicture);
 
-//        Glide.with(this).load(awsUrl).placeholder(R.drawable.profile).error(R.drawable.profile).into(profilePicture);
-
-
 
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
