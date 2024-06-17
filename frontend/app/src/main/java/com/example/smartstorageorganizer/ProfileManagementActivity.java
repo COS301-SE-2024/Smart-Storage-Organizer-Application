@@ -48,6 +48,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
         profileBackButton = findViewById(R.id.ProfileBackButton);
         profilePicture = findViewById(R.id.profilePicture);
 
+
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
             Log.i("AuthEmailFragment", currentEmail);
