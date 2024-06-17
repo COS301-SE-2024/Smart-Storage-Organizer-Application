@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
-        addCategory = root.findViewById(R.id.addCategory);
+//        addCategory = root.findViewById(R.id.addCategory);
         itemRecyclerView.setHasFixedSize(true);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
@@ -92,13 +92,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
-                startActivity(intent);
-            }
-        });
+//        addCategory.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 //        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
