@@ -102,7 +102,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/logoutButton"
+            android:id="@+id/addButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginHorizontal="32dp"
