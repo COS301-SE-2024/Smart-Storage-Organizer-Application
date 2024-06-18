@@ -284,33 +284,33 @@ public class EditProfileActivity extends AppCompatActivity {
 
         }
     }
-    public void GetUrl(String Path)
-    {
-        Amplify.Storage.getUrl(
-                StoragePath.fromString(Path),
-                result -> {
-                    String url = String.valueOf(result.getUrl());
-                    Amplify.Auth.updateUserAttribute(
-                            new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
-                            resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
-                            error -> Log.e("AuthDemo", "Update failed", error)
-                    );
-                    Log.i("MyAmplifyApp", "Successfully generated: " + url);
-                    runOnUiThread(() -> {
-                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
-                },
-                error -> {
-                    Log.e("MyAmplifyApp", "URL generation failure", error);
-                    loadingScreen.setVisibility(View.GONE);
-//                        loadingScreen.pauseAnimation();
-                    content.setVisibility(View.VISIBLE);
-                }
-        );
-    }
+//    public void GetUrl(String Path)
+//    {
+//        Amplify.Storage.getUrl(
+//                StoragePath.fromString(Path),
+//                result -> {
+//                    String url = String.valueOf(result.getUrl());
+//                    Amplify.Auth.updateUserAttribute(
+//                            new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+//                            resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+//                            error -> Log.e("AuthDemo", "Update failed", error)
+//                    );
+//                    Log.i("MyAmplifyApp", "Successfully generated: " + url);
+//                    runOnUiThread(() -> {
+//                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    });
+//                },
+//                error -> {
+//                    Log.e("MyAmplifyApp", "URL generation failure", error);
+//                    loadingScreen.setVisibility(View.GONE);
+////                        loadingScreen.pauseAnimation();
+//                    content.setVisibility(View.VISIBLE);
+//                }
+//        );
+//    }
     public void UploadProfilePicture(File ProfilePicture)
     {
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
@@ -329,6 +329,17 @@ public class EditProfileActivity extends AppCompatActivity {
     }
     public String GetObjectUrl(String key)
     {
+        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        Amplify.Auth.updateUserAttribute(
+                new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+                resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+                error -> Log.e("AuthDemo", "Update failed", error)
+        );
+        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+        startActivity(intent);
+        finish();
+
         return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
     }
 
