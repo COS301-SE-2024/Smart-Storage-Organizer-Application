@@ -164,11 +164,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentPhone);
                     runOnUiThread(() -> {
-                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         email.setText(currentEmail);
                         name.setText(currentName);
                         surname.setText(currentSurname);
                         phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
 
                         address.setText(currentAddress);
                         String country=currentPhone.substring(1, currentPhone.length()-9);
@@ -247,6 +247,8 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
 
             imagesEncodedList = new ArrayList<>();
+
+//            Toast.makeText(EditProfileActivity.this, "Image URI: "+Objects.requireNonNull(data.getData()).toString(), Toast.LENGTH_LONG).show();
 
             if (data.getData() != null) {
                 ImageUri = data.getData();

@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
-//        addCategory = root.findViewById(R.id.addCategory);
+        addCategory = root.findViewById(R.id.addCategory);
         itemRecyclerView.setHasFixedSize(true);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
@@ -92,13 +92,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        addCategory.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+                startActivity(intent);
+            }
+        });
 
 //        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
@@ -168,11 +168,12 @@ public class HomeFragment extends Fragment {
                                 item.setQuanity(itemObject.getString("quanity"));
                                 item.setLocation(itemObject.getString("location"));
                                 item.setEmail(itemObject.getString("email"));
+                                item.setItem_image(itemObject.getString("item_image"));
 
                                 itemModelList.add(item);
                                 itemAdapter.notifyDataSetChanged();
 
-                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_name()));
+                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_image()));
                             }
 
                             requireActivity().runOnUiThread(() -> {

@@ -21,6 +21,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private TextInputLayout subcategoryInput;
+    private TextInputLayout parentCategoryInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             Spinner mySpinner = findViewById(R.id.mySpinner);
             radioGroup = findViewById(R.id.radioGroup);
             subcategoryInput = findViewById(R.id.subcategoryInput);
+            parentCategoryInput = findViewById(R.id.parentcategoryInput);
 
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -53,6 +55,14 @@ public class AddCategoryActivity extends AppCompatActivity {
                     if(radioButton.getText().toString().equals("Sub Category")){
                         mySpinner.setVisibility(View.VISIBLE);
                         subcategoryInput.setVisibility(View.VISIBLE);
+                        parentCategoryInput.setVisibility(View.GONE);
+                        Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                    else if(radioButton.getText().toString().equals("Parent Category")){
+                        mySpinner.setVisibility(View.GONE);
+                        subcategoryInput.setVisibility(View.GONE);
+                        parentCategoryInput.setVisibility(View.VISIBLE);
+
                         Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                     }
                 }
