@@ -249,4 +249,20 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public void RecommmendCategories(String itemname, String itemdescription, String useremail )
+    {
+        String json = "{\"useremail\":\""+useremail+"\", \"itemname\":\""+itemname+"\", \"itemsdecription\":\""+itemdescription+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/RecommendCategory";
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+    }
 }
