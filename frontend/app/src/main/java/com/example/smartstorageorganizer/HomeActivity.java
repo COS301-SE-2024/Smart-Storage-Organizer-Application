@@ -199,39 +199,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void AddCategory(int ParentCategory, String CategoryName, String email)
-    {
-        String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\", \"categoryname\":\""+CategoryName+"\" }";
-        
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/AddCategory";
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-    public void FetchCategory(int ParentCategory, String email)
-    {
-        String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/FetchCategory";
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-
-
     public void DeleteCategory(int id, String email)
     {
         String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
