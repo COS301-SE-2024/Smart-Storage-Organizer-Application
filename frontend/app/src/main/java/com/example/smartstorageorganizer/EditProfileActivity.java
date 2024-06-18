@@ -321,11 +321,14 @@ public class EditProfileActivity extends AppCompatActivity {
                 StoragePath.fromString(Path),
                 ProfilePicture,
                 options,
-                result -> {Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath()); GetUrl(Path);},
+                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
                 storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
         );
     }
-
+    public String GetObjectUrl(String key)
+    {
+        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+    }
 
     private CompletableFuture<Boolean> isSignedIn(){
         CompletableFuture<Boolean> future=new CompletableFuture<>();

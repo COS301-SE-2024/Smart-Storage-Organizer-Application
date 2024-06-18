@@ -199,7 +199,7 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
 
 
-        
+
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
         //updated and add a build
         try {

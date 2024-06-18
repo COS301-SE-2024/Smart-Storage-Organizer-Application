@@ -179,4 +179,6 @@ public class ProfileManagementActivity extends AppCompatActivity {
                 storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
         );
     }
+
+
 }
