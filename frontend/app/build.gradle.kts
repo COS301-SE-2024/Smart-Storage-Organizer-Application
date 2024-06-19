@@ -28,6 +28,7 @@ android {
 
         buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
         //buildConfigField( "String", "DefaultImage", defaultpicture)
+        buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");
 
 
     }
