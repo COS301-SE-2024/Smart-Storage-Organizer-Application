@@ -119,7 +119,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/FetchCategory";
+            String API_URL = BuildConfig.FetchCategoryEndPoint;
             RequestBody body = RequestBody.create(json, JSON);
 
             Request request = new Request.Builder()

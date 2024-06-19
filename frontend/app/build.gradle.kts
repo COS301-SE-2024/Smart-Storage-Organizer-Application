@@ -30,6 +30,10 @@ android {
         //buildConfigField( "String", "DefaultImage", defaultpicture)
         buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");
 
+        buildConfigField( "String", "RecommendCategoryEndPoint", "\"${localProperties["RecommendCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"");
+
 
     }
 
