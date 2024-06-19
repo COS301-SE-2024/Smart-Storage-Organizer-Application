@@ -1,0 +1,33 @@
+name: Smart Storage Organizer CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Run Tests
+      run: ./gradlew test
+
+    - name: Run Espresso Tests
+      run: ./gradlew connectedAndroidTest
