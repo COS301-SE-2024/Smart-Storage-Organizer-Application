@@ -36,3 +36,8 @@ amplifytools.xcconfig
 **.sample
 /amplify
 #amplify-do-not-edit-end
+
+
+#Ignore Pool-id
+app/src/main/res/raw/amplifyconfiguration.json
+app/src/main/res/raw/awsconfiguration.json
