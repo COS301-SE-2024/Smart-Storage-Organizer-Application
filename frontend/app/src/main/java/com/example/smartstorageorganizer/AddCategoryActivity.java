@@ -85,49 +85,43 @@ public class AddCategoryActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("Spinner",radioButton.getText().toString());
-                    if(radioButton.getText().toString().equals("Parent Category")){
+            addButton.setOnClickListener(v1 -> {
+                Log.i("Spinner",radioButton.getText().toString());
+                if(radioButton.getText().toString().equals("Parent Category")){
+                    Log.i("Spinner","Inside the Parent category if statement");
+                    if(validateParentForm()) {
                         Log.i("Spinner","Inside the Parent category if statement");
-                        if(validateParentForm()) {
-                            Log.i("Spinner","Inside the Parent category if statement");
-                            AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
-                        }
+                        AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
                     }
-                    else if(radioButton.getText().toString().equals("Sub Category")){
-                        Log.i("Spinner","Inside the Sub category if statement");
-                        if(validateSubCategoryForm()) {
-                            Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
-//                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
-                            ParentCategoryModel parent = findCategoryByName(parentCategoryModelList, currentSelectedParent);
-                            Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
-                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
-                        }
-                    }
-//                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
                 }
+                else if(radioButton.getText().toString().equals("Sub Category")){
+                    Log.i("Spinner","Inside the Sub category if statement");
+                    if(validateSubCategoryForm()) {
+                        Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
+//                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
+                        ParentCategoryModel parent = findCategoryByName(parentCategoryModelList, currentSelectedParent);
+                        Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
+                        AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
+                    }
+                }
+//                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
             });
-            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    radioButton = findViewById(checkedId);
-                    if(radioButton.getText().toString().equals("Sub Category")){
-                        mySpinner.setVisibility(View.VISIBLE);
-                        spinnerHeaderText.setVisibility(View.VISIBLE);
-                        subcategoryInput.setVisibility(View.VISIBLE);
-                        parentCategoryInput.setVisibility(View.GONE);
-                        Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
-                    }
-                    else if(radioButton.getText().toString().equals("Parent Category")){
-                        mySpinner.setVisibility(View.GONE);
-                        spinnerHeaderText.setVisibility(View.GONE);
-                        subcategoryInput.setVisibility(View.GONE);
-                        parentCategoryInput.setVisibility(View.VISIBLE);
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                radioButton = findViewById(checkedId);
+                if(radioButton.getText().toString().equals("Sub Category")){
+                    mySpinner.setVisibility(View.VISIBLE);
+                    spinnerHeaderText.setVisibility(View.VISIBLE);
+                    subcategoryInput.setVisibility(View.VISIBLE);
+                    parentCategoryInput.setVisibility(View.GONE);
+                    Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
+                }
+                else if(radioButton.getText().toString().equals("Parent Category")){
+                    mySpinner.setVisibility(View.GONE);
+                    spinnerHeaderText.setVisibility(View.GONE);
+                    subcategoryInput.setVisibility(View.GONE);
+                    parentCategoryInput.setVisibility(View.VISIBLE);
 
-                        Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                 }
             });
             mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -54,24 +54,10 @@
                 android:hint="Description"
                 android:inputType="textAutoComplete"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Add Item Image for better identification"-->
-<!--        android:textColor="@color/colorSecondary"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="18dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/profileImage"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="120dp"-->
-<!--        android:src="@drawable/profile"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="16dp" />-->
+    <Spinner
+        android:id="@+id/item_category_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/button_add_item"

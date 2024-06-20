@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,19 +88,11 @@ public class HomeFragment extends Fragment {
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
 
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddItemPopup();
-            }
-        });
+        addItemButton.setOnClickListener(v -> showAddItemPopup());
 
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
-                startActivity(intent);
-            }
+        addCategory.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+            startActivity(intent);
         });
 
 //        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -234,23 +228,43 @@ public class HomeFragment extends Fragment {
         // Get the EditTexts and Button from the dialog layout
         EditText itemName = dialogView.findViewById(R.id.item_name);
         EditText itemDescription = dialogView.findViewById(R.id.item_description);
+        Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
         Button buttonNext = dialogView.findViewById(R.id.button_add_item);
+
+        // Fetch data from the database to populate the spinner
+        fetchCategories(itemCategorySpinner);
 
         // Create the AlertDialog
         alertDialog = builder.create();
 
         // Set the button click listener
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
-            }
+        buttonNext.setOnClickListener(v -> {
+            String name = itemName.getText().toString().trim();
+            String description = itemDescription.getText().toString().trim();
+            String category = itemCategorySpinner.getSelectedItem().toString();
+            postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
         });
 
         // Show the AlertDialog
         alertDialog.show();
+    }
+
+
+    private void fetchCategories(Spinner spinner) {
+
+        // Replace with your API call to fetch categories from the database
+        String json = "{\"email\":\""+currentEmail+"\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchCategoryEndPoint; // Replace with your endpoint
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+
     }
 
     private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email )  {
@@ -288,37 +302,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-//    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String item_id ) {
-//        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//                requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    final String responseData = response.body().string();
-//                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-//                } else {
-//                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-//                }
-//            }
-//        });
-//    }
 
     @Override
     public void onDestroyView() {
