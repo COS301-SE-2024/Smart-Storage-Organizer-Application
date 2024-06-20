@@ -30,6 +30,7 @@ import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.card.MaterialCardView;
@@ -96,8 +97,7 @@ public class HomeFragment extends Fragment {
         addCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
-                startActivity(intent);
+                showAddButtonPopup();
             }
         });
 
@@ -246,6 +246,48 @@ public class HomeFragment extends Fragment {
                 String name = itemName.getText().toString().trim();
                 String description = itemDescription.getText().toString().trim();
                 postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
+            }
+        });
+
+        // Show the AlertDialog
+        alertDialog.show();
+    }
+
+    private void showAddButtonPopup() {
+        // Create an AlertDialog builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Inflate the dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_button_popup, null);
+        builder.setView(dialogView);
+
+        // Get the EditTexts and Button from the dialog layout
+        Button addItemButton = dialogView.findViewById(R.id.addItemButton);
+        Button addCategoryButton = dialogView.findViewById(R.id.addCategoryButton);
+        Button addUnitButton = dialogView.findViewById(R.id.addUnitButton);
+
+        // Create the AlertDialog
+        alertDialog = builder.create();
+
+        // Set the button click listener
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddItemPopup();
+            }
+        });
+        addCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+        addUnitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), UnitActivity.class);
+                startActivity(intent);
             }
         });
 
