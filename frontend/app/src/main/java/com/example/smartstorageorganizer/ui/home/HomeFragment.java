@@ -7,13 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,19 +21,17 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.Adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
-import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.HomeActivity;
-import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
-import com.google.android.material.card.MaterialCardView;
+import com.example.smartstorageorganizer.model.CategoryModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +40,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -65,8 +60,13 @@ public class HomeFragment extends Fragment {
     private RecyclerView itemRecyclerView;
     private String currentEmail;
     AlertDialog alertDialog;
+    private RecyclerView category_RecyclerView;
+    private List<CategoryModel> categoryModelList;
+    private CategoryAdapter categoryAdapter;
 
-    private MaterialCardView addCategory;
+//    private MaterialCardView addCategory;
+    private boolean flag = true;
+    private List<String> parentCategories = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -79,10 +79,24 @@ public class HomeFragment extends Fragment {
             Log.i("AuthDemo", "User is signed in");
         });
 
+        if(flag) {
+//                parentCategoryModelList = new ArrayList<>();
+            FetchCategory(0, "ezemakau@gmail.com");
+        }
+
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
-        addCategory = root.findViewById(R.id.addCategory);
+        category_RecyclerView = root.findViewById(R.id.category_rec);
+//        addCategory = root.findViewById(R.id.addCategory);
+
+        category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+        categoryModelList = new ArrayList<>();
+        //flash sale
+
+        categoryAdapter = new CategoryAdapter(requireActivity(), categoryModelList);
+        category_RecyclerView.setAdapter(categoryAdapter);
+
         itemRecyclerView.setHasFixedSize(true);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
@@ -90,16 +104,16 @@ public class HomeFragment extends Fragment {
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddItemPopup();
-            }
-        });
-
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 showAddButtonPopup();
             }
         });
+
+//        addCategory.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showAddButtonPopup();
+//            }
+//        });
 
 //        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
@@ -331,36 +345,91 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String item_id ) {
-//        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//                requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    final String responseData = response.body().string();
-//                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-//                } else {
-//                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-//                }
-//            }
-//        });
-//    }
+    public void FetchCategory(int ParentCategory, String email)
+    {
+        if(flag) {
+            String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
+
+
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            OkHttpClient client = new OkHttpClient();
+            String API_URL = BuildConfig.FetchCategoryEndPoint;
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .build();
+
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() -> Log.e("Category Request Method", "GET request failed", e));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        requireActivity().runOnUiThread(() -> {
+                            requireActivity().runOnUiThread(() -> Log.e("Category Response Results", responseData));
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+
+                                int statusCode = jsonObject.getInt("statusCode");
+                                String status = jsonObject.getString("status");
+
+                                String bodyString = jsonObject.getString("body");
+                                JSONArray bodyArray = new JSONArray(bodyString);
+
+                                List<ItemModel> items = new ArrayList<>();
+
+                                requireActivity().runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
+                                parentCategories.add("");
+                                for (int i = 0; i < bodyArray.length(); i++) {
+                                    JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                    CategoryModel parentCategory = new CategoryModel();
+                                    parentCategory.setCategoryID(itemObject.getString("id"));
+                                    parentCategory.setCategoryName(itemObject.getString("categoryname"));
+
+                                    categoryModelList.add(parentCategory);
+                                    categoryAdapter.notifyDataSetChanged();
+
+                                    Log.e("Category Name", parentCategory.getCategoryName());
+                                    parentCategories.add(itemObject.getString("categoryname"));
+
+
+                                }
+                                requireActivity().runOnUiThread(() -> {
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                                    mySpinner.setAdapter(adapter);
+                                });
+
+
+//                            requireActivity().runOnUiThread(() -> {
+//                                fetchItemsLoader.setVisibility(View.GONE);
+//                                itemRecyclerView.setVisibility(View.VISIBLE);
+//                            });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+                    } else {
+                        requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                    }
+                }
+            });
+            flag = false;
+        }
+
+    }
 
     @Override
     public void onDestroyView() {
