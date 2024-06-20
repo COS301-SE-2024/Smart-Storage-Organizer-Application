@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="Updated team bio with pictures" />
+    <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="Updated team bio with pictures">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +37,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "development",
+    "git-widget-placeholder": "StorageBuckets",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Chaks Malaks/COS 301/CapStone Project/Smart-Storage-Organizer-Application/frontend"
   }
