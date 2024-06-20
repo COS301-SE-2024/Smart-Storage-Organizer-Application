@@ -11,14 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -28,15 +24,12 @@ import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
-import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.HomeActivity;
-import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +38,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -242,7 +234,7 @@ public class HomeFragment extends Fragment {
             String name = itemName.getText().toString().trim();
             String description = itemDescription.getText().toString().trim();
             String category = itemCategorySpinner.getSelectedItem().toString();
-            postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
+            postAddItem(name, description, category, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
         });
 
         // Show the AlertDialog
@@ -252,11 +244,11 @@ public class HomeFragment extends Fragment {
 
     private void fetchCategories(Spinner spinner) {
 
-        // Replace with your API call to fetch categories from the database
+        // API call to fetch categories from the database
         String json = "{\"email\":\""+currentEmail+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchCategoryEndPoint; // Replace with your endpoint
+        String API_URL = BuildConfig.FetchCategoryEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -264,10 +256,48 @@ public class HomeFragment extends Fragment {
                 .post(body)
                 .build();
 
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    requireActivity().runOnUiThread(() -> {
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+
+                            List<String> categories = new ArrayList<>();
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject categoryObject = bodyArray.getJSONObject(i);
+                                String category = categoryObject.getString("category_name");
+                                categories.add(category);
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
+                                    android.R.layout.simple_spinner_item, categories);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinner.setAdapter(adapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                } else {
+                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                }
+            }
+        });
     }
 
-    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email )  {
+    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email, String currentEmail)  {
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
