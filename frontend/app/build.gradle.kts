@@ -34,6 +34,8 @@ android {
 
         buildConfigField( "String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"");
 
+        buildConfigField( "String", "AddCategoryEndPoint", "\"${localProperties["AddCategoryEndPoint"]}\"");
+
         buildConfigField( "String", "EditItemEndPoint", "\"${localProperties["EditItemEndPoint"]}\"");
 
         buildConfigField( "String", "FetchByEmailEndPoint", "\"${localProperties["FetchByEmailEndPoint"]}\"");
