@@ -4,10 +4,12 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="32dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,10 +28,10 @@
             android:paddingBottom="8dp" />
 
         <TextView
+            android:id="@+id/help_reset_password_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To reset your password, go to the settings menu, then select 'Account', and tap 'Reset Password'." />
-
+            android:text="A: To reset your password, click here: Reset Password" />
         <!-- Add more FAQs here -->
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +44,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: Your data is highly secure with end-to-end encryption, ensuring that only you can access your files. Additionally, our servers are protected by advanced security measures to safeguard your information." />
-
         <!-- Add more FAQs here -->
         <TextView
             android:layout_width="wrap_content"
