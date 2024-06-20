@@ -232,4 +232,39 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
     }
+
+    public void DeleteItem(String itemid)
+    {
+        String json = "{\"item_id\":\""+itemid+"\"}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.DeleteItemEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+    }
+
+    public void ChangeQaunity(String itemid, String sign)
+    {
+        String json = "{\"item_id\":\""+itemid+"\",  \"sign\":\""+sign+"\"}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.ChangeQuantityEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+    }
+
 }
