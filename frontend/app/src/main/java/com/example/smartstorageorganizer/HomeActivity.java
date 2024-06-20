@@ -12,8 +12,11 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -34,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -266,5 +270,27 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
     }
+    public void UploadProfilePicture(File ProfilePicture)
+    {
+        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                .contentType("image/png") // Adjust based on file type
+                .build();
+        long Time = System.nanoTime();
+        String key= String.valueOf(Time);
+        String Path="public/itemimages/"+key+".png";
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString(Path),
+                ProfilePicture,
+                options,
+                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
+    }
+    public String GetObjectUrl(String key)
+    {
+       // String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
 
+
+        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/itemimages/"+key+".png";
+    }
 }
