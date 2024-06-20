@@ -18,17 +18,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
+import com.example.smartstorageorganizer.AddCategoryActivity;
+import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.EditProfileActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
@@ -53,12 +57,15 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
 
     LottieAnimationView fetchItemsLoader;
+    RecyclerView.LayoutManager layoutManager;
     private FragmentHomeBinding binding;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
     private String currentEmail;
     AlertDialog alertDialog;
+
+    private MaterialCardView addCategory;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -74,6 +81,10 @@ public class HomeFragment extends Fragment {
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
+        addCategory = root.findViewById(R.id.addCategory);
+        itemRecyclerView.setHasFixedSize(true);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        itemRecyclerView.setLayoutManager(layoutManager);
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +93,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+//        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
         //flash sale
 
@@ -98,7 +117,7 @@ public class HomeFragment extends Fragment {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/SearchByEmail";
+        String API_URL = BuildConfig.FetchByEmailEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -150,11 +169,12 @@ public class HomeFragment extends Fragment {
                                 item.setQuanity(itemObject.getString("quanity"));
                                 item.setLocation(itemObject.getString("location"));
                                 item.setEmail(itemObject.getString("email"));
+                                item.setItem_image(itemObject.getString("item_image"));
 
                                 itemModelList.add(item);
                                 itemAdapter.notifyDataSetChanged();
 
-                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_name()));
+                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_image()));
                             }
 
                             requireActivity().runOnUiThread(() -> {
@@ -237,7 +257,7 @@ public class HomeFragment extends Fragment {
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/AddItem";
+        String API_URL = BuildConfig.AddItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()

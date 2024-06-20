@@ -1,11 +1,20 @@
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+}
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.reader(Charsets.UTF_8).use { reader ->
+        localProperties.load(reader)
+    }
 }
 
 android {
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
+    android.buildFeatures.buildConfig =true
 
     defaultConfig {
         applicationId = "com.example.smartstorageorganizer"
@@ -15,6 +24,25 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
+        //buildConfigField( "String", "DefaultImage", defaultpicture)
+        buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "RecommendCategoryEndPoint", "\"${localProperties["RecommendCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "AddCategoryEndPoint", "\"${localProperties["AddCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "EditItemEndPoint", "\"${localProperties["EditItemEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchByEmailEndPoint", "\"${localProperties["FetchByEmailEndPoint"]}\"");
+
+
+        buildConfigField( "String", "AddItemEndPoint", "\"${localProperties["AddItemEndPoint"]}\"");
+
     }
 
     buildTypes {
@@ -67,6 +95,7 @@ dependencies {
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
     implementation ("com.airbnb.android:lottie:6.4.1")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")
@@ -108,6 +137,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 
     implementation("com.google.code.gson:gson:2.8.8") // Use the latest version
+
+    implementation("com.amplifyframework:aws-storage-s3:2.16.1")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 
 

@@ -8,6 +8,8 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.configuration.AmplifyOutputs;
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 //import com.amplifyframework.core.configuration.AmplifyConfiguration;
 
 public class MyAmplifyApp extends Application {
@@ -21,6 +23,7 @@ public class MyAmplifyApp extends Application {
 
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
+            Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {

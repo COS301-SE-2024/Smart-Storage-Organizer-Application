@@ -10,6 +10,7 @@ public class ItemModel {
     private String quanity;
     private String location;
     private String email;
+    private String item_image;
 
     public String getItem_id() {
         return item_id;
@@ -83,11 +84,19 @@ public class ItemModel {
         this.email = email;
     }
 
+    public String getItem_image() {
+        return item_image;
+    }
+
+    public void setItem_image(String item_image) {
+        this.item_image = item_image;
+    }
+
     public ItemModel() {
 
     }
 
-    public ItemModel(String item_id, String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String email) {
+    public ItemModel(String item_id, String item_name, String description, String colourcoding, String barcode, String qrcode, String quanity, String location, String email, String item_image) {
         this.item_id = item_id;
         this.item_name = item_name;
         this.description = description;
@@ -97,5 +106,6 @@ public class ItemModel {
         this.quanity = quanity;
         this.location = location;
         this.email = email;
+        this.item_image = item_image;
     }
 }
