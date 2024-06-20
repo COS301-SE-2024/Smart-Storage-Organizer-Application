@@ -54,7 +54,16 @@
 
         </RadioGroup>
 
-
+        <TextView
+            android:id="@+id/spinnerHeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="Select Parent Category"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="16dp"/>
         <Spinner
             android:id="@+id/mySpinner"
             android:layout_width="match_parent"

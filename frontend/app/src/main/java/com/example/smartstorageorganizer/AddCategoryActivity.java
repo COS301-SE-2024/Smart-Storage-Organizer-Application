@@ -1,13 +1,17 @@
 package com.example.smartstorageorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,7 +21,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.ParentCategoryModel;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
@@ -27,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,11 +49,15 @@ public class AddCategoryActivity extends AppCompatActivity {
     private RadioButton radioButton;
     private TextInputLayout subcategoryInput;
     private TextInputLayout parentCategoryInput;
+    TextView spinnerHeaderText;
+    public ArrayList<ParentCategoryModel> parentCategoryModelList = new ArrayList<>();
+    private String currentSelectedParent;
 
     private List<String> parentCategories = new ArrayList<>();
     private List<String> parentCategoriesIcons = new ArrayList<>();
     private Spinner mySpinner;
     private ConstraintLayout addButton;
+    private TextInputEditText parentCategoryEditText, subCategory;
     private boolean flag = true;
 
     @Override
@@ -58,10 +70,16 @@ public class AddCategoryActivity extends AppCompatActivity {
             radioGroup = findViewById(R.id.radioGroup);
             subcategoryInput = findViewById(R.id.subcategoryInput);
             parentCategoryInput = findViewById(R.id.parentcategoryInput);
+            parentCategoryEditText = findViewById(R.id.parentcategory);
+            spinnerHeaderText = findViewById(R.id.spinnerHeaderText);
             addButton = findViewById(R.id.addButton);
+            subCategory = findViewById(R.id.subcategory);
+            //flash sale
 
             if(flag) {
+//                parentCategoryModelList = new ArrayList<>();
                 FetchCategory(0, "ezemakau@gmail.com");
+                currentSelectedParent = "";
             }
 
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -70,7 +88,25 @@ public class AddCategoryActivity extends AppCompatActivity {
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
+                    Log.i("Spinner",radioButton.getText().toString());
+                    if(radioButton.getText().toString().equals("Parent Category")){
+                        Log.i("Spinner","Inside the Parent category if statement");
+                        if(validateParentForm()) {
+                            Log.i("Spinner","Inside the Parent category if statement");
+                            AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
+                        }
+                    }
+                    else if(radioButton.getText().toString().equals("Sub Category")){
+                        Log.i("Spinner","Inside the Sub category if statement");
+                        if(validateSubCategoryForm()) {
+                            Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
+//                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
+                            ParentCategoryModel parent = findCategoryByName(parentCategoryModelList, currentSelectedParent);
+                            Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
+                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
+                        }
+                    }
+//                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
                 }
             });
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -79,12 +115,14 @@ public class AddCategoryActivity extends AppCompatActivity {
                     radioButton = findViewById(checkedId);
                     if(radioButton.getText().toString().equals("Sub Category")){
                         mySpinner.setVisibility(View.VISIBLE);
+                        spinnerHeaderText.setVisibility(View.VISIBLE);
                         subcategoryInput.setVisibility(View.VISIBLE);
                         parentCategoryInput.setVisibility(View.GONE);
                         Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                     }
                     else if(radioButton.getText().toString().equals("Parent Category")){
                         mySpinner.setVisibility(View.GONE);
+                        spinnerHeaderText.setVisibility(View.GONE);
                         subcategoryInput.setVisibility(View.GONE);
                         parentCategoryInput.setVisibility(View.VISIBLE);
 
@@ -96,9 +134,11 @@ public class AddCategoryActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                     // Get selected item
-                    String selectedItem = parentView.getItemAtPosition(position).toString();
+                    currentSelectedParent = parentView.getItemAtPosition(position).toString();
+
                     // Do something with the selected item
-                    Toast.makeText(AddCategoryActivity.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                    Log.i("Spinner","CurrentParent: "+currentSelectedParent);
+                    Toast.makeText(AddCategoryActivity.this, "Selected: " + currentSelectedParent, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -111,6 +151,49 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
+    private ParentCategoryModel findCategoryByName(ArrayList<ParentCategoryModel> categories, String categoryName) {
+        runOnUiThread(() -> {
+            Log.e("Spinner", parentCategoryModelList.get(0).getCategoryName());
+        });
+        for (ParentCategoryModel category : parentCategoryModelList) {
+//            Log.i("Spinner","Searching: "+category.getCategoryName());
+            if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+//                Log.i("Spinner","Found: "+category.getCategoryName());
+                return category;
+            }
+        }
+        return null; // Return null if no category with the given name is found
+    }
+
+
+    private boolean validateParentForm() {
+        String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
+
+        if (TextUtils.isEmpty(parentCategoryText)) {
+            parentCategoryEditText.setError("Parent Category is required.");
+            parentCategoryEditText.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateSubCategoryForm() {
+        String subCategoryText = Objects.requireNonNull(subCategory.getText()).toString().trim();
+
+        if (Objects.equals(currentSelectedParent, "")) {
+            Toast.makeText(AddCategoryActivity.this, currentSelectedParent, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(TextUtils.isEmpty(subCategoryText)){
+            subCategory.setError("Sub Category is required.");
+            subCategory.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
     public void FetchCategory(int ParentCategory, String email)
     {
         if(flag) {
@@ -119,7 +202,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/FetchCategory";
+            String API_URL = BuildConfig.FetchCategoryEndPoint;
             RequestBody body = RequestBody.create(json, JSON);
 
             Request request = new Request.Builder()
@@ -154,16 +237,17 @@ public class AddCategoryActivity extends AppCompatActivity {
                                 List<ItemModel> items = new ArrayList<>();
 
                                 runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
-
+                                parentCategories.add("");
                                 for (int i = 0; i < bodyArray.length(); i++) {
                                     JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                    ParentCategoryModel parentCategory = new ParentCategoryModel();
+                                    parentCategory.setCategoryID(itemObject.getString("id"));
+                                    parentCategory.setCategoryName(itemObject.getString("categoryname"));
+
+                                    parentCategoryModelList.add(parentCategory);
                                     parentCategories.add(itemObject.getString("categoryname"));
-
-                                    String temp = itemObject.getString("categoryname");
-
-                                    runOnUiThread(() -> Log.e("Category Details", temp));
                                 }
-//                            fillSpinner();
                                 runOnUiThread(() -> {
                                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddCategoryActivity.this, android.R.layout.simple_spinner_item, parentCategories);
                                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -197,7 +281,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/AddCategory";
+        String API_URL = BuildConfig.AddCategoryEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -218,6 +302,10 @@ public class AddCategoryActivity extends AppCompatActivity {
                     final String responseData = response.body().string();
                     runOnUiThread(() -> {
                         runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                        Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                        Toast.makeText(AddCategoryActivity.this, "New Category Added Successfully.", Toast.LENGTH_LONG).show();
                     });
                 } else {
                     runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
