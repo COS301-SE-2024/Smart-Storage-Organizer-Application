@@ -154,9 +154,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             Log.e("Spinner", categoryModelList.get(0).getCategoryName());
         });
         for (CategoryModel category : categoryModelList) {
-//            Log.i("Spinner","Searching: "+category.getCategoryName());
             if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
-//                Log.i("Spinner","Found: "+category.getCategoryName());
                 return category;
             }
         }
@@ -242,9 +240,12 @@ public class AddCategoryActivity extends AppCompatActivity {
                                     CategoryModel parentCategory = new CategoryModel();
                                     parentCategory.setCategoryID(itemObject.getString("id"));
                                     parentCategory.setCategoryName(itemObject.getString("categoryname"));
+//                                    parentCategory.setImageUrl(itemObject.getString("icon"));
 
                                     categoryModelList.add(parentCategory);
                                     parentCategories.add(itemObject.getString("categoryname"));
+//                                    String temp = itemObject.getString("icon");
+//                                    runOnUiThread(() -> Log.e("Image Url", temp));
                                 }
                                 runOnUiThread(() -> {
                                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddCategoryActivity.this, android.R.layout.simple_spinner_item, parentCategories);

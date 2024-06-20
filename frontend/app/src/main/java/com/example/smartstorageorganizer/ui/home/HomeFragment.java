@@ -395,11 +395,12 @@ public class HomeFragment extends Fragment {
                                     CategoryModel parentCategory = new CategoryModel();
                                     parentCategory.setCategoryID(itemObject.getString("id"));
                                     parentCategory.setCategoryName(itemObject.getString("categoryname"));
+                                    parentCategory.setImageUrl(itemObject.getString("icon"));
 
                                     categoryModelList.add(parentCategory);
                                     categoryAdapter.notifyDataSetChanged();
 
-                                    Log.e("Category Name", parentCategory.getCategoryName());
+                                    Log.i("Category Image Url", itemObject.getString("icon"));
                                     parentCategories.add(itemObject.getString("categoryname"));
 
 

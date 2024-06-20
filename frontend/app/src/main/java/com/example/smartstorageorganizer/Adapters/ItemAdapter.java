@@ -50,7 +50,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 //        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         if(!Objects.equals(ItemModelList.get(position).getItem_image(), "empty")){
-            Glide.with(context).load(ItemModelList.get(position).getItem_image()).placeholder(R.drawable.appliance).error(R.drawable.appliance).into(holder.itemImage);
+            Glide.with(context).load(ItemModelList.get(position).getItem_image()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
