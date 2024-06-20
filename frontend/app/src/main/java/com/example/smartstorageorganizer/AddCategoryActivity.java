@@ -93,7 +93,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                         Log.i("Spinner","Inside the Parent category if statement");
                         if(validateParentForm()) {
                             Log.i("Spinner","Inside the Parent category if statement");
-//                            AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
+                            AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
                         }
                     }
                     else if(radioButton.getText().toString().equals("Sub Category")){
