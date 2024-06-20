@@ -14,6 +14,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.bumptech.glide.Glide;
+import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,13 +30,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
     private TextView fullName;
+    private ShapeableImageView profileImage;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
-    private String currentName, currentSurname;
+    private String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View header = navigationView.getHeaderView(0);
         fullName = (TextView) header.findViewById(R.id.fullName);
+        profileImage = header.findViewById(R.id.profileImage);
 //        fullName.setText("Ezekiel Makau");
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -112,9 +132,9 @@ public class HomeActivity extends AppCompatActivity {
                             case "family_name":
                                 currentSurname = attribute.getValue();
                                 break;
-//                            case "phone_number":
-//                                currentPhone = attribute.getValue();
-//                                break;
+                            case "picture":
+                                currentPicture = attribute.getValue();
+                                break;
 //                            case "address":
 //                                currentAddress = attribute.getValue();
 //                                break;
@@ -129,6 +149,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         String username = currentName+" "+currentSurname;
                         fullName.setText(username);
                     });
@@ -175,6 +196,40 @@ public class HomeActivity extends AppCompatActivity {
                 });
             }
         });
+
+    }
+
+    public void DeleteCategory(int id, String email)
+    {
+        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.DeleteCategoryEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+    }
+
+    public void RecommmendCategories(String itemname, String itemdescription, String useremail )
+    {
+        String json = "{\"useremail\":\""+useremail+"\", \"itemname\":\""+itemname+"\", \"itemsdecription\":\""+itemdescription+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.RecommendCategoryEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
 
     }
 }

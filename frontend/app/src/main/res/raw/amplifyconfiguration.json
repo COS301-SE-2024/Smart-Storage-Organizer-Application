@@ -12,15 +12,15 @@
                 "CredentialsProvider": {
                     "CognitoIdentity": {
                         "Default": {
-                            "PoolId": "eu-north-1:99833d42-d2eb-466d-a849-7556e84bfd68",
+                            "PoolId": "eu-north-1:0ee2e3bd-8338-41e6-a530-3170cf75077e",
                             "Region": "eu-north-1"
                         }
                     }
                 },
                 "CognitoUserPool": {
                     "Default": {
-                        "PoolId": "eu-north-1_WkYKk9bRV",
-                        "AppClientId": "57csmqj2dlf8lcuqd1vtcb1l5f",
+                        "PoolId": "eu-north-1_J4pc2EShD",
+                        "AppClientId": "o4lcj7np88j0ome8av38b9o7n",
                         "Region": "eu-north-1"
                     }
                 },
@@ -45,7 +45,8 @@
                             "NAME",
                             "FAMILY_NAME",
                             "ADDRESS",
-                            "PHONE_NUMBER"
+                            "PHONE_NUMBER",
+                            "PICTURE"
                         ],
                         "socialProviders": [],
                         "usernameAttributes": [
@@ -55,7 +56,22 @@
                             "EMAIL"
                         ]
                     }
+                },
+                "S3TransferUtility": {
+                    "Default": {
+                        "Bucket": "smart-storage-f0629f0176059-staging",
+                        "Region": "eu-north-1"
+                    }
                 }
+            }
+        }
+    },
+    "storage": {
+        "plugins": {
+            "awsS3StoragePlugin": {
+                "bucket": "smart-storage-f0629f0176059-staging",
+                "region": "eu-north-1",
+                "defaultAccessLevel": "guest"
             }
         }
     }

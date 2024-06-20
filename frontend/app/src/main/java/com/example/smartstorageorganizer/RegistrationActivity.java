@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer;
 
+
+import com.example.smartstorageorganizer.BuildConfig;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -65,8 +67,7 @@ public class RegistrationActivity extends AppCompatActivity {
         registerButtonIcon = findViewById(R.id.register_button_icon);
 
         cpp.setCountryForPhoneCode(27);
-
-
+        
         //SignUp("bonganizungu889@gmail.com", "0586454569", "Test1", "Subject", "856 Ohio", "Uber1235#");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -90,7 +91,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     registerButtonText.setVisibility(View.GONE);
                     registerButtonIcon.setVisibility(View.GONE);
 
-                    SignUp(email, phone, name, surname, "856 Hydrogen Street", password);
+                    SignUp(email, phone, name, surname, "364 Hygrogen, Hatfield", password);
                 }
             }
         });
@@ -197,6 +198,10 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
 
+
+
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
+        //updated and add a build
         try {
             Amplify.Auth.signUp(
                     email,

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="24dp"
+    android:paddingHorizontal="16dp"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/addItemButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Item"/>
+
+    <Button
+        android:id="@+id/addCategoryButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Category"/>
+
+    <Button
+        android:id="@+id/addUnitButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Unit"/>
+
+</LinearLayout>

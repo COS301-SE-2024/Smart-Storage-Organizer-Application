@@ -19,7 +19,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
+import com.bumptech.glide.Glide;
+import com.google.android.material.imageview.ShapeableImageView;
 
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 public class ProfileManagementActivity extends AppCompatActivity {
@@ -27,8 +32,9 @@ public class ProfileManagementActivity extends AppCompatActivity {
     private TextView email, username;
     ConstraintLayout content;
     LottieAnimationView loadingScreen;
-    private String currentEmail, currentName, currentSurname;
+    private String currentEmail, currentName, currentSurname, currentProfileImage;
     ImageView profileBackButton;
+    ShapeableImageView profilePicture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,8 @@ public class ProfileManagementActivity extends AppCompatActivity {
         content = findViewById(R.id.content);
         loadingScreen = findViewById(R.id.loadingScreen);
         profileBackButton = findViewById(R.id.ProfileBackButton);
+        profilePicture = findViewById(R.id.profilePicture);
+
 
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
@@ -81,7 +89,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
-
+       // UploadProfilePicture("app\\src\\main\\java\\com\\example\\com.example.smartstorageorganizer\\left.jpg");
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
 
@@ -96,15 +104,15 @@ public class ProfileManagementActivity extends AppCompatActivity {
                             case "family_name":
                                 currentSurname = attribute.getValue();
                                 break;
+                            case "picture":
+                                currentProfileImage = attribute.getValue();
+                                break;
                         }
-
-
-
-
                     }
                     Log.i("progress","User attributes fetched successfully");
                     Log.i("progressEmail",currentEmail);
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentProfileImage).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profilePicture);
                         email.setText(currentEmail);
                         String fullName = currentName+" "+currentSurname;
                         username.setText(fullName);
@@ -122,6 +130,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     public void SignOut()
     {
+
         Amplify.Auth.signOut(signOutResult -> {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
@@ -157,4 +166,19 @@ public class ProfileManagementActivity extends AppCompatActivity {
         });
 
     }
+
+    public void UploadProfilePicture(String ProfilePicturePath)
+    {
+        File ProfilePicture= new File(ProfilePicturePath);
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString("public/ProfilePictures"),
+                ProfilePicture,
+                StorageUploadFileOptions.defaultInstance(),
+                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
+                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
+    }
+
+
 }

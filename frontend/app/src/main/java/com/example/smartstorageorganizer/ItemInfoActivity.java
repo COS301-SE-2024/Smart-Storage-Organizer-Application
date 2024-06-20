@@ -117,7 +117,7 @@ public class ItemInfoActivity extends AppCompatActivity {
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
+        String API_URL = BuildConfig.EditItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
