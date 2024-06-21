@@ -17,6 +17,9 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".ViewItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".UnitActivity"
             android:exported="false" />
         <activity
