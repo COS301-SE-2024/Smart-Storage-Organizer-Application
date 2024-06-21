@@ -278,27 +278,27 @@ public class HomeFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
                 // Cancel the previous request if the user continues typing
                 if (runnable != null)
                 {
                     handler.removeCallbacks(runnable);
                 }
+
                 // Delay the request to fetch category suggestions
-                runnable = () -> {
+                runnable = () ->
+                {
                     String name = itemName.getText().toString().trim();
                     String description = itemDescription.getText().toString().trim();
 
                     // Check if both name and description are filled
-                    if (!name.isEmpty() && !description.isEmpty()) {
+                    if (!name.isEmpty() && !description.isEmpty())
+                    {
                         Spinner itemCategorySpinner1 = dialogView.findViewById(R.id.item_category_spinner);
                         fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner1);
                     }
                 };
-//                String name = itemName.getText().toString().trim();
-//                String description = itemDescription.getText().toString().trim();
-//                Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
-//                fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
 
                 // Execute the runnable after a delay (e.g., 1000 milliseconds or 1 second)
                 handler.postDelayed(runnable, 1000);
@@ -403,22 +403,25 @@ public class HomeFragment extends Fragment {
                 {
                     // response body converted to string
                     final String responseData = response.body().string();
-                    Log.i("Response Data", responseData);
+                    Log.i("1Response Data", responseData);
                     requireActivity().runOnUiThread(() ->
                     {
                         try
                         {
-                            // Parse the JSON response
-                            JSONArray jsonArray = new JSONArray(responseData);
-                            List<String> categories = new ArrayList<>();
-
-                            for (int i = 0; i < jsonArray.length(); i++)
-                            {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                                Check if you are calling the jsonObject correctly
-                                String category = jsonObject.getString("parentcategory");
-                                categories.add(category);
+                            if (responseData.isEmpty()) {
+                                throw new JSONException("Empty or null response data");
                             }
+
+                            // Parse the response as a JSON object
+                            JSONObject jsonObject = new JSONObject(responseData);
+
+                            // Extract the category name
+                            JSONObject categoryObject = jsonObject.getJSONObject("category");
+                            String category = categoryObject.getString("categoryname");
+
+                            // Create a list of categories (with only one category in this case)
+                            List<String> categories = new ArrayList<>();
+                            categories.add(category);
 
                             // Populate the Spinner
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
@@ -428,7 +431,7 @@ public class HomeFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-//                            Log.i("1Request Method", e.toString());
+                            Log.e("1JSON Exception", e.toString());
                             Toast.makeText(requireActivity(), "Failed-01 to parse category suggestions", Toast.LENGTH_SHORT).show();
                         }
                     });
