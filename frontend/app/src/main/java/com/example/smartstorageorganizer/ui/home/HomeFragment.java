@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -422,12 +424,31 @@ public class HomeFragment extends Fragment {
                             // Create a list of categories (with only one category in this case)
                             List<String> categories = new ArrayList<>();
                             categories.add(category);
+                            categories.add("Add Custom Category");  //Add other
 
                             // Populate the Spinner
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
                                     android.R.layout.simple_spinner_item, categories);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             itemCategorySpinner.setAdapter(adapter);
+
+                            // Set the item selected listener
+                            itemCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                            {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                                {
+                                    if (categories.get(position).equals("Add Custom Category"))
+                                    {
+                                        // Show dialog to input custom category
+                                        showCustomCategoryDialog(categories, adapter);
+                                    }
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                }
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -440,9 +461,38 @@ public class HomeFragment extends Fragment {
                             Toast.makeText(requireActivity(), "Failed-02 to fetch category suggestions", Toast.LENGTH_SHORT).show()
                     );
                 }
+
+
+            }
+
+            private void showCustomCategoryDialog(List<String> categories, ArrayAdapter<String> adapter) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                builder.setTitle("Enter Custom Category");
+
+                final EditText input = new EditText(requireActivity());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", (dialog, which) ->
+                {
+                    String customCategory = input.getText().toString();
+                    if (!customCategory.isEmpty()) {
+                        categories.add(categories.size() - 1, customCategory); // Add custom category before "Add Custom Category" option
+                        adapter.notifyDataSetChanged();
+                        itemCategorySpinner.setSelection(categories.indexOf(customCategory)); // Select the new custom category
+                    }
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                builder.show();
             }
         });
+
+
     }
+
+
+
 
     private void postAddItem(String item_image, String item_name, String description,String category, String subCategory, String colourcoding, String barcode, String qrcode, String quantity, String location, String email)  {
 
