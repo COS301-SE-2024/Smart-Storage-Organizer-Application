@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:gravity="center_vertical"
-                android:text="Electronics"
+                android:text=""
                 android:textColor="@color/colorSecondary"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -58,7 +58,7 @@
 
     <Spinner
         android:id="@+id/category_filter"
-        android:layout_width="150dp"
+        android:layout_width="120dp"
         android:visibility="visible"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

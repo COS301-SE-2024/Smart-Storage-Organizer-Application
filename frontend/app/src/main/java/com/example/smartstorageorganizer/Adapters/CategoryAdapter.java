@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.CategoryModel;
 
 import java.util.List;
@@ -53,9 +54,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
-                intent.putExtra("item_name", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
-//                intent.putExtra("item_description", ParentCategoryModelList.get(holder.getAdapterPosition()).getDescription());
+                Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
+                intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
+                intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
 //                intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
 //                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourcoding());
 //                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItem_id());
