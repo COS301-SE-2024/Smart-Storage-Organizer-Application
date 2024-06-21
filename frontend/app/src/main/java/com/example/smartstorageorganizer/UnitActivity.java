@@ -131,7 +131,6 @@ public class UnitActivity extends AppCompatActivity {
 //                                    mySpinner.setAdapter(adapter);
                                 });
 
-
 //                            requireActivity().runOnUiThread(() -> {
 //                                fetchItemsLoader.setVisibility(View.GONE);
 //                                itemRecyclerView.setVisibility(View.VISIBLE);

@@ -49,7 +49,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private TextInputLayout parentCategoryInput;
     TextView spinnerHeaderText;
     public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
-    private String currentSelectedParent;
+    private String currentSelectedParent, currentEmail;
 
     private List<String> parentCategories = new ArrayList<>();
     private List<String> parentCategoriesIcons = new ArrayList<>();
@@ -75,8 +75,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             //flash sale
 
             if(flag) {
-//                parentCategoryModelList = new ArrayList<>();
-                FetchCategory(0, "ezemakau@gmail.com");
+                FetchCategory(0, getIntent().getStringExtra("email"));
                 currentSelectedParent = "";
             }
 
