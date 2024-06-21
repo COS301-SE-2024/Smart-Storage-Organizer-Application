@@ -56,7 +56,7 @@
             android:id="@+id/help_add_category_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu to either add an item, add a category or unit. You will then click on 'Add Category', which will then take you to a page where you either select Parent Category or Sub Category. If you click on Parent Category, you will be given a list of pre-defined categories to choose from. Then you can add your own Sub Category and click on 'Finish'." />
+            android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu. You will then click on 'Add Category', which will give you a page where you select Parent Category or Sub Category. Then you can add your own Sub Category and click on 'Finish'." />
 
         <!-- Add more FAQs here -->
         <TextView
