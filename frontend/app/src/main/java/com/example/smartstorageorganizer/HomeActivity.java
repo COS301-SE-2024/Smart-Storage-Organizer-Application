@@ -232,28 +232,10 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
     }
-    public void FilterByCategory(int parentcategory )
-    {
-        String json = "{\"parentcategory\":\""+parentcategory+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.CategoryFilterEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
 
     public void FilterBySubCategory(int parentcategory, int subcategory )
     {
         String json = "{\"parentcategory\":\""+parentcategory+"\", \"subcategory\":\""+subcategory+"\" }";
-
-
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
