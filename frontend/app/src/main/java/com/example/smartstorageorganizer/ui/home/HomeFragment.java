@@ -1,8 +1,14 @@
 package com.example.smartstorageorganizer.ui.home;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +40,7 @@ import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,11 +70,12 @@ public class HomeFragment extends Fragment {
     private String currentEmail;
     AlertDialog alertDialog;
 
+    private ShapeableImageView itemImageView;
+    private static final int PICK_IMAGE_REQUEST = 1;
+
     private MaterialCardView addCategory;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -81,6 +93,7 @@ public class HomeFragment extends Fragment {
         itemRecyclerView.setLayoutManager(layoutManager);
 
         addItemButton.setOnClickListener(v -> showAddItemPopup());
+
 
         addCategory.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
@@ -209,6 +222,15 @@ public class HomeFragment extends Fragment {
         return future;
     }
 
+    private void openImagePicker()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+
     private void showAddItemPopup() {
         // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -218,13 +240,60 @@ public class HomeFragment extends Fragment {
         builder.setView(dialogView);
 
         // Get the EditTexts and Button from the dialog layout
+
+        ImageView itemImage  = dialogView.findViewById(R.id.item_image);
         EditText itemName = dialogView.findViewById(R.id.item_name);
         EditText itemDescription = dialogView.findViewById(R.id.item_description);
         Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
         Button buttonNext = dialogView.findViewById(R.id.button_add_item);
 
+        // Set click listener to open image picker
+        itemImage.setOnClickListener(v -> openImagePicker());
+
+
+        // Set click listener for add button
+//        buttonNext.setOnClickListener(v -> {
+//            String itemNameN = itemName.getText().toString();
+//            String itemDescriptionN = itemDescription.getText().toString();
+//            // Fetch category suggestions
+//            fetchCategorySuggestions(itemNameN, itemDescriptionN, currentEmail, itemCategorySpinner);
+//        });
+
+
+
+
         // Fetch data from the database to populate the spinner
-        fetchCategories(itemCategorySpinner);
+//        fetchCategories(itemCategorySpinner);
+
+        // Initialize Handler for delay mechanism
+//        final Handler handler = new Handler(Looper.getMainLooper());
+//        final Runnable fetchRunnable = () -> {
+//            String name = itemName.getText().toString().trim();
+//            String description = itemDescription.getText().toString().trim();
+//            fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
+//        };
+
+        // Add TextWatchers to EditText fields
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String name = itemName.getText().toString().trim();
+                String description = itemDescription.getText().toString().trim();
+                Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
+                fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+//                handler.postDelayed(fetchRunnable, 500); // Delay of 500 milliseconds
+            }
+        };
+
+        itemName.addTextChangedListener(textWatcher);
+        itemDescription.addTextChangedListener(textWatcher);
 
         // Create the AlertDialog
         alertDialog = builder.create();
@@ -234,22 +303,30 @@ public class HomeFragment extends Fragment {
             String name = itemName.getText().toString().trim();
             String description = itemDescription.getText().toString().trim();
             String category = itemCategorySpinner.getSelectedItem().toString();
-            postAddItem(name, description, category, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
+            postAddItem("image",name,description,category,"subCategory",
+                    "red","codeE", "qrcode","1","level-2",currentEmail);
         });
 
         // Show the AlertDialog
         alertDialog.show();
     }
 
-
-    private void fetchCategories(Spinner spinner) {
-
-        // API call to fetch categories from the database
-        String json = "{\"email\":\""+currentEmail+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private void fetchCategorySuggestions(String name, String description, String email, Spinner itemCategorySpinner) {
+        // API endpoint that can return category suggestions based on the item
+        String API_URL = BuildConfig.RecommendCategoryEndPoint;
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchCategoryEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("itemname", name);
+            jsonObject.put("itemdescription", description);
+            jsonObject.put("useremail", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
 
         Request request = new Request.Builder()
                 .url(API_URL)
@@ -260,49 +337,131 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+
+                requireActivity().runOnUiThread(() ->
+                        Toast.makeText(requireActivity(), "Failed-02 to fetch category suggestions", Toast.LENGTH_SHORT).show()
+                );
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
+                    Log.i("Response Data", responseData);
                     requireActivity().runOnUiThread(() -> {
                         try {
-                            JSONObject jsonObject = new JSONObject(responseData);
-                            String bodyString = jsonObject.getString("body");
-                            JSONArray bodyArray = new JSONArray(bodyString);
-
+                            // Parse the JSON response
+                            JSONArray jsonArray = new JSONArray(responseData);
                             List<String> categories = new ArrayList<>();
-                            for (int i = 0; i < bodyArray.length(); i++) {
-                                JSONObject categoryObject = bodyArray.getJSONObject(i);
-                                String category = categoryObject.getString("category_name");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String category = jsonObject.getString("category");
                                 categories.add(category);
                             }
 
+                            // Populate the Spinner
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
                                     android.R.layout.simple_spinner_item, categories);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spinner.setAdapter(adapter);
+                            itemCategorySpinner.setAdapter(adapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+//                            Log.i("1Request Method", e.toString());
+                            Toast.makeText(requireActivity(), "Failed-01 to parse category suggestions", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 } else {
-                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(requireActivity(), "Failed-02 to fetch category suggestions", Toast.LENGTH_SHORT).show()
+                    );
                 }
             }
         });
     }
 
-    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email, String currentEmail)  {
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+//    private void fetchCategories(Spinner spinner) {
+//
+//        // API call to fetch categories from the database
+//        String json = "{\"email\":\""+currentEmail+"\" }";
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        OkHttpClient client = new OkHttpClient();
+//        // API endpoint that can return category suggestions based on the item
+//        String API_URL = BuildConfig.FetchCategoryEndPoint;
+//        RequestBody body = RequestBody.create(json, JSON);
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed", e));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String responseData = response.body().string();
+//                    requireActivity().runOnUiThread(() -> {
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(responseData);
+//                            String bodyString = jsonObject.getString("body");
+//                            JSONArray bodyArray = new JSONArray(bodyString);
+//
+//                            List<String> categories = new ArrayList<>();
+//                            for (int i = 0; i < bodyArray.length(); i++) {
+//                                JSONObject categoryObject = bodyArray.getJSONObject(i);
+//                                String category = categoryObject.getString("category_name");
+//                                categories.add(category);
+//                            }
+//
+//                            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
+//                                    android.R.layout.simple_spinner_item, categories);
+//                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                            spinner.setAdapter(adapter);
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    });
+//
+//                } else {
+//                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+//                }
+//            }
+//        });
+//    }
+
+    private void postAddItem(String item_image, String item_name, String description,String category, String subCategory, String colourcoding, String barcode, String qrcode, String quantity, String location, String email)  {
+
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.AddItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("item_image", item_image);
+            jsonObject.put("item_name", item_name);
+            jsonObject.put("description",description);
+            jsonObject.put("category",category);
+            jsonObject.put("sub_category",subCategory);
+            jsonObject.put("colour_coding",colourcoding);
+            jsonObject.put("barcode",barcode);
+            jsonObject.put("qrcode",qrcode);
+            jsonObject.put("quantity",quantity);
+            jsonObject.put("location",location);
+            jsonObject.put("email",email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
 
         Request request = new Request.Builder()
                 .url(API_URL)
