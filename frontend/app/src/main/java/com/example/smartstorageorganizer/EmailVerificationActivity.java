@@ -116,7 +116,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     //change to new page
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(EmailVerificationActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
