@@ -2,22 +2,26 @@ package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.view.View;
+
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +36,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UnitActivity extends AppCompatActivity {
-    String[] categories = {"Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8"};
+
     boolean flag = true;
-    public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
+    private ArrayList<CategoryModel> categoryModelList ;
+    private ConstraintLayout addButton;
     private List<String> parentCategories = new ArrayList<>();
     private LinearLayout checkboxContainer;
 
@@ -46,11 +51,41 @@ public class UnitActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 
             checkboxContainer = findViewById(R.id.checkbox_container);
+            addButton = findViewById(R.id.addButton);
 
-            if(flag){
-                FetchCategory(0, "ezemakau@gmail.com");
-//                flag = false;
+            if (flag) {
+                fetchCategory(0, "ezemakau@gmail.com");
+
             }
+            categoryModelList = new ArrayList<>();
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String constraints = "";
+                    int i;
+                    for (i = 2; i < checkboxContainer.getChildCount(); i++) {
+                        CheckBox cb;
+                        cb = (CheckBox) checkboxContainer.getChildAt(i);
+                        if (cb.isChecked()) {
+                            Log.e("Selected Category", cb.getText().toString());
+                            CategoryModel category;
+                            category = findCategoryByName( cb.getText().toString());
+                            if (category != null) {
+                                constraints += category.getCategoryID();
+                            }
+                        }
+                    }
+                    TextInputEditText unitName;
+                    unitName = findViewById(R.id.unitName);
+                    String unit;
+                    unit = unitName.getText().toString();
+                    TextInputEditText unitCap;
+                    unitCap = findViewById(R.id.capacity);
+                    String capacity;
+                    capacity = unitCap.getText().toString();
+
+                }
+            });
 
             // Create checkboxes dynamically and add them to the LinearLayout
 
@@ -58,21 +93,22 @@ public class UnitActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
     }
 
-    public void FetchCategory(int ParentCategory, String email)
-    {
-        if(flag) {
-            String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
+    public void fetchCategory(int parentCategory, String email) {
+        if (flag) {
+            String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\" }";
 
 
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
             OkHttpClient client = new OkHttpClient();
-            String API_URL = BuildConfig.FetchCategoryEndPoint;
-            RequestBody body = RequestBody.create(json, JSON);
+            String apiUrl = BuildConfig.FetchCategoryEndPoint;
+            RequestBody body = RequestBody.create(json, jsonObject);
 
             Request request = new Request.Builder()
-                    .url(API_URL)
+                    .url(apiUrl)
                     .post(body)
                     .build();
 
@@ -94,13 +130,10 @@ public class UnitActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(responseData);
 
-                                int statusCode = jsonObject.getInt("statusCode");
-                                String status = jsonObject.getString("status");
-
                                 String bodyString = jsonObject.getString("body");
                                 JSONArray bodyArray = new JSONArray(bodyString);
 
-                                List<ItemModel> items = new ArrayList<>();
+
 
                                 runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
                                 parentCategories.add("");
@@ -113,7 +146,8 @@ public class UnitActivity extends AppCompatActivity {
                                     parentCategory.setImageUrl(itemObject.getString("icon"));
 
                                     categoryModelList.add(parentCategory);
-//                                    categoryAdapter.notifyDataSetChanged();
+
+
 
                                     Log.i("Category Image Url", itemObject.getString("icon"));
                                     parentCategories.add(itemObject.getString("categoryname"));
@@ -121,21 +155,58 @@ public class UnitActivity extends AppCompatActivity {
 
                                 }
                                 runOnUiThread(() -> {
+                                    if (!categoryModelList.isEmpty()) {
+                                        CheckBox checkBox = new CheckBox(UnitActivity.this);
+                                        checkBox.setText("Select All");
+                                        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                            if (!isChecked) {
+                                                CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                cb.setChecked(false);
+                                            } else {
+                                                for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
+                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
+                                                    cb.setChecked(isChecked);
+                                                }
+                                            }
+
+                                        });
+                                        checkboxContainer.addView(checkBox);
+                                        CheckBox unselect = new CheckBox(UnitActivity.this);
+                                        unselect.setText("Unselect All");
+                                        unselect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                            if (!isChecked) {
+                                                CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                cb.setChecked(true);
+                                            } else {
+                                                for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
+                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
+                                                    cb.setChecked(false);
+                                                }
+                                            }
+
+                                        });
+                                        checkboxContainer.addView(unselect);
+                                    }
                                     for (CategoryModel category : categoryModelList) {
                                         CheckBox checkBox = new CheckBox(UnitActivity.this);
                                         checkBox.setText(category.getCategoryName());
+                                        checkBox.setOnCheckedChangeListener(
+                                                (buttonView, isChecked) -> {
+                                                    if (!isChecked) {
+                                                        CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                        cb.setChecked(false);
+                                                        checkBox.setChecked(false);
+
+                                                    }
+                                                }
+                                        );
                                         checkboxContainer.addView(checkBox);
+
                                     }
-//                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(UnitActivity.this, android.R.layout.simple_spinner_item, parentCategories);
-//                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                                    mySpinner.setAdapter(adapter);
+
                                 });
 
 
-//                            requireActivity().runOnUiThread(() -> {
-//                                fetchItemsLoader.setVisibility(View.GONE);
-//                                itemRecyclerView.setVisibility(View.VISIBLE);
-//                            });
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -151,4 +222,18 @@ public class UnitActivity extends AppCompatActivity {
         }
 
     }
+
+    private CategoryModel findCategoryByName( String categoryName) {
+        runOnUiThread(() ->
+            Log.e("Spinner", categoryModelList.get(0).getCategoryName())
+        );
+        for (CategoryModel category : categoryModelList) {
+            if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                return category;
+            }
+        }
+        return null; // Return null if no category with the given name is found
+    }
+
+
 }
