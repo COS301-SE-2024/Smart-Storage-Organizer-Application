@@ -47,12 +47,12 @@ public class HelpActivity extends AppCompatActivity {
             spannableString.setSpan(clickableSpan, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        helpAddCategoryTextView.setText(spannableString);
-        helpAddCategoryTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+        helpResetPasswordTextView.setText(spannableString);
+        helpResetPasswordTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
 
         TextView helpAddCategoryTextView = findViewById(R.id.help_add_category_text_view);
         String message = helpAddCategoryTextView.getText().toString();
-        SpannableString spannableString = new SpannableString(message);
+        SpannableString spannableStr = new SpannableString(message);
         int first = message.indexOf("Homepage");
         int last = start + "Homepage".length();
 
@@ -61,14 +61,35 @@ public class HelpActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View widget) {
                     // Handle click event, e.g., navigate to ResetPassword activity
-                    Intent intent = new Intent(HelpActivity.this, ResetPasswordActivity.class);
+                    Intent intent = new Intent(HelpActivity.this, HomeActivity.class);
                     startActivity(intent);
                 }
             };
-            spannableString.setSpan(clickableSpan, first, last, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableStr.setSpan(clickableSpan, first, last, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        helpAddCategoryTextView.setText(spannableString);
+        helpAddCategoryTextView.setText(spannableStr);
         helpAddCategoryTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+
+        TextView helpEditProfileTextView = findViewById(R.id.help_add_category_text_view);
+        String note = helpEditProfileTextView.getText().toString();
+        SpannableString spanString = new SpannableString(note);
+        int initial = note.indexOf("EDIT PROFILE");
+        int latest = start + "EDIT PROFILE".length();
+
+        if (initial >= 0) {
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    // Handle click event, e.g., navigate to ResetPassword activity
+                    Intent intent = new Intent(HelpActivity.this, ProfileManagementActivity.class);
+                    startActivity(intent);
+                }
+            };
+            spanString.setSpan(clickableSpan, initial, latest, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        helpEditProfileTextView.setText(spanString);
+        helpEditProfileTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
     }
 }
