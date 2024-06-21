@@ -32,8 +32,8 @@ public class HelpActivity extends AppCompatActivity {
         // Create a clickable span for "Reset Password"
         String text = helpResetPasswordTextView.getText().toString();
         SpannableString spannableString = new SpannableString(text);
-        int start = text.indexOf("Reset Password");
-        int end = start + "Reset Password".length();
+        int start = text.indexOf("Forgot Password");
+        int end = start + "Forgot Password".length();
 
         if (start >= 0) {
             ClickableSpan clickableSpan = new ClickableSpan() {
@@ -47,7 +47,28 @@ public class HelpActivity extends AppCompatActivity {
             spannableString.setSpan(clickableSpan, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        helpResetPasswordTextView.setText(spannableString);
-        helpResetPasswordTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+        helpAddCategoryTextView.setText(spannableString);
+        helpAddCategoryTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+
+        TextView helpAddCategoryTextView = findViewById(R.id.help_add_category_text_view);
+        String message = helpAddCategoryTextView.getText().toString();
+        SpannableString spannableString = new SpannableString(message);
+        int first = message.indexOf("Homepage");
+        int last = start + "Homepage".length();
+
+        if (first >= 0) {
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    // Handle click event, e.g., navigate to ResetPassword activity
+                    Intent intent = new Intent(HelpActivity.this, ResetPasswordActivity.class);
+                    startActivity(intent);
+                }
+            };
+            spannableString.setSpan(clickableSpan, first, last, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        helpAddCategoryTextView.setText(spannableString);
+        helpAddCategoryTextView.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
     }
 }

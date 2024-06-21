@@ -31,7 +31,7 @@
             android:id="@+id/help_reset_password_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To reset your password, click here: Reset Password" />
+            android:text="A: To reset your password, you can click on the “Forgot Password” button which will take you to the forgot password page which will let you to reset your password by entering your email address then you will receive an email to reset you password." />
         <!-- Add more FAQs here -->
         <TextView
             android:layout_width="wrap_content"
@@ -48,14 +48,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Q: How do I upload files to the smart storage?"
+            android:text="Q: How do I add a Category to the smart storage?"
             android:textStyle="bold"
             android:paddingBottom="8dp" />
 
         <TextView
+            android:id="@+id/help_add_category_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To upload files, open the app and navigate to the 'Upload' section. Select the files you want to upload from your device, then tap the 'Upload' button. Your files will be securely stored in the cloud." />
+            android:text="A: •	When you want to add a Category, you will have to click on the “+” button at the bottom of the Homepage which will then give you a menu to either add an item, add a category or unit. You will then click on “Add Category”, which will then take you to a page where you either select Parent Category or Sub Category. If you click on Parent Category, you will be given a list of pre-defined categories to choose from. Then you can add your own Sub Category and click on “Finish”." />
 
         <!-- Add more FAQs here -->
         <TextView
@@ -70,6 +71,17 @@
             android:layout_height="wrap_content"
             android:text="A: If you need assistance, you can contact our customer support team by going to the 'Help' section and tapping 'Contact Support'. You can also reach us via email or chat support available on our website." />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I edit my profile?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
 
+        <TextView
+            android:id="@+id/help_edit_profile_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: •	If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on “EDIT PROFILE” at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture."/>
     </LinearLayout>
 </ScrollView>
