@@ -272,15 +272,36 @@ public class HomeFragment extends Fragment {
         // Add TextWatchers to EditText fields
         TextWatcher textWatcher = new TextWatcher()
         {
+            private Handler handler = new Handler();
+            private Runnable runnable;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
-                fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
+                // Cancel the previous request if the user continues typing
+                if (runnable != null)
+                {
+                    handler.removeCallbacks(runnable);
+                }
+                // Delay the request to fetch category suggestions
+                runnable = () -> {
+                    String name = itemName.getText().toString().trim();
+                    String description = itemDescription.getText().toString().trim();
+
+                    // Check if both name and description are filled
+                    if (!name.isEmpty() && !description.isEmpty()) {
+                        Spinner itemCategorySpinner1 = dialogView.findViewById(R.id.item_category_spinner);
+                        fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner1);
+                    }
+                };
+//                String name = itemName.getText().toString().trim();
+//                String description = itemDescription.getText().toString().trim();
+//                Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
+//                fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
+
+                // Execute the runnable after a delay (e.g., 1000 milliseconds or 1 second)
+                handler.postDelayed(runnable, 1000);
             }
 
             @Override
