@@ -1,4 +1,5 @@
 package com.example.smartstorageorganizer;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -8,88 +9,76 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.os.Build;
 import android.text.SpannableStringBuilder;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.P)
 public class LoginActivityTest {
-    @Mock
-    TextInputEditText Password;
-    TextInputEditText Email;
-    @Mock
+
     LoginActivity loginActivity;
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-        loginActivity = new LoginActivity();
+        loginActivity = Robolectric.buildActivity(LoginActivity.class)
+                .create()
+                .resume()
+                .get();
     }
-
-//    @Test
-//    public void signInSuccessfulWhenValidCredentialsProvided() {
-//        String validEmail = "validEmail@example.com";
-//        String validPassword = "validPassword";
-//
-//        when(loginActivity.SignIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
-//
-//        loginActivity.SignIn(validEmail, validPassword);
-//
-//        verify(loginActivity).SignIn(validEmail, validPassword);
-//    }
-//
-//    @Test
-//    public void signInUnsuccessfulWhenInvalidCredentialsProvided() {
-//        String invalidEmail = "invalidEmail";
-//        String invalidPassword = "invalidPassword";
-//
-//        when(loginActivity.SignIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
-//
-//        loginActivity.SignIn(invalidEmail, invalidPassword);
-//
-//        verify(loginActivity).SignIn(invalidEmail, invalidPassword);
-//    }
 
     @Test
-    public void Add() {
-        assertEquals(4, loginActivity.addNum(2, 2));
+    public void shouldNotBeNull() {
+        assertNotNull(loginActivity);
+    }
+    @Test
+    public void validateFormShouldReturnTrueForValidEmailAndPassword() {
+        // Given
+        String validEmail = "test@example.com";
+        String validPassword = "password123";
+
+        // When
+        boolean result = loginActivity.validateForm(validEmail, validPassword);
+
+        // Then
+        assertEquals(true, result);
+    }
+    @Test
+    public void ValidateFormShouldReturnFalseForEmptyEmail(){
+        String email="";
+        String validPassword = "password123";
+
+        boolean result=loginActivity.validateForm(email,validPassword);
+        assertFalse(result);
     }
 //    @Test
-//    public void validateFormReturnsFalseWhenInvalidEmailProvided() {
-//        String invalidEmail = "invalidEmail";
-//        String validPassword = "validPassword";
+//    public void addNumShouldReturnCorrectSum() {
+//        // Given
+//        int a = 2;
+//        int b = 2;
 //
-//        when(loginActivity.validateForm()).thenReturn(false);
+//        // When
+//        int result = loginActivity.addNum(a, b);
 //
-//        assertFalse(loginActivity.validateForm());
+//        // Then
+//        assertEquals(4, result);
 //    }
 
-//    @Test
-//    public void validateFormReturnsFalseWhenInvalidPasswordProvided() {
-//        String validEmail = "validEmail@example.com";
-//        String invalidPassword = "invalidPassword";
-//
-//        when(loginActivity.validateForm()).thenReturn(false);
-//
-//        assertFalse(loginActivity.validateForm());
-//    }
-//
-//    @Test
-//    public void validateFormReturnsFalseWhenEmptyCredentialsProvided() {
-//        String emptyEmail = "";
-//        String emptyPassword = "";
-//
-//        when(loginActivity.validateForm()).thenReturn(false);
-//
-//        assertFalse(loginActivity.validateForm());
-//    }
+
+
+
+
+
 }

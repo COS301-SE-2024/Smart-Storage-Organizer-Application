@@ -63,3 +63,5 @@ Japp/src/test/java/com/example/smartstorageorganizer/LoginActivityTest.java,d\5
 Oapp/src/test/java/com/example/smartstorageorganizer/AuthenticationUnitTest.java,e\7\e7fda61da494a8220c9899e04c5b3192516c67bc
 I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
+C
+settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850

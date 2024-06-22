@@ -83,6 +83,13 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
+    implementation("org.slf4j:slf4j-api:1.7.30")
+
+
+
+    implementation("org.slf4j:slf4j-log4j12:1.7.30")
+    implementation("log4j:log4j:1.2.17")
+
     // for Cognito
     implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
     implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
