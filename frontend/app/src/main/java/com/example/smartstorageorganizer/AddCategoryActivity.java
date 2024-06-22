@@ -103,7 +103,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                             AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
                         }
                     }
-                }
 //                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
             });
             radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
