@@ -55,20 +55,12 @@ public class ItemInfoActivity extends AppCompatActivity {
             return insets;
         });
 
-        editItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditItemPopup();
-            }
-        });
+        editItemButton.setOnClickListener(v -> showEditItemPopup());
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -96,17 +88,14 @@ public class ItemInfoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
 
         // Set the button click listener
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                String location = itemLocation.getText().toString().trim();
-                String colorCode = itemColorCode.getText().toString().trim();
+        buttonNext.setOnClickListener(v -> {
+            String name = itemName.getText().toString().trim();
+            String description = itemDescription.getText().toString().trim();
+            String location = itemLocation.getText().toString().trim();
+            String colorCode = itemColorCode.getText().toString().trim();
 
-                PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
-                alertDialog.dismiss();
-            }
+            PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
+            alertDialog.dismiss();
         });
 
         // Show the AlertDialog
