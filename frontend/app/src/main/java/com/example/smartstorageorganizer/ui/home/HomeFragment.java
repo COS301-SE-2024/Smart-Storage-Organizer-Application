@@ -36,6 +36,7 @@ import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -53,6 +54,7 @@ import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -553,17 +555,6 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void postAddItem(String item_image, String item_name, String description, int category) {
-        // Provide default values for the remaining attributes
-        int subCategory = 0;
-        String colourcoding = "default";
-        String barcode = "default";
-        String qrcode = "default";
-        int quantity = 1;
-        String location = "default";
-        String email = currentEmail;
-
-
     private void showAddButtonPopup() {
         // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -607,7 +598,28 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email )  {
+//    private void postAddItem(String item_image, String item_name, String description, int category) {
+//        // Provide default values for the remaining attributes
+//        int subCategory = 0;
+//        String colourcoding = "default";
+//        String barcode = "default";
+//        String qrcode = "default";
+//        int quantity = 1;
+//        String location = "default";
+//        String email = currentEmail;
+
+
+
+
+    private void postAddItem(String item_image, String item_name, String description, int category) {
+        // Provide default values for the remaining attributes
+        int subCategory = 0;
+        String colourcoding = "default";
+        String barcode = "default";
+        String qrcode = "default";
+        int quantity = 1;
+        String location = "default";
+        String email = currentEmail;
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
