@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -547,25 +548,43 @@ public class HomeFragment extends Fragment {
                             Toast.makeText(requireActivity(), "Failed-02 to fetch category suggestions", Toast.LENGTH_SHORT).show()
                     );
                 }
-
-
             }
 
             private void showCustomCategoryDialog(List<String> categories, ArrayAdapter<String> adapter) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("Enter Custom Category");
+                builder.setTitle("Add Custom Category and Subcategory");
 
-                final EditText input = new EditText(requireActivity());
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
+//                final EditText input = new EditText(requireActivity());
+//                input.setInputType(InputType.TYPE_CLASS_TEXT);
 
-                builder.setPositiveButton("OK", (dialog, which) ->
+                // Set up the input fields
+                LinearLayout layout = new LinearLayout(requireActivity());
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                // Input field for category
+                final EditText inputCategory = new EditText(requireActivity());
+                inputCategory.setHint("Category Name");
+                layout.addView(inputCategory);
+
+                // Input field for subcategory
+                final EditText inputSubCategory = new EditText(requireActivity());
+                inputSubCategory.setHint("Subcategory Name");
+                layout.addView(inputSubCategory);
+
+                builder.setView(layout);
+
+                builder.setPositiveButton("Add", (dialog, which) ->
                 {
-                    String customCategory = input.getText().toString();
-                    if (!customCategory.isEmpty()) {
-                        categories.add(categories.size() - 1, customCategory); // Add custom category before "Add Custom Category" option
+                    String category = inputCategory.getText().toString().trim();
+                    String subcategory = inputSubCategory.getText().toString().trim();
+
+                    if (!category.isEmpty() && !subcategory.isEmpty()) {
+                        String combinedCategory = category + " - " + subcategory;
+                        categories.add(categories.size() - 1, combinedCategory); // Add before "Add Custom Category"
                         adapter.notifyDataSetChanged();
-                        itemCategorySpinner.setSelection(categories.indexOf(customCategory)); // Select the new custom category
+                        itemCategorySpinner.setSelection(categories.indexOf(combinedCategory));
+                    } else {
+                        Toast.makeText(requireActivity(), "Please enter both category and subcategory", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
