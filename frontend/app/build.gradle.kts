@@ -12,6 +12,13 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
     android.buildFeatures.buildConfig =true
@@ -74,7 +81,17 @@ android {
 
 }
 
+
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.12.2")
+
+    implementation("org.slf4j:slf4j-api:1.7.30")
+
+
+
+    implementation("org.slf4j:slf4j-log4j12:1.7.30")
+    implementation("log4j:log4j:1.2.17")
 
     // for Cognito
     implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
@@ -84,6 +101,7 @@ dependencies {
     implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
 
 
+    testImplementation ("org.robolectric:robolectric:4.6.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
