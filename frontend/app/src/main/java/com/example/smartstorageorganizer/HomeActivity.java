@@ -236,15 +236,14 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
     }
-
-    public void DeleteItem(String itemid)
+  
+    public void FilterBySubCategory(int parentcategory, int subcategory )
     {
-        String json = "{\"item_id\":\""+itemid+"\"}";
-
+        String json = "{\"parentcategory\":\""+parentcategory+"\", \"subcategory\":\""+subcategory+"\" }";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteItemEndPoint;
+        String API_URL = BuildConfig.SubCategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()

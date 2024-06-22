@@ -42,10 +42,14 @@ android {
 
 
         buildConfigField( "String", "AddItemEndPoint", "\"${localProperties["AddItemEndPoint"]}\"");
+        buildConfigField("String", "AddUnitEndPoint", "\"${localProperties["AddUnitEndPoint"]}\"");
 
 
         buildConfigField( "String", "ChangeQuantityEndPoint", "\"${localProperties["ChangeQuantityEndPoint"]}\"");
         buildConfigField( "String", "DeleteItemEndPoint", "\"${localProperties["DeleteItemEndPoint"]}\"");
+        buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
+
+        buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"");
     }
 
     buildTypes {
@@ -82,7 +86,7 @@ dependencies {
 
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.activity)   
+    implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)

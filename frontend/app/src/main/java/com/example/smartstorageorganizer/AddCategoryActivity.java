@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,9 +20,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
-import com.example.smartstorageorganizer.model.ParentCategoryModel;
+import com.example.smartstorageorganizer.model.CategoryModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -50,8 +48,9 @@ public class AddCategoryActivity extends AppCompatActivity {
     private TextInputLayout subcategoryInput;
     private TextInputLayout parentCategoryInput;
     TextView spinnerHeaderText;
-    public ArrayList<ParentCategoryModel> parentCategoryModelList = new ArrayList<>();
+    public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
     private String currentSelectedParent;
+    private String currentEmail;
 
     private List<String> parentCategories = new ArrayList<>();
     private List<String> parentCategoriesIcons = new ArrayList<>();
@@ -77,8 +76,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             //flash sale
 
             if(flag) {
-//                parentCategoryModelList = new ArrayList<>();
-                FetchCategory(0, "ezemakau@gmail.com");
+                FetchCategory(0, getIntent().getStringExtra("email"));
                 currentSelectedParent = "";
             }
 
@@ -99,9 +97,11 @@ public class AddCategoryActivity extends AppCompatActivity {
                     if(validateSubCategoryForm()) {
                         Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
 //                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
-                        ParentCategoryModel parent = findCategoryByName(parentCategoryModelList, currentSelectedParent);
-                        Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
-                        AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
+
+                            CategoryModel parent = findCategoryByName(categoryModelList, currentSelectedParent);
+                            Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
+                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
+                        }
                     }
                 }
 //                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
@@ -145,14 +145,12 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private ParentCategoryModel findCategoryByName(ArrayList<ParentCategoryModel> categories, String categoryName) {
+    private CategoryModel findCategoryByName(ArrayList<CategoryModel> categories, String categoryName) {
         runOnUiThread(() -> {
-            Log.e("Spinner", parentCategoryModelList.get(0).getCategoryName());
+            Log.e("Spinner", categoryModelList.get(0).getCategoryName());
         });
-        for (ParentCategoryModel category : parentCategoryModelList) {
-//            Log.i("Spinner","Searching: "+category.getCategoryName());
+        for (CategoryModel category : categoryModelList) {
             if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
-//                Log.i("Spinner","Found: "+category.getCategoryName());
                 return category;
             }
         }
@@ -235,12 +233,15 @@ public class AddCategoryActivity extends AppCompatActivity {
                                 for (int i = 0; i < bodyArray.length(); i++) {
                                     JSONObject itemObject = bodyArray.getJSONObject(i);
 
-                                    ParentCategoryModel parentCategory = new ParentCategoryModel();
+                                    CategoryModel parentCategory = new CategoryModel();
                                     parentCategory.setCategoryID(itemObject.getString("id"));
                                     parentCategory.setCategoryName(itemObject.getString("categoryname"));
+//                                    parentCategory.setImageUrl(itemObject.getString("icon"));
 
-                                    parentCategoryModelList.add(parentCategory);
+                                    categoryModelList.add(parentCategory);
                                     parentCategories.add(itemObject.getString("categoryname"));
+//                                    String temp = itemObject.getString("icon");
+//                                    runOnUiThread(() -> Log.e("Image Url", temp));
                                 }
                                 runOnUiThread(() -> {
                                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddCategoryActivity.this, android.R.layout.simple_spinner_item, parentCategories);

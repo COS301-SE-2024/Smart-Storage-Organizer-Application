@@ -1,15 +1,18 @@
 package com.example.smartstorageorganizer.model;
 
-public class ParentCategoryModel {
+public class CategoryModel {
     private String categoryName;
     private String categoryID;
+    private String imageUrl;
 
-    public ParentCategoryModel() {
+    public CategoryModel() {
 
     }
-    public ParentCategoryModel(String categoryName, String categoryID) {
+
+    public CategoryModel(String categoryName, String categoryID, String imageUrl) {
         this.categoryName = categoryName;
         this.categoryID = categoryID;
+        this.imageUrl = imageUrl;
     }
 
     public String getCategoryName() {
@@ -26,5 +29,13 @@ public class ParentCategoryModel {
 
     public void setCategoryID(String categoryID) {
         this.categoryID = categoryID;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

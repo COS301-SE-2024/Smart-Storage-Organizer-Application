@@ -1,0 +1,17 @@
+
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôÛ´¸üÿÿÿÿ8–ş¸ƒ2
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï”üÿÿÿÿ8–ş¸ƒ2
+r	java:S117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ„ø¿şÿÿÿÿ8—ş¸ƒ2
+r	java:S117c"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ç¼˜ùÿÿÿÿ8—ş¸ƒ2
+r	java:S117c"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ç¼˜ùÿÿÿÿ8—ş¸ƒ2
+r	java:S117c"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(€Ç¼˜ùÿÿÿÿ8—ş¸ƒ2
+’	java:S116"RRename this field "item_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â§ñøÿÿÿÿJ$0930dda9-6cb0-4da2-80a1-14acad29223d
+	java:S116"TRename this field "item_name" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Âë¤J$6b39b2c8-3820-4879-af9b-53235db3c70c
+v	java:S116"URename this field "item_image" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(“ç³ıúÿÿÿÿ8ş¸ƒ2
+c	java:S107c"BConstructor has 10 parameters, which is greater than 7 authorized.(€Ç¼˜ùÿÿÿÿ8 ş¸ƒ2
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ĞÚåøÿÿÿÿ8©ş¸ƒ2
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ôÛ´¸üÿÿÿÿ8ªş¸ƒ2
+j	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Íòİ8«ş¸ƒ2
+o	java:S100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï”üÿÿÿÿ8«ş¸ƒ2
+i	java:S100W"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ç¼ÆB8³ş¸ƒ2
+o	java:S100["NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ„ø¿şÿÿÿÿ8´ş¸ƒ2

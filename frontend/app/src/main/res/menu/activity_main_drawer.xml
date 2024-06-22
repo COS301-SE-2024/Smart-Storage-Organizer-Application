@@ -29,6 +29,10 @@
             android:icon="@drawable/baseline_question_mark_24"
             android:title="About"
             android:textColor="@color/colorPrimary"/>
-
+        <item
+            android:id="@+id/action_faq"
+            android:title="FAQ"
+            android:orderInCategory="100"
+            android:showAsAction="never" />
     </group>
 </menu>
