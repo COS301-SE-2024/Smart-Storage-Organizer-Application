@@ -1,12 +1,16 @@
 package com.example.smartstorageorganizer.ui.home;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -35,6 +39,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
+import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
@@ -78,6 +83,7 @@ public class HomeFragment extends Fragment {
 
     private ShapeableImageView itemImageView;
     private static final int PICK_IMAGE_REQUEST = 1;
+    private ImageView itemImage; // Declare as a class member
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private MaterialCardView addCategory;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -109,8 +115,6 @@ public class HomeFragment extends Fragment {
 
 //        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
-        //flash sale
-
         itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
 
@@ -230,14 +234,7 @@ public class HomeFragment extends Fragment {
         return future;
     }
 
-    private void openImagePicker()
-    {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
+
 
 
     private void showAddItemPopup()
@@ -264,11 +261,14 @@ public class HomeFragment extends Fragment {
 
         // Set the button click listener
         buttonNext.setOnClickListener(v -> {
+//            String name = itemName.getText().toString().trim();
+//            String description = itemDescription.getText().toString().trim();
+//            String category = itemCategorySpinner.getSelectedItem().toString();
+//            postAddItem("image",name,description,category,"subCategory",
+//                    "red","codeE", "qrcode","1","level-2",currentEmail);
             String name = itemName.getText().toString().trim();
             String description = itemDescription.getText().toString().trim();
-            String category = itemCategorySpinner.getSelectedItem().toString();
-            postAddItem("image",name,description,category,"subCategory",
-                    "red","codeE", "qrcode","1","level-2",currentEmail);
+            postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
         });
 
         // Add TextWatchers to EditText fields
@@ -316,22 +316,24 @@ public class HomeFragment extends Fragment {
         itemDescription.addTextChangedListener(textWatcher);
 
         // Ensure all UI elements are initialized
-        if (buttonNext != null && itemName != null && itemDescription != null && itemCategorySpinner != null) {
+//        && itemCategorySpinner != null
+        if (buttonNext != null && itemName != null && itemDescription != null ) {
             // Set the button click listener
             buttonNext.setOnClickListener(v -> {
                 try {
                     // Get the text from EditText and Spinner
                     String name = itemName.getText().toString().trim();
                     String description = itemDescription.getText().toString().trim();
-                    String category = itemCategorySpinner.getSelectedItem().toString();
+//                    String category = itemCategorySpinner.getSelectedItem().toString();
 
                     // Log the values for debugging
                     Log.d("AddItem", "Name: " + name);
                     Log.d("AddItem", "Description: " + description);
-                    Log.d("AddItem", "Category: " + category);
+//                    Log.d("AddItem", "Category: " + category);
 
                     // Ensure none of the values are empty
-                    if (name.isEmpty() || description.isEmpty() || category.isEmpty()) {
+//                    || category.isEmpty()
+                    if (name.isEmpty() || description.isEmpty() ) {
                         Log.e("AddItem", "One or more fields are empty");
 //                        Toast.makeText(getApplicationContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                         return;
@@ -341,8 +343,9 @@ public class HomeFragment extends Fragment {
                     fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
 
                     // Post the item
-                    postAddItem("image", name, description, category, "subCategory",
-                            "red", "codeE", "qrcode", "1", "level-2", currentEmail);
+//                    postAddItem("image", name, description, category, "subCategory",
+//                            "red", "codeE", "qrcode", "1", "level-2", currentEmail);
+                    postAddItem(name, description, "Yellow", "asdffd",  "00111100", "1", "Centinary", currentEmail);
 
                 } catch (Exception e) {
                     // Log the exception
@@ -359,6 +362,64 @@ public class HomeFragment extends Fragment {
         // Show the AlertDialog
         alertDialog.show();
     }
+
+    private void openImagePicker()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+    //private void openImagePicker() {
+//    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//    imagePickerLauncher.launch(intent);
+//}
+
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        // Initialize the ActivityResultLauncher
+//        imagePickerLauncher = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                result -> {
+//                    if (result.getResultCode() == Activity.RESULT_OK) {
+//                        Intent data = result.getData();
+//                        if (data != null) {
+//                            Uri selectedImageUri = data.getData();
+//                            if (selectedImageUri != null) {
+////                                itemImage.setImageURI(selectedImageUri); // Display the selected image
+//
+//                                // Use Glide to display the image
+//                                Glide.with(requireActivity())
+//                                        .load(selectedImageUri)
+//                                        .into(itemImage);
+//                            }
+//                        }
+//                    }
+//                }
+//        );
+//
+//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+
+            requireActivity().runOnUiThread(() -> {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImageUri);
+                    itemImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
 
     private void fetchCategorySuggestions(String name, String description, String email, Spinner itemCategorySpinner)
     {
@@ -398,8 +459,7 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException
-            {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 // if HTTP req is successful
                 if (response.isSuccessful())
                 {
@@ -492,61 +552,99 @@ public class HomeFragment extends Fragment {
     }
 
 
+//**************
+private void postAddItem(String item_name, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String email )  {
+    String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
+    MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient();
+    String API_URL = BuildConfig.AddItemEndPoint;
+    RequestBody body = RequestBody.create(json, JSON);
 
+    Request request = new Request.Builder()
+            .url(API_URL)
+            .post(body)
+            .build();
 
-    private void postAddItem(String item_image, String item_name, String description,String category, String subCategory, String colourcoding, String barcode, String qrcode, String quantity, String location, String email)  {
-
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddItemEndPoint;
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("item_image", item_image);
-            jsonObject.put("item_name", item_name);
-            jsonObject.put("description",description);
-            jsonObject.put("category",category);
-            jsonObject.put("sub_category",subCategory);
-            jsonObject.put("colour_coding",colourcoding);
-            jsonObject.put("barcode",barcode);
-            jsonObject.put("qrcode",qrcode);
-            jsonObject.put("quantity",quantity);
-            jsonObject.put("location",location);
-            jsonObject.put("email",email);
-        } catch (JSONException e) {
+    client.newCall(request).enqueue(new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
             e.printStackTrace();
-            return;
+            requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
         }
 
-        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            if (response.isSuccessful()) {
+                final String responseData = response.body().string();
+                requireActivity().runOnUiThread(() -> {
+                    requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
+                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                });
+            } else {
+                requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
             }
+        }
+    });
+}
+//    *********************************
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    requireActivity().runOnUiThread(() -> {
-                        requireActivity().runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-                        Intent intent = new Intent(getActivity(), HomeActivity.class);
-                        startActivity(intent);
-                        requireActivity().finish();
-                    });
-                } else {
-                    requireActivity().runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                }
-            }
-        });
-    }
+
+
+//    private void postAddItem(String item_image, String item_name, String description,String category, String subCategory, String colourcoding, String barcode, String qrcode, String quantity, String location, String email)  {
+//
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = BuildConfig.AddItemEndPoint;
+//
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("item_image", item_image);
+//            jsonObject.put("item_name", item_name);
+//            jsonObject.put("description",description);
+//            jsonObject.put("category",category);
+//            jsonObject.put("sub_category",subCategory);
+//            jsonObject.put("colour_coding",colourcoding);
+//            jsonObject.put("barcode",barcode);
+//            jsonObject.put("qrcode",qrcode);
+//            jsonObject.put("quantity",quantity);
+//            jsonObject.put("location",location);
+//            jsonObject.put("email",email);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//
+//        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                requireActivity().runOnUiThread(() -> Log.e("100Request Method", "POST request failed", e));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String responseData = response.body().string();
+//                    requireActivity().runOnUiThread(() -> {
+//                        requireActivity().runOnUiThread(() -> Log.i("200Request Method", "POST request succeeded: " + responseData));
+//                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+//                        startActivity(intent);
+//                        requireActivity().finish();
+//                    });
+//                } else {
+//                    requireActivity().runOnUiThread(() -> Log.e("300Request Method", "POST request failed: " + response.code()));
+//                }
+//            }
+//        });
+//    }
 
     @Override
     public void onDestroyView() {
