@@ -57,3 +57,9 @@ Q.idea/sonarlint/securityhotspotstore/e/3/e3e6d44e57a8a3fd18ba9f31a7aae293700749
 Q.idea/sonarlint/securityhotspotstore/1/3/139897364ce379c9ca6b4f76a4cda7807730d568,e\c\ecf33ad56257b96368a26163821bd0088bceea42
 Å
 Q.idea/sonarlint/securityhotspotstore/2/9/2945bbb8cc01b4853f4be9e9158d917ebeb0f615,9\f\9f80cf96c68fa88c24c137a779fbf50eca942881
+z
+Japp/src/test/java/com/example/smartstorageorganizer/LoginActivityTest.java,d\5\d5926b97f81931e180a46460e93fdbe56a437f33
+
+Oapp/src/test/java/com/example/smartstorageorganizer/AuthenticationUnitTest.java,e\7\e7fda61da494a8220c9899e04c5b3192516c67bc
+I
+gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f

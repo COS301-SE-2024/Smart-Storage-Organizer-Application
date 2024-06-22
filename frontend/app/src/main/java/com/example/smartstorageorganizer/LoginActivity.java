@@ -105,14 +105,15 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validateForm()){
+
+                String email = Email.getText().toString().trim();
+                String password = Password.getText().toString().trim();
+                if(validateForm(email, password)){
                     buttonLoader.setVisibility(View.VISIBLE);
                     buttonLoader.playAnimation();
                     loginButtonText.setVisibility(View.GONE);
                     loginButtonIcon.setVisibility(View.GONE);
 
-                    String email = Email.getText().toString().trim();
-                    String password = Password.getText().toString().trim();
                     SignIn(email, password);
                 }
             }
@@ -155,9 +156,7 @@ public class LoginActivity extends AppCompatActivity {
         return future;
     }
 
-    private boolean validateForm() {
-        String email = Email.getText().toString().trim();
-        String password = Password.getText().toString().trim();
+    public boolean validateForm(String email, String password){
 
         if (TextUtils.isEmpty(email)) {
             Email.setError("Employee ID is required.");
@@ -190,7 +189,8 @@ public class LoginActivity extends AppCompatActivity {
         this.Result=Result;
     }
 
-    public void SignIn(String email, String Password) {
+    public CompletableFuture SignIn(String email, String Password) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,
                 Password,
@@ -254,7 +254,9 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
+
                         finish();
+                        future.complete(true);
                     });
                 },
                 error -> {
@@ -276,7 +278,9 @@ public class LoginActivity extends AppCompatActivity {
                             );
                              Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
                             intent.putExtra("email", email);
+                            future.complete(true);
                              startActivity(intent);
+
                         });
                     } else {
                         runOnUiThread(() -> {
@@ -286,14 +290,18 @@ public class LoginActivity extends AppCompatActivity {
                             loginButtonIcon.setVisibility(View.VISIBLE);
 
                             Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                            future.complete(true);
+
                         });
                     }
                     Log.e("AuthQuickstart", error.toString());
                 }
         );
 
+        return future;
+    }
 
+    public int addNum(int a, int b) {
+        return a + b;
     }
 }
-
-
