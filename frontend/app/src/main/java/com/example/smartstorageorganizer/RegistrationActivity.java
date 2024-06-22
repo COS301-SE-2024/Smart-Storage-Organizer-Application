@@ -115,7 +115,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateForm() {
+    private boolean validateForm(String ) {
         String name = Name.getText().toString().trim();
         String surname = Surname.getText().toString().trim();
         String email = Email.getText().toString().trim();
@@ -248,6 +248,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-
+    public int AddNumbers(int numA, int numB) {
+        return numA + numB;
+    }
 }
 

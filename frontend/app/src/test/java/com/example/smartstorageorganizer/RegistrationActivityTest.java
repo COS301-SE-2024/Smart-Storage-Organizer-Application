@@ -2,21 +2,26 @@ package com.example.smartstorageorganizer;
 
 import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
-
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
 
-public class RegistrationActivityTest extends TestCase {
+@RunWith(RobolectricTestRunner.class)
+public class RegistrationActivityTest {
+    @Mock
+    RegistrationActivity registrationActivity;
 
-    @Test
-    public void onCreate() {
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        registrationActivity = new RegistrationActivity();
     }
 
     @Test
-    public void confimSignUp() {
-    }
-
-    @Test
-    public void signUp() {
+    public void Add() {
+        assertEquals(4, registrationActivity.AddNumbers(2, 2));
     }
 }

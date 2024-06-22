@@ -106,6 +106,9 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.2.0")
     testImplementation("org.mockito:mockito-inline:4.2.0")
 
+    testImplementation ("org.robolectric:robolectric:4.12.2")
+
+
     // AndroidX Test - Core, Runner, and Rules
     testImplementation("androidx.test:core:1.4.0")
     testImplementation("androidx.test:runner:1.4.0")
