@@ -1,0 +1,30 @@
+
+C
+java:S1604O"(Make this anonymous inner class a lambda(ºÁöïûÿÿÿÿ
+C
+java:S1604c"(Make this anonymous inner class a lambda(±Ü¥œÿÿÿÿÿ
+C
+java:S1604j"(Make this anonymous inner class a lambda(®Ê¹üÿÿÿÿ
+g	java:S117°"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù§ÓÕ
+g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+f
+java:S1192µ"ODefine a constant instead of duplicating this literal "AuthQuickstart" 3 times.(úÙÛË
+d	java:S116,"ORename this field "Name" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«×´Ü
+g	java:S116,"RRename this field "Surname" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«×´Ü
+e	java:S116,"PRename this field "Email" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«×´Ü
+h	java:S116,"SRename this field "Password" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«×´Ü
+k	java:S116,"VRename this field "PhoneNumber" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(«×´Ü
+Z
+java:S1659,"DDeclare "Surname" and all following declarations on a separate line.(«×´Ü
+V	java:S125G"<This block of commented-out lines of code should be removed.(”ôêïøÿÿÿÿ
+d	java:S100°"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù§ÓÕ
+C
+java:S1602µ",Remove useless curly braces around statement(úÙÛË
+C
+java:S1602¸",Remove useless curly braces around statement(êôú‰
+d	java:S100À"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
+R	java:S125î"<This block of commented-out lines of code should be removed.(Ìøöö

@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
-import java.io.IOException;
+
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -47,15 +47,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 //import com.amplifyframework.auth.result.authResult;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
+
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -77,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
     isSignedIn().thenAccept(isSignedIn -> {
                 if (isSignedIn) {
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -253,8 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                             },
                             error -> Log.e("AuthQuickstart", error.toString())
                     );
-                  //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
-                    //change to new page
+
                     runOnUiThread(() -> {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("email", email);
@@ -264,7 +259,8 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
-                    AuthSignInResult r= new AuthSignInResult(false, null);
+                    AuthSignInResult r;
+                           r = new AuthSignInResult(false, null);
 //                    postAddItem("Lenovo", "ideapad 110", "orange", "sdf5d", "0110000", "1", "Herold");
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {

@@ -1,0 +1,35 @@
+
+p
+java:S1604i"(Make this anonymous inner class a lambda(ºÁöïûÿÿÿÿ8Ê—¾‚„2J$11152985-ad44-4ee4-9402-4ae352a3f221
+k
+java:S1604y"(Make this anonymous inner class a lambda(¤ â…8Ì—¾‚„2J$385d52d3-8464-4e1c-99dd-1b05561b0c13
+™	java:S117»"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ãªäüÿÿÿÿ8Î—¾‚„2J$b62f7b0f-d9b1-4bf0-925a-8d90ced3fd09
+™	java:S117Á"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üï½µıÿÿÿÿ8Ğ—¾‚„2J$a671bfbf-7636-462a-af61-27d640425142
+j
+java:S5411M"(Use a primitive boolean expression here.(¨İS8Ó—¾‚„2J$658f6dc5-2a22-421a-beb3-fd6c693ecf7c
+š
+java:S1192T"RDefine a constant instead of duplicating this literal "AmplifyQuickstart" 4 times.(Æ¾µÂÿÿÿÿÿ8˜¾‚„2J$5673ff96-23bb-4878-897b-6fb1d03d347f
+“
+java:S1192Æ"ODefine a constant instead of duplicating this literal "AuthQuickstart" 6 times.(¾í8˜˜¾‚„2J$e301f61e-bf3d-439f-8c81-82e2e10707d8
+~	java:S1250"<This block of commented-out lines of code should be removed.(Æââî8š˜¾‚„2J$e5ab164e-f21f-47af-be10-8018c88f4d89
+—	java:S116="PRename this field "Email" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ú¶‚Æøÿÿÿÿ8œ˜¾‚„2J$fc6a3bb1-5008-4061-a6e7-8fecfc9bc813
+•	java:S116>"SRename this field "Password" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬çï¾8˜¾‚„2J$a800ca09-fb71-493a-a786-3d8b7353b979
+“	java:S116A"QRename this field "Result" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎÌîß8Ÿ˜¾‚„2J$daca9e12-eda5-4b25-b623-d425ed1da393
+—	java:S116B"PRename this field "Error" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’ÎÃÑúÿÿÿÿ8¡˜¾‚„2J$9d46f61a-6016-422f-b37c-b2be387df081
+p
+java:S1659:"-Declare "loginButtonText" on a separate line.(‹î¢€8Û˜¾‚„2J$bff68256-d412-4dea-9ce0-c29f24d6c54f
+–	java:S100»"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ãªäüÿÿÿÿ8•›¾‚„2J$d07b5c50-2769-4830-9d2c-40c10ffdb2c4
+–	java:S100Á"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üï½µıÿÿÿÿ8™›¾‚„2J$522df577-7554-4903-9eeb-7512a66bed8e
+›
+java:S3776Á"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(üï½µıÿÿÿÿ8­›¾‚„2J$a72c0ca2-98db-4b75-a51c-15d398d28348
+v
+java:S1481Ç"-Remove this unused "nextstep" local variable.(ü§µ†ÿÿÿÿÿ8°›¾‚„2J$90000e28-5825-4451-ae45-da5558bd263b
+i
+java:S1481È"&Remove this unused "r" local variable.(—¶é8²›¾‚„2J$9ad7e5c4-dc78-40fb-b424-8f55fd2f508b
+o
+java:S1481†"&Remove this unused "r" local variable.(›×Ö¦ÿÿÿÿÿ8öœ¾‚„2J$71b8d2ee-71ee-4547-b33f-973b43c28ec6
+„	java:S125ˆ"<This block of commented-out lines of code should be removed.(äÙ×•úÿÿÿÿ8 ¿ø„2J$51d3692f-e6a5-4859-998f-d69ca890707c
+f
+java:S11285"Remove this duplicated import.(¬ßØÿÿÿÿÿ8”¾‚„2J$c3627636-0117-40e1-8c31-f8dca1a48d97
+f
+java:S11286"Remove this duplicated import.(Ï‚ñ—øÿÿÿÿ8•¾‚„2J$9b9e24cc-a1c2-4afc-b0a3-0db495177505
