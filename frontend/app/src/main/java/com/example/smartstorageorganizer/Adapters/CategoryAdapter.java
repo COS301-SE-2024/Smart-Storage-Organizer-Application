@@ -14,11 +14,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.CategoryModel;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
@@ -44,16 +47,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 //        holder.description.setText(ParentCategoryModelList.get(position).getDescription());
 //        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-//        if(!Objects.equals(ParentCategoryModelList.get(position).getItem_image(), "empty")){
-//            Glide.with(context).load(ItemModelList.get(position).getItem_image()).placeholder(R.drawable.appliance).error(R.drawable.appliance).into(holder.itemImage);
-//        }
+        if(!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")){
+            Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
-                intent.putExtra("item_name", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
-//                intent.putExtra("item_description", ParentCategoryModelList.get(holder.getAdapterPosition()).getDescription());
+                Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
+                intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
+                intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
 //                intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
 //                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourcoding());
 //                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItem_id());
@@ -69,20 +72,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-//        ImageView image;
+        ImageView image;
         TextView name;
-        TextView description;
-        ImageView itemImage;
-        Button more_info_button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            image = itemView.findViewById(R.id.category_image);
+            image = itemView.findViewById(R.id.category_image);
             name = itemView.findViewById(R.id.category_name);
-//            description = itemView.findViewById(R.id.item_description);
-//            itemImage = itemView.findViewById(R.id.itemImage);
-
-//            more_info_button = itemView.findViewById(R.id.more_info_button);
         }
     }
 

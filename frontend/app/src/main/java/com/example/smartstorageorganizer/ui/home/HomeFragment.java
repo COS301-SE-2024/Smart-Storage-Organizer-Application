@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -54,11 +55,12 @@ public class HomeFragment extends Fragment {
 
     LottieAnimationView fetchItemsLoader;
     RecyclerView.LayoutManager layoutManager;
+    private TextView name;
     private FragmentHomeBinding binding;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
-    private String currentEmail;
+    private String currentEmail, currentName;
     AlertDialog alertDialog;
     private RecyclerView category_RecyclerView;
     private List<CategoryModel> categoryModelList;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
         category_RecyclerView = root.findViewById(R.id.category_rec);
+        name = root.findViewById(R.id.name);
 //        addCategory = root.findViewById(R.id.addCategory);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -219,14 +222,14 @@ public class HomeFragment extends Fragment {
                             case "email":
                                 currentEmail = attribute.getValue();
                                 break;
+                            case "name":
+                                currentName = attribute.getValue();
+                                break;
                         }
-
-
-
-
                     }
                     Log.i("progress","User attributes fetched successfully");
                     requireActivity().runOnUiThread(() -> {
+                        name.setText("Hi "+currentName);
                         FetchByEmail(currentEmail);
                     });
                     future.complete(true);
@@ -294,6 +297,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+                intent.putExtra("email", currentEmail);
                 startActivity(intent);
             }
         });
@@ -395,11 +399,12 @@ public class HomeFragment extends Fragment {
                                     CategoryModel parentCategory = new CategoryModel();
                                     parentCategory.setCategoryID(itemObject.getString("id"));
                                     parentCategory.setCategoryName(itemObject.getString("categoryname"));
+                                    parentCategory.setImageUrl(itemObject.getString("icon"));
 
                                     categoryModelList.add(parentCategory);
                                     categoryAdapter.notifyDataSetChanged();
 
-                                    Log.e("Category Name", parentCategory.getCategoryName());
+                                    Log.i("Category Image Url", itemObject.getString("icon"));
                                     parentCategories.add(itemObject.getString("categoryname"));
 
 

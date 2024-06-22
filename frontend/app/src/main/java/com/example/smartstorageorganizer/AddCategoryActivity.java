@@ -50,6 +50,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     TextView spinnerHeaderText;
     public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
     private String currentSelectedParent;
+    private String currentEmail;
 
     private List<String> parentCategories = new ArrayList<>();
     private List<String> parentCategoriesIcons = new ArrayList<>();
@@ -75,8 +76,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             //flash sale
 
             if(flag) {
-//                parentCategoryModelList = new ArrayList<>();
-                FetchCategory(0, "ezemakau@gmail.com");
+                FetchCategory(0, getIntent().getStringExtra("email"));
                 currentSelectedParent = "";
             }
 
@@ -154,9 +154,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             Log.e("Spinner", categoryModelList.get(0).getCategoryName());
         });
         for (CategoryModel category : categoryModelList) {
-//            Log.i("Spinner","Searching: "+category.getCategoryName());
             if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
-//                Log.i("Spinner","Found: "+category.getCategoryName());
                 return category;
             }
         }
@@ -242,9 +240,12 @@ public class AddCategoryActivity extends AppCompatActivity {
                                     CategoryModel parentCategory = new CategoryModel();
                                     parentCategory.setCategoryID(itemObject.getString("id"));
                                     parentCategory.setCategoryName(itemObject.getString("categoryname"));
+//                                    parentCategory.setImageUrl(itemObject.getString("icon"));
 
                                     categoryModelList.add(parentCategory);
                                     parentCategories.add(itemObject.getString("categoryname"));
+//                                    String temp = itemObject.getString("icon");
+//                                    runOnUiThread(() -> Log.e("Image Url", temp));
                                 }
                                 runOnUiThread(() -> {
                                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddCategoryActivity.this, android.R.layout.simple_spinner_item, parentCategories);

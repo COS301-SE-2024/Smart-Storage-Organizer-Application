@@ -4,14 +4,15 @@ public class CategoryModel {
     private String categoryName;
     private String categoryID;
     private String imageUrl;
-    private String parentCategoryID;
 
     public CategoryModel() {
 
     }
-    public CategoryModel(String categoryName, String categoryID) {
+
+    public CategoryModel(String categoryName, String categoryID, String imageUrl) {
         this.categoryName = categoryName;
         this.categoryID = categoryID;
+        this.imageUrl = imageUrl;
     }
 
     public String getCategoryName() {
@@ -31,7 +32,7 @@ public class CategoryModel {
     }
 
     public String getImageUrl() {
-        return categoryID;
+        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
