@@ -63,15 +63,28 @@ public class ProfileManagementActivity extends AppCompatActivity {
             return insets;
         });
 
-        editProfileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-            finish();
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
-        logoutButton.setOnClickListener(v -> SignOut());
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignOut();
+            }
+        });
 
-        profileBackButton.setOnClickListener(v -> finish());
+        profileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private CompletableFuture<Boolean> getDetails() {

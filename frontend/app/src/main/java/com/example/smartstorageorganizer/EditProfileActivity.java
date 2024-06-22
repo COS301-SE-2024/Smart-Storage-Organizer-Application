@@ -97,23 +97,38 @@ public class EditProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        editProfileBackButton.setOnClickListener(v -> finish());
-
-        profileImage.setOnClickListener(v -> OpenGallery());
-
-
-        findViewById(R.id.save_button).setOnClickListener(v -> upDateDetails().thenAccept(updateDetails -> {
-            loadingScreen.setVisibility(View.VISIBLE);
-            loadingScreen.playAnimation();
-            content.setVisibility(View.GONE);
-            if(!file.exists()){
-                Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                Log.i("EditProfileActivity", "Back button clicked");
-                Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                startActivity(intent);
+        editProfileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
-        }));
+        });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenGallery();
+            }
+        });
+
+
+        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upDateDetails().thenAccept(updateDetails -> {
+                    loadingScreen.setVisibility(View.VISIBLE);
+                    loadingScreen.playAnimation();
+                    content.setVisibility(View.GONE);
+                    if(!file.exists()){
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("EditProfileActivity", "Back button clicked");
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+        });
     }
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
