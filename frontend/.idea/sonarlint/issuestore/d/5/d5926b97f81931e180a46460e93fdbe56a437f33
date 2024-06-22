@@ -1,23 +1,9 @@
 
-X	java:S125C"<This block of commented-out lines of code should be removed.(Ó¥àŠ8ÈĞ­„2
-d
-java:S1128"GRemove this unused import 'androidx.test.core.app.ApplicationProvider'.(·Ñ¿¿8ÉĞ­„2
-J
-java:S1128	"-Remove this unused import 'org.mockito.Mock'.(´ëò÷8ÊĞ­„2
-]
-java:S1128
-";Remove this unused import 'org.mockito.MockitoAnnotations'.(Õ©š¤şÿÿÿÿ8ËĞ­„2
-^
-java:S1128"ARemove this unused import 'org.mockito.junit.MockitoJUnitRunner'.(˜«†ø8ËĞ­„2
-`
-java:S1128"CRemove this unused import 'java.util.concurrent.CompletableFuture'.(ôŞä´8ÌĞ­„2
+‚
+java:S5845V"?Change the assertion arguments to not compare dissimilar types.(´ç®ú8‘÷…„2J$7d21c32a-4f8e-42ab-a00a-27ddf958acac
+V
+java:S1128"9Remove this unused import 'org.junit.Assert.assertFalse'.(Ô”®Ì8À„2
 Z
-java:S1128"8Remove this unused import 'org.junit.Assert.assertTrue'.(”ÄÜ™ûÿÿÿÿ8ÍĞ­„2
+java:S1128"8Remove this unused import 'org.junit.Assert.assertTrue'.(”ÄÜ™ûÿÿÿÿ8Â„2
 Y
-java:S1128"7Remove this unused import 'org.mockito.Mockito.verify'.(î ®ûşÿÿÿÿ8ÍĞ­„2
-R
-java:S1128"5Remove this unused import 'org.mockito.Mockito.when'.(†÷œ‡8ÎĞ­„2
-b
-java:S1128"@Remove this unused import 'android.text.SpannableStringBuilder'.(¨ïÊµúÿÿÿÿ8ÏĞ­„2
-q
-java:S1128"TRemove this unused import 'com.google.android.material.textfield.TextInputEditText'.(°Ò8ÏĞ­„2
+java:S1128"7Remove this unused import 'org.mockito.Mockito.verify'.(î ®ûşÿÿÿÿ8Ä„2

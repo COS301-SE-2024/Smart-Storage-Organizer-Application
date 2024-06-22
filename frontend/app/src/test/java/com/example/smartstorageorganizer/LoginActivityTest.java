@@ -1,17 +1,14 @@
 package com.example.smartstorageorganizer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,9 +18,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.os.Build;
-import android.text.SpannableStringBuilder;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
@@ -61,20 +55,37 @@ public class LoginActivityTest {
         String validPassword = "password123";
 
         boolean result=loginActivity.validateForm(email,validPassword);
-        assertFalse(result);
+        assertEquals(false,result);
     }
-//    @Test
-//    public void addNumShouldReturnCorrectSum() {
-//        // Given
-//        int a = 2;
-//        int b = 2;
-//
-//        // When
-//        int result = loginActivity.addNum(a, b);
-//
-//        // Then
-//        assertEquals(4, result);
-//    }
+    @Test
+    public void ValidateFormShouldReturnFalseWhenPasswordEmpty(){
+        // Given
+        String validEmail = "test@example.com";
+        String validPassword = "";
+
+        // When
+        boolean result = loginActivity.validateForm(validEmail, validPassword);
+
+        // Then
+        assertEquals(false,result);
+    }
+    @Test
+    public void SignInWithValidEmailAndPassword(){
+        String validEmail = "test@example.com";
+        String validPassword = "password123";
+        AtomicBoolean result = new AtomicBoolean(false);
+        // When
+        when(loginActivity.SignIn(validEmail,validPassword)).thenReturn(CompletableFuture.completedFuture(true));
+        loginActivity.SignIn(validEmail,validPassword).thenAccept(isResult->{
+            if(isResult)
+                result.set(true);
+            else
+                result.set(false);
+
+        });
+        assertEquals(true,result);
+    }
+
 
 
 

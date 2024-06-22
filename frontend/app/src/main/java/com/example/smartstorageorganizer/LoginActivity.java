@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
         this.Result=Result;
     }
 
-    public CompletableFuture SignIn(String email, String Password) {
+    public CompletableFuture<Boolean> SignIn(String email, String Password) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,
