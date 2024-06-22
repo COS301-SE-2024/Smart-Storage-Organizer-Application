@@ -72,7 +72,7 @@ public class ViewItemActivity extends AppCompatActivity {
         categoryID = getIntent().getStringExtra("category_id");
 
         if(flag) {
-            parentCategories.add("Filter");
+            parentCategories.add("Filter By Category");
             FilterByCategory(Integer.parseInt(categoryID));
 //            FilterBySubCategory(Integer.parseInt(categoryID), 36);
             FetchCategory(Integer.parseInt(getIntent().getStringExtra("category_id")), getIntent().getStringExtra("email"));
@@ -92,7 +92,7 @@ public class ViewItemActivity extends AppCompatActivity {
                 currentSelectedCategory = parentView.getItemAtPosition(position).toString();
 
                 // Do something with the selected item
-                if(!currentSelectedCategory.equals("Filter")) {
+                if(!currentSelectedCategory.equals("Filter By Category")) {
                     CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
                     assert subCategory != null;
                     FilterBySubCategory(Integer.parseInt(categoryID), Integer.parseInt(subCategory.getCategoryID()));
