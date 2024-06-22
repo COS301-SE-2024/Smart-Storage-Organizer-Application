@@ -365,8 +365,6 @@ public class HomeFragment extends Fragment {
             Log.e("AddItem", "One or more UI elements are not initialized");
         }
 
-
-
         // Show the AlertDialog
         alertDialog.show();
     }
