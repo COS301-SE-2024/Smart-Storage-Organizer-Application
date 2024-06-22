@@ -88,15 +88,15 @@ public class AddCategoryActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.i("Spinner",radioButton.getText().toString());
                     if(radioButton.getText().toString().equals("Parent Category")){
-                        Log.i("Spinner","Inside the Parent category if statement");
-                        if(validateParentForm()) {
+                        String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
+                        if(validateParentForm(parentCategoryText)) {
                             Log.i("Spinner","Inside the Parent category if statement");
                             AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
                         }
                     }
                     else if(radioButton.getText().toString().equals("Sub Category")){
-                        Log.i("Spinner","Inside the Sub category if statement");
-                        if(validateSubCategoryForm()) {
+                        String subCategoryText = Objects.requireNonNull(subCategory.getText()).toString().trim();
+                        if(validateSubCategoryForm(subCategoryText)) {
                             Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
 //                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
                             CategoryModel parent = findCategoryByName(categoryModelList, currentSelectedParent);
@@ -162,8 +162,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateParentForm() {
-        String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
+    public boolean validateParentForm(String parentCategoryText) {
 
         if (TextUtils.isEmpty(parentCategoryText)) {
             parentCategoryEditText.setError("Parent Category is required.");
@@ -174,8 +173,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean validateSubCategoryForm() {
-        String subCategoryText = Objects.requireNonNull(subCategory.getText()).toString().trim();
+    public boolean validateSubCategoryForm(String subCategoryText) {
 
         if (Objects.equals(currentSelectedParent, "")) {
             Toast.makeText(AddCategoryActivity.this, currentSelectedParent, Toast.LENGTH_LONG).show();
