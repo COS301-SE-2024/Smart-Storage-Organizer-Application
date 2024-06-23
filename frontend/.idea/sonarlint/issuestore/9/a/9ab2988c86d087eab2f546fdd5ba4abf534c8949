@@ -2,9 +2,9 @@
 C
 java:S1604O"(Make this anonymous inner class a lambda(ºÁöïûÿÿÿÿ
 C
-java:S1604c"(Make this anonymous inner class a lambda(±Ü¥œÿÿÿÿÿ
+java:S1604h"(Make this anonymous inner class a lambda(±Ü¥œÿÿÿÿÿ
 C
-java:S1604j"(Make this anonymous inner class a lambda(®Ê¹üÿÿÿÿ
+java:S1604o"(Make this anonymous inner class a lambda(®Ê¹üÿÿÿÿ
 g	java:S117°"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ù§ÓÕ
 g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ
 g	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¿¼ãÅ

@@ -89,3 +89,7 @@ Iapp/src/test/java/com/example/smartstorageorganizer/MainActivityTest.java,2\a\
 Rapp/src/main/java/com/example/smartstorageorganizer/ProfileManagementActivity.java,8\0\80aaf9c22a4686fc5c3a8f12e7600c5598ae8003
 †
 Vapp/src/test/java/com/example/smartstorageorganizer/ProfileManagementActivityTest.java,d\6\d65a9b65d0cc708a0ef433f9948692c117cfb497
+~
+Napp/src/main/java/com/example/smartstorageorganizer/ResetPasswordActivity.java,8\5\8551f96e4fed57df72adfbee1ac288d00ec2ced8
+‚
+Rapp/src/test/java/com/example/smartstorageorganizer/ResetPasswordActivityTest.java,a\0\a0444a3da0d0172d8d701e1ac9fc423be43ec6c5

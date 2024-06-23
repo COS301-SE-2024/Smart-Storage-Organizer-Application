@@ -1,0 +1,17 @@
+
+—
+java:S1192C"ODefine a constant instead of duplicating this literal "AuthQuickstart" 4 times.(ÀÇâ‡ıÿÿÿÿ8ôó¸¯„2J$9b05b643-e43f-4f73-8261-d1ba492f371b
+¢
+java:S1450"_Remove the "btnResetPassword" field and declare it as a local variable in the relevant methods.(º¬Æ8ƒô¸¯„2J$ea791c25-69d2-4975-bd4f-a3a68b178fb2
+§
+java:S1450"_Remove the "btnSendResetLink" field and declare it as a local variable in the relevant methods.(Ö¼ëÕıÿÿÿÿ8ƒô¸¯„2J$93974932-4896-42fb-912e-c3af98765488
+
+java:S1450"VRemove the "etEmail" field and declare it as a local variable in the relevant methods.(Å¸ıßıÿÿÿÿ8„ô¸¯„2J$8bbfe80f-8d1a-4e65-bb48-80a39074c02f
+Ÿ
+java:S1450"\Remove the "etNewPassword" field and declare it as a local variable in the relevant methods.(¬è¥Ñ8„ô¸¯„2J$f0e03126-f34f-4a53-af42-40237665cb1d
+©
+java:S1450"aRemove the "etVerificationCode" field and declare it as a local variable in the relevant methods.(¢Œ–“ûÿÿÿÿ8…ô¸¯„2J$f75d4d2a-ffca-4983-b24d-6f79254793b8
+f
+java:S1128"Remove this duplicated import.(°şÊóøÿÿÿÿ8Àô¸¯„2J$529946e1-a22c-49c1-a93b-c4c9cb05e6a8
+a
+java:S1128"Remove this duplicated import.(€¶£î8Àô¸¯„2J$ebb0a318-f4bd-4f3e-ae08-4dcf3d29700d

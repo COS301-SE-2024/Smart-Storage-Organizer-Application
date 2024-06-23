@@ -20,6 +20,8 @@ import com.amplifyframework.auth.options.AuthResetPasswordOptions;
 import com.amplifyframework.core.Amplify;
 import android.util.Log;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ResetPasswordActivity extends AppCompatActivity {
     private EditText etEmail;
     private Button btnSendResetLink;
@@ -59,6 +61,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
     private void sendResetLink(String email) {
+
         Amplify.Auth.resetPassword(
                 email,
                 result -> Log.i("AuthQuickstart", result.toString()),
@@ -66,13 +69,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
         );
     }
 
-    private void resetPassword(String verificationCode, String newPassword) {
+    public CompletableFuture<Boolean> resetPassword(String verificationCode, String newPassword) {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         Amplify.Auth.confirmResetPassword(
                 newPassword,
                 verificationCode,
                 "confirmation code you received",
-                () -> Log.i("AuthQuickstart", "New password confirmed"),
-                error -> Log.e("AuthQuickstart", error.toString())
+                () -> {Log.i("AuthQuickstart", "New password confirmed");  future.complete(true);},
+                error -> {Log.e("AuthQuickstart", error.toString());  future.complete(false);}
         );
+        return future;
     }
 }
