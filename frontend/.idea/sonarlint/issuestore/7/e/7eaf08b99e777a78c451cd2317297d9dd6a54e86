@@ -1,5 +1,7 @@
 
-:
-java:S2187"Add some tests to this class.(­†‹³8ïÛë©„2
-n
-java:S1128"-Remove this unused import 'org.junit.Assert'.(›ëš‡úÿÿÿÿJ$35547dc2-80ea-41a0-a9f5-dd21f78c7606
+Y
+java:S1128"7Remove this unused import 'org.mockito.Mockito.verify'.(î ®ûşÿÿÿÿ8¯šû«„2
+
+java:S1128">Remove this unused import 'org.robolectric.shadow.api.Shadow'.(˜ÏÓ8½…ø«„2J$c1011888-5358-49ce-a5d4-deea527d8ec3
+‘
+java:S1128"IRemove this unused import 'org.robolectric.shadows.ShadowCountDownTimer'.(ı˜¤ßıÿÿÿÿ8¾…ø«„2J$8b9de2d4-f682-458e-900d-8c46aee44242

@@ -48,8 +48,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView fullName;
-    private ShapeableImageView profileImage;
+    public TextView fullName;
+    public ShapeableImageView profileImage;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
     private String currentName, currentSurname, currentPicture;

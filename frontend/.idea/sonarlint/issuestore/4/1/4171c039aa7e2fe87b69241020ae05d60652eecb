@@ -1,51 +1,73 @@
 
->
-java:S1604E"(Make this anonymous inner class a lambda(ëõ‘‰
->
-java:S1604T"(Make this anonymous inner class a lambda(ÀŒ¨Ú
-f	java:S117I"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¶ŠŒ
-f	java:S117J"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ì‹ª
-f	java:S117K"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü–“Î
-k	java:S117L"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ´Å­ÿÿÿÿÿ
-k	java:S117M"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£¿ß¥üÿÿÿÿ
-f	java:S117N"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡¤——
-f	java:S117c"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¶ŠŒ
-f	java:S117d"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ì‹ª
-f	java:S117e"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü–“Î
-k	java:S117f"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ´Å­ÿÿÿÿÿ
-k	java:S117g"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£¿ß¥üÿÿÿÿ
-f	java:S117h"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡¤——
-k	java:S117n"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(º¿®ùÿÿÿÿ
-\
-java:S1192/"FDefine a constant instead of duplicating this literal "email" 4 times.(Ô€Ã¹
-j
-java:S1192["ODefine a constant instead of duplicating this literal "AuthQuickstart" 4 times.(èàÉƒúÿÿÿÿ
-j	java:S116"URename this field "ButtonNext" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨¶Ëè
-y	java:S116"_Rename this field "next_button_text_otp" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.( Ê¥«şÿÿÿÿ
-]
-java:S1659"GDeclare "inputCode2" and all following declarations on a separate line.(ıƒà³
-M
-java:S1659"2Declare "next_button_text_otp" on a separate line.( Ê¥«şÿÿÿÿ
-Q	java:S125+"<This block of commented-out lines of code should be removed.(áØ–„
-V	java:S1252"<This block of commented-out lines of code should be removed.(ÛƒŞêşÿÿÿÿ
-h	java:S100n"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(º¿®ùÿÿÿÿ
-˜
-java:S1186ˆ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±
-˜
-java:S1186”"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê
-˜
-java:S1186š"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±
-˜
-java:S1186¦"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê
-˜
-java:S1186¬"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±
-˜
-java:S1186¸"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê
-˜
-java:S1186¾"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±
-˜
-java:S1186Ê"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê
-˜
-java:S1186Ğ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±
-˜
-java:S1186Ü"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê
+d
+java:S1604G"(Make this anonymous inner class a lambda(ëõ‘‰J$a576e4c2-0bde-4a96-9915-0aded4f360f1
+d
+java:S1604V"(Make this anonymous inner class a lambda(ÀŒ¨ÚJ$b0ade936-1fda-443e-8296-3edc67b2605c
+Œ	java:S117K"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¶ŠŒJ$d3282064-c69d-470b-8836-154a39367789
+Œ	java:S117L"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ì‹ªJ$e5f5ade0-c20f-405e-96fa-9b7fb35bf4d0
+Œ	java:S117M"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü–“ÎJ$b82ab1a5-a512-4b40-a16a-d6d5eac414f0
+‘	java:S117N"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ´Å­ÿÿÿÿÿJ$b7e50d79-d75e-45e1-820d-54e8853ddddb
+‘	java:S117O"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£¿ß¥üÿÿÿÿJ$5b56c815-f1dd-4fc4-b539-8179c2067d4b
+Œ	java:S117P"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡¤——J$88b6bbdf-3629-44b1-989c-4b67013258e8
+Œ	java:S117e"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì¶ŠŒJ$daddfdce-96b0-4386-9327-e46b322f261f
+Œ	java:S117f"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡ì‹ªJ$b0561475-375c-412a-b2fb-6650dd1ca816
+Œ	java:S117g"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü–“ÎJ$6e23c8d9-314f-4bd6-94a3-681191a966ba
+‘	java:S117h"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ´Å­ÿÿÿÿÿJ$236fb3f0-df6f-40a8-a257-94a312e059b0
+‘	java:S117i"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£¿ß¥üÿÿÿÿJ$3aa4d215-f7ef-41ab-a2c5-5279c0a52805
+Œ	java:S117j"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡¤——J$41894d07-1e64-4374-8ba3-d13acf3a37ef
+‘	java:S117p"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(í“Õ±ıÿÿÿÿJ$3e9d4300-8569-4ede-930d-1d9a69d3d111
+
+java:S1104"VMake inputCode1 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¥æ‰ª„2J$607ec9bf-a41a-4e61-b681-3142a68ac7a4
+
+java:S1104"VMake inputCode2 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¥æ‰ª„2J$363f53cc-1328-4d71-a230-e4e0efc277b3
+
+java:S1104"VMake inputCode3 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¥æ‰ª„2J$071a6760-b8fd-48ae-b347-40c9707b1d34
+
+java:S1104"VMake inputCode4 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¥æ‰ª„2J$1a525af1-94f8-4108-a434-318a1d5401c0
+
+java:S1104"VMake inputCode5 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¥æ‰ª„2J$c764023e-f47a-4724-9ddc-828242979575
+
+java:S1104"VMake inputCode6 a static final constant or non-public and provide accessors if needed.(Ú“ßúûÿÿÿÿ8¦æ‰ª„2J$2c113e32-81d8-45b7-a413-2c2be85ed848
+¢
+java:S1104"ZMake countDownTimer a static final constant or non-public and provide accessors if needed.(ì›‰¢ùÿÿÿÿ8ÿ†Šª„2J$a0dcb4e0-2206-4f95-88ff-d37e4b7bf87a
+š
+java:S1104"WMake phoneNumber a static final constant or non-public and provide accessors if needed.(Ò€æ¨8àÈŠª„2J$aff6996a-c32e-408b-8a25-5e036766e8fb
+™
+java:S1104 "VMake ButtonNext a static final constant or non-public and provide accessors if needed.(ó™8ãˆ‹ª„2J$2ff33a0c-127d-459d-b6ef-5fab7bbe8812
+¥
+java:S1104!"]Make resendOtpTextView a static final constant or non-public and provide accessors if needed.(êŞÈÚÿÿÿÿÿ8ş¬‹ª„2J$6cfff5df-c97f-4a33-b6f7-6e2e8a524c01
+¨
+java:S1104!"`Make next_button_text_otp a static final constant or non-public and provide accessors if needed.(êŞÈÚÿÿÿÿÿ8ş¬‹ª„2J$b5971e90-02c1-4923-8bfe-4be45f801a97
+‚
+java:S11921"FDefine a constant instead of duplicating this literal "email" 4 times.(Ô€Ã¹J$4b305d85-dcb5-4705-aee6-c8bd922d29a5
+
+java:S1192]"ODefine a constant instead of duplicating this literal "AuthQuickstart" 4 times.(èàÉƒúÿÿÿÿJ$d94fa539-f3de-4a22-9bea-cc297a584dfe
+	java:S116 "URename this field "ButtonNext" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ó™J$288fec0c-9de6-45ee-8303-de6b9340fa24
+Ÿ	java:S116!"_Rename this field "next_button_text_otp" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(êŞÈÚÿÿÿÿÿJ$6ad5b4ed-3421-4d94-9c54-2623511bad7f
+ˆ
+java:S1659"GDeclare "inputCode2" and all following declarations on a separate line.(Ú“ßúûÿÿÿÿJ$0f8006c2-69dc-4c4e-92a6-3f9eff65af75
+s
+java:S1659!"2Declare "next_button_text_otp" on a separate line.(êŞÈÚÿÿÿÿÿJ$4eadb0d7-4d76-4a62-af13-c77987628655
+w	java:S125-"<This block of commented-out lines of code should be removed.(áØ–„J$7271e621-35c0-463d-bc1e-14eb8ec9e06a
+|	java:S1254"<This block of commented-out lines of code should be removed.(ÛƒŞêşÿÿÿÿJ$f23c5e10-9a19-4479-9f0d-e120a7bcfb7e
+	java:S100p"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(í“Õ±ıÿÿÿÿJ$dce0bd6a-0110-415f-ad72-7645e098ac5f
+Å
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±8À‚Òª„2J$0634eafd-0c2f-4fd3-9e2e-af444c72c765
+Å
+java:S1186›"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê8Á‚Òª„2J$3313324b-e9c5-4d0c-871e-aecf8ae034cb
+Å
+java:S1186¡"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±8É‚Òª„2J$dc973d0f-4fb9-473d-bbe8-10b7accb32cf
+Å
+java:S1186­"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê8É‚Òª„2J$06c9a12c-ad12-44f1-ad42-d804d5e35c84
+Å
+java:S1186³"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±8Ñ‚Òª„2J$c867868d-2172-48e2-bf4b-28142289cbbe
+Å
+java:S1186¿"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê8Ñ‚Òª„2J$df05a4a7-215c-4aac-b9aa-8c8cef33b188
+Å
+java:S1186Å"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±8Ø‚Òª„2J$27584244-cb60-436c-8895-622bb9d5783c
+Å
+java:S1186Ñ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê8Ù‚Òª„2J$3be51500-01b0-4625-a550-87ff03219096
+Å
+java:S1186×"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(«û³±8à‚Òª„2J$b34cf19e-9db3-49c6-a5e7-0a75d47d5e06
+Å
+java:S1186ã"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(±¾ê8á‚Òª„2J$4249d330-6787-4e90-b42a-25325bf6f9c5

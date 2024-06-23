@@ -73,3 +73,5 @@ Papp/src/test/java/com/example/smartstorageorganizer/EditProfileActivityTest.jav
 Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.java,4\1\4171c039aa7e2fe87b69241020ae05d60652eecb
 †
 Vapp/src/test/java/com/example/smartstorageorganizer/EmailVerificationActivityTest.java,7\e\7eaf08b99e777a78c451cd2317297d9dd6a54e86
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
