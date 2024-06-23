@@ -50,9 +50,9 @@ import okhttp3.Response;
 public class HomeActivity extends AppCompatActivity {
     public TextView fullName;
     public ShapeableImageView profileImage;
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityHomeBinding binding;
-    private String currentName, currentSurname, currentPicture;
+    public AppBarConfiguration mAppBarConfiguration;
+    public ActivityHomeBinding binding;
+    public String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private CompletableFuture<Boolean> getDetails() {
+    public CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
         Amplify.Auth.fetchUserAttributes(
@@ -155,19 +155,21 @@ public class HomeActivity extends AppCompatActivity {
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
 
         );
         return future;
     }
 
-    public void SignOut()
+    public CompletableFuture<Boolean> SignOut()
     {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         Amplify.Auth.signOut(signOutResult -> {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
                 //move to a different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -178,6 +180,7 @@ public class HomeActivity extends AppCompatActivity {
                 AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
                         (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -190,13 +193,14 @@ public class HomeActivity extends AppCompatActivity {
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
+                future.complete(false);
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
 
                 });
             }
         });
-
+        return future;
     }
 
     public void DeleteCategory(int id, String email)
@@ -216,37 +220,8 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void RecommmendCategories(String itemname, String itemdescription, String useremail )
-    {
-        String json = "{\"useremail\":\""+useremail+"\", \"itemname\":\""+itemname+"\", \"itemsdecription\":\""+itemdescription+"\" }";
 
 
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.RecommendCategoryEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-
-    public void FilterBySubCategory(int parentcategory, int subcategory )
-    {
-        String json = "{\"parentcategory\":\""+parentcategory+"\", \"subcategory\":\""+subcategory+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SubCategoryFilterEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
 
 }

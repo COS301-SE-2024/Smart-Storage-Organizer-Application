@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 error -> {
                     Log.e("AmplifyQuickstart", error.toString());
                     future.completeExceptionally(error);
+                    future.complete(false);
                 }
 
         );

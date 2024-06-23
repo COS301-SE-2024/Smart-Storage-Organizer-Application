@@ -72,7 +72,7 @@ public class ItemInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void showEditItemPopup() {
+    public void showEditItemPopup() {
         // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Inflate the dialog layout

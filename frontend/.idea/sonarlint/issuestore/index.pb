@@ -75,3 +75,13 @@ Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.j
 Vapp/src/test/java/com/example/smartstorageorganizer/EmailVerificationActivityTest.java,7\e\7eaf08b99e777a78c451cd2317297d9dd6a54e86
 u
 Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
+y
+Iapp/src/test/java/com/example/smartstorageorganizer/HomeActivityTest.java,9\2\927b3b89c63a8c604359cfade9a29a9032c97866
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ItemInfoActivity.java,1\a\1a13a8f08348c41daeedf8538f4c7ded96f1c8ae
+}
+Mapp/src/test/java/com/example/smartstorageorganizer/ItemInfoActivityTest.java,4\1\4101f7ed9e1b880882e452d76689d62de559a74b
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/MainActivity.java,7\8\78ad91b2ce0a576f355193307ac9ced736401b40
+y
+Iapp/src/test/java/com/example/smartstorageorganizer/MainActivityTest.java,2\a\2adfbf37ae24ad8a2fbdfda3602eeb2123307fdf

@@ -1,0 +1,27 @@
+
+d
+java:S1604:"(Make this anonymous inner class a lambda(Ø¢²J$22d5f690-e720-45cb-9c74-fba7fa0e5b5a
+d
+java:S1604A"(Make this anonymous inner class a lambda(¾‡µàJ$dcfe1d88-b7ff-4748-8447-46904df22651
+d
+java:S1604c"(Make this anonymous inner class a lambda(§Ÿ™·J$adf95d8b-0738-4119-8add-471835e5fae7
+‘	java:S117t"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÙŒ€ÂıÿÿÿÿJ$5a7c6529-f894-485f-9f62-7d221a22b05f
+‘	java:S117t"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÙŒ€ÂıÿÿÿÿJ$30bea043-be8c-4d39-8639-6e8eda588d8d
+‹	java:S117v"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæXJ$9175d6fb-3452-4a4f-9740-210334e5e561
+Œ	java:S117x"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ‡ÏšJ$2691879a-54d7-46fb-8e35-58ff6b9648de
+‘
+java:S1192„"ODefine a constant instead of duplicating this literal "Request Method" 3 times.(å—ƒ÷şÿÿÿÿJ$1fcd4077-ea1f-409a-8179-4ebae791a0b4
+
+java:S1659 "LDeclare "itemDescription" and all following declarations on a separate line.(Ô•ò«üÿÿÿÿJ$22f7d3f9-63b0-462e-af26-d977f433ae59
+š
+java:S1450""YRemove the "backButton" field and declare it as a local variable in the relevant methods.(Î¶ÒöûÿÿÿÿJ$7d0d5886-2311-4693-9dd7-817fafe2de10
+
+java:S1450!"]Remove the "editItemButton" field and declare it as a local variable in the relevant methods.(“ÚüòşÿÿÿÿJ$3d1f4cda-54f7-4781-b432-19bdf3a32745
+|	java:S107t"<Method has 8 parameters, which is greater than 7 authorized.(ÙŒ€ÂıÿÿÿÿJ$a18f0059-37b6-4a23-964b-4ead66c36e34
+}
+java:S1117T"<Rename "itemName" which hides the field declared at line 32.(ÍÉÃ©úÿÿÿÿJ$21f8b071-b83f-415e-a0b1-b26e7a452e44
+
+java:S1117U"CRename "itemDescription" which hides the field declared at line 32.(ü»ÈJ$76cc9a43-9ca8-4713-853c-a95c8a189217
+
+java:S1117V"@Rename "itemLocation" which hides the field declared at line 32.(´ÙÕ¹ùÿÿÿÿJ$2eeed811-5ae2-4f8d-9cdb-532afda7bf93
+	java:S100t"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÙŒ€ÂıÿÿÿÿJ$4d24e279-84c2-4392-a3fd-bae5ebaae649

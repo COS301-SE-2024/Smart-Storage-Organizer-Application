@@ -1,0 +1,11 @@
+
+d
+java:S1604,"(Make this anonymous inner class a lambda(„ÑñŒJ$d3ec4b84-bcfe-448d-a428-e26b2a264401
+c
+java:S54112"(Use a primitive boolean expression here.(¨İSJ$f0d662ab-5b00-420a-97ed-3571772368fe
+“
+java:S1192N"RDefine a constant instead of duplicating this literal "AmplifyQuickstart" 3 times.(èššûÿÿÿÿJ$be0debd8-8b67-4327-813c-8644df6d7c2d
+k
+java:S1874,"/Remove this use of "Handler"; it is deprecated.(„ÑñŒJ$f45dd0b4-ac8f-4bc6-865f-f8c782e0298c
+|	java:S125/"<This block of commented-out lines of code should be removed.(¨ÀüÿÿÿÿJ$b108728b-47e9-4980-b497-79b83f0deab8
+w	java:S125`"<This block of commented-out lines of code should be removed.(Ú°à¬J$3f6bb79b-abcc-494f-bcd5-78e4c076c177
