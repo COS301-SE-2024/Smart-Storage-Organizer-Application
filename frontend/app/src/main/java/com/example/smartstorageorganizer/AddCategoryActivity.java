@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -24,6 +26,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
@@ -69,6 +72,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     TextView spinnerHeaderText;
     public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
     private String currentSelectedParent;
+    private LinearLayout addCategoryLayout;
     private String currentEmail;
 
     private List<String> parentCategories = new ArrayList<>();
@@ -76,6 +80,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private Spinner mySpinner;
     private ConstraintLayout addButton;
     private TextInputEditText parentCategoryEditText, subCategory;
+    private LottieAnimationView loadingScreen;
     private boolean flag = true;
 
     @Override
@@ -91,9 +96,11 @@ public class AddCategoryActivity extends AppCompatActivity {
             parentCategoryEditText = findViewById(R.id.parentcategory);
             spinnerHeaderText = findViewById(R.id.spinnerHeaderText);
             addButton = findViewById(R.id.addButton);
+            addCategoryLayout = findViewById(R.id.addCategoryLayout);
             subCategory = findViewById(R.id.subcategory);
             parentCategoryImage = findViewById(R.id.parentCategoryImage);
             uploadButton = findViewById(R.id.uploadButton);
+            loadingScreen = findViewById(R.id.loadingScreen);
             //flash sale
 
             if(flag) {
@@ -112,6 +119,8 @@ public class AddCategoryActivity extends AppCompatActivity {
             });
 
             addButton.setOnClickListener(v1 -> {
+                loadingScreen.setVisibility(View.VISIBLE);
+                addCategoryLayout.setVisibility(View.GONE);
                 Log.i("Spinner",radioButton.getText().toString());
                 if(radioButton.getText().toString().equals("Parent Category")){
                     Log.i("Spinner","Inside the Parent category if statement");

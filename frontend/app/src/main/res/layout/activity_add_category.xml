@@ -8,7 +8,21 @@
     android:background="@color/background"
     tools:context=".AddCategoryActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingScreen"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/loading"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
     <LinearLayout
+        android:id="@+id/addCategoryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

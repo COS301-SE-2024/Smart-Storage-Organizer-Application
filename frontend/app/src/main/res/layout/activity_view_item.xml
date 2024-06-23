@@ -8,6 +8,19 @@
     android:background="@color/background"
     tools:context=".ViewItemActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingScreen"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/loading"
+        android:visibility="visible"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -68,6 +81,20 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/spinner_background"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/notFoundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Items Found!"
+        android:visibility="gone"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/colorSecondary"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/category_filter"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.core.widget.NestedScrollView

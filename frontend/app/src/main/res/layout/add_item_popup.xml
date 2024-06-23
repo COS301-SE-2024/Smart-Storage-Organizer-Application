@@ -17,7 +17,7 @@
             android:textSize="18dp"
             android:layout_gravity="center"/>
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <ImageView
         android:id="@+id/item_image"
         android:layout_width="110dp"
         android:layout_height="110dp"

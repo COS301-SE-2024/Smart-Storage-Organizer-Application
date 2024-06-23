@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -38,13 +39,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ViewItemActivity extends AppCompatActivity {
-    private TextView Category;
+    private TextView Category, notFoundText;
     private Spinner mySpinner;
     private String categoryID, currentSelectedCategory;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
     RecyclerView.LayoutManager layoutManager;
+    private LottieAnimationView loadingScreen;
     private boolean flag = true;
+    private boolean firstTime = true;
     public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
     private List<String> parentCategories = new ArrayList<>();
     private RecyclerView itemRecyclerView;
@@ -58,6 +61,8 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner = findViewById(R.id.category_filter);
         Category = findViewById(R.id.category_text);
         itemRecyclerView = findViewById(R.id.view_all_rec);
+        loadingScreen = findViewById(R.id.loadingScreen);
+        notFoundText = findViewById(R.id.notFoundText);
 
         itemRecyclerView.setHasFixedSize(true);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -72,7 +77,7 @@ public class ViewItemActivity extends AppCompatActivity {
         categoryID = getIntent().getStringExtra("category_id");
 
         if(flag) {
-            parentCategories.add("Filter By Category");
+            parentCategories.add("All");
             FilterByCategory(Integer.parseInt(categoryID));
 //            FilterBySubCategory(Integer.parseInt(categoryID), 36);
             FetchCategory(Integer.parseInt(getIntent().getStringExtra("category_id")), getIntent().getStringExtra("email"));
@@ -92,11 +97,23 @@ public class ViewItemActivity extends AppCompatActivity {
                 currentSelectedCategory = parentView.getItemAtPosition(position).toString();
 
                 // Do something with the selected item
-                if(!currentSelectedCategory.equals("Filter By Category")) {
+                if(!currentSelectedCategory.equals("All")) {
                     CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
                     assert subCategory != null;
+                    itemModelList.clear();
+                    itemAdapter.notifyDataSetChanged();
+                    loadingScreen.setVisibility(View.VISIBLE);
                     FilterBySubCategory(Integer.parseInt(categoryID), Integer.parseInt(subCategory.getCategoryID()));
                 }
+                else {
+                    if(!firstTime){
+                        itemModelList.clear();
+                        itemAdapter.notifyDataSetChanged();
+                        loadingScreen.setVisibility(View.VISIBLE);
+                        FilterByCategory(Integer.parseInt(getIntent().getStringExtra("category_id")));
+                    }
+                }
+                firstTime = false;
                 Toast.makeText(ViewItemActivity.this, "Selected: " + currentSelectedCategory, Toast.LENGTH_SHORT).show();
             }
 
@@ -176,6 +193,7 @@ public class ViewItemActivity extends AppCompatActivity {
 //                                    runOnUiThread(() -> Log.e("Image Url", temp));
                                 }
                                 runOnUiThread(() -> {
+                                    loadingScreen.setVisibility(View.GONE);
                                     ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, parentCategories);
                                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                     mySpinner.setAdapter(adapter);
@@ -247,6 +265,10 @@ public class ViewItemActivity extends AppCompatActivity {
 
                             runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
+                            itemModelList.clear();
+                            runOnUiThread(() -> {
+                                    notFoundText.setVisibility(View.GONE);
+                            });
                             // Iterate through the array and populate the items list
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -271,10 +293,12 @@ public class ViewItemActivity extends AppCompatActivity {
 //                                runOnUiThread(() -> Log.e("Item Details", item.getItem_image()));
                             }
 
-//                            runOnUiThread(() -> {
-//                                fetchItemsLoader.setVisibility(View.GONE);
-//                                itemRecyclerView.setVisibility(View.VISIBLE);
-//                            });
+                            runOnUiThread(() -> {
+                                if (itemModelList.isEmpty()){
+                                    notFoundText.setVisibility(View.VISIBLE);
+                                }
+                                loadingScreen.setVisibility(View.GONE);
+                            });
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -336,6 +360,10 @@ public class ViewItemActivity extends AppCompatActivity {
                             runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             itemModelList.clear();
+                            itemAdapter.notifyDataSetChanged();
+                            runOnUiThread(() -> {
+                                notFoundText.setVisibility(View.GONE);
+                            });
                             // Iterate through the array and populate the items list
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -360,6 +388,13 @@ public class ViewItemActivity extends AppCompatActivity {
 //                                runOnUiThread(() -> Log.e("Item Details", item.getItem_image()));
                             }
 
+                            runOnUiThread(() -> {
+                                if (itemModelList.isEmpty()){
+                                    notFoundText.setVisibility(View.VISIBLE);
+                                }
+                                loadingScreen.setVisibility(View.GONE);
+
+                            });
 //                            runOnUiThread(() -> {
 //                                fetchItemsLoader.setVisibility(View.GONE);
 //                                itemRecyclerView.setVisibility(View.VISIBLE);

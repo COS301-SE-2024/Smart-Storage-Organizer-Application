@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.Adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.Adapters.ItemAdapter;
@@ -51,6 +54,7 @@ import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
+import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
@@ -62,9 +66,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -76,29 +83,40 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
+    int PICK_IMAGE_MULTIPLE = 1;
+    private static final int GALLERY_CODE = 1;
+    private String currentSelectedCategory, currentSelectedSubcategory;
+    Uri ImageUri;
+    File file;
+    List<String> imagesEncodedList;
+    ArrayList<Uri> ChooseImageList;
+    private Spinner parentSpinner, subcategorySpinner;
 
     LottieAnimationView fetchItemsLoader;
     RecyclerView.LayoutManager layoutManager;
     private TextView name;
     private FragmentHomeBinding binding;
     private List<ItemModel> itemModelList;
+    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> subAdapter;
     private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView;
     private String currentEmail, currentName;
     AlertDialog alertDialog;
     private RecyclerView category_RecyclerView;
     private List<CategoryModel> categoryModelList;
+    private List<CategoryModel> subcategoryModelList;
     private CategoryAdapter categoryAdapter;
-
-    private ShapeableImageView itemImageView;
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView itemImage; // Declare as a class member
-    private Uri imageUri;
-    private ActivityResultLauncher<Intent> imagePickerLauncher;
-    private MaterialCardView addCategory;
-//    private MaterialCardView addCategory;
+    private CategoryAdapter subcategoryAdapter;
+    private String parentCategoryId, subcategoryId;
+    Button buttonNext;
+    Spinner itemCategorySpinner;
+    EditText itemDescription;
+    EditText itemName;
+    ImageView itemImage;
     private boolean flag = true;
     private List<String> parentCategories = new ArrayList<>();
+    private List<String> subCategories = new ArrayList<>();
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
@@ -111,8 +129,7 @@ public class HomeFragment extends Fragment {
         });
 
         if(flag) {
-//                parentCategoryModelList = new ArrayList<>();
-            FetchCategory(0, "ezemakau@gmail.com");
+//            FetchCategory(0, "ezemakau@gmail.com");
         }
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
@@ -120,13 +137,13 @@ public class HomeFragment extends Fragment {
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
         category_RecyclerView = root.findViewById(R.id.category_rec);
         name = root.findViewById(R.id.name);
-//        addCategory = root.findViewById(R.id.addCategory);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
-        //flash sale
+        subcategoryModelList = new ArrayList<>();
 
         categoryAdapter = new CategoryAdapter(requireActivity(), categoryModelList);
+        subcategoryAdapter = new CategoryAdapter(requireActivity(), subcategoryModelList);
         category_RecyclerView.setAdapter(categoryAdapter);
 
         itemRecyclerView.setHasFixedSize(true);
@@ -140,7 +157,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         itemModelList = new ArrayList<>();
         itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
@@ -176,7 +192,6 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         requireActivity().runOnUiThread(() -> Log.e("Response Results", responseData));
 
-//                        String jsonString = "{\"statusCode\": 200, \"status\": \"Fetch Query Successful\", \"body\": \"[{\\\"item_id\\\": 25, \\\"item_name\\\": \\\"Joystick\\\", \\\"description\\\": \\\"Gaming\\\", \\\"colourcoding\\\": \\\"Yellow\\\", \\\"barcode\\\": \\\"asdffd\\\", \\\"qrcode\\\": \\\"00111100\\\", \\\"quanity\\\": 1, \\\"location\\\": \\\"Centinary\\\", \\\"email\\\": \\\"gayol59229@fincainc.com\\\"}, {\\\"item_id\\\": 26, \\\"item_name\\\": \\\"Book\\\", \\\"description\\\": \\\"Textbook\\\", \\\"colourcoding\\\": \\\"Yellow\\\", \\\"barcode\\\": \\\"asdffd\\\", \\\"qrcode\\\": \\\"00111100\\\", \\\"quanity\\\": 1, \\\"location\\\": \\\"Centinary\\\", \\\"email\\\": \\\"gayol59229@fincainc.com\\\"}]\"}";
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
@@ -252,6 +267,7 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
                         FetchByEmail(currentEmail);
+                        FetchCategory(0, currentEmail);
                     });
                     future.complete(true);
                 },
@@ -274,17 +290,17 @@ public class HomeFragment extends Fragment {
         builder.setView(dialogView);
 
         // Get the EditTexts and Button from the dialog layout
-        ImageView itemImage  = dialogView.findViewById(R.id.item_image);
-        EditText itemName = dialogView.findViewById(R.id.item_name);
-        EditText itemDescription = dialogView.findViewById(R.id.item_description);
-        Spinner itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
-        Button buttonNext = dialogView.findViewById(R.id.button_add_item);
+        itemImage  = dialogView.findViewById(R.id.item_image);
+        itemName = dialogView.findViewById(R.id.item_name);
+        itemDescription = dialogView.findViewById(R.id.item_description);
+        itemCategorySpinner = dialogView.findViewById(R.id.item_category_spinner);
+        buttonNext = dialogView.findViewById(R.id.button_add_item);
 
         // Create the AlertDialog
         alertDialog = builder.create();
 
         // Set click listener to open image picker
-        itemImage.setOnClickListener(v -> openImagePicker());
+        itemImage.setOnClickListener(v -> OpenGallery());
 
         // Set the button click listener
         buttonNext.setOnClickListener(v -> {
@@ -297,7 +313,8 @@ public class HomeFragment extends Fragment {
             // Check if image URI, name, description, and category are not empty
             if (!name.isEmpty() && !description.isEmpty()) {
                 // Assuming postAddItem is a method in your activity or fragment
-                postAddItem(itemImage1, name, description, 0);
+                UploadItemImage(file);
+//                postAddItem(itemImage1, name, description, 0);
 
             } else {
                 // Handle empty fields or missing image
@@ -375,15 +392,14 @@ public class HomeFragment extends Fragment {
                     }
 
                     // Fetch category suggestions
-                    fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
+//                    fetchCategorySuggestions(name, description, currentEmail, itemCategorySpinner);
 
                     // Post the item
-                    postAddItem(itemImageS, name, description, 0);
+                    UploadItemImage(file);
 
                 } catch (Exception e) {
                     // Log the exception
                     Log.e("AddItem", "Error in onClick", e);
-//                    Toast.makeText(getApplicationContext(), "An error occurred: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -392,14 +408,6 @@ public class HomeFragment extends Fragment {
 
         // Show the AlertDialog
         alertDialog.show();
-    }
-
-    private void openImagePicker()
-    {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     private void fetchCategorySuggestions(String name, String description, String email, Spinner itemCategorySpinner)
@@ -461,11 +469,12 @@ public class HomeFragment extends Fragment {
                             // Extract the category name
                             JSONObject categoryObject = jsonObject.getJSONObject("category");
                             String category = categoryObject.getString("categoryname");
+                            parentCategoryId = categoryObject.getString("id");
 
                             // Extract the subcategory name
                             JSONObject subcategoryObject = jsonObject.getJSONObject("subcategory");
                             String subcategory = subcategoryObject.getString("categoryname");
-
+                            subcategoryId = subcategoryObject.getString("id");
 
                             // Create a list of categories (with only one category in this case)
                             List<String> categories = new ArrayList<>();
@@ -473,10 +482,10 @@ public class HomeFragment extends Fragment {
                             categories.add("Add Custom Category");  //Add other
 
                             // Populate the Spinner
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(),
+                            ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireActivity(),
                                     android.R.layout.simple_spinner_item, categories);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            itemCategorySpinner.setAdapter(adapter);
+                            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            itemCategorySpinner.setAdapter(adapter2);
 
                             // Set the item selected listener
                             itemCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -487,7 +496,7 @@ public class HomeFragment extends Fragment {
                                     if (categories.get(position).equals("Add Custom Category"))
                                     {
                                         // Show dialog to input custom category
-                                        showCustomCategoryDialog(categories, adapter);
+                                        showCustomCategoryDialog(categories, adapter2);
                                     }
                                 }
 
@@ -509,42 +518,66 @@ public class HomeFragment extends Fragment {
                 }
             }
 
-            private void showCustomCategoryDialog(List<String> categories, ArrayAdapter<String> adapter) {
+            private void showCustomCategoryDialog(List<String> categories, ArrayAdapter<String> adapter2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("Add Custom Category and Subcategory");
 
-//                final EditText input = new EditText(requireActivity());
-//                input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                builder.setView(R.layout.add_custom_category_popup);
 
-                // Set up the input fields
-                LinearLayout layout = new LinearLayout(requireActivity());
-                layout.setOrientation(LinearLayout.VERTICAL);
+                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.add_custom_category_popup, null);
 
-                // Input field for category
-                final EditText inputCategory = new EditText(requireActivity());
-                inputCategory.setHint("Category Name");
-                layout.addView(inputCategory);
+                parentSpinner = dialogView.findViewById(R.id.ParentSpinner);
+                subcategorySpinner = dialogView.findViewById(R.id.subcategorySpinner);
 
-                // Input field for subcategory
-                final EditText inputSubCategory = new EditText(requireActivity());
-                inputSubCategory.setHint("Subcategory Name");
-                layout.addView(inputSubCategory);
+                builder.setView(dialogView);
+                String[] categoriesArray = {"Category 1", "Category 2", "Category 3", "Category 4", "Category 1", "Category 2", "Category 3", "Category 4"};
+                adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                parentSpinner.setAdapter(adapter);
 
-                builder.setView(layout);
+                parentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        // Get selected item
+                        flag = true;
+                        currentSelectedCategory = parentView.getItemAtPosition(position).toString();
+                        String parentCategory = "";
+                        parentCategory = findCategoryByName(currentSelectedCategory);
 
+                        if(!Objects.equals(parentCategory, "")){
+                            parentCategoryId = parentCategory;
+                            FetchSubcategory(Integer.parseInt(parentCategory), currentEmail);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        // Do something here if nothing is selected
+                    }
+                });
+                subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        currentSelectedSubcategory = parentView.getItemAtPosition(position).toString();
+                        String subCategory = findCategoryByName(currentSelectedSubcategory);
+                        if(!Objects.equals(subCategory, "")) {
+                            subcategoryId = subCategory;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        // Do something here if nothing is selected
+                    }
+                });
                 builder.setPositiveButton("Add", (dialog, which) ->
                 {
-                    String category = inputCategory.getText().toString().trim();
-                    String subcategory = inputSubCategory.getText().toString().trim();
+                    categories.add(categories.size() - 1, currentSelectedCategory+" - "+currentSelectedSubcategory); // Add before "Add Custom Category"
+                    adapter2.notifyDataSetChanged();
+                    itemCategorySpinner.setSelection(categories.indexOf(currentSelectedCategory+" - "+currentSelectedSubcategory));
 
-                    if (!category.isEmpty() && !subcategory.isEmpty()) {
-                        String combinedCategory = category + " - " + subcategory;
-                        categories.add(categories.size() - 1, combinedCategory); // Add before "Add Custom Category"
-                        adapter.notifyDataSetChanged();
-                        itemCategorySpinner.setSelection(categories.indexOf(combinedCategory));
-                    } else {
-                        Toast.makeText(requireActivity(), "Please enter both category and subcategory", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(requireActivity(), "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 });
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
@@ -598,20 +631,7 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-//    private void postAddItem(String item_image, String item_name, String description, int category) {
-//        // Provide default values for the remaining attributes
-//        int subCategory = 0;
-//        String colourcoding = "default";
-//        String barcode = "default";
-//        String qrcode = "default";
-//        int quantity = 1;
-//        String location = "default";
-//        String email = currentEmail;
-
-
-
-
-    private void postAddItem(String item_image, String item_name, String description, int category) {
+    private void postAddItem(String item_image, String item_name, String description, int category, int parentCategory) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
@@ -620,7 +640,7 @@ public class HomeFragment extends Fragment {
         int quantity = 1;
         String location = "default";
         String email = currentEmail;
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\" }";
+        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\", \"category\":\""+3+"\", \"sub_category\":\""+5+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.AddItemEndPoint;
@@ -630,8 +650,8 @@ public class HomeFragment extends Fragment {
             jsonObject.put("item_image", item_image);
             jsonObject.put("item_name", item_name);
             jsonObject.put("description", description);
-            jsonObject.put("category", category);
-            jsonObject.put("sub_category", subCategory);
+            jsonObject.put("category", parentCategory);
+            jsonObject.put("sub_category", category);
             jsonObject.put("colourcoding", colourcoding);
             jsonObject.put("barcode", barcode);
             jsonObject.put("qrcode", qrcode);
@@ -675,10 +695,21 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private String findCategoryByName(String categoryName) {
+        for (CategoryModel category : categoryModelList) {
+            if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                requireActivity().runOnUiThread(() -> {
+                    Log.e("Filtering: ", category.getCategoryID());
+                });
+                return category.getCategoryID();
+            }
+        }
+        return ""; // Return null if no category with the given name is found
+    }
 
     public void FetchCategory(int ParentCategory, String email)
     {
-        if(flag) {
+//        if(flag) {
             String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
 
 
@@ -733,13 +764,178 @@ public class HomeFragment extends Fragment {
 
                                     Log.i("Category Image Url", itemObject.getString("icon"));
                                     parentCategories.add(itemObject.getString("categoryname"));
+                                    subCategories.add(itemObject.getString("categoryname"));
 
 
                                 }
                                 requireActivity().runOnUiThread(() -> {
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
+                                    adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
                                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                                    mySpinner.setAdapter(adapter);
+//                                    parentSpinner.setAdapter(adapter);
+                                });
+
+
+//                            requireActivity().runOnUiThread(() -> {
+//                                fetchItemsLoader.setVisibility(View.GONE);
+//                                itemRecyclerView.setVisibility(View.VISIBLE);
+//                            });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
+                    } else {
+                        requireActivity().runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                    }
+                }
+            });
+            flag = false;
+//        }
+
+    }
+
+    private void OpenGallery() {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //startActivityForResult(galleryIntent, GalleryPick);
+        startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+
+            imagesEncodedList = new ArrayList<>();
+
+            if (data.getData() != null) {
+                ImageUri = data.getData();
+                itemImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(requireActivity().getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else if (data.getClipData() != null) {
+                ImageUri = data.getClipData().getItemAt(0).getUri();
+                itemImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(requireActivity().getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+    public void UploadItemImage(File ParentCategoryImage)
+    {
+        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                .contentType("image/png") // Adjust based on file type
+                .build();
+        long Time = System.nanoTime();
+        String key= String.valueOf(Time);
+        String Path="public/ItemImages/"+key+".png";
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString(Path),
+                ParentCategoryImage,
+                options,
+                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
+    }
+    public String GetObjectUrl(String key)
+    {
+        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+        postAddItem(url, itemName.getText().toString().trim(), itemDescription.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
+        Toast.makeText(requireActivity(), "Suggested: "+itemCategorySpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+
+        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+    }
+
+    public void FetchSubcategory(int ParentCategory, String email)
+    {
+        if(flag) {
+            String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
+
+
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            OkHttpClient client = new OkHttpClient();
+            String API_URL = BuildConfig.FetchCategoryEndPoint;
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .build();
+
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() -> Log.e("Category Request Method", "GET request failed", e));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        requireActivity().runOnUiThread(() -> {
+                            requireActivity().runOnUiThread(() -> Log.e("Category Response Results", responseData));
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+
+                                int statusCode = jsonObject.getInt("statusCode");
+                                String status = jsonObject.getString("status");
+
+                                String bodyString = jsonObject.getString("body");
+                                JSONArray bodyArray = new JSONArray(bodyString);
+
+                                List<ItemModel> items = new ArrayList<>();
+
+                                requireActivity().runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
+//                                subCategories.add("");
+                                subCategories.clear();
+                                for (int i = 0; i < bodyArray.length(); i++) {
+                                    JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                    CategoryModel parentCategory = new CategoryModel();
+                                    parentCategory.setCategoryID(itemObject.getString("id"));
+                                    parentCategory.setCategoryName(itemObject.getString("categoryname"));
+                                    parentCategory.setImageUrl(itemObject.getString("icon"));
+
+                                    categoryModelList.add(parentCategory);
+                                    subcategoryAdapter.notifyDataSetChanged();
+
+                                    Log.i("Category Image Url", itemObject.getString("categoryname"));
+                                    subCategories.add(itemObject.getString("categoryname"));
+
+
+                                }
+                                requireActivity().runOnUiThread(() -> {
+                                    subAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, subCategories);
+                                    subAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    subcategorySpinner.setAdapter(subAdapter);
+
                                 });
 
 
