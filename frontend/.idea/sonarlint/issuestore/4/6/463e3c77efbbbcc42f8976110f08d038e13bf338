@@ -1,0 +1,66 @@
+
+f	java:S117z"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦
+f	java:S117€"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX
+l	java:S117‚"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£Ü¤‚şÿÿÿÿ
+f	java:S117Ğ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX
+l	java:S117Ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Â£®ïşÿÿÿÿ
+f	java:S117¨"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX
+g	java:S117ª"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ïøÍå
+x
+java:S11040"]Make categoryModelList a static final constant or non-public and provide accessors if needed.(’ì´úÿÿÿÿ
+Œ
+java:S13190"qThe type of "categoryModelList" should be an interface such as "List" rather than the implementation "ArrayList".(’ì´úÿÿÿÿ
+r
+java:S1192æ"VDefine a constant instead of duplicating this literal "View Response Results" 4 times.(¨Ì§ıÿÿÿÿ
+v
+java:S1192€"`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 3 times.(…çæX
+f
+java:S1192Ä"ODefine a constant instead of duplicating this literal "Request Method" 3 times.(ú»Ç—
+j
+java:S1192"SDefine a constant instead of duplicating this literal "GET request failed" 3 times.(¢Ö¯¢
+l
+java:S1192Ä"UDefine a constant instead of duplicating this literal "GET request failed: " 3 times.(ú»Ç—
+[
+java:S1192N"FDefine a constant instead of duplicating this literal "email" 3 times.(Ú¢.
+i
+java:S1192"RDefine a constant instead of duplicating this literal "View Item Details" 4 times.(ÌÒ£ê
+b
+java:S1192œ"KDefine a constant instead of duplicating this literal "statusCode" 3 times.(‰ÜŠÅ
+m	java:S116)"SRename this field "Category" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ©ì²şÿÿÿÿ
+P
+java:S1659+"5Declare "currentSelectedCategory" on a separate line.(Ü½Ùˆúÿÿÿÿ
+r
+java:S1450)"WRemove the "Category" field and declare it as a local variable in the relevant methods.(ñ©ì²şÿÿÿÿ
+z
+java:S14502"_Remove the "itemRecyclerView" field and declare it as a local variable in the relevant methods.(Á†ŸÖûÿÿÿÿ
+V	java:S125M"<This block of commented-out lines of code should be removed.(ˆ÷Œƒúÿÿÿÿ
+G
+java:S1602o",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ
+c	java:S100z"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦
+F
+java:S1481œ"/Remove this unused "statusCode" local variable.(‰ÜŠÅ
+B
+java:S1481"+Remove this unused "status" local variable.(©©­ı
+F
+java:S1481¢"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ
+W	java:S125«"<This block of commented-out lines of code should be removed.(‰“¶Ìÿÿÿÿÿ
+W	java:S125¯"<This block of commented-out lines of code should be removed.(Çù–¨şÿÿÿÿ
+R	java:S125¹"<This block of commented-out lines of code should be removed.(²éšÁ
+i	java:S100Ì"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹õ‹Äıÿÿÿÿ
+R	java:S125è"<This block of commented-out lines of code should be removed.(Œ“
+F
+java:S1481î"/Remove this unused "statusCode" local variable.(‰ÜŠÅ
+W	java:S125ï"<This block of commented-out lines of code should be removed.(¡ûÖ¾şÿÿÿÿ
+F
+java:S1481ö"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ
+W	java:S125"<This block of commented-out lines of code should be removed.(¹ˆŞòÿÿÿÿÿ
+R	java:S125’"<This block of commented-out lines of code should be removed.(ÑˆŠÎ
+d	java:S100¤"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û‡±ú
+R	java:S125À"<This block of commented-out lines of code should be removed.(Œ“
+F
+java:S1481Æ"/Remove this unused "statusCode" local variable.(‰ÜŠÅ
+W	java:S125Ç"<This block of commented-out lines of code should be removed.(¡ûÖ¾şÿÿÿÿ
+F
+java:S1481Î"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ
+W	java:S125è"<This block of commented-out lines of code should be removed.(¹ˆŞòÿÿÿÿÿ
+R	java:S125ë"<This block of commented-out lines of code should be removed.(ÑˆŠÎ
