@@ -107,7 +107,7 @@ public class ViewItemActivity extends AppCompatActivity {
         });
     }
 
-    private CategoryModel findCategoryByName(String categoryName) {
+    public CategoryModel findCategoryByName(String categoryName) {
         runOnUiThread(() -> {
             Log.e("Spinner", categoryModelList.get(0).getCategoryName());
         });
