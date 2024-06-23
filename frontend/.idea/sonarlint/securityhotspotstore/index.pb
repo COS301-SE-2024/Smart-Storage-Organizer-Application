@@ -65,3 +65,15 @@ I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ItemInfoActivity.java,1\a\1a13a8f08348c41daeedf8538f4c7ded96f1c8ae
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeFragment.java,7\1\712a8214a2895769852d79024d74dabbe333e498
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
+€
+Papp/src/test/java/com/example/smartstorageorganizer/AddCategoryActivityTest.java,c\0\c0e01c420df75c1d784efb5e66f92e7301fa3080
+ˆ
+Xapp/src/test/java/com/example/smartstorageorganizer/LoginActivivityIntergrationTest.java,d\6\d6c6d8d7ec1d7778233ec7a6404e0ab684164959
+…
+Uapp/src/test/java/com/example/smartstorageorganizer/LoginActivityIntegrationTest.java,7\a\7a2883057338dec48edc55482c963f631636b32c

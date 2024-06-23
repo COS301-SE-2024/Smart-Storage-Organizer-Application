@@ -1,9 +1,11 @@
 
-‚
-java:S5845V"?Change the assertion arguments to not compare dissimilar types.(´ç®ú8‘÷…„2J$7d21c32a-4f8e-42ab-a00a-27ddf958acac
-V
-java:S1128"9Remove this unused import 'org.junit.Assert.assertFalse'.(Ô”®Ì8À„2
-Z
-java:S1128"8Remove this unused import 'org.junit.Assert.assertTrue'.(”ÄÜ™ûÿÿÿÿ8Â„2
-Y
-java:S1128"7Remove this unused import 'org.mockito.Mockito.verify'.(î ®ûşÿÿÿÿ8Ä„2
+„
+java:S1128"<Remove this unused import 'android.os.Looper.getMainLooper'.(…ğ¢”üÿÿÿÿ8æ×Ê©„2J$21ab96a2-7fa7-4eab-b63b-18ebdd68d179
+‰
+java:S1128"ARemove this unused import 'org.robolectric.shadows.ShadowLooper'.(¨Õ×ûüÿÿÿÿ8äüË©„2J$eb623191-655a-48e8-9bc7-a21b2d6d593b
+|
+java:S1128"9Remove this unused import 'org.junit.Assert.assertFalse'.(Ô”®Ì8ˆ·Â©„2J$3a622131-e0d4-4f10-9bf8-d24431cf3446
+€
+java:S1128"8Remove this unused import 'org.junit.Assert.assertTrue'.(”ÄÜ™ûÿÿÿÿ8‰·Â©„2J$4c3e74f7-0b61-48a4-911f-482dff07e247
+…
+java:S1128"=Remove this unused import 'org.robolectric.Shadows.shadowOf'.(ŠŠööüÿÿÿÿ8ç×Ê©„2J$49ee70d3-c6ab-4ffa-b49c-99b4d567db24
