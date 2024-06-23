@@ -1,11 +1,11 @@
 
 d
-java:S1604,"(Make this anonymous inner class a lambda(„ÑñŒJ$d3ec4b84-bcfe-448d-a428-e26b2a264401
+java:S1604,"(Make this anonymous inner class a lambda(„ÑñŒJ$78d1d2cd-acb1-4fb3-bbf1-8343c0e54df2
 c
-java:S54112"(Use a primitive boolean expression here.(¨İSJ$f0d662ab-5b00-420a-97ed-3571772368fe
+java:S54112"(Use a primitive boolean expression here.(¨İSJ$7aa17869-4514-4350-a1c3-3fad3eca0483
 “
-java:S1192N"RDefine a constant instead of duplicating this literal "AmplifyQuickstart" 3 times.(èššûÿÿÿÿJ$be0debd8-8b67-4327-813c-8644df6d7c2d
+java:S1192N"RDefine a constant instead of duplicating this literal "AmplifyQuickstart" 3 times.(èššûÿÿÿÿJ$3b346c35-b028-4d91-8463-b6760048cba7
 k
-java:S1874,"/Remove this use of "Handler"; it is deprecated.(„ÑñŒJ$f45dd0b4-ac8f-4bc6-865f-f8c782e0298c
-|	java:S125/"<This block of commented-out lines of code should be removed.(¨ÀüÿÿÿÿJ$b108728b-47e9-4980-b497-79b83f0deab8
-w	java:S125`"<This block of commented-out lines of code should be removed.(Ú°à¬J$3f6bb79b-abcc-494f-bcd5-78e4c076c177
+java:S1874,"/Remove this use of "Handler"; it is deprecated.(„ÑñŒJ$4c0873ed-24f8-4c17-9698-6726bd3da531
+|	java:S125/"<This block of commented-out lines of code should be removed.(¨ÀüÿÿÿÿJ$ff12fc1c-a24f-46c2-9911-6c5d28488792
+w	java:S125`"<This block of commented-out lines of code should be removed.(Ú°à¬J$aac96379-0ffe-4044-9b50-b90d131836d2

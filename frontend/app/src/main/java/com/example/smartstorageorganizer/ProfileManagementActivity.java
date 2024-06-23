@@ -167,18 +167,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     }
 
-    public void UploadProfilePicture(String ProfilePicturePath)
-    {
-        File ProfilePicture= new File(ProfilePicturePath);
-        Amplify.Storage.uploadFile(
-                StoragePath.fromString("public/ProfilePictures"),
-                ProfilePicture,
-                StorageUploadFileOptions.defaultInstance(),
-                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
-                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
-                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
-        );
-    }
+    
 
 
 }
