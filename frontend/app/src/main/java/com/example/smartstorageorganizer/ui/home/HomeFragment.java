@@ -709,7 +709,7 @@ public class HomeFragment extends Fragment {
 
     public void FetchCategory(int ParentCategory, String email)
     {
-        if(flag) {
+//        if(flag) {
             String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
 
 
@@ -791,7 +791,7 @@ public class HomeFragment extends Fragment {
                 }
             });
             flag = false;
-        }
+//        }
 
     }
 
