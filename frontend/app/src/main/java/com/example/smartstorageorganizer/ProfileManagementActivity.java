@@ -122,7 +122,9 @@ public class ProfileManagementActivity extends AppCompatActivity {
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error ->{ Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    future.complete(false);
+                }
 
         );
         return future;
@@ -167,7 +169,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
 
     }
 
-    
+
 
 
 }

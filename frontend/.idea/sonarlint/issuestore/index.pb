@@ -87,3 +87,5 @@ y
 Iapp/src/test/java/com/example/smartstorageorganizer/MainActivityTest.java,2\a\2adfbf37ae24ad8a2fbdfda3602eeb2123307fdf
 ‚
 Rapp/src/main/java/com/example/smartstorageorganizer/ProfileManagementActivity.java,8\0\80aaf9c22a4686fc5c3a8f12e7600c5598ae8003
+†
+Vapp/src/test/java/com/example/smartstorageorganizer/ProfileManagementActivityTest.java,d\6\d65a9b65d0cc708a0ef433f9948692c117cfb497
