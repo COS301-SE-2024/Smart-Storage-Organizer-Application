@@ -1,12 +1,16 @@
 package com.example.smartstorageorganizer;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -20,6 +24,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.AuthUserAttributeKey;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,6 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +54,18 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddCategoryActivity extends AppCompatActivity {
+    int PICK_IMAGE_MULTIPLE = 1;
+    private static final int GALLERY_CODE = 1;
+    Uri ImageUri;
+    File file;
+    List<String> imagesEncodedList;
+    ArrayList<Uri> ChooseImageList;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private TextInputLayout subcategoryInput;
     private TextInputLayout parentCategoryInput;
+    private ImageView parentCategoryImage;
+    ConstraintLayout uploadButton;
     TextView spinnerHeaderText;
     public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
     private String currentSelectedParent;
@@ -73,6 +92,8 @@ public class AddCategoryActivity extends AppCompatActivity {
             spinnerHeaderText = findViewById(R.id.spinnerHeaderText);
             addButton = findViewById(R.id.addButton);
             subCategory = findViewById(R.id.subcategory);
+            parentCategoryImage = findViewById(R.id.parentCategoryImage);
+            uploadButton = findViewById(R.id.uploadButton);
             //flash sale
 
             if(flag) {
@@ -83,13 +104,20 @@ public class AddCategoryActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
+            uploadButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OpenGallery();
+                }
+            });
+
             addButton.setOnClickListener(v1 -> {
                 Log.i("Spinner",radioButton.getText().toString());
                 if(radioButton.getText().toString().equals("Parent Category")){
                     Log.i("Spinner","Inside the Parent category if statement");
                     if(validateParentForm()) {
                         Log.i("Spinner","Inside the Parent category if statement");
-                        AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com");
+                        UploadParentCategoryImage(file);
                     }
                 }
                 else if(radioButton.getText().toString().equals("Sub Category")){
@@ -100,7 +128,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
                             CategoryModel parent = findCategoryByName(categoryModelList, currentSelectedParent);
                             Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
-                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com");
+                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com", "");
                         }
                     }
 //                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
@@ -112,6 +140,8 @@ public class AddCategoryActivity extends AppCompatActivity {
                     spinnerHeaderText.setVisibility(View.VISIBLE);
                     subcategoryInput.setVisibility(View.VISIBLE);
                     parentCategoryInput.setVisibility(View.GONE);
+                    parentCategoryImage.setVisibility(View.GONE);
+                    uploadButton.setVisibility(View.GONE);
                     Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                 }
                 else if(radioButton.getText().toString().equals("Parent Category")){
@@ -119,6 +149,8 @@ public class AddCategoryActivity extends AppCompatActivity {
                     spinnerHeaderText.setVisibility(View.GONE);
                     subcategoryInput.setVisibility(View.GONE);
                     parentCategoryInput.setVisibility(View.VISIBLE);
+                    parentCategoryImage.setVisibility(View.VISIBLE);
+                    uploadButton.setVisibility(View.VISIBLE);
 
                     Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                 }
@@ -142,6 +174,58 @@ public class AddCategoryActivity extends AppCompatActivity {
 
             return insets;
         });
+    }
+
+    private void OpenGallery() {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        //startActivityForResult(galleryIntent, GalleryPick);
+        startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+
+            imagesEncodedList = new ArrayList<>();
+
+//            Toast.makeText(EditProfileActivity.this, "Image URI: "+Objects.requireNonNull(data.getData()).toString(), Toast.LENGTH_LONG).show();
+
+            if (data.getData() != null) {
+                ImageUri = data.getData();
+                parentCategoryImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) parentCategoryImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else if (data.getClipData() != null) {
+                ImageUri = data.getClipData().getItemAt(0).getUri();
+                parentCategoryImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) parentCategoryImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 
     private CategoryModel findCategoryByName(ArrayList<CategoryModel> categories, String categoryName) {
@@ -269,9 +353,9 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     }
 
-    public void AddCategory(int ParentCategory, String CategoryName, String email)
+    public void AddCategory(int ParentCategory, String CategoryName, String email, String url)
     {
-        String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\", \"categoryname\":\""+CategoryName+"\" }";
+        String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\", \"categoryname\":\""+CategoryName+"\", \"icon\": \""+url+"\" }";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -307,5 +391,33 @@ public class AddCategoryActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void UploadParentCategoryImage(File ParentCategoryImage)
+    {
+        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                .contentType("image/png") // Adjust based on file type
+                .build();
+        long Time = System.nanoTime();
+        String key= String.valueOf(Time);
+        String Path="public/Category/"+key+".png";
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString(Path),
+                ParentCategoryImage,
+                options,
+                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+        );
+    }
+    public String GetObjectUrl(String key)
+    {
+        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/"+key+".png";
+        AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com", url);
+//        Toast.makeText(AddCategoryActivity.this, "Parent Category Added Successfully.", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
+//        startActivity(intent);
+//        finish();
+
+        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/"+key+".png";
     }
 }

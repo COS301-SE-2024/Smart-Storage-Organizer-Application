@@ -64,6 +64,55 @@
             android:layout_marginStart="32dp"
             android:layout_marginBottom="8dp"
             android:textSize="16dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/uploadButton"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/logout_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif"
+                android:text="Upload"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/logout_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/outline_file_upload_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/logout_button_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/parentCategoryImage"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="32dp"
+             android:layout_height="170dp"/>
+
         <Spinner
             android:id="@+id/mySpinner"
             android:layout_width="match_parent"
