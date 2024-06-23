@@ -64,6 +64,74 @@
             android:layout_marginStart="32dp"
             android:layout_marginBottom="8dp"
             android:textSize="16dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/parentcategoryInput"
+            style="CustomTextInputOutlinedBox"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/parentcategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Parent Category"
+                android:inputType="textAutoComplete" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/uploadButton"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/colorPrimary"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/logout_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif"
+                android:text="Upload"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/logout_button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/outline_file_upload_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/logout_button_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/parentCategoryImage"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="32dp"
+             android:layout_height="170dp"/>
+
         <Spinner
             android:id="@+id/mySpinner"
             android:layout_width="match_parent"
@@ -92,24 +160,6 @@
                 android:inputType="textAutoComplete" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/parentcategoryInput"
-            style="CustomTextInputOutlinedBox"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/parentcategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Parent Category"
-                android:inputType="textAutoComplete" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <ImageView
             android:id="@+id/category_image"
             android:visibility="gone"
@@ -118,57 +168,60 @@
             android:layout_gravity="center"
             android:src="@drawable/no_image"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/addButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="32dp"
-            android:background="@color/colorPrimary"
-            android:clickable="true"
-            android:focusable="true">
-
-            <TextView
-                android:id="@+id/logOutButtonText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="0dp"
-                android:fontFamily="sans-serif"
-                android:text="Finish"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-<!--            <ImageView-->
-<!--                android:id="@+id/logoutButtonIcon"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="6dp"-->
-<!--                android:src="@drawable/baseline_add_24"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="@+id/logOutButtonText"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/buttonLoader"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lottie_rawRes="@raw/loading"
-                android:visibility="gone"
-                app:lottie_autoPlay="false"
-                app:lottie_loop="false"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/logOutButtonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="0dp"
+            android:fontFamily="sans-serif"
+            android:text="Finish"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/logoutButtonIcon"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginStart="6dp"-->
+        <!--                android:src="@drawable/baseline_add_24"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintStart_toEndOf="@+id/logOutButtonText"-->
+        <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/buttonLoader"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/loading" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
