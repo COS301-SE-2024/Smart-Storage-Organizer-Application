@@ -1,11 +1,11 @@
 
-n	java:S117Á"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8˜„ğ„2
-m	java:S117Ç"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8˜„ğ„2
-s	java:S117É"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£Ü¤‚şÿÿÿÿ8™„ğ„2
-n	java:S117•"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8™„ğ„2
-n	java:S117•"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8™„ğ„2
-m	java:S117™"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8™„ğ„2
-n	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡™²…8™„ğ„2
+n	java:S117¿"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8˜„ğ„2
+m	java:S117Å"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8˜„ğ„2
+s	java:S117Ç"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£Ü¤‚şÿÿÿÿ8™„ğ„2
+n	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8™„ğ„2
+n	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8™„ğ„2
+m	java:S117—"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8™„ğ„2
+n	java:S117™"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡™²…8™„ğ„2
 
 java:S11043"]Make categoryModelList a static final constant or non-public and provide accessors if needed.(’ì´úÿÿÿÿ8œ„ğ„2
 “
@@ -13,19 +13,19 @@ java:S13193"qThe type of "categoryModelList" should be an interface such as "Li
 h
 java:S1192w"KDefine a constant instead of duplicating this literal "Selected: " 3 times.(œ”Ú8½„ğ„2
 e
-java:S1192Y"HDefine a constant instead of duplicating this literal "Spinner" 8 times.(ëâş8Â„ğ„2
+java:S1192Y"HDefine a constant instead of duplicating this literal "Spinner" 6 times.(ëâş8Â„ğ„2
 m
-java:S1192Œ"ODefine a constant instead of duplicating this literal "Request Method" 4 times.(ú»Ç—8Ã„ğ„2
+java:S1192Š"ODefine a constant instead of duplicating this literal "Request Method" 4 times.(ú»Ç—8Ã„ğ„2
 K
 java:S1659;")Declare "subCategory" on a separate line.(„˜‹ûÿÿÿÿ8à„ğ„2
 Z
 java:S1144˜"7Remove this unused private "findCategoryByName" method.(¨„»øÿÿÿÿ8ê„ğ„2
-Z
-java:S1144¥"7Remove this unused private "validateParentForm" method.(İ™ü°ÿÿÿÿÿ8ë„ğ„2
-_
-java:S1144±"<Remove this unused private "validateSubCategoryForm" method.(«¹°ùÿÿÿÿ8ë„ğ„2
 t
 java:S3776?"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¨Œşÿÿÿÿ8„…ğ„2
+_
+java:S1854["=Remove this useless assignment to local variable "!unknown!".(ƒê‚úÿÿÿÿ8Ÿ‰­©„2
+Z
+java:S1854b"=Remove this useless assignment to local variable "!unknown!".(¬ÉùÄ8 ‰­©„2
 Z
 java:S1854f"=Remove this useless assignment to local variable "!unknown!".(ÊÑ‰8…ğ„2
 ]	java:S125e"<This block of commented-out lines of code should be removed.(„ÌÒîÿÿÿÿÿ8£…ğ„2
@@ -34,17 +34,17 @@ T
 java:S1172˜"1Remove this unused method parameter "categories".(¨„»øÿÿÿÿ8²…ğ„2
 O
 java:S1602™",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8³…ğ„2
-k	java:S100Á"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8Æ…ğ„2
+k	java:S100¿"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8Æ…ğ„2
 M
-java:S1481ã"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8…†ğ„2
+java:S1481á"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8…†ğ„2
 I
-java:S1481ä"+Remove this unused "status" local variable.(©©­ı8…†ğ„2
+java:S1481â"+Remove this unused "status" local variable.(©©­ı8…†ğ„2
 M
-java:S1481é"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8ˆ†ğ„2
-^	java:S125ó"<This block of commented-out lines of code should be removed.(‰“¶Ìÿÿÿÿÿ8†ğ„2
-^	java:S125÷"<This block of commented-out lines of code should be removed.(Çù–¨şÿÿÿÿ8‘†ğ„2
-Y	java:S125"<This block of commented-out lines of code should be removed.(²éšÁ8”†ğ„2
-k	java:S100•"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8–†ğ„2
+java:S1481ç"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8ˆ†ğ„2
+^	java:S125ñ"<This block of commented-out lines of code should be removed.(‰“¶Ìÿÿÿÿÿ8†ğ„2
+^	java:S125õ"<This block of commented-out lines of code should be removed.(Çù–¨şÿÿÿÿ8‘†ğ„2
+Y	java:S125ÿ"<This block of commented-out lines of code should be removed.(²éšÁ8”†ğ„2
+k	java:S100“"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8–†ğ„2
 L
 java:S10685"0Remove this unused "currentEmail" private field.(¯ô 8¶†ğ„2
 [

@@ -65,3 +65,11 @@ I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+|
+Lapp/src/main/java/com/example/smartstorageorganizer/EditProfileActivity.java,b\9\b9207bce6dfe4f4e1c112e5d720bb8aee96605c5
+€
+Papp/src/test/java/com/example/smartstorageorganizer/EditProfileActivityTest.java,3\3\3378155149634c4e9e34d872e6844f3e1edbba5c
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.java,4\1\4171c039aa7e2fe87b69241020ae05d60652eecb
+†
+Vapp/src/test/java/com/example/smartstorageorganizer/EmailVerificationActivityTest.java,7\e\7eaf08b99e777a78c451cd2317297d9dd6a54e86

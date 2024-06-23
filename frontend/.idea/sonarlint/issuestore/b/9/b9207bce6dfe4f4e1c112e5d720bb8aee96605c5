@@ -1,0 +1,49 @@
+
+k
+java:S1604d"(Make this anonymous inner class a lambda(ÄˆşÍ8ÍİÎ©„2J$73563d5a-5193-47e3-b33f-16384d952893
+k
+java:S1604k"(Make this anonymous inner class a lambda(½§Øş8ÏİÎ©„2J$2c101f57-6a2d-45df-bd29-032ba8ac80a1
+p
+java:S1604s"(Make this anonymous inner class a lambda(ŸºâÜúÿÿÿÿ8ÏİÎ©„2J$9877fa58-e43d-4bf5-b609-50a66bed38bf
+”	java:S117É"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(·ï†Å8ÏİÎ©„2J$b8996eff-4f96-4503-a7bc-15c551ea3f4c
+™	java:S117Ê"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾¡²Ûøÿÿÿÿ8ÏİÎ©„2J$b17c59e9-090d-4c9d-be88-b3e784c23ede
+™	java:S117Ë"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü«ØÉÿÿÿÿÿ8ÏİÎ©„2J$8ee6f15d-bde5-47f7-8ac4-aa571175033c
+”	java:S117Ì"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ƒ—Á˜8ÏİÎ©„2J$c63ce990-ee54-45ed-b7d9-1d42ec697cb0
+™	java:S117º"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ş“Ù¹úÿÿÿÿ8ĞİÎ©„2J$efb965a0-ecf8-4d09-a4a7-b46b30af326f
+”	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±Ò¦8ĞİÎ©„2J$ac1fc43d-300a-4129-a13d-2bd80c0bd3f0
+™	java:S117Â"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Œ£–şÿÿÿÿ8ĞİÎ©„2J$fbd1224e-9499-4993-9552-48533cbd48b0
+—
+java:S1192Ñ"NDefine a constant instead of duplicating this literal "Update failed" 4 times.(¬üÎ¹øÿÿÿÿ8İİÎ©„2J$c443ecc4-32ab-429b-bf13-e03e07642bc8
+’
+java:S1192N"JDefine a constant instead of duplicating this literal "AuthDemo" 10 times.(ö…¢Šûÿÿÿÿ8ŞİÎ©„2J$406c01cd-c2b2-41a8-9ea0-3a8a29c77bb5
+~	java:S125%"<This block of commented-out lines of code should be removed.(Ì×8àİÎ©„2J$9a5fcac6-e893-4ac5-a6cc-9735b4cc9767
+¥	java:S1167"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğ›×¾üÿÿÿÿ8âİÎ©„2J$1ad12c64-a2a5-43bb-9022-88ce0e7dd2e1
+š	java:S1169"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ÚÅÉüÿÿÿÿ8âİÎ©„2J$08d5df0c-8eae-40d4-8a9e-a520f710f834
+¡	java:S116;"ZRename this field "ChooseImageList" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï²êŞüÿÿÿÿ8âİÎ©„2J$e0ed7487-1f2b-47df-b960-bd13c0d3a77d
+‡
+java:S16593"DDeclare "surname" and all following declarations on a separate line.(Ééú8ùİÎ©„2J$ab879838-edb5-41ad-9c3e-006bf5b231cf
+j	java:S131Œ""Add a default case to this switch.(‹ıÌ­üÿÿÿÿ8ÄŞÎ©„2J$1013598e-5a39-4435-a146-c7289c425cf0
+„	java:S125±"<This block of commented-out lines of code should be removed.(™ÙÉ¨ûÿÿÿÿ8ÌŞÎ©„2J$a2b6f06e-ed09-475d-bb84-519dd4440a68
+–	java:S100½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾‡¾÷şÿÿÿÿ8ÍŞÎ©„2J$c92ef3df-92c8-4855-b5ba-374928fa7bfa
+‚
+java:S1874Ã">Remove this use of "startActivityForResult"; it is deprecated.(¡æÖé8ÏŞÎ©„2J$a2062f8e-c5b3-4613-982f-a66d07773186
+„	java:S125Â"<This block of commented-out lines of code should be removed.(¯å‚şÿÿÿÿ8ÏŞÎ©„2J$10ac82a0-9101-48ae-ab8f-00861bab7489
+}
+java:S1854Ì"9Remove this useless assignment to local variable "Phone".(ƒ—Á˜8ÑŞÎ©„2J$3c8bce73-9900-4427-b3f2-fcbaa2b18887
+n
+java:S1481Ì"*Remove this unused "Phone" local variable.(ƒ—Á˜8×ŞÎ©„2J$fc552c34-f119-4b11-a2ea-37bafb64dc90
+Ÿ
+java:S2159Í"VRemove this call to "equals"; comparisons between unrelated types always return false.(¶Îñˆıÿÿÿÿ8×ŞÎ©„2J$a5236e26-885c-4369-b466-34b71fb585ac
+Ÿ
+java:S2159Õ"VRemove this call to "equals"; comparisons between unrelated types always return false.(‚ö¿Äøÿÿÿÿ8ÚŞÎ©„2J$94c2ec22-dbe9-49a1-a88f-9821dc845c16
+Ÿ
+java:S2159İ"VRemove this call to "equals"; comparisons between unrelated types always return false.(úÏçıÿÿÿÿ8ÛŞÎ©„2J$8353a47d-8fe2-445c-b7c7-20cad30dadb7
+„	java:S125è"<This block of commented-out lines of code should be removed.(„öí·ıÿÿÿÿ8ßŞÎ©„2J$fe1373b0-c0e0-46b6-b0c6-1792b16c6ad8
+“
+java:S1874õ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8àŞÎ©„2J$cf9f7e05-4396-4620-b91b-b2111bf51213
+„	java:S125û"<This block of commented-out lines of code should be removed.(Äö¸‹øÿÿÿÿ8éŞÎ©„2J$4b82146d-e9ce-4b06-b023-404840ffe0b6
+–	java:S100º"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ş“Ù¹úÿÿÿÿ8úŞÎ©„2J$d0115674-1991-40e0-a613-4b6a0264bbc2
+	java:S125 "<This block of commented-out lines of code should be removed.(Ú°à¬8üŞÎ©„2J$33121d0b-8bf8-490b-a5a6-bfc88fea5d15
+–	java:S100Í"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÊÑ­®ùÿÿÿÿ8…ßÎ©„2J$b1e8d8ca-c455-4632-b3b4-6e10aec29c83
+a
+java:S1128&"Remove this duplicated import.(Ú¢±Î8ŒßÎ©„2J$5b7d1efa-91c6-405b-a9a1-ac4dd94b8b36

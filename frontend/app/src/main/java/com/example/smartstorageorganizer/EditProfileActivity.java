@@ -311,8 +311,9 @@ public class EditProfileActivity extends AppCompatActivity {
 //                }
 //        );
 //    }
-    public void UploadProfilePicture(File ProfilePicture)
+    public CompletableFuture<Boolean> UploadProfilePicture(File ProfilePicture)
     {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
                 .contentType("image/png") // Adjust based on file type
                 .build();
@@ -323,9 +324,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 StoragePath.fromString(Path),
                 ProfilePicture,
                 options,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
-                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)); future.complete(true);},
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure); future.complete(false);}
         );
+
+        return future;
     }
     public String GetObjectUrl(String key)
     {
@@ -343,27 +346,5 @@ public class EditProfileActivity extends AppCompatActivity {
         return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
     }
 
-    private CompletableFuture<Boolean> isSignedIn(){
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.fetchAuthSession(
-
-                result->{
-                    if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
-                        future.complete(true);
-                    }
-                    else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
-                        future.complete(false);
-                    }},
-                error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
-                    future.completeExceptionally(error);
-                }
-
-        );
-        return future;
-    }
 
 }
