@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
         });
 
         if(flag) {
-            FetchCategory(0, "ezemakau@gmail.com");
+//            FetchCategory(0, "ezemakau@gmail.com");
         }
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
@@ -267,6 +267,7 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
                         FetchByEmail(currentEmail);
+                        FetchCategory(0, currentEmail);
                     });
                     future.complete(true);
                 },
