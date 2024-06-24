@@ -72,7 +72,7 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 
 ## Documentation
 - [Software System Requirements version 1.0](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
-- [Software System Requirements version 2.0](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
+- [Software System Requirements version 2.0](https://www.overleaf.com/read/yynpkbbmdzhk#746941/)
 - [Coding Standards](https://drive.google.com/file/d/1EAAzcRx2sW9YHFUU5M2FNNSPxxFSiY5M/view?usp=sharing/)
 - [User Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/)
 
