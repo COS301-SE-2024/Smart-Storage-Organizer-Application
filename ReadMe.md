@@ -78,4 +78,5 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 
 ## Video Presentation
  - [Video Demo version 1.0](https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link/)
+ - [Video Demo version 2.0](https://drive.google.com/file/d/1AEc3MrZKrq1AfwJUcGkbMed6eWlABkgF/view?usp=sharing)
 
