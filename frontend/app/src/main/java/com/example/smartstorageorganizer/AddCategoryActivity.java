@@ -123,8 +123,8 @@ public class AddCategoryActivity extends AppCompatActivity {
                 addCategoryLayout.setVisibility(View.GONE);
                 Log.i("Spinner",radioButton.getText().toString());
                 if(radioButton.getText().toString().equals("Parent Category")){
-                    Log.i("Spinner","Inside the Parent category if statement");
-                    if(validateParentForm()) {
+                    String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
+                    if(validateParentForm(parentCategoryText)) {
                         Log.i("Spinner","Inside the Parent category if statement");
                         UploadParentCategoryImage(file);
                     }
@@ -250,8 +250,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
 
-    private boolean validateParentForm() {
-        String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
+    public boolean validateParentForm(String parentCategoryText) {
 
         if (TextUtils.isEmpty(parentCategoryText)) {
             parentCategoryEditText.setError("Parent Category is required.");

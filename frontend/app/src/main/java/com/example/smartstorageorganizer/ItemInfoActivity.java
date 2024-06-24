@@ -55,16 +55,24 @@ public class ItemInfoActivity extends AppCompatActivity {
             return insets;
         });
 
-        editItemButton.setOnClickListener(v -> showEditItemPopup());
+        editItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditItemPopup();
+            }
+        });
 
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 
-    private void showEditItemPopup() {
+    public void showEditItemPopup() {
         // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Inflate the dialog layout
@@ -88,21 +96,24 @@ public class ItemInfoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
 
         // Set the button click listener
-        buttonNext.setOnClickListener(v -> {
-            String name = itemName.getText().toString().trim();
-            String description = itemDescription.getText().toString().trim();
-            String location = itemLocation.getText().toString().trim();
-            String colorCode = itemColorCode.getText().toString().trim();
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = itemName.getText().toString().trim();
+                String description = itemDescription.getText().toString().trim();
+                String location = itemLocation.getText().toString().trim();
+                String colorCode = itemColorCode.getText().toString().trim();
 
-            PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
-            alertDialog.dismiss();
+                PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
+                alertDialog.dismiss();
+            }
         });
 
         // Show the AlertDialog
         alertDialog.show();
     }
 
-        private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
+    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();

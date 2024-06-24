@@ -12,11 +12,8 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.storage.StoragePath;
-import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -37,7 +34,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +48,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
-    private TextView fullName;
-    private ShapeableImageView profileImage;
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityHomeBinding binding;
-    private String currentName, currentSurname, currentPicture;
+    public TextView fullName;
+    public ShapeableImageView profileImage;
+    public AppBarConfiguration mAppBarConfiguration;
+    public ActivityHomeBinding binding;
+    public String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private CompletableFuture<Boolean> getDetails() {
+    public CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
         Amplify.Auth.fetchUserAttributes(
@@ -159,19 +155,21 @@ public class HomeActivity extends AppCompatActivity {
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
 
         );
         return future;
     }
 
-    public void SignOut()
+    public CompletableFuture<Boolean> SignOut()
     {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         Amplify.Auth.signOut(signOutResult -> {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
                 //move to a different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -182,6 +180,7 @@ public class HomeActivity extends AppCompatActivity {
                 AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
                         (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -194,13 +193,14 @@ public class HomeActivity extends AppCompatActivity {
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
+                future.complete(false);
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
 
                 });
             }
         });
-
+        return future;
     }
 
     public void DeleteCategory(int id, String email)
@@ -220,76 +220,8 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void RecommmendCategories(String itemname, String itemdescription, String useremail )
-    {
-        String json = "{\"useremail\":\""+useremail+"\", \"itemname\":\""+itemname+"\", \"itemsdecription\":\""+itemdescription+"\" }";
 
 
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.RecommendCategoryEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-  
-    public void FilterBySubCategory(int parentcategory, int subcategory )
-    {
-        String json = "{\"parentcategory\":\""+parentcategory+"\", \"subcategory\":\""+subcategory+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SubCategoryFilterEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-
-    public void ChangeQaunity(String itemid, String sign)
-    {
-        String json = "{\"item_id\":\""+itemid+"\",  \"sign\":\""+sign+"\"}";
 
 
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.ChangeQuantityEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-    }
-    public void UploadProfilePicture(File ProfilePicture)
-    {
-        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
-                .contentType("image/png") // Adjust based on file type
-                .build();
-        long Time = System.nanoTime();
-        String key= String.valueOf(Time);
-        String Path="public/itemimages/"+key+".png";
-        Amplify.Storage.uploadFile(
-                StoragePath.fromString(Path),
-                ProfilePicture,
-                options,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
-                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
-        );
-    }
-    public String GetObjectUrl(String key)
-    {
-       // String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
-
-
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/itemimages/"+key+".png";
-    }
 }

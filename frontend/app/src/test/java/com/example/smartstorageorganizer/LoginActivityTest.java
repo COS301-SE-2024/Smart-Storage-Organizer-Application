@@ -1,48 +1,52 @@
 package com.example.smartstorageorganizer;
+import static android.os.Looper.getMainLooper;
+import static org.mockito.Mockito.spy;
+import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLooper;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.shadows.ShadowLooper.runUiThreadTasksIncludingDelayedTasks;
 
 import android.os.Build;
-import android.text.SpannableStringBuilder;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
 public class LoginActivityTest {
 
     LoginActivity loginActivity;
+    @Mock
+    LoginActivity lg = mock(LoginActivity.class);
 
     @Before
     public void setup() {
-        loginActivity = Robolectric.buildActivity(LoginActivity.class)
+        loginActivity = spy(Robolectric.buildActivity(LoginActivity.class)
                 .create()
                 .resume()
-                .get();
+                .get());
     }
 
     @Test
     public void shouldNotBeNull() {
         assertNotNull(loginActivity);
     }
+
     @Test
     public void validateFormShouldReturnTrueForValidEmailAndPassword() {
         // Given
@@ -55,30 +59,100 @@ public class LoginActivityTest {
         // Then
         assertEquals(true, result);
     }
+
     @Test
-    public void ValidateFormShouldReturnFalseForEmptyEmail(){
-        String email="";
+    public void ValidateFormShouldReturnFalseForEmptyEmail() {
+        String email = "";
         String validPassword = "password123";
 
-        boolean result=loginActivity.validateForm(email,validPassword);
-        assertFalse(result);
+        boolean result = loginActivity.validateForm(email, validPassword);
+        assertEquals(false, result);
     }
-//    @Test
-//    public void addNumShouldReturnCorrectSum() {
-//        // Given
-//        int a = 2;
-//        int b = 2;
-//
-//        // When
-//        int result = loginActivity.addNum(a, b);
-//
-//        // Then
-//        assertEquals(4, result);
-//    }
 
+    @Test
+    public void ValidateFormShouldReturnFalseWhenPasswordEmpty() {
+        // Given
+        String validEmail = "test@example.com";
+        String validPassword = "";
 
+        // When
+        boolean result = loginActivity.validateForm(validEmail, validPassword);
 
+        // Then
+        assertEquals(false, result);
+    }
+    @Test
+    public void signInWithValidEmailAndPassword() {
+        String validEmail = "test@example.com";
+        String validPassword = "password123";
+        AtomicBoolean result = new AtomicBoolean(false);
 
+        LoginActivity mockLoginActivity = mock(LoginActivity.class);
+        when(mockLoginActivity.SignIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
 
+        mockLoginActivity.SignIn(validEmail, validPassword).thenAccept(isResult -> {
+            if (isResult) {
+                result.set(true);
+            } else {
+                result.set(false);
+            }
+        });
 
+        assertEquals(true, result.get());
+    }
+
+    @Test
+    public void signInWithInvalidEmailAndPassword() {
+        String invalidEmail = "invalid@example.com";
+        String invalidPassword = "wrongpassword";
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        LoginActivity mockLoginActivity = mock(LoginActivity.class);
+        when(mockLoginActivity.SignIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
+
+        mockLoginActivity.SignIn(invalidEmail, invalidPassword).thenAccept(isResult -> {
+            if (isResult) {
+                result.set(true);
+            } else {
+                result.set(false);
+            }
+        });
+
+        assertEquals(false, result.get());
+    }
+
+    @Test
+    public void testSetErrorAndResult() {
+        String testError = "Test Error";
+        String testResult = "Test Result";
+
+        loginActivity.SetErrorAndResult(testError, testResult);
+
+        assertEquals(testError, loginActivity.Error);
+        assertEquals(testResult, loginActivity.Result);
+    }
+
+    @Test
+    public void clickingRegisterButton_callsSignInWithCorrectParameters() {
+        // Given
+        String email = "test@example.com";
+        String password = "password123";
+
+        // Set the text fields
+        loginActivity.Email.setText(email);
+        loginActivity.Password.setText(password);
+
+        // When
+        loginActivity.registerButton.performClick();
+
+        runUiThreadTasksIncludingDelayedTasks();
+        // Then
+        verify(loginActivity).SignIn(email, password);
+    }
 }
+
+
+
+
+
+
