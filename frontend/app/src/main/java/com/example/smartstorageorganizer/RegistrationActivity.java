@@ -79,12 +79,17 @@ public class RegistrationActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateForm()){
-                    String name = Name.getText().toString().trim();
-                    String surname = Surname.getText().toString().trim();
-                    String email = Email.getText().toString().trim();
-                    String phone = "+27"+PhoneNumber.getText().toString().trim();
-                    String password = Password.getText().toString().trim();
+                String name = Name.getText().toString().trim();
+                String surname = Surname.getText().toString().trim();
+                String email = Email.getText().toString().trim();
+                String phone = PhoneNumber.getText().toString().trim();
+                String password = Password.getText().toString().trim();
+                if (validateForm(name, surname, email, phone, password)){
+                    name = Name.getText().toString().trim();
+                    surname = Surname.getText().toString().trim();
+                    email = Email.getText().toString().trim();
+                    phone = "+27"+PhoneNumber.getText().toString().trim();
+                    password = Password.getText().toString().trim();
 
                     buttonLoader.setVisibility(View.VISIBLE);
                     buttonLoader.playAnimation();
@@ -115,12 +120,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
-    private boolean validateForm() {
-        String name = Name.getText().toString().trim();
-        String surname = Surname.getText().toString().trim();
-        String email = Email.getText().toString().trim();
-        String phone = PhoneNumber.getText().toString().trim();
-        String password = Password.getText().toString().trim();
+    public boolean validateForm(String name, String surname, String email, String phone, String password) {
 
         if (TextUtils.isEmpty(name)) {
             Name.setError("First Name is required.");

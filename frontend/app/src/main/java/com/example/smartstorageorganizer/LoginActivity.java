@@ -50,16 +50,16 @@ import org.json.JSONObject;
 
 import okhttp3.MediaType;
 
-import okhttp3.Request;
+
 import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
     TextView signUpLink, loginButtonText;
     ImageView loginButtonIcon;
-    RelativeLayout registerButton;
-    TextInputEditText Email;
-    TextInputEditText Password;
+    public RelativeLayout registerButton;
+    public  TextInputEditText Email;
+    public TextInputEditText Password;
     LottieAnimationView buttonLoader;
 
     String Result;
@@ -73,17 +73,17 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-    isSignedIn().thenAccept(isSignedIn -> {
-                if (isSignedIn) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+        isSignedIn().thenAccept(isSignedIn -> {
+            if (isSignedIn) {
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
 
-                } else {
-                    Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-                    Log.i("AmplifyQuickstart", "User is not signed in.");
-                }
-            });
+            } else {
+                Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
+                Log.i("AmplifyQuickstart", "User is not signed in.");
+            }
+        });
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
@@ -102,29 +102,23 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        registerButton.setOnClickListener(v -> {
 
-                String email = Email.getText().toString().trim();
-                String password = Password.getText().toString().trim();
-                if(validateForm(email, password)){
-                    buttonLoader.setVisibility(View.VISIBLE);
-                    buttonLoader.playAnimation();
-                    loginButtonText.setVisibility(View.GONE);
-                    loginButtonIcon.setVisibility(View.GONE);
+            String email = Email.getText().toString().trim();
+            String password = Password.getText().toString().trim();
+            if(validateForm(email, password)){
+                buttonLoader.setVisibility(View.VISIBLE);
+                buttonLoader.playAnimation();
+                loginButtonText.setVisibility(View.GONE);
+                loginButtonIcon.setVisibility(View.GONE);
 
-                    SignIn(email, password);
-                }
+                SignIn(email, password);
             }
         });
 
-        signUpLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
-                startActivity(intent);
-            }
+        signUpLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            startActivity(intent);
         });
 
         resetPasswordLink.setOnClickListener(v -> {
@@ -189,15 +183,15 @@ public class LoginActivity extends AppCompatActivity {
         this.Result=Result;
     }
 
-    public CompletableFuture SignIn(String email, String Password) {
+    public CompletableFuture<Boolean> SignIn(String email, String Password) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,
                 Password,
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
-                    String nextstep="";
-                    AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
+
+
 
                     Amplify.Auth.fetchAuthSession(
                             session -> {
@@ -261,9 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                 },
                 error -> {
                     Log.e("AuthQuickstart", error.toString());
-                    AuthSignInResult r;
-                           r = new AuthSignInResult(false, null);
-//                    postAddItem("Lenovo", "ideapad 110", "orange", "sdf5d", "0110000", "1", "Herold");
+
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
                         runOnUiThread(() -> {
@@ -276,10 +268,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
                             );
-                             Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
                             intent.putExtra("email", email);
                             future.complete(true);
-                             startActivity(intent);
+                            startActivity(intent);
 
                         });
                     } else {
@@ -301,7 +293,4 @@ public class LoginActivity extends AppCompatActivity {
         return future;
     }
 
-    public int addNum(int a, int b) {
-        return a + b;
-    }
 }

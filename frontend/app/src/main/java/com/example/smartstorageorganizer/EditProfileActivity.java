@@ -97,23 +97,38 @@ public class EditProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        editProfileBackButton.setOnClickListener(v -> finish());
-
-        profileImage.setOnClickListener(v -> OpenGallery());
-
-
-        findViewById(R.id.save_button).setOnClickListener(v -> upDateDetails().thenAccept(updateDetails -> {
-            loadingScreen.setVisibility(View.VISIBLE);
-            loadingScreen.playAnimation();
-            content.setVisibility(View.GONE);
-            if(!file.exists()){
-                Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                Log.i("EditProfileActivity", "Back button clicked");
-                Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                startActivity(intent);
+        editProfileBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
-        }));
+        });
+
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenGallery();
+            }
+        });
+
+
+        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                upDateDetails().thenAccept(updateDetails -> {
+                    loadingScreen.setVisibility(View.VISIBLE);
+                    loadingScreen.playAnimation();
+                    content.setVisibility(View.GONE);
+                    if(!file.exists()){
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("EditProfileActivity", "Back button clicked");
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+        });
     }
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
@@ -161,7 +176,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         loadingScreen.setVisibility(View.GONE);
 //                        loadingScreen.pauseAnimation();
                         content.setVisibility(View.VISIBLE);
-                   });
+                    });
                     future.complete(true);
                 },
                 error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
@@ -192,7 +207,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
                     result -> Log.i("AuthDemo", "Updated name"),
                     error -> Log.e("AuthDemo", "Update failed", error)
-                    );
+            );
             future.complete(true);
         }
         if(!Surname.equals(surname)){
@@ -269,7 +284,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         }
     }
-//    public void GetUrl(String Path)
+    //    public void GetUrl(String Path)
 //    {
 //        Amplify.Storage.getUrl(
 //                StoragePath.fromString(Path),
@@ -296,8 +311,9 @@ public class EditProfileActivity extends AppCompatActivity {
 //                }
 //        );
 //    }
-    public void UploadProfilePicture(File ProfilePicture)
+    public CompletableFuture<Boolean> UploadProfilePicture(File ProfilePicture)
     {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
                 .contentType("image/png") // Adjust based on file type
                 .build();
@@ -308,9 +324,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 StoragePath.fromString(Path),
                 ProfilePicture,
                 options,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
-                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)); future.complete(true);},
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure); future.complete(false);}
         );
+
+        return future;
     }
     public String GetObjectUrl(String key)
     {
@@ -328,27 +346,5 @@ public class EditProfileActivity extends AppCompatActivity {
         return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
     }
 
-    private CompletableFuture<Boolean> isSignedIn(){
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.fetchAuthSession(
-
-                result->{
-                    if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
-                        future.complete(true);
-                    }
-                    else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
-                        future.complete(false);
-                    }},
-                error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
-                    future.completeExceptionally(error);
-                }
-
-        );
-        return future;
-    }
 
 }

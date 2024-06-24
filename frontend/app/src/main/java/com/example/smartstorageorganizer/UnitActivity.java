@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -100,7 +101,9 @@ public class UnitActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             unitName.setText("");
                             unitCap.setText("");
-
+                            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
                         });
                     }
                 });

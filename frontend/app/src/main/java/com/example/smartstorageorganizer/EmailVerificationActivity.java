@@ -21,14 +21,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.core.Amplify;
 
+import java.util.concurrent.CompletableFuture;
+
 public class EmailVerificationActivity extends AppCompatActivity {
-    private EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
-    private CountDownTimer countDownTimer;
-    String phoneNumber;
+    public EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
+    public CountDownTimer countDownTimer;
+    public String phoneNumber;
     Long timeoutSeconds = 60L;
     String verificationCode;
-    RelativeLayout ButtonNext;
-    TextView resendOtpTextView, next_button_text_otp;
+    public RelativeLayout ButtonNext;
+    public TextView resendOtpTextView, next_button_text_otp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,13 +109,16 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
     }
 
-    public  void ConfirmSignUp(String email , String Code)
+    public CompletableFuture<Boolean> ConfirmSignUp(String email , String Code)
     {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.confirmSignUp(
                 email,
                 Code,
                 result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+                    future.complete(true);
                     //change to new page
+
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
@@ -123,11 +128,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     });
 
                 },
-                error ->{ Log.e("AuthQuickstart", error.toString());
+                error ->{future.complete(false);
+                    Log.e("AuthQuickstart", error.toString());
                     //dont change to different page
                     Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show();
                 }
         );
+        return future;
     }
 
     private void setupOTPInputs() {

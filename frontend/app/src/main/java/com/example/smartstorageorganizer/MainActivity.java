@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private CompletableFuture<Boolean> isSignedIn(){
+    public CompletableFuture<Boolean> isSignedIn(){
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
         Amplify.Auth.fetchAuthSession(
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 error -> {
                     Log.e("AmplifyQuickstart", error.toString());
                     future.completeExceptionally(error);
+                    future.complete(false);
                 }
 
         );
