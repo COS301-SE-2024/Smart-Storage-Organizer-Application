@@ -72,7 +72,7 @@ public class ItemInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void showEditItemPopup() {
+    public void showEditItemPopup() {
         // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Inflate the dialog layout
@@ -113,11 +113,11 @@ public class ItemInfoActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-        private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
+    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = "https://m1bavqqu90.execute-api.eu-north-1.amazonaws.com/deployment/ssrest/EditItem";
+        String API_URL = BuildConfig.EditItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()

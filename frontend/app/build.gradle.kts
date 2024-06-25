@@ -1,11 +1,27 @@
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
 }
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.reader(Charsets.UTF_8).use { reader ->
+        localProperties.load(reader)
+    }
+}
 
 android {
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
+    android.buildFeatures.buildConfig =true
 
     defaultConfig {
         applicationId = "com.example.smartstorageorganizer"
@@ -15,6 +31,32 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
+        //buildConfigField( "String", "DefaultImage", defaultpicture)
+        buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "RecommendCategoryEndPoint", "\"${localProperties["RecommendCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "AddCategoryEndPoint", "\"${localProperties["AddCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "EditItemEndPoint", "\"${localProperties["EditItemEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchByEmailEndPoint", "\"${localProperties["FetchByEmailEndPoint"]}\"");
+
+
+        buildConfigField( "String", "AddItemEndPoint", "\"${localProperties["AddItemEndPoint"]}\"");
+        buildConfigField("String", "AddUnitEndPoint", "\"${localProperties["AddUnitEndPoint"]}\"");
+
+
+        buildConfigField( "String", "ChangeQuantityEndPoint", "\"${localProperties["ChangeQuantityEndPoint"]}\"");
+        buildConfigField( "String", "DeleteItemEndPoint", "\"${localProperties["DeleteItemEndPoint"]}\"");
+        buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
+
+        buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"");
     }
 
     buildTypes {
@@ -39,8 +81,27 @@ android {
 
 }
 
-dependencies {
 
+dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.12.2")
+
+    implementation("org.slf4j:slf4j-api:1.7.30")
+
+
+
+    implementation("org.slf4j:slf4j-log4j12:1.7.30")
+    implementation("log4j:log4j:1.2.17")
+
+    // for Cognito
+    implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
+    implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
+
+    implementation ("com.amplifyframework:core:1.28.4")
+    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
+
+
+    testImplementation ("org.robolectric:robolectric:4.6.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -59,6 +120,7 @@ dependencies {
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
     implementation ("com.airbnb.android:lottie:6.4.1")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")
@@ -74,12 +136,12 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.1.3")
 
     // AndroidX Test - Espresso
+
     testImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.amplifyframework:aws-api:2.16.1")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
-    testImplementation("androidx.test.espresso:espresso-core:3.4.0");
 
     // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
@@ -100,6 +162,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 
     implementation("com.google.code.gson:gson:2.8.8") // Use the latest version
+
+    implementation("com.amplifyframework:aws-storage-s3:2.16.1")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 
 

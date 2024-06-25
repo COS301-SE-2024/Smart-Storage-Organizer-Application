@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 import java.io.IOException;
 import java.util.Locale;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.XMLFormatter;
 import okhttp3.OkHttpClient;
@@ -13,7 +14,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
-import java.io.IOException;
+
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -46,45 +47,43 @@ import org.json.JSONException;
 import org.json.JSONObject;
 //import com.amplifyframework.auth.result.authResult;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+
+
 import okhttp3.Response;
 
 
 public class LoginActivity extends AppCompatActivity {
     TextView signUpLink, loginButtonText;
     ImageView loginButtonIcon;
-    RelativeLayout registerButton;
-    TextInputEditText Email;
-    TextInputEditText Password;
+    public RelativeLayout registerButton;
+    public  TextInputEditText Email;
+    public TextInputEditText Password;
     LottieAnimationView buttonLoader;
 
     String Result;
     String  Error;
+
+    TextView resetPasswordLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-    isSignedIn().thenAccept(isSignedIn -> {
-                if (isSignedIn) {
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
 
-                } else {
-                    Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-                    Log.i("AmplifyQuickstart", "User is not signed in.");
-                }
-            });
+        isSignedIn().thenAccept(isSignedIn -> {
+            if (isSignedIn) {
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+
+            } else {
+                Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
+                Log.i("AmplifyQuickstart", "User is not signed in.");
+            }
+        });
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         Email = findViewById(R.id.inputLoginEmail);
@@ -94,34 +93,37 @@ public class LoginActivity extends AppCompatActivity {
         loginButtonText = findViewById(R.id.login_button_text);
 
 
+        resetPasswordLink = findViewById(R.id.resetPasswordLink);
+
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validateForm()){
-                    buttonLoader.setVisibility(View.VISIBLE);
-                    buttonLoader.playAnimation();
-                    loginButtonText.setVisibility(View.GONE);
-                    loginButtonIcon.setVisibility(View.GONE);
+        registerButton.setOnClickListener(v -> {
 
-                    String email = Email.getText().toString().trim();
-                    String password = Password.getText().toString().trim();
-                    SignIn(email, password);
-                }
+            String email = Email.getText().toString().trim();
+            String password = Password.getText().toString().trim();
+            if(validateForm(email, password)){
+                buttonLoader.setVisibility(View.VISIBLE);
+                buttonLoader.playAnimation();
+                loginButtonText.setVisibility(View.GONE);
+                loginButtonIcon.setVisibility(View.GONE);
+
+                SignIn(email, password);
             }
         });
 
-        signUpLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
-                startActivity(intent);
-            }
+        signUpLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            startActivity(intent);
+        });
+
+        resetPasswordLink.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -148,9 +150,7 @@ public class LoginActivity extends AppCompatActivity {
         return future;
     }
 
-    private boolean validateForm() {
-        String email = Email.getText().toString().trim();
-        String password = Password.getText().toString().trim();
+    public boolean validateForm(String email, String password){
 
         if (TextUtils.isEmpty(email)) {
             Email.setError("Employee ID is required.");
@@ -183,13 +183,16 @@ public class LoginActivity extends AppCompatActivity {
         this.Result=Result;
     }
 
-    public void SignIn(String email, String Password) {
+    public CompletableFuture<Boolean> SignIn(String email, String Password) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,
                 Password,
                 result -> {
                     Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
-                    String nextstep="";
+
+
+
                     Amplify.Auth.fetchAuthSession(
                             session -> {
                                 Amplify.Auth.fetchUserAttributes(
@@ -240,17 +243,19 @@ public class LoginActivity extends AppCompatActivity {
                             },
                             error -> Log.e("AuthQuickstart", error.toString())
                     );
-                  //  AuthSignInResult r= new AuthSignInResult(true, result.getNextStep());
-                    //change to new page
+
                     runOnUiThread(() -> {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
+
                         finish();
+                        future.complete(true);
                     });
                 },
                 error -> {
-//                    postAddItem("Lenovo", "ideapad 110", "orange", "sdf5d", "0110000", "1", "Herold");
+                    Log.e("AuthQuickstart", error.toString());
+
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
                         runOnUiThread(() -> {
@@ -263,9 +268,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
                             );
-                             Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
                             intent.putExtra("email", email);
-                             startActivity(intent);
+                            future.complete(true);
+                            startActivity(intent);
+
                         });
                     } else {
                         runOnUiThread(() -> {
@@ -275,14 +282,15 @@ public class LoginActivity extends AppCompatActivity {
                             loginButtonIcon.setVisibility(View.VISIBLE);
 
                             Toast.makeText(this, "Wrong Credentials.", Toast.LENGTH_LONG).show();
+                            future.complete(true);
+
                         });
                     }
                     Log.e("AuthQuickstart", error.toString());
                 }
         );
 
-
+        return future;
     }
+
 }
-
-

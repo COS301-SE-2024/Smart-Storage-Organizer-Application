@@ -1,8 +1,17 @@
 package com.example.smartstorageorganizer;
 
+import static android.app.PendingIntent.getActivity;
+
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +28,19 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.storage.StoragePath;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
+//import com.amplifyframework.storage.s3.options.S3UploadFileOptions;
+import com.amplifyframework.storage.options.StorageUploadFileOptions;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,8 +64,9 @@ public class EditProfileActivity extends AppCompatActivity {
     String currentSurname = "";
     String currentPhone = "";
     String currentAddress = "";
+    String currentProfileUrl = "";
     String customAttribute = "";
-    boolean flag = false;
+    File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,44 +116,20 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 upDateDetails().thenAccept(updateDetails -> {
-                    Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                    Log.i("EditProfileActivity", "Back button clicked");
-                    Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                    startActivity(intent);
-                    finish();
+                    loadingScreen.setVisibility(View.VISIBLE);
+                    loadingScreen.playAnimation();
+                    content.setVisibility(View.GONE);
+                    if(!file.exists()){
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("EditProfileActivity", "Back button clicked");
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 });
-//                getDetails().thenAccept(getDetails -> {
-//                    Log.i("AuthDemo", "User is signed in");
-//                    Log.i("AuthEmail", currentEmail);
-//                    name = findViewById(R.id.name);
-//                    surname = findViewById(R.id.surname);
-//                    email = findViewById(R.id.email);
-//                    address = findViewById(R.id.address);
-//                    phone = findViewById(R.id.phone);
-//                    cpp = findViewById(R.id.ccp);
-                    //  cpp.setCountryForPhoneCode(1); // This will set the country code to USA (+1)
-
-                    // cpp.setCountryForPhoneCode(new Integer(currentPhone.substring(0, currentPhone.length()-9)));
-
-//                    email.setText(currentEmail);
-//                    name.setText(currentName);
-//                    surname.setText(currentSurname);
-//                    phone.setText(currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
-//                    Log.i("phoneSet", currentPhone.substring(currentPhone.length() - 9, currentPhone.length()));
-//                    address.setText(currentAddress);
-//                    String country = currentPhone.substring(0, currentPhone.length() - 9);
-//                    Integer countryiNT = new Integer(country);
-//
-//                    cpp.setCountryForPhoneCode(Integer.parseInt(country));
-//                       phone.setText(currentPhone);
-//                });
-
-//                finish();
             }
         });
-//
     }
-
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
@@ -157,6 +153,9 @@ public class EditProfileActivity extends AppCompatActivity {
                             case "address":
                                 currentAddress = attribute.getValue();
                                 break;
+                            case "picture":
+                                currentProfileUrl = attribute.getValue();
+                                break;
                             case "custom:myCustomAttribute":
                                 customAttribute = attribute.getValue();
                                 break;
@@ -169,14 +168,15 @@ public class EditProfileActivity extends AppCompatActivity {
                         name.setText(currentName);
                         surname.setText(currentSurname);
                         phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
 
                         address.setText(currentAddress);
                         String country=currentPhone.substring(1, currentPhone.length()-9);
                         cpp.setCountryForPhoneCode(Integer.parseInt(country));
                         loadingScreen.setVisibility(View.GONE);
-                        loadingScreen.pauseAnimation();
+//                        loadingScreen.pauseAnimation();
                         content.setVisibility(View.VISIBLE);
-                   });
+                    });
                     future.complete(true);
                 },
                 error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
@@ -207,7 +207,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
                     result -> Log.i("AuthDemo", "Updated name"),
                     error -> Log.e("AuthDemo", "Update failed", error)
-                    );
+            );
             future.complete(true);
         }
         if(!Surname.equals(surname)){
@@ -226,15 +226,18 @@ public class EditProfileActivity extends AppCompatActivity {
             );
             future.complete(true);
         }
-        if(!Phone.equals(phone)){
-            Amplify.Auth.updateUserAttribute(
-                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
-                    result -> Log.i("AuthDemo", "Updated phone"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
-
-            );
-            future.complete(true);
+        if(true){
+            UploadProfilePicture(file);
         }
+//        if(!Phone.equals(phone)){
+//            Amplify.Auth.updateUserAttribute(
+//                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
+//                    result -> Log.i("AuthDemo", "Updated phone"),
+//                    error -> Log.e("AuthDemo", "Update failed", error)
+//
+//            );
+//            future.complete(true);
+//        }
         return future;
     }
 
@@ -245,38 +248,103 @@ public class EditProfileActivity extends AppCompatActivity {
 
             imagesEncodedList = new ArrayList<>();
 
+//            Toast.makeText(EditProfileActivity.this, "Image URI: "+Objects.requireNonNull(data.getData()).toString(), Toast.LENGTH_LONG).show();
+
             if (data.getData() != null) {
                 ImageUri = data.getData();
                 profileImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             else if (data.getClipData() != null) {
                 ImageUri = data.getClipData().getItemAt(0).getUri();
+                profileImage.setImageURI(ImageUri);
+                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+
+                // Create a file to save the image
+                file = new File(getCacheDir(), "image.jpeg");
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
     }
-    private CompletableFuture<Boolean> isSignedIn(){
+    //    public void GetUrl(String Path)
+//    {
+//        Amplify.Storage.getUrl(
+//                StoragePath.fromString(Path),
+//                result -> {
+//                    String url = String.valueOf(result.getUrl());
+//                    Amplify.Auth.updateUserAttribute(
+//                            new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+//                            resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+//                            error -> Log.e("AuthDemo", "Update failed", error)
+//                    );
+//                    Log.i("MyAmplifyApp", "Successfully generated: " + url);
+//                    runOnUiThread(() -> {
+//                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    });
+//                },
+//                error -> {
+//                    Log.e("MyAmplifyApp", "URL generation failure", error);
+//                    loadingScreen.setVisibility(View.GONE);
+////                        loadingScreen.pauseAnimation();
+//                    content.setVisibility(View.VISIBLE);
+//                }
+//        );
+//    }
+    public CompletableFuture<Boolean> UploadProfilePicture(File ProfilePicture)
+    {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.fetchAuthSession(
-
-                result->{
-                    if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
-                        future.complete(true);
-                    }
-                    else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
-                        future.complete(false);
-                    }},
-                error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
-                    future.completeExceptionally(error);
-                }
-
+        StorageUploadFileOptions options = StorageUploadFileOptions.builder()
+                .contentType("image/png") // Adjust based on file type
+                .build();
+        long Time = System.nanoTime();
+        String key= String.valueOf(Time);
+        String Path="public/ProfilePictures/"+key+".png";
+        Amplify.Storage.uploadFile(
+                StoragePath.fromString(Path),
+                ProfilePicture,
+                options,
+                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)); future.complete(true);},
+                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure); future.complete(false);}
         );
+
         return future;
     }
+    public String GetObjectUrl(String key)
+    {
+        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        Amplify.Auth.updateUserAttribute(
+                new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+                resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+                error -> Log.e("AuthDemo", "Update failed", error)
+        );
+        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+        startActivity(intent);
+        finish();
+
+        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+    }
+
 
 }

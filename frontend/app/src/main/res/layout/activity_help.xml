@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FAQ"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp" />
+
+        <!-- Example FAQ item -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I reset my password?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/help_reset_password_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To reset your password, you can click on the 'Forgot Password' button which will take you to the forgot password page which will let you to reset your password by entering your email address then you will receive an email to reset you password." />
+        <!-- Add more FAQs here -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How secure is my data in the smart storage?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: Your data is highly secure with end-to-end encryption, ensuring that only you can access your files. Additionally, our servers are protected by advanced security measures to safeguard your information." />
+        <!-- Add more FAQs here -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add a Category to the smart storage?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/help_add_category_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu. You will then click on 'Add Category', which will give you a page where you select Parent Category or Sub Category. Then you can add your own Sub Category and click on 'Finish'." />
+
+        <!-- Add more FAQs here -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I contact customer support?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: If you need assistance, you can contact our customer support team by going to the 'Help' section and tapping 'Contact Support'. You can also reach us via email or chat support available on our website." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I edit my profile?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/help_edit_profile_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture."/>
+    </LinearLayout>
+</ScrollView>

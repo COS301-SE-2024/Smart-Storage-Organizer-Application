@@ -1,0 +1,78 @@
+{
+    "UserAgent": "aws-amplify-cli/2.0",
+    "Version": "1.0",
+    "auth": {
+        "plugins": {
+            "awsCognitoAuthPlugin": {
+                "UserAgent": "aws-amplify-cli/0.1.0",
+                "Version": "0.1.0",
+                "IdentityManager": {
+                    "Default": {}
+                },
+                "CredentialsProvider": {
+                    "CognitoIdentity": {
+                        "Default": {
+                            "PoolId": "eu-north-1:0ee2e3bd-8338-41e6-a530-3170cf75077e",
+                            "Region": "eu-north-1"
+                        }
+                    }
+                },
+                "CognitoUserPool": {
+                    "Default": {
+                        "PoolId": "eu-north-1_J4pc2EShD",
+                        "AppClientId": "o4lcj7np88j0ome8av38b9o7n",
+                        "Region": "eu-north-1"
+                    }
+                },
+                "Auth": {
+                    "Default": {
+                        "authenticationFlowType": "USER_SRP_AUTH",
+                        "mfaConfiguration": "OFF",
+                        "mfaTypes": [
+                            "SMS"
+                        ],
+                        "passwordProtectionSettings": {
+                            "passwordPolicyMinLength": 8,
+                            "passwordPolicyCharacters": [
+                                "REQUIRES_LOWERCASE",
+                                "REQUIRES_NUMBERS",
+                                "REQUIRES_SYMBOLS",
+                                "REQUIRES_UPPERCASE"
+                            ]
+                        },
+                        "signupAttributes": [
+                            "EMAIL",
+                            "NAME",
+                            "FAMILY_NAME",
+                            "ADDRESS",
+                            "PHONE_NUMBER",
+                            "PICTURE"
+                        ],
+                        "socialProviders": [],
+                        "usernameAttributes": [
+                            "EMAIL"
+                        ],
+                        "verificationMechanisms": [
+                            "EMAIL"
+                        ]
+                    }
+                },
+                "S3TransferUtility": {
+                    "Default": {
+                        "Bucket": "smart-storage-f0629f0176059-staging",
+                        "Region": "eu-north-1"
+                    }
+                }
+            }
+        }
+    },
+    "storage": {
+        "plugins": {
+            "awsS3StoragePlugin": {
+                "bucket": "smart-storage-f0629f0176059-staging",
+                "region": "eu-north-1",
+                "defaultAccessLevel": "guest"
+            }
+        }
+    }
+}

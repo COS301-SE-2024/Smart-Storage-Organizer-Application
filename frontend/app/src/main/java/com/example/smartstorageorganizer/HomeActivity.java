@@ -14,6 +14,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.bumptech.glide.Glide;
+import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,13 +30,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class HomeActivity extends AppCompatActivity {
-    private TextView fullName;
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityHomeBinding binding;
-    private String currentName, currentSurname;
+    public TextView fullName;
+    public ShapeableImageView profileImage;
+    public AppBarConfiguration mAppBarConfiguration;
+    public ActivityHomeBinding binding;
+    public String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +76,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View header = navigationView.getHeaderView(0);
         fullName = (TextView) header.findViewById(R.id.fullName);
+        profileImage = header.findViewById(R.id.profileImage);
 //        fullName.setText("Ezekiel Makau");
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private CompletableFuture<Boolean> getDetails() {
+    public CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
         Amplify.Auth.fetchUserAttributes(
@@ -112,9 +132,9 @@ public class HomeActivity extends AppCompatActivity {
                             case "family_name":
                                 currentSurname = attribute.getValue();
                                 break;
-//                            case "phone_number":
-//                                currentPhone = attribute.getValue();
-//                                break;
+                            case "picture":
+                                currentPicture = attribute.getValue();
+                                break;
 //                            case "address":
 //                                currentAddress = attribute.getValue();
 //                                break;
@@ -129,24 +149,27 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
+                        Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         String username = currentName+" "+currentSurname;
                         fullName.setText(username);
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
 
         );
         return future;
     }
 
-    public void SignOut()
+    public CompletableFuture<Boolean> SignOut()
     {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
         Amplify.Auth.signOut(signOutResult -> {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
                 //move to a different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -157,6 +180,7 @@ public class HomeActivity extends AppCompatActivity {
                 AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
                         (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
+                future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
@@ -169,12 +193,35 @@ public class HomeActivity extends AppCompatActivity {
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
+                future.complete(false);
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
 
                 });
             }
         });
+        return future;
+    }
+
+    public void DeleteCategory(int id, String email)
+    {
+        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.DeleteCategoryEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
 
     }
+
+
+
+
+
 }
