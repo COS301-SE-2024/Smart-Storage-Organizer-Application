@@ -25,10 +25,6 @@
             android:exported="false"
             android:theme="@style/Theme.SmartStorageOrganizer" />
         <activity
-            android:name=".ResetPasswordVerification"
-            android:exported="false"
-            android:theme="@style/Theme.SmartStorageOrganizer" />
-        <activity
             android:name=".ManualActivity"
             android:exported="false" />
         <activity
