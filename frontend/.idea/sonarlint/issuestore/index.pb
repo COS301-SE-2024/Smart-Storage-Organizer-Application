@@ -65,3 +65,15 @@ I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeFragment.java,7\1\712a8214a2895769852d79024d74dabbe333e498
+‚
+Rapp/src/test/java/com/example/smartstorageorganizer/ResetPasswordActivityTest.java,a\0\a0444a3da0d0172d8d701e1ac9fc423be43ec6c5
+~
+Napp/src/main/java/com/example/smartstorageorganizer/ResetPasswordActivity.java,8\5\8551f96e4fed57df72adfbee1ac288d00ec2ced8
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.java,4\1\4171c039aa7e2fe87b69241020ae05d60652eecb
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/ResetPasswordVerification.java,8\6\86757400e8e16ac02f1dbdacf1397807f1197bc0
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
