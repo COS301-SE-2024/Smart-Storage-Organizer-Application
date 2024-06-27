@@ -77,3 +77,11 @@ Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.j
 Rapp/src/main/java/com/example/smartstorageorganizer/ResetPasswordVerification.java,8\6\86757400e8e16ac02f1dbdacf1397807f1197bc0
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+v
+Fapp/src/main/java/com/example/smartstorageorganizer/FirstFragment.java,4\9\49457c2697a8bbbc69782bba427aeb1e430edf1b
+w
+Gapp/src/main/java/com/example/smartstorageorganizer/SecondFragment.java,2\9\29fc2bf07e6ede621db638307b460df74bc5f19d
+Š
+Zapp/src/main/java/com/example/smartstorageorganizer/ResetPasswordVerificationActivity.java,d\b\db68e3b902c80344a0493aa957eb8cc2aa190075
+x
+Happ/src/main/java/com/example/smartstorageorganizer/Second2Fragment.java,c\6\c60e4524e157fd5ac73e16a9c989a689022523d8
