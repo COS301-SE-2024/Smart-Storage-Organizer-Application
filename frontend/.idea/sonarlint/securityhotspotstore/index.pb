@@ -65,3 +65,13 @@ I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+t
+Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0607d6b6e614428b9a1fa3bef3bf2a7e11fc
+{
+Kapp/src/main/java/com/example/smartstorageorganizer/model/CategoryList.java,b\c\bca34fc00d22e17ca23e309763d35d04e53fb804
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeFragment.java,7\1\712a8214a2895769852d79024d74dabbe333e498
+Ü
+Vapp/src/main/java/com/example/smartstorageorganizer/utils/FetchCategoriesCallback.java,7\b\7b300f324d32897e332ca9131451b526774af960
+Å
+Qapp/src/main/java/com/example/smartstorageorganizer/utils/OperationCallbacks.java,2\1\2130f6ee39314cf842c382bc9c49587ca8c07502
