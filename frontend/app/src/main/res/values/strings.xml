@@ -63,4 +63,12 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="email_verification">Email Verification</string>
+    <string name="enter_the_otp_sent_to">Enter the OTP sent to</string>
+    <string name="enter_6_digit_code">Enter 6-digit code</string>
+    <string name="resend_otp_in_60_sec">Resend OTP in 60 sec</string>
+    <string name="reset">Reset</string>
+    <string name="new_password">New Password</string>
+    <string name="password">Password</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -1,14 +1,14 @@
 package com.example.smartstorageorganizer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
-import android.os.CountDownTimer;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +32,7 @@ public class ResetPasswordVerificationActivity extends AppCompatActivity {
     public RelativeLayout ButtonNext;
     public TextView resendOtpTextView, next_button_text_otp;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,12 +227,14 @@ public class ResetPasswordVerificationActivity extends AppCompatActivity {
 
     private void startCountdown() {
         countDownTimer = new CountDownTimer(60000, 1000) {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update the text on each tick
                 resendOtpTextView.setText("Resend OTP in " + millisUntilFinished / 1000 + " sec");
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onFinish() {
                 // Enable the TextView and set its text when the countdown finishes
