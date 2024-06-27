@@ -1,52 +1,49 @@
 package com.example.smartstorageorganizer;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.smartstorageorganizer.databinding.ActivityNewPasswordBinding;
+import com.amplifyframework.core.Amplify;
 
 public class NewPasswordActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityNewPasswordBinding binding;
+    private EditText newPasswordField;
 
+    private Button resetPasswordButton;
+    private String email;
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_password);
 
-        binding = ActivityNewPasswordBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        newPasswordField = findViewById(R.id.newPassword);
+        resetPasswordButton = findViewById(R.id.buttonConfirm);
 
-        setSupportActionBar(binding.toolbar);
+        // Get the email from the intent
+        email = getIntent().getStringExtra("email");
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_new_password);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        resetPasswordButton.setOnClickListener(v -> {
+            String newPassword = newPasswordField.getText().toString();
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+            if (newPassword.isEmpty()) {
+                Toast.makeText(NewPasswordActivity.this, "Please fill in the password", Toast.LENGTH_LONG).show();
             }
+//            else {
+////                Need to Amplify.resetPass to get email and password 'newpassword'
+//                resetPassword(newPassword);
+//            }
         });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_new_password);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+//  Reset Password function to be implemented
 }
