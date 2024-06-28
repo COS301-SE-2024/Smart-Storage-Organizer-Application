@@ -29,10 +29,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class ProfileManagementActivity extends AppCompatActivity {
 
-    private TextView email, username;
+    private TextView email;
+    private TextView username;
     ConstraintLayout content;
     LottieAnimationView loadingScreen;
-    private String currentEmail, currentName, currentSurname, currentProfileImage;
+    private String currentEmail;
+    private String currentName;
+    private String currentSurname;
+    private String currentProfileImage;
     ImageView profileBackButton;
     ShapeableImageView profilePicture;
     @Override
@@ -69,14 +73,13 @@ public class ProfileManagementActivity extends AppCompatActivity {
             finish();
         });
 
-        logoutButton.setOnClickListener(v -> SignOut());
+        logoutButton.setOnClickListener(v -> signOut());
 
         profileBackButton.setOnClickListener(v -> finish());
     }
 
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
-       // UploadProfilePicture("app\\src\\main\\java\\com\\example\\com.example.smartstorageorganizer\\left.jpg");
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
 
@@ -94,6 +97,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
                             case "picture":
                                 currentProfileImage = attribute.getValue();
                                 break;
+                            default:
                         }
                     }
                     Log.i("progress","User attributes fetched successfully");
@@ -115,7 +119,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
         return future;
     }
 
-    public void SignOut()
+    public void signOut()
     {
 
         Amplify.Auth.signOut(signOutResult -> {
@@ -130,8 +134,6 @@ public class ProfileManagementActivity extends AppCompatActivity {
                 });
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
                 // Sign Out completed with some errors. User is signed out of the device.
-                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
-                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
                 runOnUiThread(() -> {
                     Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
@@ -145,27 +147,7 @@ public class ProfileManagementActivity extends AppCompatActivity {
                 // Sign Out failed with an exception, leaving the user signed in.
                 Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
                 //dont move to different page
-                runOnUiThread(() -> {
-//                    requireActivity().Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
-
-                });
             }
         });
-
     }
-
-    public void UploadProfilePicture(String ProfilePicturePath)
-    {
-        File ProfilePicture= new File(ProfilePicturePath);
-        Amplify.Storage.uploadFile(
-                StoragePath.fromString("public/ProfilePictures"),
-                ProfilePicture,
-                StorageUploadFileOptions.defaultInstance(),
-                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
-                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
-                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
-        );
-    }
-
-
 }

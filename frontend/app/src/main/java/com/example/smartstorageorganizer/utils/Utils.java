@@ -28,6 +28,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Utils {
+    private static String type = "application/json; charset=utf-8";
+    private static String message = "Request Method";
 
     private Utils() {}
 
@@ -35,9 +37,8 @@ public class Utils {
         String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
 
         List<CategoryModel> categoryModelList = new ArrayList<>();
-        String message = "Request Method";
 
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        MediaType mediaType = MediaType.get(type);
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.FetchCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
@@ -97,7 +98,8 @@ public class Utils {
     public static void addCategory(int parentCategory, String categoryName, String email, String url, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\", \"categoryname\":\"" + categoryName + "\", \"icon\": \"" + url + "\" }";
 
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        String message = "Add Category";
+        MediaType mediaType = MediaType.get(type);
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.AddCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
@@ -112,7 +114,7 @@ public class Utils {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 activity.runOnUiThread(() -> {
-                    Log.e("AddCategory", "POST request failed", e);
+                    Log.e(message, "POST request failed", e);
                     callback.onFailure(e.getMessage());
                 });
             }
@@ -122,13 +124,13 @@ public class Utils {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
                     activity.runOnUiThread(() -> {
-                        Log.i("AddCategory", "POST request succeeded: " + responseData);
+                        Log.i(message, "POST request succeeded: " + responseData);
                         callback.onSuccess(true);
                     });
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e("AddCategory", "POST request failed: " + response.code());
-                        callback.onFailure("Response code: " + response.code());
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
                     });
                 }
             }
@@ -140,7 +142,7 @@ public class Utils {
         String message = "View Response Results";
 
         List<ItemModel> itemModelList = new ArrayList<>();
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        MediaType mediaType = MediaType.get(type);
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.CategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
@@ -199,8 +201,8 @@ public class Utils {
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e("Request Method", "GET request failed: " + response);
-                        callback.onFailure("Response code: " + response.code());
+                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code" + response.code());
                     });
                 }
             }
@@ -212,7 +214,7 @@ public class Utils {
         String message = "View Request Method";
 
         List<ItemModel> itemModelList = new ArrayList<>();
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        MediaType mediaType = MediaType.get(type);
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.SubCategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
@@ -271,8 +273,8 @@ public class Utils {
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e("Request Method", "GET request failed: " + response);
-                        callback.onFailure("Response code: " + response.code());
+                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
                     });
                 }
             }
@@ -293,7 +295,7 @@ public class Utils {
         OkHttpClient client = new OkHttpClient();
 
 
-        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get(type));
 
         Request request = new Request.Builder()
                 .url(BuildConfig.AddUnitEndPoint)
@@ -329,7 +331,7 @@ public class Utils {
                     }
                     catch (Exception e){
                         future.completeExceptionally(e);
-                        Log.i("Error","Error in parsing json");
+                        Log.i("Error: ","Error in parsing json");
                     }
 
                 }

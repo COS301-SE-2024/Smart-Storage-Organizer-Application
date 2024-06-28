@@ -26,8 +26,10 @@ public class ManualActivity extends AppCompatActivity {
     private PdfRenderer.Page currentPage;
     private ParcelFileDescriptor parcelFileDescriptor;
     private int currentPageIndex = 0;
-    private Button prevButton, nextButton, downloadButton;
+    private Button prevButton;
+    private Button nextButton;
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final String USER_MANUAL = "user_manual.pdf";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +39,13 @@ public class ManualActivity extends AppCompatActivity {
         pdfImageView = findViewById(R.id.pdfImageView);
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
-        downloadButton = findViewById(R.id.downloadButton);
+        Button downloadButton = findViewById(R.id.downloadButton);
 
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPage(currentPageIndex - 1);
-            }
-        });
+        prevButton.setOnClickListener(v -> showPage(currentPageIndex - 1));
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPage(currentPageIndex + 1);
-            }
-        });
+        nextButton.setOnClickListener(v -> showPage(currentPageIndex + 1));
 
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkPermissionsAndDownload();
-            }
-        });
+        downloadButton.setOnClickListener(v -> checkPermissionsAndDownload());
 
         try {
             openRenderer();
@@ -70,8 +57,8 @@ public class ManualActivity extends AppCompatActivity {
 
     private void openRenderer() throws IOException {
         // Copy the PDF file from assets to a file in the app's cache directory
-        File file = new File(getCacheDir(), "user_manual.pdf");
-        try (InputStream asset = getAssets().open("user_manual.pdf");
+        File file = new File(getCacheDir(), USER_MANUAL);
+        try (InputStream asset = getAssets().open(USER_MANUAL);
              FileOutputStream output = new FileOutputStream(file)) {
             byte[] buffer = new byte[1024];
             int size;
@@ -137,11 +124,10 @@ public class ManualActivity extends AppCompatActivity {
     }
 
     private void downloadPdf() {
-        File file = new File(getCacheDir(), "user_manual.pdf");
         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File destinationFile = new File(downloadDir, "user_manual.pdf");
+        File destinationFile = new File(downloadDir, USER_MANUAL);
 
-        try (InputStream inputStream = getAssets().open("user_manual.pdf");
+        try (InputStream inputStream = getAssets().open(USER_MANUAL);
              FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             byte[] buffer = new byte[1024];
             int length;

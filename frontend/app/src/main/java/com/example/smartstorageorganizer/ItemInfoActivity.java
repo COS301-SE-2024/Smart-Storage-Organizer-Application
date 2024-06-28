@@ -29,9 +29,9 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 
 public class ItemInfoActivity extends AppCompatActivity {
-    private TextView itemName, itemDescription, itemLocation;
-    private AppCompatButton editItemButton;
-    private ImageView backButton;
+    private TextView itemName;
+    private TextView itemDescription;
+    private TextView itemLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,8 @@ public class ItemInfoActivity extends AppCompatActivity {
         itemName = findViewById(R.id.item_name);
         itemDescription = findViewById(R.id.item_description);
         itemLocation = findViewById(R.id.item_location);
-        editItemButton = findViewById(R.id.edit_item_button);
-        backButton = findViewById(R.id.backButton);
+        AppCompatButton editItemButton = findViewById(R.id.edit_item_button);
+        ImageView backButton = findViewById(R.id.backButton);
 
         itemName.setText(getIntent().getStringExtra("item_name"));
         itemDescription.setText(getIntent().getStringExtra("item_description"));
@@ -55,20 +55,12 @@ public class ItemInfoActivity extends AppCompatActivity {
             return insets;
         });
 
-        editItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditItemPopup();
-            }
-        });
+        editItemButton.setOnClickListener(v -> showEditItemPopup());
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -81,47 +73,46 @@ public class ItemInfoActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         // Get the EditTexts and Button from the dialog layout
-        EditText itemName = dialogView.findViewById(R.id.item_name);
-        EditText itemDescription = dialogView.findViewById(R.id.item_description);
-        EditText itemLocation = dialogView.findViewById(R.id.item_location);
+        EditText itemNameText = dialogView.findViewById(R.id.item_name);
+        EditText itemDescriptionText = dialogView.findViewById(R.id.item_description);
+        EditText itemLocationText = dialogView.findViewById(R.id.item_location);
         EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
         Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
 
-        itemName.setText(getIntent().getStringExtra("item_name"));
-        itemDescription.setText(getIntent().getStringExtra("item_description"));
-        itemLocation.setText(getIntent().getStringExtra("location"));
+        itemNameText.setText(getIntent().getStringExtra("item_name"));
+        itemDescriptionText.setText(getIntent().getStringExtra("item_description"));
+        itemLocationText.setText(getIntent().getStringExtra("location"));
         itemColorCode.setText(getIntent().getStringExtra("color_code"));
 
         // Create the AlertDialog
         AlertDialog alertDialog = builder.create();
 
         // Set the button click listener
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                String location = itemLocation.getText().toString().trim();
-                String colorCode = itemColorCode.getText().toString().trim();
+        buttonNext.setOnClickListener(v -> {
+            String name = itemNameText.getText().toString().trim();
+            String description = itemDescriptionText.getText().toString().trim();
+            String location = itemLocationText.getText().toString().trim();
+            String colorCode = itemColorCode.getText().toString().trim();
 
-                PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
-                alertDialog.dismiss();
-            }
+            postEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
+            alertDialog.dismiss();
         });
 
         // Show the AlertDialog
         alertDialog.show();
     }
 
-    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int itemId ) {
+        String json = "{\"item_name\":\""+itemname+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+itemId+"\" }";
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.EditItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
+        String apiUrl = BuildConfig.EditItemEndPoint;
+        RequestBody body = RequestBody.create(json, mediaType);
+
+        String message = "Request Method";
 
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(apiUrl)
                 .post(body)
                 .build();
 
@@ -129,7 +120,7 @@ public class ItemInfoActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                runOnUiThread(() -> Log.e(message, "POST request failed", e));
             }
 
             @Override
@@ -137,13 +128,13 @@ public class ItemInfoActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
                     runOnUiThread(() -> {
-                        runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-                        itemName.setText(item_name);
+                        runOnUiThread(() -> Log.i(message, "POST request succeeded: " + responseData));
+                        itemName.setText(itemname);
                         itemDescription.setText(description);
                         itemLocation.setText(location);
                     });
                 } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                    runOnUiThread(() -> Log.e(message, "POST request failed: " + response.code()));
                 }
             }
         });

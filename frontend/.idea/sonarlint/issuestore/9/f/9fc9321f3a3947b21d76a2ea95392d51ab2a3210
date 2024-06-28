@@ -1,13 +1,7 @@
 
-
-java:S4144ı"bUpdate this method so that its implementation is not identical to "handleSingleImage" on line 247.(çÚöP8¹¶ñó…2
-¤
-java:S1186Ú"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(öÙ½¹ûÿÿÿÿ8Û¶ñó…2
-a
-java:S1874ä">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2
-m
-java:S1874è"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2
-N
-java:S10680"1Remove this unused "CATEGORY_NAME" private field.(Ì¤«ÿ8·ñó…2
-L
-java:S10681"/Remove this unused "CATEGORY_ID" private field.(­ïæâ8·ñó…2
+Ÿ
+java:S14506"WRemove the "imageUri" field and declare it as a local variable in the relevant methods.(Ø°´şÿÿÿÿ8†Ğ¢ô…2J$174adb94-e2da-41d9-b252-187d8bca9795
+‡
+java:S1874ã">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2J$83fbc0df-e541-49a9-9ca0-0841eef83fed
+“
+java:S1874ç"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2J$04ede2a8-6d94-4252-8874-8ca9083faf32

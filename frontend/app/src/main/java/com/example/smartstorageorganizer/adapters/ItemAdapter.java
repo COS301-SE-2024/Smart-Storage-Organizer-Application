@@ -1,4 +1,4 @@
-package com.example.smartstorageorganizer.Adapters;
+package com.example.smartstorageorganizer.adapters;
 
 
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,19 +17,18 @@ import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
-import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
-    private Context context;
-    private List<ItemModel> ItemModelList;
+    private final Context context;
+    private final List<ItemModel> itemModelList;
 
-    public ItemAdapter(Context context, List<ItemModel> ItemModelList) {
+    public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
-        this.ItemModelList = ItemModelList;
+        this.itemModelList = itemModelList;
     }
 
     @NonNull
@@ -42,24 +40,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
-//        Glide.with(context).load(ItemModelList.get(position).getItem_image()).into(holder.image);
-        holder.name.setText(ItemModelList.get(position).getItemName());
-        holder.description.setText(ItemModelList.get(position).getDescription());
-//        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.name.setText(itemModelList.get(position).getItemName());
+        holder.description.setText(itemModelList.get(position).getDescription());
 
-        if(!Objects.equals(ItemModelList.get(position).getItemImage(), "empty")){
-            Glide.with(context).load(ItemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
+        if(!Objects.equals(itemModelList.get(position).getItemImage(), "empty")){
+            Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
-                intent.putExtra("item_name", ItemModelList.get(holder.getAdapterPosition()).getItemName());
-                intent.putExtra("item_description", ItemModelList.get(holder.getAdapterPosition()).getDescription());
-                intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
-                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourCoding());
-                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItemId());
+                intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
+                intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
+                intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
+                intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
+                intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
 
                 context.startActivity(intent);
             }
@@ -68,15 +64,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return ItemModelList.size();
+        return itemModelList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ShapeableImageView image;
+        ImageView image;
         TextView name;
         TextView description;
         ImageView itemImage;
-        Button more_info_button;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,8 +79,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);
-
-//            more_info_button = itemView.findViewById(R.id.more_info_button);
         }
     }
 

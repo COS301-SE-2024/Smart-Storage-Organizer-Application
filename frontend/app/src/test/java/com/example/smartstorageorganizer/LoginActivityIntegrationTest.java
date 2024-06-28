@@ -54,7 +54,7 @@ public class LoginActivityIntegrationTest {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.complete(true); // Simulate successful sign-in
             return future;
-        }).when(spyLoginActivity).SignIn(email, password);
+        }).when(spyLoginActivity).signIn(email, password);
 
         // Create a CountDownLatch initialized with a count of 1
         CountDownLatch latch = new CountDownLatch(1);

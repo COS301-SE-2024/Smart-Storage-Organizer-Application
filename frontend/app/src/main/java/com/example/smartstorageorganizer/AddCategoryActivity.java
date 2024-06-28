@@ -45,8 +45,6 @@ import java.util.Objects;
 public class AddCategoryActivity extends AppCompatActivity {
     private static final int GALLERY_CODE = 1;
     private static final String EMAIL_KEY = "email";
-    private static final String CATEGORY_NAME = "category";
-    private static final String CATEGORY_ID = "category_id";
     private static final String IMAGE_TYPE = "image/*";
     private static final String IMAGE_CACHE_NAME = "image.jpeg";
     private static final String IMAGE_CONTENT_TYPE = "image/png";
@@ -216,6 +214,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
+                //Handle when nothing is not selected.
             }
         });
     }
@@ -240,17 +239,11 @@ public class AddCategoryActivity extends AppCompatActivity {
         if (data.getData() != null) {
             handleSingleImage(data.getData());
         } else if (data.getClipData() != null) {
-            handleMultipleImages(data.getClipData().getItemAt(0).getUri());
+            handleSingleImage(data.getClipData().getItemAt(0).getUri());
         }
     }
 
     private void handleSingleImage(Uri uri) {
-        imageUri = uri;
-        parentCategoryImage.setImageURI(imageUri);
-        saveImageToFile(((BitmapDrawable) parentCategoryImage.getDrawable()).getBitmap());
-    }
-
-    private void handleMultipleImages(Uri uri) {
         imageUri = uri;
         parentCategoryImage.setImageURI(imageUri);
         saveImageToFile(((BitmapDrawable) parentCategoryImage.getDrawable()).getBitmap());
@@ -274,7 +267,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         return null;
     }
 
-    private boolean validateParentForm(String parentCategoryText) {
+    boolean validateParentForm(String parentCategoryText) {
         if (TextUtils.isEmpty(parentCategoryText)) {
             parentCategoryEditText.setError("Parent Category is required.");
             parentCategoryEditText.requestFocus();

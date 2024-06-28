@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.XMLFormatter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Callback;
@@ -15,7 +14,6 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,45 +25,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.amplifyframework.api.rest.RestOptions;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 
-import com.amplifyframework.auth.cognito.exceptions.invalidstate.SignedInException;
-import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
-import com.amplifyframework.auth.exceptions.InvalidStateException;
-import com.amplifyframework.auth.result.AuthSignInResult;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
-import org.json.JSONException;
-import org.json.JSONObject;
-//import com.amplifyframework.auth.result.authResult;
-
-
-import okhttp3.MediaType;
-
-
-import okhttp3.Response;
-
-
 public class LoginActivity extends AppCompatActivity {
-    TextView signUpLink, loginButtonText;
+    TextView signUpLink;
+    TextView loginButtonText;
     ImageView loginButtonIcon;
-    public RelativeLayout registerButton;
-    public  TextInputEditText Email;
-    public TextInputEditText Password;
+    private   TextInputEditText email;
+    private TextInputEditText password;
     LottieAnimationView buttonLoader;
 
-    String Result;
-    String  Error;
+    String resultString;
+    String errorString;
 
     TextView resetPasswordLink;
+    static final String AMPLIFY_QUICK_START = "AmplifyQuickstart";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +52,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         isSignedIn().thenAccept(isSignedIn -> {
-            if (isSignedIn) {
+            if (Boolean.TRUE.equals(isSignedIn)) {
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
 
             } else {
                 Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-                Log.i("AmplifyQuickstart", "User is not signed in.");
+                Log.i(AMPLIFY_QUICK_START, "User is not signed in.");
             }
         });
         signUpLink = findViewById(R.id.signUpLink);
-        registerButton = findViewById(R.id.buttonLogin);
-        Email = findViewById(R.id.inputLoginEmail);
-        Password = findViewById(R.id.inputLoginPassword);
+        RelativeLayout registerButton = findViewById(R.id.buttonLogin);
+        email = findViewById(R.id.inputLoginEmail);
+        password = findViewById(R.id.inputLoginPassword);
         buttonLoader = findViewById(R.id.buttonLoader);
         loginButtonIcon = findViewById(R.id.login_button_icon);
         loginButtonText = findViewById(R.id.login_button_text);
@@ -104,15 +82,15 @@ public class LoginActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(v -> {
 
-            String email = Email.getText().toString().trim();
-            String password = Password.getText().toString().trim();
+            String email = this.email.getText().toString().trim();
+            String password = this.password.getText().toString().trim();
             if(validateForm(email, password)){
                 buttonLoader.setVisibility(View.VISIBLE);
                 buttonLoader.playAnimation();
                 loginButtonText.setVisibility(View.GONE);
                 loginButtonIcon.setVisibility(View.GONE);
 
-                SignIn(email, password);
+                signIn(email, password);
             }
         });
 
@@ -134,15 +112,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 result->{
                     if(result.isSignedIn()){
-                        Log.i("AmplifyQuickstart", "User is signed in");
+                        Log.i(AMPLIFY_QUICK_START, "User is signed in");
                         future.complete(true);
                     }
                     else {
-                        Log.i("AmplifyQuickstart", "User is not signed in");
+                        Log.i(AMPLIFY_QUICK_START, "User is not signed in");
                         future.complete(false);
                     }},
                 error -> {
-                    Log.e("AmplifyQuickstart", error.toString());
+                    Log.e(AMPLIFY_QUICK_START, error.toString());
                     future.completeExceptionally(error);
                 }
 
@@ -153,43 +131,43 @@ public class LoginActivity extends AppCompatActivity {
     public boolean validateForm(String email, String password){
 
         if (TextUtils.isEmpty(email)) {
-            Email.setError("Employee ID is required.");
-            Email.requestFocus();
+            this.email.setError("Employee ID is required.");
+            this.email.requestFocus();
             return false;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Email.setError("Enter a valid email.");
-            Email.requestFocus();
+            this.email.setError("Enter a valid email.");
+            this.email.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Password.setError("Password is required.");
-            Password.requestFocus();
+            this.password.setError("Password is required.");
+            this.password.requestFocus();
             return false;
         }
 
         if (password.length() < 8) {
-            Password.setError("Password should be at least 8 characters long.");
-            Password.requestFocus();
+            this.password.setError("Password should be at least 8 characters long.");
+            this.password.requestFocus();
             return false;
         }
 
         return true;
     }
-    public void SetErrorAndResult(String error, String Result)
+    public void setErrorAndResult(String error, String result)
     {
-        this.Error=error;
-        this.Result=Result;
+        this.errorString =error;
+        this.resultString =result;
     }
 
-    public CompletableFuture<Boolean> SignIn(String email, String Password) {
+    public CompletableFuture<Boolean> signIn(String email, String password) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,
-                Password,
+                password,
                 result -> {
-                    Log.i("AuthQuickstart", result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
+                    Log.i(AMPLIFY_QUICK_START, result.isSignedIn() ? "Sign in succeeded" : "Sign in not complete");
 
 
 
@@ -241,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Use the token to make a request to the API
                             },
-                            error -> Log.e("AuthQuickstart", error.toString())
+                            error -> Log.e(AMPLIFY_QUICK_START, error.toString())
                     );
 
                     runOnUiThread(() -> {
@@ -254,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
                     });
                 },
                 error -> {
-                    Log.e("AuthQuickstart", error.toString());
+                    Log.e(AMPLIFY_QUICK_START, error.toString());
 
 
                     if (error.toString().toLowerCase(Locale.ROOT).contains("user is not confirmed")) {
@@ -263,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
                             // You can also redirect the user to a verification page
                             Amplify.Auth.resendSignUpCode(
                                     email,
-                                    result -> Log.i("AuthQuickstart", "ResendSignUp succeeded:"),
+                                    result -> Log.i(AMPLIFY_QUICK_START, "ResendSignUp succeeded:"),
                                     errorResendCode -> Log.e("AuthQuickstart", "ResendSignUp failed", errorResendCode)
 
 
@@ -286,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         });
                     }
-                    Log.e("AuthQuickstart", error.toString());
+                    Log.e(AMPLIFY_QUICK_START, error.toString());
                 }
         );
 

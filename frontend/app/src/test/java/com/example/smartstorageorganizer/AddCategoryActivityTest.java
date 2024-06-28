@@ -53,29 +53,4 @@ public class AddCategoryActivityTest {
         // Then
         assertTrue(result);
     }
-
-    //    @Test
-//    public void testValidateForm_EmptyParentCategory() {
-//        // Given
-//        String validParentCategory = "";
-//
-//        // When
-//        boolean result = addCategoryActivity.validateParentForm(validParentCategory);
-//
-//        // Then
-//        assertEquals(false, result);
-//    }
-//
-//    @Test
-//    public void testValidateForm_EmptySubCategory() {
-//        // Given
-//        String validSubCategory = "";
-//
-//        // When
-//        boolean result = addCategoryActivity.validateParentForm(validSubCategory);
-//
-//        // Then
-//        assertEquals(false, result);
-//    }
-
 }

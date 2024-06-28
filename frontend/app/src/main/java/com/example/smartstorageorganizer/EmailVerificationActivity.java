@@ -24,13 +24,16 @@ import com.amplifyframework.core.Amplify;
 import java.util.concurrent.CompletableFuture;
 
 public class EmailVerificationActivity extends AppCompatActivity {
-    public EditText inputCode1, inputCode2, inputCode3, inputCode4, inputCode5, inputCode6;
-    public CountDownTimer countDownTimer;
-    public String phoneNumber;
-    Long timeoutSeconds = 60L;
-    String verificationCode;
-    public RelativeLayout ButtonNext;
-    public TextView resendOtpTextView, next_button_text_otp;
+    private EditText inputCode1;
+    private EditText inputCode2;
+    private EditText inputCode3;
+    private EditText inputCode4;
+    private EditText inputCode5;
+    private EditText inputCode6;
+    private CountDownTimer countDownTimer;
+    private TextView resendOtpTextView;
+    private static final String AUTH_QUICK_START =  "AuthQuickstart";
+    private static final String EMAIL =  "email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +41,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_email_verification);
 
-        ButtonNext = findViewById(R.id.buttonNext);
+        RelativeLayout buttonNext = findViewById(R.id.buttonNext);
         resendOtpTextView = findViewById(R.id.resendOtp);
-        next_button_text_otp = findViewById(R.id.next_button_text_otp);
 
-//        resendOtpTextView.setText("Checking");
         resendOtpTextView.setText("Resend OTP in 60 sec");
 
         TextView email = findViewById(R.id.textEmail);
-        email.setText(getIntent().getStringExtra("email"));
-        phoneNumber = getIntent().getStringExtra("email");
-
-//        sendOtp(phoneNumber, false);
+        email.setText(getIntent().getStringExtra(EMAIL));
 
         inputCode1 = findViewById(R.id.inputCode1);
         inputCode2 = findViewById(R.id.inputCode2);
@@ -68,68 +66,61 @@ public class EmailVerificationActivity extends AppCompatActivity {
             return insets;
         });
 
-        ButtonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validateForm()){
-                    String Code1 = inputCode1.getText().toString().trim();
-                    String Code2 = inputCode2.getText().toString().trim();
-                    String Code3 = inputCode3.getText().toString().trim();
-                    String Code4 = inputCode4.getText().toString().trim();
-                    String Code5 = inputCode5.getText().toString().trim();
-                    String Code6 = inputCode6.getText().toString().trim();
-                    ConfirmSignUp(email.getText().toString(), Code1+Code2+Code3+Code4+Code5+Code6);
-                }
+        buttonNext.setOnClickListener(v -> {
+            if(validateForm()){
+                String code1 = inputCode1.getText().toString().trim();
+                String code2 = inputCode2.getText().toString().trim();
+                String code3 = inputCode3.getText().toString().trim();
+                String code4 = inputCode4.getText().toString().trim();
+                String code5 = inputCode5.getText().toString().trim();
+                String code6 = inputCode6.getText().toString().trim();
+                confirmSignUp(email.getText().toString(), code1+code2+code3+code4+code5+code6);
             }
         });
 
-        resendOtpTextView.setOnClickListener(new View.OnClickListener() {
+        resendOtpTextView.setOnClickListener(v -> {
+            Log.i(EMAIL, email.getText().toString());
+            Amplify.Auth.resendSignUpCode(
+                    email.getText().toString(),
+                    result -> Log.i(AUTH_QUICK_START, "ResendSignUp succeeded: "),
+                    error -> Log.e(AUTH_QUICK_START, "ResendSignUp failed", error)
 
-            @Override
-            public void onClick(View v) {
-                Log.i("email", email.getText().toString());
-                Amplify.Auth.resendSignUpCode(
-                        email.getText().toString(),
-                        result -> Log.i("AuthQuickstart", "ResendSignUp succeeded: "),
-                        error -> Log.e("AuthQuickstart", "ResendSignUp failed", error)
-
-                );
-            }
+            );
         });    }
 
     public boolean validateForm(){
-        String Code1 = inputCode1.getText().toString().trim();
-        String Code2 = inputCode2.getText().toString().trim();
-        String Code3 = inputCode3.getText().toString().trim();
-        String Code4 = inputCode4.getText().toString().trim();
-        String Code5 = inputCode5.getText().toString().trim();
-        String Code6 = inputCode6.getText().toString().trim();
+        String code1 = inputCode1.getText().toString().trim();
+        String code2 = inputCode2.getText().toString().trim();
+        String code3 = inputCode3.getText().toString().trim();
+        String code4 = inputCode4.getText().toString().trim();
+        String code5 = inputCode5.getText().toString().trim();
+        String code6 = inputCode6.getText().toString().trim();
 
-        return !TextUtils.isEmpty(Code1) && !TextUtils.isEmpty(Code2) && !TextUtils.isEmpty(Code3) && !TextUtils.isEmpty(Code4) && !TextUtils.isEmpty(Code5) && !TextUtils.isEmpty(Code6);
+        return !TextUtils.isEmpty(code1) && !TextUtils.isEmpty(code2) && !TextUtils.isEmpty(code3) && !TextUtils.isEmpty(code4) && !TextUtils.isEmpty(code5) && !TextUtils.isEmpty(code6);
 
     }
 
-    public CompletableFuture<Boolean> ConfirmSignUp(String email , String Code)
+    public CompletableFuture<Boolean> confirmSignUp(String email , String code)
     {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.confirmSignUp(
                 email,
-                Code,
-                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+                code,
+                result ->{ Log.i(AUTH_QUICK_START, result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
                     future.complete(true);
                     //change to new page
 
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
-                        intent.putExtra("email", email);
+                        intent.putExtra(EMAIL, email);
                         startActivity(intent);
                         finish();
                     });
 
                 },
                 error ->{future.complete(false);
-                    Log.e("AuthQuickstart", error.toString());
+                    Log.e(AUTH_QUICK_START, error.toString());
                     //dont change to different page
                     Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show();
                 }
@@ -141,7 +132,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         inputCode1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do something after text changed
             }
 
             @Override
@@ -153,13 +144,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do something after text changed
             }
         });
         inputCode2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do something after text changed
             }
 
             @Override
@@ -171,13 +162,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do something after text changed
             }
         });
         inputCode3.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do something after text changed
             }
 
             @Override
@@ -189,13 +180,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do something after text changed
             }
         });
         inputCode4.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do something after text changed
             }
 
             @Override
@@ -207,13 +198,13 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do something after text changed
             }
         });
         inputCode5.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //Do something after text changed
             }
 
             @Override
@@ -225,7 +216,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                //Do something after text changed
             }
         });
 

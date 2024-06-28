@@ -1,7 +1,6 @@
 package com.example.smartstorageorganizer;
 
 
-import com.example.smartstorageorganizer.BuildConfig;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -20,28 +19,22 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.Call;
-import okhttp3.Callback;
 
 public class RegistrationActivity extends AppCompatActivity {
-    TextInputEditText Name, Surname, Email, Password, PhoneNumber;
+    TextInputEditText name;
+    TextInputEditText surname;
+    TextInputEditText email;
+    TextInputEditText password;
+    TextInputEditText phoneNumber;
     TextView registerButtonText;
     ImageView registerButtonIcon;
     LottieAnimationView buttonLoader;
@@ -56,19 +49,17 @@ public class RegistrationActivity extends AppCompatActivity {
         RelativeLayout registerButton = findViewById(R.id.buttonRegister);
         ImageView registerBackButton = findViewById(R.id.registerBackButton);
         TextView loginLink = findViewById(R.id.loginLink);
-        Name = findViewById(R.id.name);
-        Surname = findViewById(R.id.surname);
-        Email = findViewById(R.id.email);
-        Password = findViewById(R.id.password);
-        PhoneNumber = findViewById(R.id.phone);
+        name = findViewById(R.id.name);
+        surname = findViewById(R.id.surname);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        phoneNumber = findViewById(R.id.phone);
         cpp = findViewById(R.id.cpp);
         buttonLoader = findViewById(R.id.buttonLoader);
         registerButtonText = findViewById(R.id.register_button_text);
         registerButtonIcon = findViewById(R.id.register_button_icon);
 
         cpp.setCountryForPhoneCode(27);
-        
-        //SignUp("bonganizungu889@gmail.com", "0586454569", "Test1", "Subject", "856 Ohio", "Uber1235#");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -76,45 +67,34 @@ public class RegistrationActivity extends AppCompatActivity {
             return insets;
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = Name.getText().toString().trim();
-                String surname = Surname.getText().toString().trim();
-                String email = Email.getText().toString().trim();
-                String phone = PhoneNumber.getText().toString().trim();
-                String password = Password.getText().toString().trim();
-                if (validateForm(name, surname, email, phone, password)){
-                    name = Name.getText().toString().trim();
-                    surname = Surname.getText().toString().trim();
-                    email = Email.getText().toString().trim();
-                    phone = "+27"+PhoneNumber.getText().toString().trim();
-                    password = Password.getText().toString().trim();
+        registerButton.setOnClickListener(v -> {
+            String nameText = name.getText().toString().trim();
+            String surnameText = surname.getText().toString().trim();
+            String emailText = email.getText().toString().trim();
+            String phoneText = phoneNumber.getText().toString().trim();
+            String passwordText = password.getText().toString().trim();
+            if (validateForm(nameText, surnameText, emailText, phoneText, passwordText)){
+                nameText = name.getText().toString().trim();
+                surnameText = surname.getText().toString().trim();
+                emailText = email.getText().toString().trim();
+                phoneText = "+27"+ phoneNumber.getText().toString().trim();
+                passwordText = password.getText().toString().trim();
 
-                    buttonLoader.setVisibility(View.VISIBLE);
-                    buttonLoader.playAnimation();
-                    registerButtonText.setVisibility(View.GONE);
-                    registerButtonIcon.setVisibility(View.GONE);
+                buttonLoader.setVisibility(View.VISIBLE);
+                buttonLoader.playAnimation();
+                registerButtonText.setVisibility(View.GONE);
+                registerButtonIcon.setVisibility(View.GONE);
 
-                    SignUp(email, phone, name, surname, "364 Hygrogen, Hatfield", password);
-                }
+                signUp(emailText, phoneText, nameText, surnameText, "364 Hydrogen, Hatfield", passwordText);
             }
         });
 
-        registerBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        registerBackButton.setOnClickListener(v -> finish());
 
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        loginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
 
@@ -123,80 +103,64 @@ public class RegistrationActivity extends AppCompatActivity {
     public boolean validateForm(String name, String surname, String email, String phone, String password) {
 
         if (TextUtils.isEmpty(name)) {
-            Name.setError("First Name is required.");
-            Name.requestFocus();
+            this.name.setError("First Name is required.");
+            this.name.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(surname)) {
-            Surname.setError("First Surname is required.");
-            Surname.requestFocus();
+            this.surname.setError("First Surname is required.");
+            this.surname.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(email)) {
-            Email.setError("Email is required.");
-            Email.requestFocus();
+            this.email.setError("Email is required.");
+            this.email.requestFocus();
             return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Email.setError("Enter a valid email.");
-            Email.requestFocus();
+            this.email.setError("Enter a valid email.");
+            this.email.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            PhoneNumber.setError("Phone Number is required.");
-            PhoneNumber.requestFocus();
+            phoneNumber.setError("Phone Number is required.");
+            phoneNumber.requestFocus();
             return false;
         }
 
         if (phone.length() < 9|| phone.length() > 10){
 
-            PhoneNumber.setError("Enter a valid phone number.");
-            PhoneNumber.requestFocus();
+            phoneNumber.setError("Enter a valid phone number.");
+            phoneNumber.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Password.setError("Password is required.");
-            Password.requestFocus();
+            this.password.setError("Password is required.");
+            this.password.requestFocus();
             return false;
         }
 
         if (password.length() < 8) {
-            Password.setError("Password should be at least 8 characters long.");
-            Password.requestFocus();
+            this.password.setError("Password should be at least 8 characters long.");
+            this.password.requestFocus();
             return false;
         }
 
         return true;
     }
 
-    public  void ConfimSignUp(String email , String Code)
-    {
-        Amplify.Auth.confirmSignUp(
-                email,
-                Code,
-                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-                    //change to new page
-                },
-                error ->{ Log.e("AuthQuickstart", error.toString());
-                    //dont change to different page
-                }
-        );
-    }
-
-
-
-    public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
+    public void signUp(String email, String cellNumber, String name, String surname, String address, String password)
     {
         // Add this line, to include the Auth plugin.
         ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), Name));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), name));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surname));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), address));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), cellNumber));
 
 
 
@@ -205,7 +169,7 @@ public class RegistrationActivity extends AppCompatActivity {
         try {
             Amplify.Auth.signUp(
                     email,
-                    Password,
+                    password,
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
                         Log.i("AuthQuickstart", result.toString());
@@ -235,7 +199,6 @@ public class RegistrationActivity extends AppCompatActivity {
         catch (Exception e) {
             Log.e("AuthSignUpError", "Exception during sign-up", e);
             //do not change pages
-//            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
             runOnUiThread(() -> {
                 buttonLoader.setVisibility(View.GONE);
                 buttonLoader.playAnimation();
