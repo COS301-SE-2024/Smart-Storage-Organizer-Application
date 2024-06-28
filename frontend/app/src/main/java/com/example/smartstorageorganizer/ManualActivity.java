@@ -1,25 +1,35 @@
 package com.example.smartstorageorganizer;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.FileOutputStream;
-import java.io.File;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import androidx.core.content.ContextCompat;
-import androidx.core.app.ActivityCompat;
-import android.content.pm.PackageManager;
-import android.os.Environment;
+import android.widget.ImageView;
 import android.widget.Toast;
-import android.Manifest;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ManualActivity extends AppCompatActivity {
+
+    private static final String TAG = "ManualActivity";
+    private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final String USER_MANUAL = "user_manual.pdf";
 
     private ImageView pdfImageView;
     private PdfRenderer pdfRenderer;
@@ -28,35 +38,52 @@ public class ManualActivity extends AppCompatActivity {
     private int currentPageIndex = 0;
     private Button prevButton;
     private Button nextButton;
-    private static final int REQUEST_WRITE_STORAGE = 112;
-    private static final String USER_MANUAL = "user_manual.pdf";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
 
+        initializeViews();
+        setupWindowInsets();
+        setupButtonListeners();
+
+        try {
+            openRenderer();
+            showPage(currentPageIndex);
+        } catch (IOException e) {
+            Log.e(TAG, "Error opening PDF renderer", e);
+        }
+    }
+
+    private void initializeViews() {
         pdfImageView = findViewById(R.id.pdfImageView);
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         Button downloadButton = findViewById(R.id.downloadButton);
-
-        prevButton.setOnClickListener(v -> showPage(currentPageIndex - 1));
-
-        nextButton.setOnClickListener(v -> showPage(currentPageIndex + 1));
-
         downloadButton.setOnClickListener(v -> checkPermissionsAndDownload());
+    }
 
-        try {
-            openRenderer();
-            showPage(currentPageIndex);  // Display the first page
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    private void setupButtonListeners() {
+        prevButton.setOnClickListener(v -> showPage(currentPageIndex - 1));
+        nextButton.setOnClickListener(v -> showPage(currentPageIndex + 1));
     }
 
     private void openRenderer() throws IOException {
-        // Copy the PDF file from assets to a file in the app's cache directory
+        File file = copyPdfToCache();
+        parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+        pdfRenderer = new PdfRenderer(parcelFileDescriptor);
+    }
+
+    private File copyPdfToCache() throws IOException {
         File file = new File(getCacheDir(), USER_MANUAL);
         try (InputStream asset = getAssets().open(USER_MANUAL);
              FileOutputStream output = new FileOutputStream(file)) {
@@ -66,45 +93,38 @@ public class ManualActivity extends AppCompatActivity {
                 output.write(buffer, 0, size);
             }
         }
-
-        parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
-        pdfRenderer = new PdfRenderer(parcelFileDescriptor);
+        return file;
     }
 
     private void showPage(int index) {
         if (pdfRenderer.getPageCount() <= index || index < 0) return;
 
-        // Close the current page before opening another one.
         if (currentPage != null) {
             currentPage.close();
         }
 
-        // Use `openPage` to open a specific page in PDF.
         currentPage = pdfRenderer.openPage(index);
         currentPageIndex = index;
 
-        // Important: the destination bitmap must be ARGB (not RGB).
         Bitmap bitmap = Bitmap.createBitmap(currentPage.getWidth(), currentPage.getHeight(), Bitmap.Config.ARGB_8888);
-        // Here, we render the page onto the Bitmap.
         currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-        // We are ready to show the Bitmap to the user.
         pdfImageView.setImageBitmap(bitmap);
 
-        // Update button states
+        updateButtonStates();
+    }
+
+    private void updateButtonStates() {
         prevButton.setEnabled(currentPageIndex > 0);
         nextButton.setEnabled(currentPageIndex < pdfRenderer.getPageCount() - 1);
     }
 
     private void checkPermissionsAndDownload() {
-        // Check if the write permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Request write permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         } else {
-            // Permission already granted, download the PDF
             downloadPdf();
         }
     }
@@ -112,14 +132,11 @@ public class ManualActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_WRITE_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, download the PDF
-                downloadPdf();
-            } else {
-                // Permission denied
-                Toast.makeText(this, "Write permission is required to download the PDF", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == REQUEST_WRITE_STORAGE && grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            downloadPdf();
+        } else {
+            Toast.makeText(this, "Write permission is required to download the PDF", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,13 +153,18 @@ public class ManualActivity extends AppCompatActivity {
             }
             Toast.makeText(this, "PDF downloaded to " + destinationFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Failed to download PDF", e);
             Toast.makeText(this, "Failed to download PDF", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onDestroy() {
+        closeRenderer();
+        super.onDestroy();
+    }
+
+    private void closeRenderer() {
         try {
             if (currentPage != null) {
                 currentPage.close();
@@ -150,8 +172,7 @@ public class ManualActivity extends AppCompatActivity {
             pdfRenderer.close();
             parcelFileDescriptor.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error closing PDF renderer", e);
         }
-        super.onDestroy();
     }
 }

@@ -14,6 +14,7 @@ public class EditProfileFragment extends Fragment {
     public static EditProfileFragment newInstance() {
         return new EditProfileFragment();
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

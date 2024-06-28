@@ -1,16 +1,15 @@
 package com.example.smartstorageorganizer;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.util.Log;
 import android.widget.Toast;
-import android.util.Patterns;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,15 +29,18 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class RegistrationActivity extends AppCompatActivity {
-    TextInputEditText name;
-    TextInputEditText surname;
-    TextInputEditText email;
-    TextInputEditText password;
-    TextInputEditText phoneNumber;
-    TextView registerButtonText;
-    ImageView registerButtonIcon;
-    LottieAnimationView buttonLoader;
-    CountryCodePicker cpp;
+
+    private static final String TAG = "RegistrationActivity";
+
+    private TextInputEditText nameEditText;
+    private TextInputEditText surnameEditText;
+    private TextInputEditText emailEditText;
+    private TextInputEditText passwordEditText;
+    private TextInputEditText phoneNumberEditText;
+    private CountryCodePicker countryCodePicker;
+    private LottieAnimationView buttonLoader;
+    private TextView registerButtonText;
+    private ImageView registerButtonIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,171 +48,174 @@ public class RegistrationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registration);
 
-        RelativeLayout registerButton = findViewById(R.id.buttonRegister);
-        ImageView registerBackButton = findViewById(R.id.registerBackButton);
-        TextView loginLink = findViewById(R.id.loginLink);
-        name = findViewById(R.id.name);
-        surname = findViewById(R.id.surname);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        phoneNumber = findViewById(R.id.phone);
-        cpp = findViewById(R.id.cpp);
-        buttonLoader = findViewById(R.id.buttonLoader);
-        registerButtonText = findViewById(R.id.register_button_text);
-        registerButtonIcon = findViewById(R.id.register_button_icon);
+        initializeViews();
+        setupWindowInsets();
 
-        cpp.setCountryForPhoneCode(27);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        registerButton.setOnClickListener(v -> {
-            String nameText = name.getText().toString().trim();
-            String surnameText = surname.getText().toString().trim();
-            String emailText = email.getText().toString().trim();
-            String phoneText = phoneNumber.getText().toString().trim();
-            String passwordText = password.getText().toString().trim();
-            if (validateForm(nameText, surnameText, emailText, phoneText, passwordText)){
-                nameText = name.getText().toString().trim();
-                surnameText = surname.getText().toString().trim();
-                emailText = email.getText().toString().trim();
-                phoneText = "+27"+ phoneNumber.getText().toString().trim();
-                passwordText = password.getText().toString().trim();
-
-                buttonLoader.setVisibility(View.VISIBLE);
-                buttonLoader.playAnimation();
-                registerButtonText.setVisibility(View.GONE);
-                registerButtonIcon.setVisibility(View.GONE);
-
-                signUp(emailText, phoneText, nameText, surnameText, "364 Hydrogen, Hatfield", passwordText);
+        findViewById(R.id.buttonRegister).setOnClickListener(v -> {
+            if (validateForm()) {
+                performSignUp();
             }
         });
 
-        registerBackButton.setOnClickListener(v -> finish());
+        findViewById(R.id.registerBackButton).setOnClickListener(v -> finish());
 
-        loginLink.setOnClickListener(v -> {
+        findViewById(R.id.loginLink).setOnClickListener(v -> {
             Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         });
 
-
+        countryCodePicker.setCountryForPhoneCode(27);
     }
 
-    public boolean validateForm(String name, String surname, String email, String phone, String password) {
+    private void initializeViews() {
+        nameEditText = findViewById(R.id.name);
+        surnameEditText = findViewById(R.id.surname);
+        emailEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
+        phoneNumberEditText = findViewById(R.id.phone);
+        countryCodePicker = findViewById(R.id.cpp);
+        buttonLoader = findViewById(R.id.buttonLoader);
+        registerButtonText = findViewById(R.id.register_button_text);
+        registerButtonIcon = findViewById(R.id.register_button_icon);
+    }
+
+    private void setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    private boolean validateForm() {
+        String name = nameEditText.getText().toString().trim();
+        String surname = surnameEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
+        String phone = phoneNumberEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            this.name.setError("First Name is required.");
-            this.name.requestFocus();
+            nameEditText.setError("First Name is required.");
+            nameEditText.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(surname)) {
-            this.surname.setError("First Surname is required.");
-            this.surname.requestFocus();
+            surnameEditText.setError("Surname is required.");
+            surnameEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(email)) {
-            this.email.setError("Email is required.");
-            this.email.requestFocus();
+            emailEditText.setError("Email is required.");
+            emailEditText.requestFocus();
             return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            this.email.setError("Enter a valid email.");
-            this.email.requestFocus();
+            emailEditText.setError("Enter a valid email.");
+            emailEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            phoneNumber.setError("Phone Number is required.");
-            phoneNumber.requestFocus();
+            phoneNumberEditText.setError("Phone Number is required.");
+            phoneNumberEditText.requestFocus();
             return false;
         }
 
-        if (phone.length() < 9|| phone.length() > 10){
-
-            phoneNumber.setError("Enter a valid phone number.");
-            phoneNumber.requestFocus();
+        if (phone.length() < 9 || phone.length() > 10) {
+            phoneNumberEditText.setError("Enter a valid phone number.");
+            phoneNumberEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            this.password.setError("Password is required.");
-            this.password.requestFocus();
+            passwordEditText.setError("Password is required.");
+            passwordEditText.requestFocus();
             return false;
         }
 
         if (password.length() < 8) {
-            this.password.setError("Password should be at least 8 characters long.");
-            this.password.requestFocus();
+            passwordEditText.setError("Password should be at least 8 characters long.");
+            passwordEditText.requestFocus();
             return false;
         }
 
         return true;
     }
 
-    public void signUp(String email, String cellNumber, String name, String surname, String address, String password)
-    {
-        // Add this line, to include the Auth plugin.
+    private void performSignUp() {
+        String nameText = nameEditText.getText().toString().trim();
+        String surnameText = surnameEditText.getText().toString().trim();
+        String emailText = emailEditText.getText().toString().trim();
+        String phoneText = countryCodePicker.getSelectedCountryCodeWithPlus() + phoneNumberEditText.getText().toString().trim();
+        String passwordText = passwordEditText.getText().toString().trim();
+
         ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), name));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surname));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), address));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), cellNumber));
-
-
-
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), nameText));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        //updated and add a build
+
         try {
+            buttonLoader.setVisibility(View.VISIBLE);
+            buttonLoader.playAnimation();
+            registerButtonText.setVisibility(View.GONE);
+            registerButtonIcon.setVisibility(View.GONE);
+
             Amplify.Auth.signUp(
-                    email,
-                    password,
+                    emailText,
+                    passwordText,
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
-                        Log.i("AuthQuickstart", result.toString());
-                        //move to different page
-                        runOnUiThread(() -> {
-                            Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
-                            intent.putExtra("email", email);
-                            startActivity(intent);
-                            finish();
-                        });
+                        Log.i(TAG, "Sign-up successful: " + result.toString());
+                        moveToVerificationActivity(emailText);
                     },
                     error -> {
-                        //do not move to different page
-                        Log.e("AuthQuickstart Error: ", error.toString());
-                        if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
-                            Log.i("Message: ", "User Already Exists.");
-                            runOnUiThread(() -> {
-                                Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
-                                intent.putExtra("email", email);
-                                startActivity(intent);
-                                finish();
-                            });
-                        }
+                        Log.e(TAG, "Sign-up failed", error);
+                        handleSignUpFailure(emailText, error);
                     }
             );
+        } catch (Exception e) {
+            Log.e(TAG, "Sign-up exception", e);
+            handleSignUpException();
         }
-        catch (Exception e) {
-            Log.e("AuthSignUpError", "Exception during sign-up", e);
-            //do not change pages
-            runOnUiThread(() -> {
-                buttonLoader.setVisibility(View.GONE);
-                buttonLoader.playAnimation();
-                registerButtonText.setVisibility(View.VISIBLE);
-                registerButtonIcon.setVisibility(View.VISIBLE);
-
-                Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
-            });
-        }
-
     }
 
+    private void moveToVerificationActivity(String email) {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
+            intent.putExtra("email", email);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void handleSignUpFailure(String email, Exception error) {
+        runOnUiThread(() -> {
+            if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
+                Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show();
+                moveToVerificationActivity(email);
+            } else {
+                resetSignUpButton();
+                Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void handleSignUpException() {
+        runOnUiThread(() -> {
+            resetSignUpButton();
+            Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
+        });
+    }
+
+    private void resetSignUpButton() {
+        buttonLoader.setVisibility(View.GONE);
+        buttonLoader.pauseAnimation();
+        registerButtonText.setVisibility(View.VISIBLE);
+        registerButtonIcon.setVisibility(View.VISIBLE);
+    }
 
 }
-

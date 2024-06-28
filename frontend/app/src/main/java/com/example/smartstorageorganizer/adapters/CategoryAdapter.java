@@ -1,7 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
-
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -39,10 +40,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
-        Log.i("Adapter", "Adapter function.");
         holder.name.setText(categoryModelList.get(position).getCategoryName());
 
-        if(!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")){
+        if (!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")) {
             Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
         }
 
@@ -52,6 +52,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
 
             context.startActivity(intent);
+        });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirmation")
+                    .setMessage("Do you want to delete the "+categoryModelList.get(holder.getAdapterPosition()).getCategoryName()+" category?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Log.i("Adapter", "Yes clicked.");
+                        Log.i("Delete", "Yes clicked.");
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        // Dismiss the dialog
+                        Log.i("Adapter", "No clicked.");
+                        dialog.dismiss();
+                    })
+                    .show();
+            return true;
         });
     }
 
@@ -70,7 +87,4 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             name = itemView.findViewById(R.id.category_name);
         }
     }
-
 }
-
-
