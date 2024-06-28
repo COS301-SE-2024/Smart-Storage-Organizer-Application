@@ -3,9 +3,12 @@ package com.example.smartstorageorganizer.utils;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.unitModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -273,5 +277,79 @@ public class Utils {
                 }
             }
         });
+    }
+    public static CompletableFuture<Boolean> getAllUnits (String categoriesId)  {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("categories_id", Integer.parseInt(categoriesId));
+            jsonObject.put("type", "GetCategoryConstraints");
+        }
+        catch (JSONException e){
+            future.completeExceptionally(e);
+            return future;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(BuildConfig.AddUnitEndPoint)
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                future.completeExceptionally(e);
+                Log.i("Error","Error in fetching data");
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response)  {
+                if(response.isSuccessful()){
+                    try {
+
+                        final String jsonBody = response.body().toString();
+                        JSONObject jsonObject = new JSONObject(jsonBody);
+                        final String body= jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(body);
+                        List<unitModel> unitList=new ArrayList<>();
+                        for(int i=0;i<bodyArray.length();i++){
+                            JSONObject unitObject=bodyArray.getJSONObject(i);
+                            String unitName=unitObject.getString("unit_name");
+                            String unitId=unitObject.getString("unit_id");
+                            int capacity=Integer.parseInt(unitObject.getString("capacity"));
+                            int currentCapacity=Integer.parseInt(unitObject.getString("current_capacity"));
+                            unitModel unit=new unitModel(unitName,unitId,capacity,currentCapacity);
+                            unitList.add(unit);
+                        }
+                    }
+                    catch (Exception e){
+                        future.completeExceptionally(e);
+                        Log.i("Error","Error in parsing json");
+                    }
+
+                }
+                else{
+
+                    Log.i("Error","Error in fetching data");
+                    future.complete(false);
+                }
+            }
+        });
+        return future;
+    }
+    public unitModel getUnitAvailable(List<unitModel> unitList){
+        unitModel units=new unitModel("","",0,0);
+        for(unitModel unit:unitList){
+            if(units.getFreeCapacity()>unit.getFreeCapacity()){
+               units=unit;
+            }
+        }
+        return units;
+
     }
 }
