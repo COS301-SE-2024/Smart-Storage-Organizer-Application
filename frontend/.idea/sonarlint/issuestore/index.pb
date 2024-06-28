@@ -71,7 +71,9 @@ Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0
 Kapp/src/main/java/com/example/smartstorageorganizer/model/CategoryList.java,b\c\bca34fc00d22e17ca23e309763d35d04e53fb804
 }
 Mapp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeFragment.java,7\1\712a8214a2895769852d79024d74dabbe333e498
-Ü
-Vapp/src/main/java/com/example/smartstorageorganizer/utils/FetchCategoriesCallback.java,7\b\7b300f324d32897e332ca9131451b526774af960
-Å
-Qapp/src/main/java/com/example/smartstorageorganizer/utils/OperationCallbacks.java,2\1\2130f6ee39314cf842c382bc9c49587ca8c07502
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ViewItemActivity.java,4\6\463e3c77efbbbcc42f8976110f08d038e13bf338
+Ä
+Papp/src/main/java/com/example/smartstorageorganizer/utils/OperationCallback.java,7\4\74fe8fd5a386dd9477153911f7bb0b2b334954a1
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/Adapters/ItemAdapter.java,9\3\935a550f941cc48224ff32ec9b7a06d9aae4e112

@@ -3,7 +3,6 @@ package com.example.smartstorageorganizer.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,23 +43,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
 //        Glide.with(context).load(ItemModelList.get(position).getItem_image()).into(holder.image);
-        holder.name.setText(ItemModelList.get(position).getItem_name());
+        holder.name.setText(ItemModelList.get(position).getItemName());
         holder.description.setText(ItemModelList.get(position).getDescription());
 //        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        if(!Objects.equals(ItemModelList.get(position).getItem_image(), "empty")){
-            Glide.with(context).load(ItemModelList.get(position).getItem_image()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
+        if(!Objects.equals(ItemModelList.get(position).getItemImage(), "empty")){
+            Glide.with(context).load(ItemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
-                intent.putExtra("item_name", ItemModelList.get(holder.getAdapterPosition()).getItem_name());
+                intent.putExtra("item_name", ItemModelList.get(holder.getAdapterPosition()).getItemName());
                 intent.putExtra("item_description", ItemModelList.get(holder.getAdapterPosition()).getDescription());
                 intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
-                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourcoding());
-                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItem_id());
+                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourCoding());
+                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItemId());
 
                 context.startActivity(intent);
             }
