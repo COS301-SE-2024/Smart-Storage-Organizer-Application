@@ -51,7 +51,6 @@ public class AddCategoryActivity extends AppCompatActivity {
     private static final String IMAGE_PATH_FORMAT = "public/Category/%s.png";
     private static final String STORAGE_URL_FORMAT = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/%s.png";
 
-    private Uri imageUri;
     private File imageFile;
     private RadioGroup radioGroup;
     private RadioButton selectedRadioButton;
@@ -244,8 +243,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     private void handleSingleImage(Uri uri) {
-        imageUri = uri;
-        parentCategoryImage.setImageURI(imageUri);
+        parentCategoryImage.setImageURI(uri);
         saveImageToFile(((BitmapDrawable) parentCategoryImage.getDrawable()).getBitmap());
     }
 

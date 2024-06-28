@@ -47,8 +47,8 @@ public class LoginActivityIntegrationTest {
         String password = "Nivlac321#";
 
         // Set the text fields
-        loginActivity.Email.setText(email);
-        loginActivity.Password.setText(password);
+        loginActivity.email.setText(email);
+        loginActivity.password.setText(password);
 
         Mockito.doAnswer(invocation -> {
             CompletableFuture<Boolean> future = new CompletableFuture<>();

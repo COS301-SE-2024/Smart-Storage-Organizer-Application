@@ -1,7 +1,5 @@
 
-Ÿ
-java:S14506"WRemove the "imageUri" field and declare it as a local variable in the relevant methods.(Ø°´şÿÿÿÿ8†Ğ¢ô…2J$174adb94-e2da-41d9-b252-187d8bca9795
 ‡
-java:S1874ã">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2J$83fbc0df-e541-49a9-9ca0-0841eef83fed
+java:S1874â">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2J$dc1b722b-def6-4ba9-9b14-2754241bbfc5
 “
-java:S1874ç"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2J$04ede2a8-6d94-4252-8874-8ca9083faf32
+java:S1874æ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2J$82f2c532-35fb-4de6-92f7-770b1618c47a

@@ -24,14 +24,14 @@ import com.amplifyframework.core.Amplify;
 import java.util.concurrent.CompletableFuture;
 
 public class EmailVerificationActivity extends AppCompatActivity {
-    private EditText inputCode1;
-    private EditText inputCode2;
-    private EditText inputCode3;
-    private EditText inputCode4;
-    private EditText inputCode5;
-    private EditText inputCode6;
-    private CountDownTimer countDownTimer;
-    private TextView resendOtpTextView;
+    EditText inputCode1;
+    EditText inputCode2;
+    EditText inputCode3;
+    EditText inputCode4;
+    EditText inputCode5;
+    EditText inputCode6;
+    CountDownTimer countDownTimer;
+    TextView resendOtpTextView;
     private static final String AUTH_QUICK_START =  "AuthQuickstart";
     private static final String EMAIL =  "email";
 

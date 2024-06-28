@@ -47,18 +47,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
-                intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
-                intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
-                intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
-                intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
-                intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
+            intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
+            intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
+            intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
+            intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
+            intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
 
-                context.startActivity(intent);
-            }
+            context.startActivity(intent);
         });
     }
 

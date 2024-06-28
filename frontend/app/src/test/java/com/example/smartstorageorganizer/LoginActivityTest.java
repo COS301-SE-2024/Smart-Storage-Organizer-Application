@@ -137,8 +137,8 @@ public class LoginActivityTest {
         String password = "password123";
 
         // Set the text fields
-        loginActivity.Email.setText(email);
-        loginActivity.Password.setText(password);
+        loginActivity.email.setText(email);
+        loginActivity.password.setText(password);
 
         // When
         loginActivity.registerButton.performClick();

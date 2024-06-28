@@ -38,10 +38,6 @@ public class UnitActivityTest {
     }
 
     @Test
-    public void fetchCategory() {
-    }
-
-    @Test
     public void createUnit() {
         //given
         String unit="UnitName";

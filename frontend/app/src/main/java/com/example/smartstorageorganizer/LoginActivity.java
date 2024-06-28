@@ -35,14 +35,15 @@ public class LoginActivity extends AppCompatActivity {
     TextView signUpLink;
     TextView loginButtonText;
     ImageView loginButtonIcon;
-    private   TextInputEditText email;
-    private TextInputEditText password;
+    TextInputEditText email;
+    TextInputEditText password;
     LottieAnimationView buttonLoader;
 
     String resultString;
     String errorString;
 
     TextView resetPasswordLink;
+    RelativeLayout registerButton;
     static final String AMPLIFY_QUICK_START = "AmplifyQuickstart";
 
     @Override
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         signUpLink = findViewById(R.id.signUpLink);
-        RelativeLayout registerButton = findViewById(R.id.buttonLogin);
+        registerButton = findViewById(R.id.buttonLogin);
         email = findViewById(R.id.inputLoginEmail);
         password = findViewById(R.id.inputLoginPassword);
         buttonLoader = findViewById(R.id.buttonLoader);
