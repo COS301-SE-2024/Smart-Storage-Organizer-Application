@@ -69,16 +69,36 @@ public class ResetPasswordVerificationActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
         ButtonNext.setOnClickListener(v -> {
-            if(validateForm()){
-                String Code1 = inputCode1.getText().toString().trim();
-                String Code2 = inputCode2.getText().toString().trim();
-                String Code3 = inputCode3.getText().toString().trim();
-                String Code4 = inputCode4.getText().toString().trim();
-                String Code5 = inputCode5.getText().toString().trim();
-                String Code6 = inputCode6.getText().toString().trim();
-                ConfirmSignUp(email.getText().toString(), Code1+Code2+Code3+Code4+Code5+Code6);
-            }
+//            @Override
+//            public void onClick(View v) {
+                if(validateForm())
+                {
+                    String Code1 = inputCode1.getText().toString().trim();
+                    String Code2 = inputCode2.getText().toString().trim();
+                    String Code3 = inputCode3.getText().toString().trim();
+                    String Code4 = inputCode4.getText().toString().trim();
+                    String Code5 = inputCode5.getText().toString().trim();
+                    String Code6 = inputCode6.getText().toString().trim();
+//                    confirmSignUp(email.getText().toString(), Code1+Code2+Code3+Code4+Code5+Code6);
+                    String verificationCode = Code1+Code2+Code3+Code4+Code5+Code6;
+                    if (verificationCode.isEmpty()) {
+                        Toast.makeText(ResetPasswordVerificationActivity.this, "Please enter the verification code", Toast.LENGTH_LONG).show();
+                    } else {
+                        // You can add code here to validate the code if needed
+                        Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
+                        String ToStremail = email.getText().toString();
+                        intent.putExtra("email", ToStremail);
+                        intent.putExtra("verificationCode", verificationCode);
+                        startActivity(intent);
+                    }
+
+                }
+
+
+
         });
 
         resendOtpTextView.setOnClickListener(v -> {
@@ -103,32 +123,65 @@ public class ResetPasswordVerificationActivity extends AppCompatActivity {
 
     }
 
-    public CompletableFuture<Boolean> ConfirmSignUp(String email , String Code)
-    {
+//    public CompletableFuture<Boolean> ConfirmSignUp(String email , String Code)
+//    {
+//        CompletableFuture<Boolean> future = new CompletableFuture<>();
+//        Amplify.Auth.confirmSignUp(
+//                email,
+//                Code,
+//                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+//                    future.complete(true);
+//                    // Change to reset password page
+//                    runOnUiThread(() -> {
+//                        Toast.makeText(this, "Please reset your new password.", Toast.LENGTH_LONG).show();
+//                        Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
+//                        intent.putExtra("email", email);
+//                        startActivity(intent);
+//                        finish();
+//                    });
+//
+//                },
+//                error ->{future.complete(false);
+//                    Log.e("AuthQuickstart", error.toString());
+//                    //dont change to different page
+//                    Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show();
+//                }
+//        );
+//        return future;
+//    }
+
+
+    public void confirmSignUp(String email, String code) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Log.i("retried email",email);
+        Log.i("Rcode",code);
         Amplify.Auth.confirmSignUp(
                 email,
-                Code,
-                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-                    future.complete(true);
-                    // Change to reset password page
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Please reset your new password.", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
-                        intent.putExtra("email", email);
-                        startActivity(intent);
-                        finish();
-                    });
-
+                code,
+                result -> {
+                    Log.i("AuthQuickstart", result.isSignUpComplete() ? "Verification code confirmed" : "Verification code confirmation not complete");
+                    if (result.isSignUpComplete()) {
+                        future.complete(true);
+                        // Change to reset password page
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Please reset your new password.", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
+                            intent.putExtra("email", email);
+                            startActivity(intent);
+                            finish();
+                        });
+                    } else {
+                        future.complete(false);
+                    }
                 },
-                error ->{future.complete(false);
-                    Log.e("AuthQuickstart", error.toString());
-                    //dont change to different page
-                    Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show();
+                error -> {
+                    future.complete(false);
+                    Log.e("1AuthQuickstart", error.toString());
+                    runOnUiThread(() -> Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show());
                 }
         );
-        return future;
     }
+
 
     private void setupOTPInputs() {
         inputCode1.addTextChangedListener(new TextWatcher() {

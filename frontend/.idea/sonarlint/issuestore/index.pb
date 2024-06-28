@@ -127,3 +127,5 @@ Q.idea/sonarlint/securityhotspotstore/2/9/29fc2bf07e6ede621db638307b460df74bc5f1
 Q.idea/sonarlint/securityhotspotstore/c/6/c60e4524e157fd5ac73e16a9c989a689022523d8,b\6\b6a4a0e55c381d82f0bdd8aba5cc3251046301d0
 Å
 Q.idea/sonarlint/securityhotspotstore/4/1/4171c039aa7e2fe87b69241020ae05d60652eecb,4\0\40235e964d9caf53d7218cf1ffa5198d843904d4
+@
+build.gradle.kts,d\b\dbcff70658daf80b53ce624f6adcaa529df5ed8d
