@@ -104,14 +104,13 @@ public class EditProfileActivity extends AppCompatActivity {
     private void configureButtons() {
         findViewById(R.id.editProfileBackButton).setOnClickListener(v -> finish());
         profileImage.setOnClickListener(v -> openGallery());
-        findViewById(R.id.save_button).setOnClickListener(v -> upDateDetails().thenAccept(updateDetails -> {
+        findViewById(R.id.save_button).setOnClickListener(v -> updateDetails().thenAccept(updateDetails -> {
             loadingScreen.setVisibility(View.VISIBLE);
             loadingScreen.playAnimation();
             content.setVisibility(View.GONE);
-            if (!file.exists()) {
-                showUpdateSuccessMessage();
-                navigateToProfileManagement();
-            }
+
+            showUpdateSuccessMessage();
+            navigateToProfileManagement();
         }));
     }
 
@@ -216,7 +215,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private CompletableFuture<Boolean> upDateDetails() {
+    private CompletableFuture<Boolean> updateDetails() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         String nameText = Objects.requireNonNull(name.getText()).toString().trim();
         String surnameText = Objects.requireNonNull(surname.getText()).toString().trim();
