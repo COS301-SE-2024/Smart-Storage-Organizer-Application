@@ -57,6 +57,11 @@ android {
         buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
 
         buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"");
+
+        buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"");
+
+
+
     }
 
     buildTypes {

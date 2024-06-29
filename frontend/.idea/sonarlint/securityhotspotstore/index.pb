@@ -143,3 +143,6 @@ _app/src/main/java/com/example/smartstorageorganizer/ui/notifications/Notificati
 Napp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeViewModel.java,a\c\ac4cc53c8bd6d0674adf3293d672aaa3a7b52462
 ê
 `app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsViewModel.java,d\4\d4b46ff5c43cd7eeb0959570e1b9105886e392b2
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
