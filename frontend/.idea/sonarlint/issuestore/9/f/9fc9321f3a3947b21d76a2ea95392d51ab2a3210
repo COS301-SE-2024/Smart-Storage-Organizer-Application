@@ -1,5 +1,5 @@
 
 ‡
-java:S1874â">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2J$dc1b722b-def6-4ba9-9b14-2754241bbfc5
+java:S1874ç">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8•ÔÛ˜†2J$4231ebc7-bd65-4d29-b918-d283a5512940
 “
-java:S1874æ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2J$82f2c532-35fb-4de6-92f7-770b1618c47a
+java:S1874ë"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8–ÔÛ˜†2J$f67852e2-2033-409e-98bc-a08395708bcc

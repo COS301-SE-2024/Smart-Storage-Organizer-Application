@@ -1,9 +1,11 @@
 package com.example.smartstorageorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import java.util.List;
 
 public class ViewItemActivity extends AppCompatActivity {
     private TextView notFoundText;
+    private ImageView backButton;
     private Spinner mySpinner;
     private String categoryID;
     private String currentSelectedCategory;
@@ -45,6 +48,7 @@ public class ViewItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_item);
 
         initializeViews();
+        setupBackButton();
         setupRecyclerView();
         loadInitialData();
         setupSpinnerListener();
@@ -56,8 +60,13 @@ public class ViewItemActivity extends AppCompatActivity {
         itemRecyclerView = findViewById(R.id.view_all_rec);
         loadingScreen = findViewById(R.id.loadingScreen);
         notFoundText = findViewById(R.id.notFoundText);
+        backButton = findViewById(R.id.back_home_button);
         category.setText(getIntent().getStringExtra("category"));
         categoryID = getIntent().getStringExtra("category_id");
+    }
+
+    private void setupBackButton() {
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void setupRecyclerView() {

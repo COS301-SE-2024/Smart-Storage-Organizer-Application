@@ -40,7 +40,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AddCategoryActivity extends AppCompatActivity {
     private static final int GALLERY_CODE = 1;
@@ -105,6 +104,12 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
+    private void navigateToHome() {
+        Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void fetchParentCategories() {
         String email = getIntent().getStringExtra(EMAIL_KEY);
         Utils.fetchParentCategories(0, email, this, new OperationCallback<List<CategoryModel>>() {
@@ -147,7 +152,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
             CategoryModel parent = findCategoryByName(currentSelectedParent);
             if (parent != null) {
-                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), getIntent().getStringExtra(EMAIL_KEY), "");
+                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
             }
         }
     }
@@ -302,21 +307,24 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     private void handleImageUploadSuccess(String key) {
         String url = String.format(STORAGE_URL_FORMAT, key);
-        addNewCategory(0, parentCategoryEditText.getText().toString(), "ezemakau@gmail.com", url);
+        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
     }
 
-    private void addNewCategory(int parentCategory, String categoryName, String email, String url) {
-        Utils.addCategory(parentCategory, categoryName, email, url, this, new OperationCallback<Boolean>() {
+    private void addNewCategory(int parentCategory, String categoryName, String url) {
+        Utils.addCategory(parentCategory, categoryName, "NULL", url, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     showToast("Category added successfully");
+                    navigateToHome();
                 }
             }
 
             @Override
             public void onFailure(String error) {
                 showToast("Failed to add category: " + error);
+                loadingScreen.setVisibility(View.GONE);
+                addCategoryLayout.setVisibility(View.VISIBLE);
             }
         });
     }
