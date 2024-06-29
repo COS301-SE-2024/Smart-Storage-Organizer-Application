@@ -19,67 +19,66 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.storage.StoragePath;
-import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.google.android.material.imageview.ShapeableImageView;
 
-import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 public class ProfileManagementActivity extends AppCompatActivity {
 
-    private TextView email, username;
-    ConstraintLayout content;
-    LottieAnimationView loadingScreen;
-    private String currentEmail, currentName, currentSurname, currentProfileImage;
-    ImageView profileBackButton;
-    ShapeableImageView profilePicture;
+    private static final String TAG = "ProfileManagementActivity";
+    private TextView email;
+    private TextView username;
+    private ConstraintLayout content;
+    private LottieAnimationView loadingScreen;
+    private ImageView profileBackButton;
+    private ShapeableImageView profilePicture;
+
+    private String currentEmail;
+    private String currentName;
+    private String currentSurname;
+    private String currentProfileImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile_management);
 
+        initializeViews();
+        setupWindowInsets();
+        fetchUserDetails();
+
+        setupButtons();
+    }
+
+    private void initializeViews() {
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
         content = findViewById(R.id.content);
         loadingScreen = findViewById(R.id.loadingScreen);
         profileBackButton = findViewById(R.id.ProfileBackButton);
         profilePicture = findViewById(R.id.profilePicture);
+    }
 
-
-        getDetails().thenAccept(getDetails->{
-            Log.i("AuthDemo", "User is signed in");
-            Log.i("AuthEmailFragment", currentEmail);
-        });
-
-        AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
-        ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
-
+    private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
-        editProfileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-            finish();
+    private void fetchUserDetails() {
+        getDetails().thenAccept(success -> {
+            Log.i(TAG, "User details fetched successfully");
         });
-
-        logoutButton.setOnClickListener(v -> SignOut());
-
-        profileBackButton.setOnClickListener(v -> finish());
     }
 
     private CompletableFuture<Boolean> getDetails() {
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-       // UploadProfilePicture("app\\src\\main\\java\\com\\example\\com.example.smartstorageorganizer\\left.jpg");
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
-
                     for (AuthUserAttribute attribute : attributes) {
                         switch (attribute.getKey().getKeyString()) {
                             case "email":
@@ -94,78 +93,87 @@ public class ProfileManagementActivity extends AppCompatActivity {
                             case "picture":
                                 currentProfileImage = attribute.getValue();
                                 break;
+                            default:
+                                break;
                         }
                     }
-                    Log.i("progress","User attributes fetched successfully");
-                    Log.i("progressEmail",currentEmail);
+                    Log.i(TAG, "User attributes fetched successfully");
                     runOnUiThread(() -> {
-                        Glide.with(this).load(currentProfileImage).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profilePicture);
-                        email.setText(currentEmail);
-                        String fullName = currentName+" "+currentSurname;
-                        username.setText(fullName);
-                        loadingScreen.setVisibility(View.GONE);
-                        loadingScreen.pauseAnimation();
-                        content.setVisibility(View.VISIBLE);
+                        displayUserInfo();
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
-
+                error -> {
+                    Log.e(TAG, "Failed to fetch user attributes", error);
+                    future.complete(false);
+                }
         );
         return future;
     }
 
-    public void SignOut()
-    {
+    private void displayUserInfo() {
+        Glide.with(this)
+                .load(currentProfileImage)
+                .placeholder(R.drawable.no_profile_image)
+                .error(R.drawable.no_profile_image)
+                .into(profilePicture);
 
-        Amplify.Auth.signOut(signOutResult -> {
-            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
-                // Sign Out completed fully and without errors.
-                Log.i("AuthQuickStart", "Signed out successfully");
-                //move to a different page
-                runOnUiThread(() -> {
-                    Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                // Sign Out completed with some errors. User is signed out of the device.
-                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
-                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
-                //move to the different page
-                runOnUiThread(() -> {
-                    Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
+        email.setText(currentEmail);
+        String fullName = currentName + " " + currentSurname;
+        username.setText(fullName);
 
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
-                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
-                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
-                // Sign Out failed with an exception, leaving the user signed in.
-                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
-                //dont move to different page
-                runOnUiThread(() -> {
-//                    requireActivity().Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show();
-
-                });
-            }
-        });
-
+        loadingScreen.setVisibility(View.GONE);
+        loadingScreen.pauseAnimation();
+        content.setVisibility(View.VISIBLE);
     }
 
-    public void UploadProfilePicture(String ProfilePicturePath)
-    {
-        File ProfilePicture= new File(ProfilePicturePath);
-        Amplify.Storage.uploadFile(
-                StoragePath.fromString("public/ProfilePictures"),
-                ProfilePicture,
-                StorageUploadFileOptions.defaultInstance(),
-                progress ->{ Log.i("MyAmplifyApp", "Fraction completed: " + progress.getFractionCompleted());},
-                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getPath());},
-                storageFailure ->{ Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+    private void setupButtons() {
+        AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
+        ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
+
+        editProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        logoutButton.setOnClickListener(v -> signOut());
+
+        profileBackButton.setOnClickListener(v -> finish());
+    }
+
+    private void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
         );
     }
 
+    private void handleSuccessfulSignOut() {
+        Log.i(TAG, "Signed out successfully");
+        moveToLoginActivity();
+    }
 
+    private void handleFailedSignOut(Exception exception) {
+        Log.e(TAG, "Sign out failed", exception);
+        moveToLoginActivity();
+    }
+
+    private void moveToLoginActivity() {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(ProfileManagementActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

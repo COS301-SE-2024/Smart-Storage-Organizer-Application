@@ -15,8 +15,6 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadow.api.Shadow;
-import org.robolectric.shadows.ShadowCountDownTimer;
 import org.robolectric.shadows.ShadowLooper;
 
 import java.util.concurrent.CompletableFuture;
@@ -105,10 +103,10 @@ public class EmailVerificationActivityTest {
          String code="123456";
          AtomicBoolean result = new AtomicBoolean(false);
          //when
-        when(MockedPage.ConfirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(true));
+        when(MockedPage.confirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(true));
 
         //then
-        MockedPage.ConfirmSignUp(email, code).thenAccept(isResult->{
+        MockedPage.confirmSignUp(email, code).thenAccept(isResult->{
             if(isResult)
                 result.set(true);
             else
@@ -126,10 +124,10 @@ public class EmailVerificationActivityTest {
         String code="123456";
         AtomicBoolean result = new AtomicBoolean(false);
         //when
-        when(MockedPage.ConfirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(false));
+        when(MockedPage.confirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(false));
 
         //then
-        MockedPage.ConfirmSignUp(email, code).thenAccept(isResult->{
+        MockedPage.confirmSignUp(email, code).thenAccept(isResult->{
             if(isResult)
                 result.set(true);
             else
@@ -147,10 +145,10 @@ public class EmailVerificationActivityTest {
         String code="123";
         AtomicBoolean result = new AtomicBoolean(false);
         //when
-        when(MockedPage.ConfirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(false));
+        when(MockedPage.confirmSignUp(email, code)).thenReturn(CompletableFuture.completedFuture(false));
 
         //then
-        MockedPage.ConfirmSignUp(email, code).thenAccept(isResult->{
+        MockedPage.confirmSignUp(email, code).thenAccept(isResult->{
             if(isResult)
                 result.set(true);
             else

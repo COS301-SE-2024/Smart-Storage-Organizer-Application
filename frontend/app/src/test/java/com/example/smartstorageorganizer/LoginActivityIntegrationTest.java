@@ -47,14 +47,14 @@ public class LoginActivityIntegrationTest {
         String password = "Nivlac321#";
 
         // Set the text fields
-        loginActivity.Email.setText(email);
-        loginActivity.Password.setText(password);
+        loginActivity.email.setText(email);
+        loginActivity.password.setText(password);
 
         Mockito.doAnswer(invocation -> {
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.complete(true); // Simulate successful sign-in
             return future;
-        }).when(spyLoginActivity).SignIn(email, password);
+        }).when(spyLoginActivity).signIn(email, password);
 
         // Create a CountDownLatch initialized with a count of 1
         CountDownLatch latch = new CountDownLatch(1);
