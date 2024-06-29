@@ -14,11 +14,6 @@
             android:icon="@drawable/outline_notifications_24"
             android:title="Notifications"
             android:textColor="@color/colorPrimary"/>
-<!--        <item-->
-<!--            android:id="@+id/nav_settings"-->
-<!--            android:icon="@drawable/outline_settings_24"-->
-<!--            android:title="Settings"-->
-<!--            android:textColor="@color/colorPrimary"/>-->
         <item
             android:id="@+id/nav_profile_management"
             android:icon="@drawable/outline_settings_24"
@@ -27,12 +22,12 @@
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/baseline_question_mark_24"
-            android:title="About"
+            android:title="Help"
             android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/action_faq"
-            android:title="FAQ"
-            android:orderInCategory="100"
-            android:showAsAction="never" />
+<!--        <item-->
+<!--            android:id="@+id/action_faq"-->
+<!--            android:title="FAQ"-->
+<!--            android:orderInCategory="100"-->
+<!--            android:showAsAction="never" />-->
     </group>
 </menu>

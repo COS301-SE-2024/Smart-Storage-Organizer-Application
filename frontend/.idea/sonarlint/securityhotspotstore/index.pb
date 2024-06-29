@@ -143,3 +143,5 @@ _app/src/main/java/com/example/smartstorageorganizer/ui/notifications/Notificati
 Napp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeViewModel.java,a\c\ac4cc53c8bd6d0674adf3293d672aaa3a7b52462
 ê
 `app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsViewModel.java,d\4\d4b46ff5c43cd7eeb0959570e1b9105886e392b2
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
