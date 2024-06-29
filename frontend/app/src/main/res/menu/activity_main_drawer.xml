@@ -20,7 +20,7 @@
             android:title="Settings"
             android:textColor="@color/colorPrimary"/>
         <item
-            android:id="@+id/nav_about"
+            android:id="@+id/nav_help"
             android:icon="@drawable/baseline_question_mark_24"
             android:title="Help"
             android:textColor="@color/colorPrimary"/>

@@ -41,7 +41,7 @@ public class ManualActivity extends AppCompatActivity {
         setupPrevButton();
         setupNextButton();
         setupDownloadButton();
-        
+
         try {
             openRenderer();
             showPage(currentPageIndex);  // Display the first page
