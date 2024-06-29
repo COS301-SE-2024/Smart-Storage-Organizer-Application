@@ -354,7 +354,7 @@ public class Utils {
         return units;
 
     }
-    public static CompletableFuture<Boolean> getDetails() {
+    public CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
         Amplify.Auth.fetchUserAttributes(
@@ -386,49 +386,6 @@ public class Utils {
                 error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
 
         );
-        return future;
-    }
-    public static CompletableFuture<Boolean>signOut()
-    {
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-        Amplify.Auth.signOut(signOutResult -> {
-            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
-                // Sign Out completed fully and without errors.
-                Log.i("AuthQuickStart", "Signed out successfully");
-                // move to a different page
-                future.complete(true);
-                runOnUiThread(() -> {
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                // Sign Out completed with some errors. User is signed out of the device.
-                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
-                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
-                //move to the different page
-                future.complete(true);
-                runOnUiThread(() -> {
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-
-            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
-                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
-                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
-
-                // Sign Out failed with an exception, leaving the user signed in.
-                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
-
-                // don't move to different page
-                future.complete(false);
-                runOnUiThread(() ->
-                    Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show()
-
-                );
-            }
-        });
         return future;
     }
 }

@@ -48,13 +48,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
-    public final TextView fullName;
-    public final ShapeableImageView profileImage;
-    public final AppBarConfiguration mAppBarConfiguration;
-    public final ActivityHomeBinding binding;
-    public final String currentName;
-    public final String currentSurname;
-    public final String currentPicture;
+    public TextView fullName;
+    public ShapeableImageView profileImage;
+    public AppBarConfiguration mAppBarConfiguration;
+    public ActivityHomeBinding binding;
+    public String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

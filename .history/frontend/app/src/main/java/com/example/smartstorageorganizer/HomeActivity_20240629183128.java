@@ -48,13 +48,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
-    public final TextView fullName;
-    public final ShapeableImageView profileImage;
-    public final AppBarConfiguration mAppBarConfiguration;
-    public final ActivityHomeBinding binding;
-    public final String currentName;
-    public final String currentSurname;
-    public final String currentPicture;
+    public TextView fullName;
+    public ShapeableImageView profileImage;
+    public AppBarConfiguration mAppBarConfiguration;
+    public ActivityHomeBinding binding;
+    public String currentName, currentSurname, currentPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +63,9 @@ public class HomeActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarHome.toolbar);
 
-        Utils.getDetails().thenAccept(getDetails->{
-         if (getDetails)
-            Log.i("AuthDemo", "User is signed in");
-        else
-            Log.i("AuthDemo", "User not is signed in");
-         } );
+        getDetails().thenAccept(getDetails->
+            Log.i("AuthDemo", "User is signed in")
+        );
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -91,13 +86,10 @@ public class HomeActivity extends AppCompatActivity {
                 buttonLoader.playAnimation();
                 logoutButtonText.setVisibility(View.GONE);
                 logoutButtonIcon.setVisibility(View.GONE);
-                Utils.signOut().thenAccept(result->{
-                    if(result)
-                        Log.i("Sign Out","User is signed out");
-                    else
-                        Log.i("Sign Out","User not signed out");
-                });
-
+                SignOut();
+            
+//                        .setAction("Action", null)
+//                        .setAnchorView(R.id.fab).show();
             }
         });
 
@@ -125,7 +117,91 @@ public class HomeActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-   
+
+    public CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "name":
+                                currentName = attribute.getValue();
+                                break;
+                            case "family_name":
+                                currentSurname = attribute.getValue();
+                                break;
+                            case "picture":
+                                currentPicture = attribute.getValue();
+                                break;
+//                            case "address":
+//                                currentAddress = attribute.getValue();
+//                                break;
+//                            case "custom:myCustomAttribute":
+//                                customAttribute = attribute.getValue();
+//                                break;
+                        }
+
+
+
+
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    runOnUiThread(() -> {
+                        Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
+                        String username = currentName+" "+currentSurname;
+                        fullName.setText(username);
+                    });
+                    future.complete(true);
+                },
+                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
+
+        );
+        return future;
+    }
+
+    public CompletableFuture<Boolean> SignOut()
+    {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+        Amplify.Auth.signOut(signOutResult -> {
+            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                // Sign Out completed fully and without errors.
+                Log.i("AuthQuickStart", "Signed out successfully");
+                // move to a different page
+                future.complete(true);
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
+                // Sign Out completed with some errors. User is signed out of the device.
+                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
+                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
+                //move to the different page
+                future.complete(true);
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
+                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
+                // Sign Out failed with an exception, leaving the user signed in.
+                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
+                // don't move to different page
+                future.complete(false);
+                runOnUiThread(() ->
+                    Toast.makeText(this, "Sign Out Failed.", Toast.LENGTH_LONG).show()
+
+                );
+            }
+        });
+        return future;
+    }
 
     public void DeleteCategory(int id, String email)
     {
