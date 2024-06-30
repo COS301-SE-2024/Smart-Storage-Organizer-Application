@@ -11,6 +11,25 @@ public class ItemModel {
     private String location;
     private String email;
     private String itemImage;
+    private String createdAt;
+
+    public ItemModel() {
+
+    }
+
+    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.description = description;
+        this.colourCoding = colourCoding;
+        this.barcode = barcode;
+        this.qrcode = qrcode;
+        this.quantity = quantity;
+        this.location = location;
+        this.email = email;
+        this.itemImage = itemImage;
+        this.createdAt = createdAt;
+    }
 
     public String getItemId() {
         return itemId;
@@ -92,20 +111,11 @@ public class ItemModel {
         this.itemImage = itemImage;
     }
 
-    public ItemModel() {
-
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage) {
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.description = description;
-        this.colourCoding = colourCoding;
-        this.barcode = barcode;
-        this.qrcode = qrcode;
-        this.quantity = quantity;
-        this.location = location;
-        this.email = email;
-        this.itemImage = itemImage;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

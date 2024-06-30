@@ -16,9 +16,6 @@
         android:name="com.example.smartstorageorganizer.ui.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" >
-        <action
-            android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/nav_edit_profile" />
     </fragment>
 
 
@@ -29,8 +26,8 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/nav_edit_profile"
-        android:name="com.example.smartstorageorganizer.ui.edit_profile.EditProfileFragment"
-        android:label="Edit Profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        android:id="@+id/nav_help"
+        android:name="com.example.smartstorageorganizer.ui.help.HelpFragment"
+        android:label="Help"
+        tools:layout="@layout/fragment_help" />
 </navigation>
