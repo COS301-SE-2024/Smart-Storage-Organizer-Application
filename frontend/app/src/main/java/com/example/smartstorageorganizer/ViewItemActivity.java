@@ -25,6 +25,8 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -146,13 +148,24 @@ public class ViewItemActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (currentSelectedOption.equals("A to Z")) {
-                    sortItemModelsAscending(itemModelList);
-                    itemAdapter.notifyDataSetChanged();
-                }
-                else if (currentSelectedOption.equals("Z to A")) {
-                    sortItemModelsDescending(itemModelList);
-                    itemAdapter.notifyDataSetChanged();
+                switch (currentSelectedOption) {
+                    case "A to Z":
+                        sortItemModelsAscending(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Z to A":
+                        sortItemModelsDescending(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Newest to Oldest":
+                        sortItemModelsByNewest(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Oldest to Newest":
+                        sortItemModelsByOldest(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    default:
                 }
 
                 Toast.makeText(ViewItemActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
@@ -238,5 +251,20 @@ public class ViewItemActivity extends AppCompatActivity {
 
     public static void sortItemModelsDescending(List<ItemModel> itemModels) {
         itemModels.sort((o1, o2) -> o2.getItemName().compareToIgnoreCase(o1.getItemName()));
+    }
+    public static void sortItemModelsByNewest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date2.compareTo(date1);
+        });
+    }
+
+    public static void sortItemModelsByOldest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date1.compareTo(date2);
+        });
     }
 }
