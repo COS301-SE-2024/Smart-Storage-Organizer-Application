@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -50,13 +51,22 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
     private void sendResetLink(String email) {
-
         Amplify.Auth.resetPassword(
                 email,
-                result -> Log.i(AMPLIFY_QUICK_START, result.toString()),
-                error -> Log.e(AMPLIFY_QUICK_START, error.toString())
+                result -> {
+                    Log.i("AuthQuickstart", result.toString());
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Verification code sent, please check your email.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ResetPasswordActivity.this, ResetPasswordVerificationActivity.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                        finish();
+                    });
+                },
+                error -> Log.e("AuthQuickstart", error.toString())
         );
     }
+
 
     public CompletableFuture<Boolean> resetPassword(String verificationCode, String newPassword) {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
