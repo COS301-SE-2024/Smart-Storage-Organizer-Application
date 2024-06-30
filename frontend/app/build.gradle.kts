@@ -98,7 +98,9 @@ dependencies {
     implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
 
     implementation ("com.amplifyframework:core:1.28.4")
-    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
+//    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
+    implementation ("com.amplifyframework:aws-auth-cognito:latest-version")
+
 
 
     testImplementation ("org.robolectric:robolectric:4.6.1")
