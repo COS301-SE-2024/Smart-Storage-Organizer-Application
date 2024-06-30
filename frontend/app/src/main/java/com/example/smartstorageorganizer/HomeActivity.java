@@ -251,14 +251,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    public void FetchByColour(int id, String email)
+    public void FetchByColour(int colourid)
     {
-        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
 
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteCategoryEndPoint;
+        String API_URL = BuildConfig.FetchByColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
