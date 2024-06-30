@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +26,7 @@ import java.util.Objects;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private Context context;
-    private List<ItemModel> itemModelList;
+    private final List<ItemModel> itemModelList;
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -35,7 +36,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @NonNull
     @Override
     public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ItemAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
     }
 
     @Override
@@ -81,7 +82,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return itemModelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
         TextView description;
@@ -99,6 +100,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
     // Method to handle item deletion
+    @SuppressLint("NotifyDataSetChanged")
     private void deleteItem(int position) {
         // Implement your delete logic here
         itemModelList.remove(position);
