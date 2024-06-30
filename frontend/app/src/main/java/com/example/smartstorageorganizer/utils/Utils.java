@@ -260,6 +260,7 @@ public class Utils {
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
                         }
@@ -353,5 +354,47 @@ public class Utils {
         }
         return units;
 
+    }
+
+    public static void deleteCategory(int id, String email, Activity activity, OperationCallback<Boolean> callback)
+    {
+        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = BuildConfig.DeleteCategoryEndPoint;
+        RequestBody body = RequestBody.create(json, mediaType);
+
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
     }
 }

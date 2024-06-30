@@ -30,18 +30,6 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         Button profile = root.findViewById(R.id.profile);
-        Button help = root.findViewById(R.id.help);
-        Button manual = root.findViewById(R.id.manual);
-
-        help.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), HelpActivity.class);
-            startActivity(intent);
-        });
-
-        manual.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), ManualActivity.class);
-            startActivity(intent);
-        });
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);

@@ -1,9 +1,11 @@
 package com.example.smartstorageorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +25,18 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ViewItemActivity extends AppCompatActivity {
     private TextView notFoundText;
+    private ImageView backButton;
     private Spinner mySpinner;
+    private Spinner sortBySpinner;
     private String categoryID;
     private String currentSelectedCategory;
     private List<ItemModel> itemModelList;
@@ -45,19 +53,27 @@ public class ViewItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_item);
 
         initializeViews();
+        setupBackButton();
         setupRecyclerView();
         loadInitialData();
         setupSpinnerListener();
+        setupSortByListener();
     }
 
     private void initializeViews() {
         mySpinner = findViewById(R.id.category_filter);
+        sortBySpinner = findViewById(R.id.sort_by_filter);
         TextView category = findViewById(R.id.category_text);
         itemRecyclerView = findViewById(R.id.view_all_rec);
         loadingScreen = findViewById(R.id.loadingScreen);
         notFoundText = findViewById(R.id.notFoundText);
+        backButton = findViewById(R.id.back_home_button);
         category.setText(getIntent().getStringExtra("category"));
         categoryID = getIntent().getStringExtra("category_id");
+    }
+
+    private void setupBackButton() {
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void setupRecyclerView() {
@@ -113,6 +129,51 @@ public class ViewItemActivity extends AppCompatActivity {
             @Override
             public void onFailure(String error) {
                 Toast.makeText(ViewItemActivity.this, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupSortByListener(){
+        String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(adapter);
+
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String currentSelectedOption = parentView.getItemAtPosition(position).toString();
+
+                if (currentSelectedOption.equals("Sort by")) {
+                    return;
+                }
+
+                switch (currentSelectedOption) {
+                    case "A to Z":
+                        sortItemModelsAscending(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Z to A":
+                        sortItemModelsDescending(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Newest to Oldest":
+                        sortItemModelsByNewest(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    case "Oldest to Newest":
+                        sortItemModelsByOldest(itemModelList);
+                        itemAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                }
+
+                Toast.makeText(ViewItemActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something here if nothing is selected
             }
         });
     }
@@ -182,5 +243,28 @@ public class ViewItemActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    public static void sortItemModelsAscending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o1.getItemName().compareToIgnoreCase(o2.getItemName()));
+    }
+
+    public static void sortItemModelsDescending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o2.getItemName().compareToIgnoreCase(o1.getItemName()));
+    }
+    public static void sortItemModelsByNewest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date2.compareTo(date1);
+        });
+    }
+
+    public static void sortItemModelsByOldest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date1.compareTo(date2);
+        });
     }
 }

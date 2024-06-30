@@ -205,5 +205,13 @@ Vapp/src/main/java/com/example/smartstorageorganizer/ui/settings/SettingsViewMod
 _app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsFragment.java,0\3\03714bd915fa07aa6a4e80c450083b0eff88f72c
 ~
 Napp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeViewModel.java,a\c\ac4cc53c8bd6d0674adf3293d672aaa3a7b52462
+�
+`app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsViewModel.java,d\4\d4b46ff5c43cd7eeb0959570e1b9105886e392b2
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/ui/help/HelpFragment.java,1\2\12dffe51accea4f1e81e463a639f9c2e8ef16cdb
+~
+Napp/src/main/java/com/example/smartstorageorganizer/ui/help/HelpViewModel.java,f\1\f1af6285a6651dc45ab63e7540033a4404c4280b
 
 `app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsViewModel.java,d\4\d4b46ff5c43cd7eeb0959570e1b9105886e392b2
