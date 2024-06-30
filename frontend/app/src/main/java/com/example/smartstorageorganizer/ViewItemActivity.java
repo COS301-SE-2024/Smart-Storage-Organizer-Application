@@ -26,12 +26,15 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ViewItemActivity extends AppCompatActivity {
     private TextView notFoundText;
     private ImageView backButton;
     private Spinner mySpinner;
+    private Spinner sortBySpinner;
     private String categoryID;
     private String currentSelectedCategory;
     private List<ItemModel> itemModelList;
@@ -52,10 +55,12 @@ public class ViewItemActivity extends AppCompatActivity {
         setupRecyclerView();
         loadInitialData();
         setupSpinnerListener();
+        setupSortByListener();
     }
 
     private void initializeViews() {
         mySpinner = findViewById(R.id.category_filter);
+        sortBySpinner = findViewById(R.id.sort_by_filter);
         TextView category = findViewById(R.id.category_text);
         itemRecyclerView = findViewById(R.id.view_all_rec);
         loadingScreen = findViewById(R.id.loadingScreen);
@@ -126,6 +131,40 @@ public class ViewItemActivity extends AppCompatActivity {
         });
     }
 
+    private void setupSortByListener(){
+        String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(adapter);
+
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String currentSelectedOption = parentView.getItemAtPosition(position).toString();
+
+                if (currentSelectedOption.equals("Sort by")) {
+                    return;
+                }
+
+                if (currentSelectedOption.equals("A to Z")) {
+                    sortItemModelsAscending(itemModelList);
+                    itemAdapter.notifyDataSetChanged();
+                }
+                else if (currentSelectedOption.equals("Z to A")) {
+                    sortItemModelsDescending(itemModelList);
+                    itemAdapter.notifyDataSetChanged();
+                }
+
+                Toast.makeText(ViewItemActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something here if nothing is selected
+            }
+        });
+    }
+
     private void setupSpinnerListener() {
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -191,5 +230,13 @@ public class ViewItemActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    public static void sortItemModelsAscending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o1.getItemName().compareToIgnoreCase(o2.getItemName()));
+    }
+
+    public static void sortItemModelsDescending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o2.getItemName().compareToIgnoreCase(o1.getItemName()));
     }
 }

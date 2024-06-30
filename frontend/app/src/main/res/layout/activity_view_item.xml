@@ -72,12 +72,22 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <Spinner
+        android:id="@+id/sort_by_filter"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/spinner_background"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <Spinner
         android:id="@+id/category_filter"
         android:layout_width="120dp"
         android:visibility="visible"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/spinner_background"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"

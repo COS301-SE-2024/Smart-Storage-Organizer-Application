@@ -15,10 +15,10 @@
 
 
     <string-array name="dropdown_items">
-        <item> </item>
-        <item>Electronics</item>
-        <item>Appliances</item>
-        <item>Garden</item>
-        <item>Gaming</item>
+        <item>Sort by </item>
+        <item>Newest to Oldest</item>
+        <item>Oldest to Newest</item>
+        <item>A to Z</item>
+        <item>Z to A</item>
     </string-array>
 </resources>
