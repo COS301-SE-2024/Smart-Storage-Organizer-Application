@@ -225,7 +225,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteCategoryEndPoint;
+        String API_URL = BuildConfig.AddColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -234,14 +234,14 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
     }
 
-    public void AddItemToColour(int id, String email)
+    public void AddItemToColour(int colourid, int itemid)
     {
-        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\", \"itemid\":\""+Integer.toString(itemid)+"\" }";
 
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteCategoryEndPoint;
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
