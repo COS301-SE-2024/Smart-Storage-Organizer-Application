@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -19,12 +20,14 @@
             android:layout_height="wrap_content"
             android:background="@color/black"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/default_backgrounditemimage"
             android:scaleType="fitXY"
             android:src="@drawable/samsung" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:padding="8dp"
             android:layout_gravity="bottom"
@@ -36,13 +39,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                tools:ignore="UselessParent">
 
                 <TextView
                     android:id="@+id/item_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Item name"
+                    android:text="@string/item_name"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="18sp"
@@ -54,7 +58,7 @@
                     android:id="@+id/item_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Item details go here."
+                    android:text="@string/item_details_go_here"
                     android:textSize="14sp"
                     android:maxLines="1"
                     android:singleLine="true"
@@ -63,15 +67,17 @@
                     android:layout_gravity="center"/>
 
             </LinearLayout>
-
-<!--            <Button-->
-<!--                android:id="@+id/roundButton"-->
-<!--                android:layout_width="55dp"-->
-<!--                android:layout_height="55dp"-->
-<!--                android:background="@drawable/circle"-->
-<!--                android:padding="0dp"-->
-<!--                android:drawablePadding="0dp"-->
-<!--                android:drawableTop="@drawable/baseline_add_24" />-->
         </LinearLayout>
+        <!-- Delete Icon -->
+        <ImageView
+            android:id="@+id/delete_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:background="@android:color/white"
+            android:padding="4dp"
+            android:src="@drawable/baseline_delete_24"
+            android:contentDescription="@string/delete_icon_description"/>
     </FrameLayout>
 </androidx.cardview.widget.CardView>
