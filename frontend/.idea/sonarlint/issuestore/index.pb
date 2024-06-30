@@ -159,3 +159,5 @@ G.idea/sonarlint/issuestore/1/6/169f70e9989744956683ecd71a246c10bb9ed125,c\b\cb
 Q.idea/sonarlint/securityhotspotstore/9/7/97c9e9c0c22612daa25cf47a5cbef179eff6cfc9,2\f\2f13dc12582d5bfc450c59096311372a86222087
 Å
 Q.idea/sonarlint/securityhotspotstore/a/4/a4ecffd46063f6a15f00a2f6938f614b121cdc07,c\c\ccea6e6c56df9de524c8e00ce3c2639cdce6e751
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ViewItemActivity.java,4\6\463e3c77efbbbcc42f8976110f08d038e13bf338

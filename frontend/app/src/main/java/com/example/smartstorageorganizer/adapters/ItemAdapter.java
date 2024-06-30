@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -58,6 +59,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
             context.startActivity(intent);
         });
+
+        // Handle delete icon click
+        holder.deleteIcon.setOnClickListener(view -> {
+            // Show a confirmation dialog or directly delete the item
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // Handle the delete action
+                        deleteItem(position);
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
     }
 
     @Override
@@ -70,6 +86,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView name;
         TextView description;
         ImageView itemImage;
+        ImageView deleteIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,9 +94,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);
+            deleteIcon = itemView.findViewById(R.id.delete_icon);  // Initialize delete icon
+
         }
     }
-
+    // Method to handle item deletion
+    private void deleteItem(int position) {
+        // Implement your delete logic here
+        itemModelList.remove(position);
+        notifyItemRemoved(position);
+        // Optionally, notify the adapter that the data set has changed
+        notifyDataSetChanged();
+    }
 }
 
 

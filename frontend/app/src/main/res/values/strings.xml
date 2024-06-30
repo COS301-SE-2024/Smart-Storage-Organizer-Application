@@ -73,4 +73,9 @@
     <string name="confirm">Confirm</string>
     <string name="icon_button">icon button</string>
     <string name="back_button">back button</string>
+
+<!--    Strings for accessibility for delete icon-->
+        <string name="item_image_description">Item Image</string>
+        <string name="delete_icon_description">Delete Icon</string>
+
 </resources>

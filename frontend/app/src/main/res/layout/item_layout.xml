@@ -73,7 +73,7 @@
             android:layout_margin="8dp"
             android:background="@android:color/white"
             android:padding="4dp"
-            android:src="@drawable/icon_delete"/>
-<!--            android:contentDescription="@string/delete_icon_description"/>-->
+            android:src="@drawable/baseline_delete_24"
+            android:contentDescription="@string/delete_icon_description"/>
     </FrameLayout>
 </androidx.cardview.widget.CardView>
