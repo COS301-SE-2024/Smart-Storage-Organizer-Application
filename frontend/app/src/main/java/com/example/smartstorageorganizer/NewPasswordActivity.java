@@ -30,6 +30,7 @@ public class NewPasswordActivity extends AppCompatActivity {
 
         String email = getIntent().getStringExtra("email");
         verificationCode = getIntent().getStringExtra("verificationCode");
+        assert email != null;
         Log.i("1Email",email);
         Log.i("1code",verificationCode);
 

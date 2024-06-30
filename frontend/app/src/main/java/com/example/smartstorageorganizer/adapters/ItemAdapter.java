@@ -47,6 +47,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
+//        to view on the next page whenever it clicks use onClick()
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
             intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
