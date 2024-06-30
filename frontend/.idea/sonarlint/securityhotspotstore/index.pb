@@ -129,10 +129,6 @@ y
 Iapp/src/test/java/com/example/smartstorageorganizer/UnitActivityTest.java,6\9\6942400fa62ca049118ba2f1f4f32f6951c94bdf
 }
 Mapp/src/test/java/com/example/smartstorageorganizer/ViewItemActivityTest.java,8\3\8307cc5623ed46183ddf6ca131290aeb004196dd
-å
-\app/src/main/java/com/example/smartstorageorganizer/ui/edit_profile/EditProfileFragment.java,6\f\6f60d33a072601ccb17d93fe9b474ab57b02c005
-ç
-]app/src/main/java/com/example/smartstorageorganizer/ui/edit_profile/EditProfileViewModel.java,2\3\23750d91680fa4133949f8a89f77e6b7e18db437
 Ö
 Uapp/src/main/java/com/example/smartstorageorganizer/ui/settings/SettingsFragment.java,2\7\27bd5ee88ccba93f7992843c624358e84fb128bd
 Ü
@@ -145,10 +141,6 @@ Napp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeViewModel.java
 `app/src/main/java/com/example/smartstorageorganizer/ui/notifications/NotificationsViewModel.java,d\4\d4b46ff5c43cd7eeb0959570e1b9105886e392b2
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-Ö
-Uapp/src/main/java/com/example/smartstorageorganizer/ui/help/EditProfileViewModel.java,d\e\de4e8e2c5dc1417d1b41f4d23a934ca852d724b3
-Ñ
-Tapp/src/main/java/com/example/smartstorageorganizer/ui/help/EditProfileFragment.java,d\b\dba95e54a1a061fa9520f9eadf487569f10f662c
 }
 Mapp/src/main/java/com/example/smartstorageorganizer/ui/help/HelpFragment.java,1\2\12dffe51accea4f1e81e463a639f9c2e8ef16cdb
 ~
