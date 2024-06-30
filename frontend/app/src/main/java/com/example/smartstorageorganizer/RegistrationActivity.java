@@ -1,17 +1,15 @@
 package com.example.smartstorageorganizer;
 
-
-import com.example.smartstorageorganizer.BuildConfig;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.util.Log;
 import android.widget.Toast;
-import android.util.Patterns;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,32 +18,29 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.hbb20.CountryCodePicker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.Call;
-import okhttp3.Callback;
 
 public class RegistrationActivity extends AppCompatActivity {
-    TextInputEditText Name, Surname, Email, Password, PhoneNumber;
-    TextView registerButtonText;
-    ImageView registerButtonIcon;
-    LottieAnimationView buttonLoader;
-    CountryCodePicker cpp;
+
+    private static final String TAG = "RegistrationActivity";
+
+    private TextInputEditText nameEditText;
+    private TextInputEditText surnameEditText;
+    private TextInputEditText emailEditText;
+    private TextInputEditText passwordEditText;
+    private TextInputEditText phoneNumberEditText;
+    private CountryCodePicker countryCodePicker;
+    private LottieAnimationView buttonLoader;
+    private TextView registerButtonText;
+    private ImageView registerButtonIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,201 +48,174 @@ public class RegistrationActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registration);
 
-        RelativeLayout registerButton = findViewById(R.id.buttonRegister);
-        ImageView registerBackButton = findViewById(R.id.registerBackButton);
-        TextView loginLink = findViewById(R.id.loginLink);
-        Name = findViewById(R.id.name);
-        Surname = findViewById(R.id.surname);
-        Email = findViewById(R.id.email);
-        Password = findViewById(R.id.password);
-        PhoneNumber = findViewById(R.id.phone);
-        cpp = findViewById(R.id.cpp);
+        initializeViews();
+        setupWindowInsets();
+
+        findViewById(R.id.buttonRegister).setOnClickListener(v -> {
+            if (validateForm()) {
+                performSignUp();
+            }
+        });
+
+        findViewById(R.id.registerBackButton).setOnClickListener(v -> finish());
+
+        findViewById(R.id.loginLink).setOnClickListener(v -> {
+            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        countryCodePicker.setCountryForPhoneCode(27);
+    }
+
+    private void initializeViews() {
+        nameEditText = findViewById(R.id.name);
+        surnameEditText = findViewById(R.id.surname);
+        emailEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
+        phoneNumberEditText = findViewById(R.id.phone);
+        countryCodePicker = findViewById(R.id.cpp);
         buttonLoader = findViewById(R.id.buttonLoader);
         registerButtonText = findViewById(R.id.register_button_text);
         registerButtonIcon = findViewById(R.id.register_button_icon);
+    }
 
-        cpp.setCountryForPhoneCode(27);
-        
-        //SignUp("bonganizungu889@gmail.com", "0586454569", "Test1", "Subject", "856 Ohio", "Uber1235#");
-
+    private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = Name.getText().toString().trim();
-                String surname = Surname.getText().toString().trim();
-                String email = Email.getText().toString().trim();
-                String phone = PhoneNumber.getText().toString().trim();
-                String password = Password.getText().toString().trim();
-                if (validateForm(name, surname, email, phone, password)){
-                    name = Name.getText().toString().trim();
-                    surname = Surname.getText().toString().trim();
-                    email = Email.getText().toString().trim();
-                    phone = "+27"+PhoneNumber.getText().toString().trim();
-                    password = Password.getText().toString().trim();
-
-                    buttonLoader.setVisibility(View.VISIBLE);
-                    buttonLoader.playAnimation();
-                    registerButtonText.setVisibility(View.GONE);
-                    registerButtonIcon.setVisibility(View.GONE);
-
-                    SignUp(email, phone, name, surname, "364 Hygrogen, Hatfield", password);
-                }
-            }
-        });
-
-        registerBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
     }
 
-    public boolean validateForm(String name, String surname, String email, String phone, String password) {
+    private boolean validateForm() {
+        String name = nameEditText.getText().toString().trim();
+        String surname = surnameEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
+        String phone = phoneNumberEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            Name.setError("First Name is required.");
-            Name.requestFocus();
+            nameEditText.setError("First Name is required.");
+            nameEditText.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(surname)) {
-            Surname.setError("First Surname is required.");
-            Surname.requestFocus();
+            surnameEditText.setError("Surname is required.");
+            surnameEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(email)) {
-            Email.setError("Email is required.");
-            Email.requestFocus();
+            emailEditText.setError("Email is required.");
+            emailEditText.requestFocus();
             return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Email.setError("Enter a valid email.");
-            Email.requestFocus();
+            emailEditText.setError("Enter a valid email.");
+            emailEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            PhoneNumber.setError("Phone Number is required.");
-            PhoneNumber.requestFocus();
+            phoneNumberEditText.setError("Phone Number is required.");
+            phoneNumberEditText.requestFocus();
             return false;
         }
 
-        if (phone.length() < 9|| phone.length() > 10){
-
-            PhoneNumber.setError("Enter a valid phone number.");
-            PhoneNumber.requestFocus();
+        if (phone.length() < 9 || phone.length() > 10) {
+            phoneNumberEditText.setError("Enter a valid phone number.");
+            phoneNumberEditText.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Password.setError("Password is required.");
-            Password.requestFocus();
+            passwordEditText.setError("Password is required.");
+            passwordEditText.requestFocus();
             return false;
         }
 
         if (password.length() < 8) {
-            Password.setError("Password should be at least 8 characters long.");
-            Password.requestFocus();
+            passwordEditText.setError("Password should be at least 8 characters long.");
+            passwordEditText.requestFocus();
             return false;
         }
 
         return true;
     }
 
-    public  void ConfimSignUp(String email , String Code)
-    {
-        Amplify.Auth.confirmSignUp(
-                email,
-                Code,
-                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-                    //change to new page
-                },
-                error ->{ Log.e("AuthQuickstart", error.toString());
-                    //dont change to different page
-                }
-        );
-    }
+    private void performSignUp() {
+        String nameText = nameEditText.getText().toString().trim();
+        String surnameText = surnameEditText.getText().toString().trim();
+        String emailText = emailEditText.getText().toString().trim();
+        String phoneText = countryCodePicker.getSelectedCountryCodeWithPlus() + phoneNumberEditText.getText().toString().trim();
+        String passwordText = passwordEditText.getText().toString().trim();
 
-
-
-    public void SignUp(String email, String CellNumber, String Name, String Surname, String Address, String Password )
-    {
-        // Add this line, to include the Auth plugin.
         ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), Name));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), Address));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), CellNumber));
-
-
-
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), nameText));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        //updated and add a build
+
         try {
+            buttonLoader.setVisibility(View.VISIBLE);
+            buttonLoader.playAnimation();
+            registerButtonText.setVisibility(View.GONE);
+            registerButtonIcon.setVisibility(View.GONE);
+
             Amplify.Auth.signUp(
-                    email,
-                    Password,
+                    emailText,
+                    passwordText,
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
-                        Log.i("AuthQuickstart", result.toString());
-                        //move to different page
-                        runOnUiThread(() -> {
-                            Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
-                            intent.putExtra("email", email);
-                            startActivity(intent);
-                            finish();
-                        });
+                        Log.i(TAG, "Sign-up successful: " + result.toString());
+                        moveToVerificationActivity(emailText);
                     },
                     error -> {
-                        //do not move to different page
-                        Log.e("AuthQuickstart Error: ", error.toString());
-                        if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
-                            Log.i("Message: ", "User Already Exists.");
-                            runOnUiThread(() -> {
-                                Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
-                                intent.putExtra("email", email);
-                                startActivity(intent);
-                                finish();
-                            });
-                        }
+                        Log.e(TAG, "Sign-up failed", error);
+                        handleSignUpFailure(emailText, error);
                     }
             );
+        } catch (Exception e) {
+            Log.e(TAG, "Sign-up exception", e);
+            handleSignUpException();
         }
-        catch (Exception e) {
-            Log.e("AuthSignUpError", "Exception during sign-up", e);
-            //do not change pages
-//            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-            runOnUiThread(() -> {
-                buttonLoader.setVisibility(View.GONE);
-                buttonLoader.playAnimation();
-                registerButtonText.setVisibility(View.VISIBLE);
-                registerButtonIcon.setVisibility(View.VISIBLE);
-
-                Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
-            });
-        }
-
     }
 
+    private void moveToVerificationActivity(String email) {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
+            intent.putExtra("email", email);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void handleSignUpFailure(String email, Exception error) {
+        runOnUiThread(() -> {
+            if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
+                Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show();
+                moveToVerificationActivity(email);
+            } else {
+                resetSignUpButton();
+                Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void handleSignUpException() {
+        runOnUiThread(() -> {
+            resetSignUpButton();
+            Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();
+        });
+    }
+
+    private void resetSignUpButton() {
+        buttonLoader.setVisibility(View.GONE);
+        buttonLoader.pauseAnimation();
+        registerButtonText.setVisibility(View.VISIBLE);
+        registerButtonIcon.setVisibility(View.VISIBLE);
+    }
 
 }
-

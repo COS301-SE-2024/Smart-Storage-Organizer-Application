@@ -21,42 +21,31 @@ import com.example.smartstorageorganizer.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
-    private Button profile, help, manual;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SettingsViewModel profileManagementViewModelViewModel =
-                new ViewModelProvider(this).get(SettingsViewModel.class);
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        profile = root.findViewById(R.id.profile);
-        help = root.findViewById(R.id.help);
-        manual = root.findViewById(R.id.manual);
+        Button profile = root.findViewById(R.id.profile);
+        Button help = root.findViewById(R.id.help);
+        Button manual = root.findViewById(R.id.manual);
 
-        help.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireActivity(), HelpActivity.class);
-                startActivity(intent);
-            }
+        help.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), HelpActivity.class);
+            startActivity(intent);
         });
 
-        manual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireActivity(), ManualActivity.class);
-                startActivity(intent);
-            }
+        manual.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), ManualActivity.class);
+            startActivity(intent);
         });
 
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);
-                startActivity(intent);
-            }
+        profile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);
+            startActivity(intent);
         });
 
         return root;

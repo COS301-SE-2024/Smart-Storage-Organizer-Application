@@ -1,5 +1,4 @@
 package com.example.smartstorageorganizer;
-import static android.os.Looper.getMainLooper;
 import static org.mockito.Mockito.spy;
 import org.mockito.Mock;
 import org.robolectric.Robolectric;
@@ -9,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLooper;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -88,9 +86,9 @@ public class LoginActivityTest {
         AtomicBoolean result = new AtomicBoolean(false);
 
         LoginActivity mockLoginActivity = mock(LoginActivity.class);
-        when(mockLoginActivity.SignIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
+        when(mockLoginActivity.signIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
 
-        mockLoginActivity.SignIn(validEmail, validPassword).thenAccept(isResult -> {
+        mockLoginActivity.signIn(validEmail, validPassword).thenAccept(isResult -> {
             if (isResult) {
                 result.set(true);
             } else {
@@ -108,9 +106,9 @@ public class LoginActivityTest {
         AtomicBoolean result = new AtomicBoolean(false);
 
         LoginActivity mockLoginActivity = mock(LoginActivity.class);
-        when(mockLoginActivity.SignIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
+        when(mockLoginActivity.signIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
 
-        mockLoginActivity.SignIn(invalidEmail, invalidPassword).thenAccept(isResult -> {
+        mockLoginActivity.signIn(invalidEmail, invalidPassword).thenAccept(isResult -> {
             if (isResult) {
                 result.set(true);
             } else {
@@ -126,10 +124,10 @@ public class LoginActivityTest {
         String testError = "Test Error";
         String testResult = "Test Result";
 
-        loginActivity.SetErrorAndResult(testError, testResult);
+        loginActivity.setErrorAndResult(testError, testResult);
 
-        assertEquals(testError, loginActivity.Error);
-        assertEquals(testResult, loginActivity.Result);
+        assertEquals(testError, loginActivity.errorString);
+        assertEquals(testResult, loginActivity.resultString);
     }
 
     @Test
@@ -139,15 +137,15 @@ public class LoginActivityTest {
         String password = "password123";
 
         // Set the text fields
-        loginActivity.Email.setText(email);
-        loginActivity.Password.setText(password);
+        loginActivity.email.setText(email);
+        loginActivity.password.setText(password);
 
         // When
         loginActivity.registerButton.performClick();
 
         runUiThreadTasksIncludingDelayedTasks();
         // Then
-        verify(loginActivity).SignIn(email, password);
+        verify(loginActivity).signIn(email, password);
     }
 }
 

@@ -1,19 +1,9 @@
 
-H
-java:S2699"-Add at least one assertion to this test case.(ÿÿ¶¤ùÿÿÿÿ
-C
-java:S2699"-Add at least one assertion to this test case.(°Ş”ş
-H
-java:S2699!"-Add at least one assertion to this test case.(¤ŒÊ¦ùÿÿÿÿ
-W
-java:S1854("ARemove this useless assignment to local variable "passwordField".(¯´ÔÕ
-T
-java:S1854'">Remove this useless assignment to local variable "emailField".(ßÙÆù
-E
-java:S1481'"/Remove this unused "emailField" local variable.(ßÙÆù
-H
-java:S1481("2Remove this unused "passwordField" local variable.(¯´ÔÕ
-H
-java:S1128"-Remove this unused import 'org.junit.Assert'.(›ëš‡úÿÿÿÿ
-K
-java:S1128"0Remove this unused import 'org.mockito.Mockito'.(®úá·ùÿÿÿÿ
+u
+java:S2699"-Add at least one assertion to this test case.(®ØÈÃúÿÿÿÿ8‚æÄı…2J$4d3f41c7-5475-424a-bdb8-c3367b46df3f
+u
+java:S2699"-Add at least one assertion to this test case.(‘¨ÙÃüÿÿÿÿ8ƒæÄı…2J$aa0d85f5-20e9-48c2-baf6-060e757996c6
+p
+java:S2699"-Add at least one assertion to this test case.(¡Ò¿î8ƒæÄı…2J$e53f469c-0376-40aa-8ff6-c7cd12930c15
+O
+java:S2699!"-Add at least one assertion to this test case.(Úå§´şÿÿÿÿ8±¿Åı…2

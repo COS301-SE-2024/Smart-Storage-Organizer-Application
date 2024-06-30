@@ -1,21 +1,20 @@
-package com.example.smartstorageorganizer.Adapters;
-
+package com.example.smartstorageorganizer.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.CategoryModel;
@@ -41,28 +40,35 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
-        Log.i("Adapter", "Adapter function.");
-//        Glide.with(context).load(ItemModelList.get(position).getItem_image()).into(holder.image);
         holder.name.setText(categoryModelList.get(position).getCategoryName());
-//        holder.description.setText(ParentCategoryModelList.get(position).getDescription());
-//        holder.price_before.setPaintFlags(holder.price_before.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        if(!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")){
+        if (!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")) {
             Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
-                intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
-                intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
-//                intent.putExtra("location", ItemModelList.get(holder.getAdapterPosition()).getLocation());
-//                intent.putExtra("color_code", ItemModelList.get(holder.getAdapterPosition()).getColourcoding());
-//                intent.putExtra("item_id", ItemModelList.get(holder.getAdapterPosition()).getItem_id());
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
+            intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
+            intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
 
-                context.startActivity(intent);
-            }
+            context.startActivity(intent);
+        });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("Confirmation")
+                    .setMessage("Do you want to delete the "+categoryModelList.get(holder.getAdapterPosition()).getCategoryName()+" category?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Log.i("Adapter", "Yes clicked.");
+                        Log.i("Delete", "Yes clicked.");
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        // Dismiss the dialog
+                        Log.i("Adapter", "No clicked.");
+                        dialog.dismiss();
+                    })
+                    .show();
+            return true;
         });
     }
 
@@ -81,7 +87,4 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             name = itemView.findViewById(R.id.category_name);
         }
     }
-
 }
-
-

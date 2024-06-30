@@ -5,42 +5,31 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import com.amplifyframework.auth.AuthException;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.options.AuthResetPasswordOptions;
+
 import com.amplifyframework.core.Amplify;
 import android.util.Log;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ResetPasswordActivity extends AppCompatActivity {
-    private EditText etEmail;
-    private Button btnSendResetLink;
-    private EditText etVerificationCode;
-    private EditText etNewPassword;
-    private Button btnResetPassword;
-
+    static final String AMPLIFY_QUICK_START = "AmplifyQuickstart";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EditText etNewPassword;
+        EditText etVerificationCode;
+        EditText etEmail;
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reset_password);
 
         etEmail = findViewById(R.id.etEmail);
-        btnSendResetLink = findViewById(R.id.btnSendResetLink);
+        Button btnSendResetLink = findViewById(R.id.btnSendResetLink);
         etVerificationCode = findViewById(R.id.etVerificationCode);
         etNewPassword = findViewById(R.id.etNewPassword);
-        btnResetPassword = findViewById(R.id.btnResetPassword);
+        Button btnResetPassword = findViewById(R.id.btnResetPassword);
 
         btnSendResetLink.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
@@ -85,8 +74,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 newPassword,
                 verificationCode,
                 "confirmation code you received",
-                () -> {Log.i("AuthQuickstart", "New password confirmed");  future.complete(true);},
-                error -> {Log.e("AuthQuickstart", error.toString());  future.complete(false);}
+                () -> {Log.i(AMPLIFY_QUICK_START, "New password confirmed");  future.complete(true);},
+                error -> {Log.e(AMPLIFY_QUICK_START, error.toString());  future.complete(false);}
         );
         return future;
     }

@@ -1,51 +1,5 @@
 
-	java:S117Á"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦J$87decd3b-1168-47b1-b00a-677c99c8b586
-Œ	java:S117Ç"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæXJ$eb1ca40e-47bf-4adf-aa1e-f23dc2ab78d7
-’	java:S117É"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£Ü¤‚şÿÿÿÿJ$409bed57-1038-47ec-8149-04e96798c619
-	java:S117•"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»J$e805e17b-b197-431d-93c5-0cb242d75a00
-”	java:S117•"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»8ê®îÑƒ2J$0bf6e1ac-a3d3-4103-b6cd-4469782dd39d
-“	java:S117™"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ê®îÑƒ2J$5da0a2cc-9f32-4be2-a36b-ada05efa0c51
-”	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡™²…8ê®îÑƒ2J$99dc7cb2-8ee2-49a5-8190-9690e0ecc325
-¥
-java:S11043"]Make categoryModelList a static final constant or non-public and provide accessors if needed.(’ì´úÿÿÿÿ8ì®îÑƒ2J$827db35b-34a3-48cd-bbd9-7da6b98b7141
-¹
-java:S13193"qThe type of "categoryModelList" should be an interface such as "List" rather than the implementation "ArrayList".(’ì´úÿÿÿÿ8í®îÑƒ2J$ba355e0b-c74a-4f94-bfef-1ef6775bff94
-
-java:S1192w"KDefine a constant instead of duplicating this literal "Selected: " 3 times.(œ”Ú8ø®îÑƒ2J$5cde1d97-f0d1-4bc2-9978-57495fcaa101
-‹
-java:S1192Y"HDefine a constant instead of duplicating this literal "Spinner" 8 times.(ëâş8ø®îÑƒ2J$abccd8d2-c796-4a10-8982-7fe4e85f62a3
-Œ
-java:S1192Œ"ODefine a constant instead of duplicating this literal "Request Method" 4 times.(ú»Ç—J$1357a867-0b96-4647-858e-9f4880e7e118
-q
-java:S1659;")Declare "subCategory" on a separate line.(„˜‹ûÿÿÿÿ8Ú‹ÃÔƒ2J$19eb44cb-3d38-4b1c-95c1-65946a9189d0
-€
-java:S1144˜"7Remove this unused private "findCategoryByName" method.(¨„»øÿÿÿÿ8—¯îÑƒ2J$2ec2248a-6eab-49b2-af7d-5d36965f0aa2
-€
-java:S1144¥"7Remove this unused private "validateParentForm" method.(İ™ü°ÿÿÿÿÿ8—¯îÑƒ2J$27534ba1-5a7c-49f1-95ee-dba70c90948c
-…
-java:S1144±"<Remove this unused private "validateSubCategoryForm" method.(«¹°ùÿÿÿÿ8˜¯îÑƒ2J$0b1ae6b4-6716-47a8-ba54-46a01eddaa18
-š
-java:S3776?"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¨Œşÿÿÿÿ8æ‹ÃÔƒ2J$78bd279f-f01b-43d1-84fe-037766b08abb
-€
-java:S1854f"=Remove this useless assignment to local variable "!unknown!".(ÊÑ‰8·¯îÑƒ2J$b9bd36df-0c71-479b-9493-16c08c0c7087
-ƒ	java:S125e"<This block of commented-out lines of code should be removed.(„ÌÒîÿÿÿÿÿ8½¯îÑƒ2J$77b3edeb-ffcf-413a-8a4c-685a07fb6e91
-ƒ	java:S125k"<This block of commented-out lines of code should be removed.(ìîßØûÿÿÿÿ8¾¯îÑƒ2J$fd677846-7e30-4c51-8537-3194736aee5c
-z
-java:S1172˜"1Remove this unused method parameter "categories".(¨„»øÿÿÿÿ8Ä¯îÑƒ2J$65a3f63a-dfeb-4e36-8cce-8d73d947b212
-u
-java:S1602™",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8Å¯îÑƒ2J$5342d776-cdde-498d-9be8-5d036bd49f47
-‘	java:S100Á"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8Ó¯îÑƒ2J$48e7fad8-5e9c-4adc-b743-a4aabfbad2c0
-s
-java:S1481ã"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8°îÑƒ2J$923f4307-30f1-459f-9fbe-aabd6ab4251a
-o
-java:S1481ä"+Remove this unused "status" local variable.(©©­ı8°îÑƒ2J$ff3656c4-a2d9-4fdc-9692-1d9f1d76c354
-s
-java:S1481é"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8”°îÑƒ2J$b5e863e9-4eba-42e3-9a5a-644b0b631ed4
-„	java:S125ó"<This block of commented-out lines of code should be removed.(‰“¶Ìÿÿÿÿÿ8–°îÑƒ2J$87884255-a6e4-433d-8394-d8cd9c3ba249
-„	java:S125÷"<This block of commented-out lines of code should be removed.(Çù–¨şÿÿÿÿ8—°îÑƒ2J$d7fa734c-040f-45be-8382-c50000749c5a
-x	java:S125"<This block of commented-out lines of code should be removed.(²éšÁJ$83965777-de36-4aef-a161-816c7c11bd10
-Š	java:S100•"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îåÛ»J$44d9c6d5-efdd-41e9-b5a1-5712f3f1d35d
-r
-java:S10685"0Remove this unused "currentEmail" private field.(¯ô 8¬ŒÃÔƒ2J$773fd499-6361-4c39-91dd-aa4bf2956362
-
-java:S10688"9Remove this unused "parentCategoriesIcons" private field.(­¾úÿÿÿÿÿ8¬ŒÃÔƒ2J$be342a6c-8d9d-4efd-9d80-d309e6ec7eff
+‡
+java:S1874â">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ä¶ñó…2J$dc1b722b-def6-4ba9-9b14-2754241bbfc5
+“
+java:S1874æ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ä¶ñó…2J$82f2c532-35fb-4de6-92f7-770b1618c47a

@@ -2,7 +2,6 @@ package com.example.smartstorageorganizer.ui.home;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,10 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,19 +20,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
 
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -46,21 +37,17 @@ import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
-import com.bumptech.glide.Glide;
-import com.example.smartstorageorganizer.Adapters.CategoryAdapter;
-import com.example.smartstorageorganizer.Adapters.ItemAdapter;
+import com.example.smartstorageorganizer.adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
-import com.example.smartstorageorganizer.ViewItemActivity;
+import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -208,21 +195,21 @@ public class HomeFragment extends Fragment {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
 
                                 ItemModel item = new ItemModel();
-                                item.setItem_id(itemObject.getString("item_id"));
-                                item.setItem_name(itemObject.getString("item_name"));
+                                item.setItemId(itemObject.getString("item_id"));
+                                item.setItemName(itemObject.getString("item_name"));
                                 item.setDescription(itemObject.getString("description"));
-                                item.setColourcoding(itemObject.getString("colourcoding"));
+                                item.setColourCoding(itemObject.getString("colourcoding"));
                                 item.setBarcode(itemObject.getString("barcode"));
                                 item.setQrcode(itemObject.getString("qrcode"));
-                                item.setQuanity(itemObject.getString("quanity"));
+                                item.setQuantity(itemObject.getString("quanity"));
                                 item.setLocation(itemObject.getString("location"));
                                 item.setEmail(itemObject.getString("email"));
-                                item.setItem_image(itemObject.getString("item_image"));
+                                item.setItemImage(itemObject.getString("item_image"));
 
                                 itemModelList.add(item);
                                 itemAdapter.notifyDataSetChanged();
 
-                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItem_image()));
+                                requireActivity().runOnUiThread(() -> Log.e("Item Details", item.getItemImage()));
                             }
 
                             requireActivity().runOnUiThread(() -> {

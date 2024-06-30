@@ -29,9 +29,12 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 
 public class ItemInfoActivity extends AppCompatActivity {
-    private TextView itemName, itemDescription, itemLocation;
-    private AppCompatButton editItemButton;
-    private ImageView backButton;
+    private TextView itemName;
+    private TextView itemDescription;
+    private TextView itemLocation;
+
+    private static final String TAG = "ItemInfoActivity";
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,113 +42,132 @@ public class ItemInfoActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_item_info);
 
+        initializeUI();
+        setItemDetails();
+        configureInsets();
+    }
+
+    private void initializeUI() {
         itemName = findViewById(R.id.item_name);
         itemDescription = findViewById(R.id.item_description);
         itemLocation = findViewById(R.id.item_location);
-        editItemButton = findViewById(R.id.edit_item_button);
-        backButton = findViewById(R.id.backButton);
+        AppCompatButton editItemButton = findViewById(R.id.edit_item_button);
+        ImageView backButton = findViewById(R.id.backButton);
 
-        itemName.setText(getIntent().getStringExtra("item_name"));
-        itemDescription.setText(getIntent().getStringExtra("item_description"));
-        itemLocation.setText(getIntent().getStringExtra("location"));
+        editItemButton.setOnClickListener(v -> showEditItemPopup());
+        backButton.setOnClickListener(v -> navigateToHome());
+    }
 
+    private void setItemDetails() {
+        Intent intent = getIntent();
+        itemName.setText(intent.getStringExtra("item_name"));
+        itemDescription.setText(intent.getStringExtra("item_description"));
+        itemLocation.setText(intent.getStringExtra("location"));
+    }
+
+    private void configureInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
 
-        editItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditItemPopup();
-            }
-        });
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+    private void navigateToHome() {
+        Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void showEditItemPopup() {
-        // Create an AlertDialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Inflate the dialog layout
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.edit_item_popup, null);
         builder.setView(dialogView);
 
-        // Get the EditTexts and Button from the dialog layout
-        EditText itemName = dialogView.findViewById(R.id.item_name);
-        EditText itemDescription = dialogView.findViewById(R.id.item_description);
-        EditText itemLocation = dialogView.findViewById(R.id.item_location);
+        EditText itemNameText = dialogView.findViewById(R.id.item_name);
+        EditText itemDescriptionText = dialogView.findViewById(R.id.item_description);
+        EditText itemLocationText = dialogView.findViewById(R.id.item_location);
         EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
         Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
 
-        itemName.setText(getIntent().getStringExtra("item_name"));
-        itemDescription.setText(getIntent().getStringExtra("item_description"));
-        itemLocation.setText(getIntent().getStringExtra("location"));
-        itemColorCode.setText(getIntent().getStringExtra("color_code"));
+        setDialogFields(itemNameText, itemDescriptionText, itemLocationText, itemColorCode);
 
-        // Create the AlertDialog
         AlertDialog alertDialog = builder.create();
 
-        // Set the button click listener
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                String location = itemLocation.getText().toString().trim();
-                String colorCode = itemColorCode.getText().toString().trim();
+        buttonNext.setOnClickListener(v -> {
+            String name = itemNameText.getText().toString().trim();
+            String description = itemDescriptionText.getText().toString().trim();
+            String location = itemLocationText.getText().toString().trim();
+            String colorCode = itemColorCode.getText().toString().trim();
 
-                PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
-                alertDialog.dismiss();
-            }
+            int itemId = Integer.parseInt(getIntent().getStringExtra("item_id"));
+            postEditItem(name, description, colorCode, "asdffd", "00111100", 1, location, itemId);
+            alertDialog.dismiss();
         });
 
-        // Show the AlertDialog
         alertDialog.show();
     }
 
-    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private void setDialogFields(EditText itemNameText, EditText itemDescriptionText, EditText itemLocationText, EditText itemColorCode) {
+        Intent intent = getIntent();
+        itemNameText.setText(intent.getStringExtra("item_name"));
+        itemDescriptionText.setText(intent.getStringExtra("item_description"));
+        itemLocationText.setText(intent.getStringExtra("location"));
+        itemColorCode.setText(intent.getStringExtra("color_code"));
+    }
+
+    private void postEditItem(String itemName, String description, String colorCode, String barcode, String qrCode, int quantity, String location, int itemId) {
+        String json = createJsonRequest(itemName, description, colorCode, barcode, qrCode, quantity, location, itemId);
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.EditItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
+        String apiUrl = BuildConfig.EditItemEndPoint;
+        RequestBody body = RequestBody.create(json, JSON_MEDIA_TYPE);
 
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(apiUrl)
                 .post(body)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-            }
+        client.newCall(request).enqueue(new ItemCallback(itemName, description, location));
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-                        itemName.setText(item_name);
-                        itemDescription.setText(description);
-                        itemLocation.setText(location);
-                    });
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                }
+    private String createJsonRequest(String itemName, String description, String colorCode, String barcode, String qrCode, int quantity, String location, int itemId) {
+        return "{\"item_name\":\"" + itemName + "\",\"description\":\"" + description + "\",\"colourcoding\":\"" + colorCode + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrCode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\",\"item_id\":" + itemId + "}";
+    }
+
+    private class ItemCallback implements Callback {
+        private final String itemName;
+        private final String description;
+        private final String location;
+
+        ItemCallback(String itemName, String description, String location) {
+            this.itemName = itemName;
+            this.description = description;
+            this.location = location;
+        }
+
+        @Override
+        public void onFailure(Call call, IOException e) {
+            runOnUiThread(() -> Log.e(TAG, "POST request failed", e));
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+            if (response.isSuccessful()) {
+                final String responseData = response.body().string();
+                runOnUiThread(() -> {
+                    Log.i(TAG, "POST request succeeded: " + responseData);
+                    updateItemDetails(itemName, description, location);
+                });
+            } else {
+                runOnUiThread(() -> Log.e(TAG, "POST request failed: " + response.code()));
             }
-        });
+        }
+
+        private void updateItemDetails(String itemName, String description, String location) {
+            ItemInfoActivity.this.itemName.setText(itemName);
+            ItemInfoActivity.this.itemDescription.setText(description);
+            ItemInfoActivity.this.itemLocation.setText(location);
+        }
     }
 }

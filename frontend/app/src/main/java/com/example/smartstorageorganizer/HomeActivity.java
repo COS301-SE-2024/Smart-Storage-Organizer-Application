@@ -217,7 +217,6 @@ public class HomeActivity extends AppCompatActivity {
                 .url(API_URL)
                 .post(body)
                 .build();
-
     }
 
 

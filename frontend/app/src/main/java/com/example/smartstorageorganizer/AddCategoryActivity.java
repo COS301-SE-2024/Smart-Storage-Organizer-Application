@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -27,19 +26,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
-import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,384 +42,286 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 public class AddCategoryActivity extends AppCompatActivity {
-    int PICK_IMAGE_MULTIPLE = 1;
     private static final int GALLERY_CODE = 1;
-    Uri ImageUri;
-    File file;
-    List<String> imagesEncodedList;
-    ArrayList<Uri> ChooseImageList;
+    private static final String EMAIL_KEY = "email";
+    private static final String IMAGE_TYPE = "image/*";
+    private static final String IMAGE_CACHE_NAME = "image.jpeg";
+    private static final String IMAGE_CONTENT_TYPE = "image/png";
+    private static final String IMAGE_PATH_FORMAT = "public/Category/%s.png";
+    private static final String STORAGE_URL_FORMAT = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/%s.png";
+
+    private File imageFile;
     private RadioGroup radioGroup;
-    private RadioButton radioButton;
+    private RadioButton selectedRadioButton;
     private TextInputLayout subcategoryInput;
     private TextInputLayout parentCategoryInput;
     private ImageView parentCategoryImage;
-    ConstraintLayout uploadButton;
-    TextView spinnerHeaderText;
-    public ArrayList<CategoryModel> categoryModelList = new ArrayList<>();
+    private ConstraintLayout uploadButton;
+    private TextView spinnerHeaderText;
     private String currentSelectedParent;
     private LinearLayout addCategoryLayout;
-    private String currentEmail;
-
-    private List<String> parentCategories = new ArrayList<>();
-    private List<String> parentCategoriesIcons = new ArrayList<>();
-    private Spinner mySpinner;
     private ConstraintLayout addButton;
-    private TextInputEditText parentCategoryEditText, subCategory;
+    private TextInputEditText parentCategoryEditText;
+    private TextInputEditText subCategoryEditText;
     private LottieAnimationView loadingScreen;
-    private boolean flag = true;
+    private List<CategoryModel> categoryModelList = new ArrayList<>();
+    private Spinner categorySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_category);
+        initViews();
+        setupWindowInsets();
+        fetchParentCategories();
+        setupUploadButton();
+        setupAddButton();
+        setupRadioGroup();
+        setupSpinnerListener();
+    }
+
+    private void initViews() {
+        categorySpinner = findViewById(R.id.mySpinner);
+        radioGroup = findViewById(R.id.radioGroup);
+        subcategoryInput = findViewById(R.id.subcategoryInput);
+        parentCategoryInput = findViewById(R.id.parentcategoryInput);
+        parentCategoryEditText = findViewById(R.id.parentcategory);
+        spinnerHeaderText = findViewById(R.id.spinnerHeaderText);
+        addButton = findViewById(R.id.addButton);
+        addCategoryLayout = findViewById(R.id.addCategoryLayout);
+        subCategoryEditText = findViewById(R.id.subcategory);
+        parentCategoryImage = findViewById(R.id.parentCategoryImage);
+        uploadButton = findViewById(R.id.uploadButton);
+        loadingScreen = findViewById(R.id.loadingScreen);
+    }
+
+    private void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            mySpinner = findViewById(R.id.mySpinner);
-            radioGroup = findViewById(R.id.radioGroup);
-            subcategoryInput = findViewById(R.id.subcategoryInput);
-            parentCategoryInput = findViewById(R.id.parentcategoryInput);
-            parentCategoryEditText = findViewById(R.id.parentcategory);
-            spinnerHeaderText = findViewById(R.id.spinnerHeaderText);
-            addButton = findViewById(R.id.addButton);
-            addCategoryLayout = findViewById(R.id.addCategoryLayout);
-            subCategory = findViewById(R.id.subcategory);
-            parentCategoryImage = findViewById(R.id.parentCategoryImage);
-            uploadButton = findViewById(R.id.uploadButton);
-            loadingScreen = findViewById(R.id.loadingScreen);
-            //flash sale
-
-            if(flag) {
-                FetchCategory(0, getIntent().getStringExtra("email"));
-                currentSelectedParent = "";
-            }
-
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-
-            uploadButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OpenGallery();
-                }
-            });
-
-            addButton.setOnClickListener(v1 -> {
-                loadingScreen.setVisibility(View.VISIBLE);
-                addCategoryLayout.setVisibility(View.GONE);
-                Log.i("Spinner",radioButton.getText().toString());
-                if(radioButton.getText().toString().equals("Parent Category")){
-                    String parentCategoryText = Objects.requireNonNull(parentCategoryEditText.getText()).toString().trim();
-                    if(validateParentForm(parentCategoryText)) {
-                        Log.i("Spinner","Inside the Parent category if statement");
-                        UploadParentCategoryImage(file);
-                    }
-                }
-                else if(radioButton.getText().toString().equals("Sub Category")){
-                    Log.i("Spinner","Inside the Sub category if statement");
-                    if(validateSubCategoryForm()) {
-                        Log.i("Spinner","Inside the Sub category validate "+currentSelectedParent);
-//                            Log.i("Spinner",parentCategoryModelList.get(0).getCategoryName());
-
-                            CategoryModel parent = findCategoryByName(categoryModelList, currentSelectedParent);
-                            Log.i("Spinner", parent.getCategoryID() + " : " + parent.getCategoryName());
-                            AddCategory(Integer.parseInt(parent.getCategoryID()), Objects.requireNonNull(subCategory.getText()).toString(), "ezemakau@gmail.com", "");
-                        }
-                    }
-//                    AddCategory(0, "Gaming", "ezemakau@gmail.com");
-            });
-            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                radioButton = findViewById(checkedId);
-                if(radioButton.getText().toString().equals("Sub Category")){
-                    mySpinner.setVisibility(View.VISIBLE);
-                    spinnerHeaderText.setVisibility(View.VISIBLE);
-                    subcategoryInput.setVisibility(View.VISIBLE);
-                    parentCategoryInput.setVisibility(View.GONE);
-                    parentCategoryImage.setVisibility(View.GONE);
-                    uploadButton.setVisibility(View.GONE);
-                    Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
-                }
-                else if(radioButton.getText().toString().equals("Parent Category")){
-                    mySpinner.setVisibility(View.GONE);
-                    spinnerHeaderText.setVisibility(View.GONE);
-                    subcategoryInput.setVisibility(View.GONE);
-                    parentCategoryInput.setVisibility(View.VISIBLE);
-                    parentCategoryImage.setVisibility(View.VISIBLE);
-                    uploadButton.setVisibility(View.VISIBLE);
-
-                    Toast.makeText(AddCategoryActivity.this, "Selected: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
-                }
-            });
-            mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    // Get selected item
-                    currentSelectedParent = parentView.getItemAtPosition(position).toString();
-
-                    // Do something with the selected item
-                    Log.i("Spinner","CurrentParent: "+currentSelectedParent);
-                    Toast.makeText(AddCategoryActivity.this, "Selected: " + currentSelectedParent, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parentView) {
-                    // Do something here if nothing is selected
-                }
-            });
-
             return insets;
         });
     }
 
-    private void OpenGallery() {
-        Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //startActivityForResult(galleryIntent, GalleryPick);
-        startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
+    private void fetchParentCategories() {
+        String email = getIntent().getStringExtra(EMAIL_KEY);
+        Utils.fetchParentCategories(0, email, this, new OperationCallback<List<CategoryModel>>() {
+            @Override
+            public void onSuccess(List<CategoryModel> result) {
+                categoryModelList = result;
+                setupSpinnerAdapter();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                showToast("Failed to fetch categories: " + error);
+            }
+        });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+    private void setupSpinnerAdapter() {
+        List<String> parentCategories = new ArrayList<>();
+        for (CategoryModel category : categoryModelList) {
+            parentCategories.add(category.getCategoryName());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+    }
 
-            imagesEncodedList = new ArrayList<>();
+    private void setupUploadButton() {
+        uploadButton.setOnClickListener(v -> openGallery());
+    }
 
-//            Toast.makeText(EditProfileActivity.this, "Image URI: "+Objects.requireNonNull(data.getData()).toString(), Toast.LENGTH_LONG).show();
+    private void setupAddButton() {
+        addButton.setOnClickListener(v -> handleAddButtonClick());
+    }
 
-            if (data.getData() != null) {
-                ImageUri = data.getData();
-                parentCategoryImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) parentCategoryImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private void handleAddButtonClick() {
+        loadingScreen.setVisibility(View.VISIBLE);
+        addCategoryLayout.setVisibility(View.GONE);
+        if (isParentCategorySelected()) {
+            handleParentCategory();
+        } else if (isSubCategorySelected() && validateSubCategoryForm()) {
+            CategoryModel parent = findCategoryByName(currentSelectedParent);
+            if (parent != null) {
+                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), getIntent().getStringExtra(EMAIL_KEY), "");
             }
-
-            else if (data.getClipData() != null) {
-                ImageUri = data.getClipData().getItemAt(0).getUri();
-                parentCategoryImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) parentCategoryImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
 
-    private CategoryModel findCategoryByName(ArrayList<CategoryModel> categories, String categoryName) {
-        runOnUiThread(() -> {
-            Log.e("Spinner", categoryModelList.get(0).getCategoryName());
+    private boolean isParentCategorySelected() {
+        return selectedRadioButton.getText().toString().equals("Parent Category");
+    }
+
+    private boolean isSubCategorySelected() {
+        return selectedRadioButton.getText().toString().equals("Sub Category");
+    }
+
+    private void handleParentCategory() {
+        String parentCategoryText = parentCategoryEditText.getText().toString().trim();
+        if (validateParentForm(parentCategoryText)) {
+            uploadParentCategoryImage(imageFile);
+        }
+    }
+
+    private void setupRadioGroup() {
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> handleRadioGroupSelection(checkedId));
+    }
+
+    private void handleRadioGroupSelection(int checkedId) {
+        selectedRadioButton = findViewById(checkedId);
+        if (isSubCategorySelected()) {
+            showSubCategoryFields();
+        } else if (isParentCategorySelected()) {
+            showParentCategoryFields();
+        }
+    }
+
+    private void showSubCategoryFields() {
+        categorySpinner.setVisibility(View.VISIBLE);
+        spinnerHeaderText.setVisibility(View.VISIBLE);
+        subcategoryInput.setVisibility(View.VISIBLE);
+        parentCategoryInput.setVisibility(View.GONE);
+        parentCategoryImage.setVisibility(View.GONE);
+        uploadButton.setVisibility(View.GONE);
+    }
+
+    private void showParentCategoryFields() {
+        categorySpinner.setVisibility(View.GONE);
+        spinnerHeaderText.setVisibility(View.GONE);
+        subcategoryInput.setVisibility(View.GONE);
+        parentCategoryInput.setVisibility(View.VISIBLE);
+        parentCategoryImage.setVisibility(View.VISIBLE);
+        uploadButton.setVisibility(View.VISIBLE);
+    }
+
+    private void setupSpinnerListener() {
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            private boolean isFirstTime = true;
+
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (isFirstTime) {
+                    isFirstTime = false;
+                    return;
+                }
+                currentSelectedParent = parentView.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //Handle when nothing is not selected.
+            }
         });
+    }
+
+    private void openGallery() {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType(IMAGE_TYPE);
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), GALLERY_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK && data != null) {
+            handleImageSelection(data);
+        }
+    }
+
+    private void handleImageSelection(Intent data) {
+        if (data.getData() != null) {
+            handleSingleImage(data.getData());
+        } else if (data.getClipData() != null) {
+            handleSingleImage(data.getClipData().getItemAt(0).getUri());
+        }
+    }
+
+    private void handleSingleImage(Uri uri) {
+        parentCategoryImage.setImageURI(uri);
+        saveImageToFile(((BitmapDrawable) parentCategoryImage.getDrawable()).getBitmap());
+    }
+
+    private void saveImageToFile(Bitmap bitmap) {
+        imageFile = new File(getCacheDir(), IMAGE_CACHE_NAME);
+        try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private CategoryModel findCategoryByName(String categoryName) {
         for (CategoryModel category : categoryModelList) {
             if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
                 return category;
             }
         }
-        return null; // Return null if no category with the given name is found
+        return null;
     }
 
-
-    public boolean validateParentForm(String parentCategoryText) {
-
+    boolean validateParentForm(String parentCategoryText) {
         if (TextUtils.isEmpty(parentCategoryText)) {
             parentCategoryEditText.setError("Parent Category is required.");
             parentCategoryEditText.requestFocus();
             return false;
         }
-
         return true;
     }
 
     private boolean validateSubCategoryForm() {
-        String subCategoryText = Objects.requireNonNull(subCategory.getText()).toString().trim();
-
-        if (Objects.equals(currentSelectedParent, "")) {
-            Toast.makeText(AddCategoryActivity.this, currentSelectedParent, Toast.LENGTH_LONG).show();
+        String subCategoryText = subCategoryEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(subCategoryText)) {
+            subCategoryEditText.setError("Sub Category is required.");
+            subCategoryEditText.requestFocus();
             return false;
         }
-        if(TextUtils.isEmpty(subCategoryText)){
-            subCategory.setError("Sub Category is required.");
-            subCategory.requestFocus();
-            return false;
-        }
-
         return true;
     }
 
-    public void FetchCategory(int ParentCategory, String email)
-    {
-        if(flag) {
-            String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\" }";
-
-
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            OkHttpClient client = new OkHttpClient();
-            String API_URL = BuildConfig.FetchCategoryEndPoint;
-            RequestBody body = RequestBody.create(json, JSON);
-
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(body)
-                    .build();
-
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Log.e("Category Request Method", "GET request failed", e));
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        runOnUiThread(() -> {
-                            runOnUiThread(() -> Log.e("Category Response Results", responseData));
-
-                            try {
-                                JSONObject jsonObject = new JSONObject(responseData);
-
-                                int statusCode = jsonObject.getInt("statusCode");
-                                String status = jsonObject.getString("status");
-
-                                String bodyString = jsonObject.getString("body");
-                                JSONArray bodyArray = new JSONArray(bodyString);
-
-                                List<ItemModel> items = new ArrayList<>();
-
-                                runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
-                                parentCategories.add("");
-                                for (int i = 0; i < bodyArray.length(); i++) {
-                                    JSONObject itemObject = bodyArray.getJSONObject(i);
-
-                                    CategoryModel parentCategory = new CategoryModel();
-                                    parentCategory.setCategoryID(itemObject.getString("id"));
-                                    parentCategory.setCategoryName(itemObject.getString("categoryname"));
-//                                    parentCategory.setImageUrl(itemObject.getString("icon"));
-
-                                    categoryModelList.add(parentCategory);
-                                    parentCategories.add(itemObject.getString("categoryname"));
-//                                    String temp = itemObject.getString("icon");
-//                                    runOnUiThread(() -> Log.e("Image Url", temp));
-                                }
-                                runOnUiThread(() -> {
-                                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddCategoryActivity.this, android.R.layout.simple_spinner_item, parentCategories);
-                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                    mySpinner.setAdapter(adapter);
-                                });
-
-
-//                            requireActivity().runOnUiThread(() -> {
-//                                fetchItemsLoader.setVisibility(View.GONE);
-//                                itemRecyclerView.setVisibility(View.VISIBLE);
-//                            });
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        });
-
-                    } else {
-                        runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
-                    }
-                }
-            });
-            flag = false;
-        }
-
-    }
-
-    public void AddCategory(int ParentCategory, String CategoryName, String email, String url)
-    {
-        String json = "{\"useremail\":\""+email+"\", \"parentcategory\":\""+Integer.toString(ParentCategory)+"\", \"categoryname\":\""+CategoryName+"\", \"icon\": \""+url+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddCategoryEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-                        Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                        Toast.makeText(AddCategoryActivity.this, "New Category Added Successfully.", Toast.LENGTH_LONG).show();
-                    });
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                }
-            }
-        });
-
-    }
-
-    public void UploadParentCategoryImage(File ParentCategoryImage)
-    {
+    private void uploadParentCategoryImage(File parentCategoryImage) {
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
-                .contentType("image/png") // Adjust based on file type
+                .contentType(IMAGE_CONTENT_TYPE)
                 .build();
-        long Time = System.nanoTime();
-        String key= String.valueOf(Time);
-        String Path="public/Category/"+key+".png";
+        String key = String.valueOf(System.nanoTime());
+        String path = String.format(IMAGE_PATH_FORMAT, key);
+
         Amplify.Storage.uploadFile(
-                StoragePath.fromString(Path),
-                ParentCategoryImage,
+                StoragePath.fromString(path),
+                parentCategoryImage,
                 options,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)),
-                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
+                result -> handleImageUploadSuccess(key),
+                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
         );
     }
-    public String GetObjectUrl(String key)
-    {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/"+key+".png";
-        AddCategory(0, Objects.requireNonNull(parentCategoryEditText.getText()).toString(), "ezemakau@gmail.com", url);
-//        Toast.makeText(AddCategoryActivity.this, "Parent Category Added Successfully.", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
-//        startActivity(intent);
-//        finish();
 
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/"+key+".png";
+    private void handleImageUploadSuccess(String key) {
+        String url = String.format(STORAGE_URL_FORMAT, key);
+        addNewCategory(0, parentCategoryEditText.getText().toString(), "ezemakau@gmail.com", url);
+    }
+
+    private void addNewCategory(int parentCategory, String categoryName, String email, String url) {
+        Utils.addCategory(parentCategory, categoryName, email, url, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    showToast("Category added successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                showToast("Failed to add category: " + error);
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
