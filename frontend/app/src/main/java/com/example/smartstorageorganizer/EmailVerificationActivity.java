@@ -26,15 +26,15 @@ import java.util.concurrent.CompletableFuture;
 public class EmailVerificationActivity extends AppCompatActivity {
 
     // UI Elements
-    private EditText inputCode1;
-    private EditText inputCode2;
-    private EditText inputCode3;
-    private EditText inputCode4;
-    private EditText inputCode5;
-    private EditText inputCode6;
-    private TextView resendOtpTextView;
+    EditText inputCode1;
+    EditText inputCode2;
+    EditText inputCode3;
+    EditText inputCode4;
+    EditText inputCode5;
+    EditText inputCode6;
+    TextView resendOtpTextView;
     private TextView emailTextView;
-    private CountDownTimer countDownTimer;
+    CountDownTimer countDownTimer;
 
     // Constants
     private static final String AUTH_QUICK_START = "AuthQuickstart";
@@ -87,7 +87,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateForm() {
+    boolean validateForm() {
         return !TextUtils.isEmpty(inputCode1.getText().toString().trim())
                 && !TextUtils.isEmpty(inputCode2.getText().toString().trim())
                 && !TextUtils.isEmpty(inputCode3.getText().toString().trim())
@@ -105,7 +105,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 + inputCode6.getText().toString().trim();
     }
 
-    private CompletableFuture<Boolean> confirmSignUp(String email, String code) {
+    CompletableFuture<Boolean> confirmSignUp(String email, String code) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.confirmSignUp(
                 email,
