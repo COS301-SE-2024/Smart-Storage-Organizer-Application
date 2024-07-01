@@ -31,15 +31,9 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         Button profile = root.findViewById(R.id.profile);
-        Button color = root.findViewById(R.id.color);
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);
-            startActivity(intent);
-        });
-
-        color.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
             startActivity(intent);
         });
 
