@@ -218,6 +218,36 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+    public void CategoryToUncategorized(int id)
+    {
+        String json = "{\"parentcategoryid\":\""+Integer.toString(id)+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.CategoryToUncategorized;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+    public void SubcategoryToUncategorized(int id)
+    {
+        String json = "{\"subcategoryid\":\""+Integer.toString(id)+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.SubcategoryFilterEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+
 
 
 
