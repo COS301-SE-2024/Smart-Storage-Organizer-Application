@@ -260,13 +260,4 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
-
-
-
-
-
-
-
-
-
 }

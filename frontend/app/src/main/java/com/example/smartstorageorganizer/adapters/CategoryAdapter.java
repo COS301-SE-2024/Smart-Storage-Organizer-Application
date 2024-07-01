@@ -127,7 +127,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 String newName = editCategoryName.getText().toString().trim();
                 if (!newName.isEmpty() && !newName.equals(category.getCategoryName())) {
                     // Update the category name (you need to implement the updateCategoryName method)
-                    updateCategoryName(category.getCategoryID(), newName);
+                    updateCategoryName(Integer.parseInt(category.getCategoryID()), newName);
                     editDialog.dismiss();
                 }
             });
@@ -176,8 +176,29 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         progressDialog.setMessage("Deleting category...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-
         Utils.deleteCategory(id, "NULL", (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    moveItemsUnderTheDeletedCategory(id);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void moveItemsUnderTheDeletedCategory(int id) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.categoryToUncategorized(id, (Activity) context, new OperationCallback<Boolean>(){
             @Override
             public void onSuccess(Boolean result) {
                 progressDialog.dismiss();
@@ -186,10 +207,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     Intent intent = new Intent(context, HomeActivity.class);
                     context.startActivity(intent);
                     ((Activity) context).finish();
-//                    navigateToHome();
                 }
             }
-
             @Override
             public void onFailure(String error) {
                 progressDialog.dismiss();
@@ -198,16 +217,28 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         });
     }
 
-    private void updateCategoryName(String categoryId, String newName) {
-        // Implement this method to update the category name in your backend or database
-        // After updating, you can refresh the list or notify the adapter of the changes
-        for (CategoryModel category : categoryModelList) {
-            if (category.getCategoryID().equals(categoryId)) {
-                category.setCategoryName(newName);
-                notifyDataSetChanged();
-                break;
+    private void updateCategoryName(int categoryId, String newName) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Updating category name...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.modifyCategoryName(categoryId, newName, (Activity) context, new OperationCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialog.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
+                }
             }
-        }
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to Modify Category Name.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void navigateToHome() {
