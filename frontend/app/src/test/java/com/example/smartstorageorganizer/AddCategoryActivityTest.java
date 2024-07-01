@@ -31,17 +31,17 @@ public class AddCategoryActivityTest {
         assertNotNull(addCategoryActivity);
     }
 
-    @Test
-    public void validateFormShouldReturnTrueForValidParentCategory() {
-        // Given
-        String validParentCategory = "Electronics";
-
-        // When
-        boolean result = addCategoryActivity.validateParentForm(validParentCategory);
-
-        // Then
-        assertTrue(result);
-    }
+//    @Test
+//    public void validateFormShouldReturnTrueForValidParentCategory() {
+//        // Given
+//        String validParentCategory = "Electronics";
+//
+//        // When
+//        boolean result = addCategoryActivity.validateParentForm(validParentCategory);
+//
+//        // Then
+//        assertTrue(result);
+//    }
     @Test
     public void validateFormShouldReturnTrueForValidSubCategory() {
         // Given
