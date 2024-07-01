@@ -91,6 +91,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
+    implementation ("com.github.yukuku:ambilwarna:2.0.1");
+
+
+
     implementation("org.slf4j:slf4j-api:1.7.30")
 
 

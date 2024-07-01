@@ -188,6 +188,7 @@ public class Utils {
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
                         }
