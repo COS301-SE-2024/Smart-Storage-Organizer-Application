@@ -24,10 +24,10 @@ jobs:
         java-version: '17'
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run:  cd frontend && ./gradlew build
 
     - name: Run Tests
-      run: ./gradlew test
+      run:  cd frontend && ./gradlew test
 
     - name: Run Espresso Tests
-      run: ./gradlew connectedAndroidTest
+      run:  cd frontend && ./gradlew connectedAndroidTest
