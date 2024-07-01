@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,8 +32,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ViewItemActivity extends AppCompatActivity {
+    private static final int PAGE_SIZE = 6;
+    private int currentPage = 1;
     private TextView notFoundText;
     private ImageView backButton;
     private Spinner mySpinner;
@@ -45,6 +49,9 @@ public class ViewItemActivity extends AppCompatActivity {
     private boolean firstTime = true;
     private List<CategoryModel> categoryModelList = new ArrayList<>();
     private RecyclerView itemRecyclerView;
+    private Button prevButton;
+    private Button nextButton;
+    private TextView pageNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,7 @@ public class ViewItemActivity extends AppCompatActivity {
         loadInitialData();
         setupSpinnerListener();
         setupSortByListener();
+        setupPaginationButtons();
     }
 
     private void initializeViews() {
@@ -68,12 +76,39 @@ public class ViewItemActivity extends AppCompatActivity {
         loadingScreen = findViewById(R.id.loadingScreen);
         notFoundText = findViewById(R.id.notFoundText);
         backButton = findViewById(R.id.back_home_button);
+        prevButton = findViewById(R.id.prevButton);
+        nextButton = findViewById(R.id.nextButton);
+        pageNumber = findViewById(R.id.pageNumber);
         category.setText(getIntent().getStringExtra("category"));
         categoryID = getIntent().getStringExtra("category_id");
     }
 
     private void setupBackButton() {
         backButton.setOnClickListener(v -> finish());
+    }
+
+    private void setupPaginationButtons() {
+        prevButton.setOnClickListener(v -> {
+            if (currentPage > 1) {
+                itemModelList.clear();
+                itemAdapter.notifyDataSetChanged();
+                currentPage--;
+                loadInitialData();
+                pageNumber.setText("Page " + currentPage);
+            }
+        });
+
+        nextButton.setOnClickListener(v -> {
+            itemModelList.clear();
+            itemAdapter.notifyDataSetChanged();
+            currentPage++;
+            loadInitialData();
+            pageNumber.setText("Page " + currentPage);
+        });
+    }
+    private void updatePaginationButtons(int resultSize) {
+        prevButton.setEnabled(currentPage > 1);
+        nextButton.setEnabled(resultSize == PAGE_SIZE);
     }
 
     private void setupRecyclerView() {
@@ -85,8 +120,35 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadInitialData() {
-        loadItemsByCategory(Integer.parseInt(categoryID));
-        fetchAndSetupCategories();
+        if (Objects.equals(getIntent().getStringExtra("category"), "All")){
+            loadAllItems();
+        }
+        else {
+            loadItemsByCategory(Integer.parseInt(categoryID));
+            fetchAndSetupCategories();
+        }
+    }
+
+    private void loadAllItems() {
+        loadingScreen.setVisibility(View.VISIBLE);
+        Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
+            @Override
+            public void onSuccess(List<ItemModel> result) {
+                itemModelList.clear();
+                itemModelList.addAll(result);
+                itemAdapter.notifyDataSetChanged();
+                loadingScreen.setVisibility(View.GONE);
+                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                updatePaginationButtons(result.size());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                loadingScreen.setVisibility(View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadItemsByCategory(int categoryId) {
@@ -100,6 +162,7 @@ public class ViewItemActivity extends AppCompatActivity {
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                updatePaginationButtons(result.size());
             }
 
             @Override

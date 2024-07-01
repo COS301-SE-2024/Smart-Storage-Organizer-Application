@@ -60,6 +60,7 @@ android {
         buildConfigField("String", "CategoryToUncategorized", "\"${localProperties["CategoryToUncategorized"]}\"");
         buildConfigField("String", "SubcategoryToUncategorized", "\"${localProperties["SubcategoryToUncategorized"]}\"");
         buildConfigField("String", "ModifyCategoryName", "\"${localProperties["ModifyCategoryName"]}\"");
+        buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"");
 
     }
 

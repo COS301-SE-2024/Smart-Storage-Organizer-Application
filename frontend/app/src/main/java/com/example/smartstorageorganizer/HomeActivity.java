@@ -260,4 +260,21 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+
+    public void FetchAllItems(int HowMany, int PageNumber)
+    {
+        String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchAllEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
 }
+
