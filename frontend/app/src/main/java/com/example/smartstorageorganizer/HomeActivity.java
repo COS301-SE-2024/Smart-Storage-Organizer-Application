@@ -238,7 +238,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SubcategoryFilterEndPoint;
+        String API_URL = BuildConfig.SubcategoryToUncategorized;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
