@@ -246,6 +246,22 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+    public void ModifyCategoryName(int id, String NewCategoryName)
+    {
+        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+NewCategoryName+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.ModifyCategoryName;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+
 
 
 
