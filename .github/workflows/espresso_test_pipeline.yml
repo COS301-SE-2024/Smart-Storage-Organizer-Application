@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - development
+      - StorageBuckets
   pull_request:
     branches:
       - main
       - development
+      - StorageBuckets
 
 jobs:
   build:
