@@ -220,6 +220,23 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public void ChangeQuantity(int id, String sign)
+    {
+        String json = "{\"item_id\":\""+Integer.toString(id)+"\", \"sign\":\""+sign+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.ChangeQuantityEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+    }
+
 
 
 
