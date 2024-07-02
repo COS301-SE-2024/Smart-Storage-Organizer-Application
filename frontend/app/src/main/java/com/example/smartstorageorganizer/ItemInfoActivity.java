@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -29,9 +30,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ItemInfoActivity extends AppCompatActivity {
-    private TextView itemName, itemDescription, itemLocation;
-    private AppCompatButton editItemButton;
-    private ImageView backButton;
+    private TextView itemName;
+    private TextView itemDescription;
+    private TextView itemLocation;
+    private static final String REQ = "Request Method";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,8 @@ public class ItemInfoActivity extends AppCompatActivity {
         itemName = findViewById(R.id.item_name);
         itemDescription = findViewById(R.id.item_description);
         itemLocation = findViewById(R.id.item_location);
-        editItemButton = findViewById(R.id.edit_item_button);
-        backButton = findViewById(R.id.backButton);
+        AppCompatButton editItemButton = findViewById(R.id.edit_item_button);
+        ImageView backButton = findViewById(R.id.backButton);
 
         itemName.setText(getIntent().getStringExtra("item_name"));
         itemDescription.setText(getIntent().getStringExtra("item_description"));
@@ -55,20 +57,12 @@ public class ItemInfoActivity extends AppCompatActivity {
             return insets;
         });
 
-        editItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditItemPopup();
-            }
-        });
+        editItemButton.setOnClickListener(v -> showEditItemPopup());
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemInfoActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -81,9 +75,9 @@ public class ItemInfoActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         // Get the EditTexts and Button from the dialog layout
-        EditText itemName = dialogView.findViewById(R.id.item_name);
-        EditText itemDescription = dialogView.findViewById(R.id.item_description);
-        EditText itemLocation = dialogView.findViewById(R.id.item_location);
+        EditText itemname = dialogView.findViewById(R.id.item_name);
+        EditText itemdescription = dialogView.findViewById(R.id.item_description);
+        EditText itemlocation = dialogView.findViewById(R.id.item_location);
         EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
         TextView itemQuantity = dialogView.findViewById(R.id.item_quantity);
         Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
@@ -91,9 +85,9 @@ public class ItemInfoActivity extends AppCompatActivity {
         Button buttonIncreaseQuantity = dialogView.findViewById(R.id.button_increase_quantity);
 
 
-        itemName.setText(getIntent().getStringExtra("item_name"));
-        itemDescription.setText(getIntent().getStringExtra("item_description"));
-        itemLocation.setText(getIntent().getStringExtra("location"));
+        itemname.setText(getIntent().getStringExtra("item_name"));
+        itemdescription.setText(getIntent().getStringExtra("item_description"));
+        itemlocation.setText(getIntent().getStringExtra("location"));
         itemColorCode.setText(getIntent().getStringExtra("color_code"));
         itemQuantity.setText(getIntent().getStringExtra("quantity"));
 
@@ -101,56 +95,106 @@ public class ItemInfoActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
 
         // Set the button click listener
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = itemName.getText().toString().trim();
-                String description = itemDescription.getText().toString().trim();
-                String location = itemLocation.getText().toString().trim();
-                String colorCode = itemColorCode.getText().toString().trim();
+        buttonNext.setOnClickListener(v -> {
+            String name = itemname.getText().toString().trim();
+            String description = itemdescription.getText().toString().trim();
+            String location = itemlocation.getText().toString().trim();
+            String colorCode = itemColorCode.getText().toString().trim();
+            int quantity = Integer.parseInt(itemQuantity.getText().toString().trim());
 
-                PostEditItem(name, description, colorCode, "asdffd",  "00111100", Integer.parseInt("1"), location, Integer.parseInt(getIntent().getStringExtra("item_id")));
-                alertDialog.dismiss();
-            }
+            postEditItem(name, description, colorCode, quantity, location, Integer.parseInt(getIntent().getStringExtra("item_id")));
+            alertDialog.dismiss();
         });
+
+        buttonDecreaseQuantity.setOnClickListener(v -> {
+            int itemId = 0;
+            changeQuantity(itemId,
+                    "-",
+                    () -> {
+                        int currentQuantity = Integer.parseInt(itemQuantity.getText().toString().trim());
+                        if (currentQuantity > 1) {
+                            itemQuantity.setText(String.valueOf(currentQuantity - 1));
+                        }
+                    },
+                    () -> Log.e(REQ, "Decrease quantity failed"));
+        });
+
+        int itemId = 0;
+        buttonIncreaseQuantity.setOnClickListener(v -> changeQuantity(itemId, "+", () -> {
+            int currentQuantity = Integer.parseInt(itemQuantity.getText().toString().trim());
+            itemQuantity.setText(String.valueOf(currentQuantity + 1));
+        }, () -> Log.e(REQ, "Increase quantity failed")));
 
         // Show the AlertDialog
         alertDialog.show();
     }
 
-    private void PostEditItem(String item_name, String description, String colourcoding, String barcode, String qrcode, int quanity, String location, int item_id ) {
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+item_id+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private void postEditItem(String name, String description, String colourcode, int quanity, String location, int itemid ) {
+        String json = "{\"item_name\":\""+name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcode+"\",\"barcode\":\""+ "asdffd" +"\",\"qrcode\":\""+ "00111100" +"\",\"quanity\":"+quanity+",\"location\":\""+location+"\", \"item_id\":\""+itemid+"\" }";
+        MediaType jsoN = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.EditItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
+        String apiURL = BuildConfig.EditItemEndPoint;
+        RequestBody body = RequestBody.create(json, jsoN);
 
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(apiURL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Log.e(REQ, "POST request failed", e));
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    runOnUiThread(() -> {
+                        runOnUiThread(() -> Log.i(REQ, "POST request succeeded: " + responseData));
+                        itemName.setText(name);
+                        itemDescription.setText(description);
+                        itemLocation.setText(location);
+                    });
+                } else {
+                    runOnUiThread(() -> Log.e(REQ, "POST request failed: " + response.code()));
+                }
+            }
+        });
+    }
+
+    public void changeQuantity(int id, String sign, Runnable onSuccess, Runnable onFailure) {
+        String json = "{\"item_id\":\"" + id + "\", \"sign\":\"" + sign + "\" }";
+
+        MediaType jsoN = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String apiURL = BuildConfig.ChangeQuantityEndPoint;
+        RequestBody body = RequestBody.create(json, jsoN);
+
+        Request request = new Request.Builder()
+                .url(apiURL)
                 .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                runOnUiThread(onFailure);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        runOnUiThread(() -> Log.i("Request Method", "POST request succeeded: " + responseData));
-                        itemName.setText(item_name);
-                        itemDescription.setText(description);
-                        itemLocation.setText(location);
-                    });
+                    runOnUiThread(onSuccess);
                 } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                    runOnUiThread(onFailure);
                 }
             }
         });
     }
+
 }

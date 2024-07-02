@@ -73,3 +73,5 @@ u
 Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
 y
 Iapp/src/main/java/com/example/smartstorageorganizer/ViewItemActivity.java,4\6\463e3c77efbbbcc42f8976110f08d038e13bf338
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/MainActivity.java,7\8\78ad91b2ce0a576f355193307ac9ced736401b40
