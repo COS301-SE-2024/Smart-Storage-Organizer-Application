@@ -11,14 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -27,6 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ItemInfoActivity extends AppCompatActivity {
     private TextView itemName, itemDescription, itemLocation;
@@ -85,12 +85,17 @@ public class ItemInfoActivity extends AppCompatActivity {
         EditText itemDescription = dialogView.findViewById(R.id.item_description);
         EditText itemLocation = dialogView.findViewById(R.id.item_location);
         EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
+        TextView itemQuantity = dialogView.findViewById(R.id.item_quantity);
         Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
+        Button buttonDecreaseQuantity = dialogView.findViewById(R.id.button_decrease_quantity);
+        Button buttonIncreaseQuantity = dialogView.findViewById(R.id.button_increase_quantity);
+
 
         itemName.setText(getIntent().getStringExtra("item_name"));
         itemDescription.setText(getIntent().getStringExtra("item_description"));
         itemLocation.setText(getIntent().getStringExtra("location"));
         itemColorCode.setText(getIntent().getStringExtra("color_code"));
+        itemQuantity.setText(getIntent().getStringExtra("quantity"));
 
         // Create the AlertDialog
         AlertDialog alertDialog = builder.create();

@@ -3,7 +3,6 @@ package com.example.smartstorageorganizer.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,7 +80,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.item_image);
+//            image = itemView.findViewById(R.id.item_image);
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);

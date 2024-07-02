@@ -65,3 +65,11 @@ I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 C
 settings.gradle.kts,7\4\749edfcc96398253e5b3416184e95c46621da850
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ItemInfoActivity.java,1\a\1a13a8f08348c41daeedf8538f4c7ded96f1c8ae
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/Adapters/ItemAdapter.java,9\3\935a550f941cc48224ff32ec9b7a06d9aae4e112
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ViewItemActivity.java,4\6\463e3c77efbbbcc42f8976110f08d038e13bf338
