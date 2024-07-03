@@ -1,21 +1,21 @@
 
-V
-java:S1144ô"3Remove this unused private "navigateToHome" method.(µ¼»®ÿÿÿÿÿ8ÿ‡ÅÆ‡2
+|
+java:S1144ô"3Remove this unused private "navigateToHome" method.(µ¼»®ÿÿÿÿÿ8ÿ‡ÅÆ‡2J$385ca105-830b-40c4-8875-099694ab3a27
 
-java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ë•¿Ç†2J$0dac8d0e-3d56-4409-8c5c-ff5404e410a2
+java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ë•¿Ç†2J$f911e1d0-3ce9-4b08-93a7-320753747dd1
 
-java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ğ•¿Ç†2J$155b95cf-d2b9-47fa-9fa0-e2ca7627d1d7
+java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ğ•¿Ç†2J$0febe0a4-9d00-4bdf-947e-9f98e31cfc9d
 v
-java:S1874°"2Remove this use of "setMessage"; it is deprecated.(¯ıË8ñ•¿Ç†2J$9965b703-7641-4be4-be84-66c31af655ad
-Y
-java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2
-Y
-java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2
-P
-java:S1874Æ"2Remove this use of "setMessage"; it is deprecated.(¯ıË8íˆÅÆ‡2
-Y
-java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8üˆÅÆ‡2
-Y
-java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ıˆÅÆ‡2
-P
-java:S1874Ş"2Remove this use of "setMessage"; it is deprecated.(‡ƒ”8şˆÅÆ‡2
+java:S1874°"2Remove this use of "setMessage"; it is deprecated.(¯ıË8ñ•¿Ç†2J$804566c5-95af-46d2-8010-94e931fc557a
+
+java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2J$2875fc46-fb44-46f2-9b65-53eeac330b55
+
+java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2J$41fb7f5e-b250-4bed-b7aa-2d7d0564f8ab
+v
+java:S1874Æ"2Remove this use of "setMessage"; it is deprecated.(¯ıË8íˆÅÆ‡2J$1fcbea25-2154-47d7-992d-23094923064e
+
+java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8üˆÅÆ‡2J$bba307fc-bb29-40e0-a2e0-21774ea45997
+
+java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ıˆÅÆ‡2J$85ee419e-2b31-444a-8062-73cced881e19
+v
+java:S1874Ş"2Remove this use of "setMessage"; it is deprecated.(‡ƒ”8şˆÅÆ‡2J$cda362b5-e8b0-4caf-9963-1ea5e54efd55
