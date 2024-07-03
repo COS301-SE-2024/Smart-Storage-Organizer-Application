@@ -39,3 +39,4 @@ amplifytools.xcconfig
 #Ignore Pool-id
 app/src/main/res/raw/amplifyconfiguration.json
 app/src/main/res/raw/awsconfiguration.json
+.idea/sonarlint

@@ -29,4 +29,11 @@
         android:layout_marginBottom="16dp"
         android:text="Add Unit"/>
 
+    <Button
+        android:id="@+id/addColorButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:text="Add Color Code"/>
+
 </LinearLayout>

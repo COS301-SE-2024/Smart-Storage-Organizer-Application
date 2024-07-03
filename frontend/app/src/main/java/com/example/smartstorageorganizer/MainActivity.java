@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         }), SPLASH_DISPLAY_LENGTH);
     }
 
-    private CompletableFuture<Boolean> isSignedIn() {
+    CompletableFuture<Boolean> isSignedIn() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.fetchAuthSession(
                 result -> {

@@ -40,11 +40,11 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signUpLink;
     private TextView loginButtonText;
     private ImageView loginButtonIcon;
-    private TextInputEditText email;
-    private TextInputEditText password;
+    TextInputEditText email;
+    TextInputEditText password;
     private LottieAnimationView buttonLoader;
     private TextView resetPasswordLink;
-    private RelativeLayout registerButton;
+    RelativeLayout registerButton;
     private static final String API_REQUEST = "API Request";
 
     @Override
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButtonIcon.setVisibility(View.VISIBLE);
     }
 
-    private boolean validateForm(String email, String password) {
+    boolean validateForm(String email, String password) {
         if (TextUtils.isEmpty(email)) {
             this.email.setError("Email is required.");
             this.email.requestFocus();
@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private CompletableFuture<Boolean> signIn(String email, String password) {
+    CompletableFuture<Boolean> signIn(String email, String password) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.signIn(
                 email,

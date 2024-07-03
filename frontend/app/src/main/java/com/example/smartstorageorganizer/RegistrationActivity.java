@@ -52,7 +52,12 @@ public class RegistrationActivity extends AppCompatActivity {
         setupWindowInsets();
 
         findViewById(R.id.buttonRegister).setOnClickListener(v -> {
-            if (validateForm()) {
+            String name = nameEditText.getText().toString().trim();
+            String surname = surnameEditText.getText().toString().trim();
+            String email = emailEditText.getText().toString().trim();
+            String phone = phoneNumberEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+            if (validateForm(name, surname, email, phone, password)) {
                 performSignUp();
             }
         });
@@ -88,13 +93,7 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateForm() {
-        String name = nameEditText.getText().toString().trim();
-        String surname = surnameEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-        String phone = phoneNumberEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
-
+    boolean validateForm(String name, String surname, String email, String phone, String password) {
         if (TextUtils.isEmpty(name)) {
             nameEditText.setError("First Name is required.");
             nameEditText.requestFocus();

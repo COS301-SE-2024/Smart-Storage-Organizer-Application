@@ -218,9 +218,63 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+    public void CategoryToUncategorized(int id)
+    {
+        String json = "{\"parentcategoryid\":\""+Integer.toString(id)+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.CategoryToUncategorized;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+    public void SubcategoryToUncategorized(int id)
+    {
+        String json = "{\"subcategoryid\":\""+Integer.toString(id)+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.SubcategoryToUncategorized;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+    public void ModifyCategoryName(int id, String NewCategoryName)
+    {
+        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+NewCategoryName+"\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.ModifyCategoryName;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+    public void FetchAllItems(int HowMany, int PageNumber)
+    {
+        String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
 
 
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchAllEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
 
-
-
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
 }
+

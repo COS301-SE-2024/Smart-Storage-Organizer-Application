@@ -245,7 +245,7 @@ public class EditProfileActivity extends AppCompatActivity {
         );
     }
 
-    private CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {
+    CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
                 .contentType("image/png") // Adjust based on file type
@@ -269,7 +269,7 @@ public class EditProfileActivity extends AppCompatActivity {
         return future;
     }
 
-    private String getObjectUrl(String key) {
+    String getObjectUrl(String key) {
         String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/" + key + ".png";
         updateUserAttribute(AuthUserAttributeKey.picture(), url);
         showUpdateSuccessMessage();

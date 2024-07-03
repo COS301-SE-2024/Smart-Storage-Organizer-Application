@@ -57,6 +57,11 @@ android {
         buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
 
         buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"");
+        buildConfigField("String", "CategoryToUncategorized", "\"${localProperties["CategoryToUncategorized"]}\"");
+        buildConfigField("String", "SubcategoryToUncategorized", "\"${localProperties["SubcategoryToUncategorized"]}\"");
+        buildConfigField("String", "ModifyCategoryName", "\"${localProperties["ModifyCategoryName"]}\"");
+        buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"");
+
     }
 
     buildTypes {
@@ -85,6 +90,10 @@ android {
 dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
+
+    implementation ("com.github.yukuku:ambilwarna:2.0.1");
+
+
 
     implementation("org.slf4j:slf4j-api:1.7.30")
 
