@@ -247,6 +247,7 @@ public class Utils {
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String bodyString = jsonObject.getString("body");
+                        String numPagesString = jsonObject.getString("totalpages");
                         JSONArray bodyArray = new JSONArray(bodyString);
                         activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 

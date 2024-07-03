@@ -94,6 +94,7 @@ public class ViewItemActivity extends AppCompatActivity {
                 itemModelList.clear();
                 itemAdapter.notifyDataSetChanged();
                 currentPage--;
+                firstTime = false;
                 loadInitialData();
                 pageNumber.setText("Page " + currentPage);
             }
@@ -104,6 +105,7 @@ public class ViewItemActivity extends AppCompatActivity {
             itemModelList.clear();
             itemAdapter.notifyDataSetChanged();
             currentPage++;
+            firstTime = false;
             loadInitialData();
             pageNumber.setText("Page " + currentPage);
         });
@@ -122,12 +124,21 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadInitialData() {
+        if (firstTime) {
+            currentSelectedCategory = "All";
+        }
         if (Objects.equals(getIntent().getStringExtra("category"), "All")){
             loadAllItems();
         }
         else {
-            loadItemsByCategory(Integer.parseInt(categoryID));
-            fetchAndSetupCategories();
+            if (!currentSelectedCategory.equals("All")) {
+                CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
+                if (subCategory != null) {
+                    loadItemsBySubCategory(Integer.parseInt(subCategory.getCategoryID()));
+                }
+            } else {
+                loadItemsByCategory(Integer.parseInt(categoryID));
+                fetchAndSetupCategories();            }
         }
     }
 
@@ -247,6 +258,8 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                currentPage = 1;
+                pageNumber.setText("Page " + currentPage);
                 if (firstTime) {
                     firstTime = false;
                     return;
@@ -290,6 +303,7 @@ public class ViewItemActivity extends AppCompatActivity {
                 itemAdapter.notifyDataSetChanged();
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                updatePaginationButtons(result.size());
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
