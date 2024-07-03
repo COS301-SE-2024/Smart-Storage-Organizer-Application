@@ -89,7 +89,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     private void setupPaginationButtons() {
         prevButton.setOnClickListener(v -> {
-            firstTime = true;
+//            firstTime = true;
             if (currentPage > 1) {
                 itemModelList.clear();
                 itemAdapter.notifyDataSetChanged();
@@ -101,7 +101,6 @@ public class ViewItemActivity extends AppCompatActivity {
         });
 
         nextButton.setOnClickListener(v -> {
-            firstTime = true;
             itemModelList.clear();
             itemAdapter.notifyDataSetChanged();
             currentPage++;
@@ -197,9 +196,11 @@ public class ViewItemActivity extends AppCompatActivity {
                     categories.add(category.getCategoryName());
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, categories);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mySpinner.setAdapter(adapter);
+                if(firstTime){
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, categories);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mySpinner.setAdapter(adapter);
+                }
             }
 
             @Override
