@@ -89,6 +89,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     private void setupPaginationButtons() {
         prevButton.setOnClickListener(v -> {
+            firstTime = true;
             if (currentPage > 1) {
                 itemModelList.clear();
                 itemAdapter.notifyDataSetChanged();
@@ -99,6 +100,7 @@ public class ViewItemActivity extends AppCompatActivity {
         });
 
         nextButton.setOnClickListener(v -> {
+            firstTime = true;
             itemModelList.clear();
             itemAdapter.notifyDataSetChanged();
             currentPage++;
@@ -153,7 +155,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     private void loadItemsByCategory(int categoryId) {
         loadingScreen.setVisibility(View.VISIBLE);
-        Utils.filterByCategory(categoryId, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -280,7 +282,7 @@ public class ViewItemActivity extends AppCompatActivity {
         loadingScreen.setVisibility(View.VISIBLE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
-        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();

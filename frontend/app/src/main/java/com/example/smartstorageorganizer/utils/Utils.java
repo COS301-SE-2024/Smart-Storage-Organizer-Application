@@ -137,8 +137,9 @@ public class Utils {
         });
     }
 
-    public static void filterByCategory(int parentCategory, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"parentcategory\":\"" + parentCategory + "\" }";
+    public static void filterByCategory(int parentCategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+//        String json = "{\"parentcategory\":\"" + parentCategory + "\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
         String message = "View Response Results";
 
         List<ItemModel> itemModelList = new ArrayList<>();
@@ -210,8 +211,10 @@ public class Utils {
         });
     }
 
-    public static void filterBySubCategory(int parentCategory, int subcategory, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\" }";
+    public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+//        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+
         String message = "View Request Method";
 
         List<ItemModel> itemModelList = new ArrayList<>();
