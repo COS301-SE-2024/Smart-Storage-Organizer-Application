@@ -52,6 +52,7 @@ public class ViewItemActivity extends AppCompatActivity {
     private Button prevButton;
     private Button nextButton;
     private TextView pageNumber;
+    private String currentSelectedOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,12 @@ public class ViewItemActivity extends AppCompatActivity {
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                itemAdapter.notifyDataSetChanged();
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
@@ -170,7 +176,12 @@ public class ViewItemActivity extends AppCompatActivity {
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                itemAdapter.notifyDataSetChanged();
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
@@ -212,6 +223,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     private void setupSortByListener(){
         String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        currentSelectedOption = "Sort by";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortBySpinner.setAdapter(adapter);
@@ -219,7 +231,7 @@ public class ViewItemActivity extends AppCompatActivity {
         sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String currentSelectedOption = parentView.getItemAtPosition(position).toString();
+                currentSelectedOption = parentView.getItemAtPosition(position).toString();
 
                 if (currentSelectedOption.equals("Sort by")) {
                     return;
@@ -301,7 +313,12 @@ public class ViewItemActivity extends AppCompatActivity {
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                itemAdapter.notifyDataSetChanged();
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 updatePaginationButtons(result.size());
@@ -346,5 +363,27 @@ public class ViewItemActivity extends AppCompatActivity {
             LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
             return date1.compareTo(date2);
         });
+    }
+
+    public void setupSort(String sortType) {
+        switch (sortType) {
+            case "A to Z":
+                sortItemModelsAscending(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Z to A":
+                sortItemModelsDescending(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Newest to Oldest":
+                sortItemModelsByNewest(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Oldest to Newest":
+                sortItemModelsByOldest(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            default:
+        }
     }
 }
