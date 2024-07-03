@@ -29,10 +29,10 @@ jobs:
         run: chmod +x ./frontend/gradlew
 
       - name: Build with Gradle
-        run: ./frontend/gradlew build
+        run:  cd frontend && ./gradlew build
 
       - name: Build Project
-        run: ./frontend/gradlew assemble
+        run:  cd frontend && ./gradlew assemble
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
