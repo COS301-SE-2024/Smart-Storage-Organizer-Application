@@ -284,7 +284,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddCol;
+        String API_URL = BuildConfig.AddColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -300,7 +300,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddCol;
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -316,7 +316,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.;
+        String API_URL = BuildConfig.FetchByColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -332,7 +332,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.;
+        String API_URL = BuildConfig.DeleteColour;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()

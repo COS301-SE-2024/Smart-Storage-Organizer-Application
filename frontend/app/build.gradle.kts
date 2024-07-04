@@ -64,6 +64,12 @@ android {
 
         buildConfigField("String", "AddColourEndPoint", "\"${localProperties["AddColourEndPoint"]}\"");
 
+        buildConfigField("String", "AddItemToColourEndPoint", "\"${localProperties["AddItemToColourEndPoint"]}\"");
+
+        buildConfigField("String", "FetchByColourEndPoint", "\"${localProperties["FetchByColourEndPoint"]}\"");
+
+        buildConfigField("String", "DeleteColour", "\"${localProperties["DeleteColour"]}\"");
+
     }
 
     buildTypes {
