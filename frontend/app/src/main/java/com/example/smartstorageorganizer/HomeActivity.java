@@ -276,5 +276,21 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+
+    public void AddColourGroup(String colourcode, String title, String description)
+    {
+        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddCol;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
 }
 
