@@ -18,3 +18,5 @@ u
 Eapp/src/main/java/com/example/smartstorageorganizer/HelpActivity.java,6\b\6b5c0303a271706cb0e948827f713493917143e6
 }
 Mapp/src/main/java/com/example/smartstorageorganizer/ui/home/HomeFragment.java,7\1\712a8214a2895769852d79024d74dabbe333e498
+;
+gradlew.bat,2\a\2a45a911a8f1836b0b6c5b758962572012d8f8c3
