@@ -30,3 +30,5 @@ Lapp/src/main/java/com/example/smartstorageorganizer/AddCategoryActivity.java,9
 Oapp/src/main/java/com/example/smartstorageorganizer/ViewColorCodesActivity.java,4\e\4ecb5ffa02d3bfc2fd990c4bb21dd29ebed3af01
 y
 Iapp/src/main/java/com/example/smartstorageorganizer/ViewItemActivity.java,4\6\463e3c77efbbbcc42f8976110f08d038e13bf338
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/adapters/ColorCodeAdapter.java,0\9\09873ba46cbd442ef190284937f9fba16eddcc8c

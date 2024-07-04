@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ViewItemActivity">
+    tools:context=".ViewColorCodesActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -32,90 +31,38 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/category_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:gravity="center_vertical"
-                android:text=""
-                android:textColor="@color/colorSecondary"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/back_home_button"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/seach_icon"
+                android:id="@+id/color_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/baseline_search_24"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Color Code"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/back_home_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/newstedScrollview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/color_code_rec"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="60dp"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="46dp"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/color_code_rec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
-            android:overScrollMode="never" />
-
-    </androidx.core.widget.NestedScrollView>
-
-    <LinearLayout
-        android:id="@+id/paginationLayout"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/delete_fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/background"
-        android:gravity="center"
+        android:layout_margin="16dp"
+        android:src="@drawable/baseline_delete_outline_24"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Previous"
-            android:enabled="false"/>
-
-        <TextView
-            android:id="@+id/pageNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Page 1"
-            android:textColor="@color/colorSecondary"
-            android:textSize="18sp"/>
-
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"/>
-    </LinearLayout>
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

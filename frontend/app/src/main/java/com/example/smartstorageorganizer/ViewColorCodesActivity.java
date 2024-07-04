@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
     private RecyclerView colorCodeRecyclerView;
     private List<ColorCodeModel> colorCodeModelList;
     private ColorCodeAdapter colorCodeAdapter;
-
-
+    private FloatingActionButton deleteFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,61 +44,46 @@ public class ViewColorCodesActivity extends AppCompatActivity {
         });
 
         colorCodeRecyclerView = findViewById(R.id.color_code_rec);
+        deleteFab = findViewById(R.id.delete_fab);
+        deleteFab.setVisibility(View.GONE); // Initially hidden
 
         colorCodeRecyclerView.setHasFixedSize(true);
         colorCodeRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         colorCodeModelList = new ArrayList<>();
-        colorCodeAdapter = new ColorCodeAdapter(this, colorCodeModelList);
+        colorCodeAdapter = new ColorCodeAdapter(this, colorCodeModelList, selectedItems -> {
+            if (selectedItems.isEmpty()) {
+                deleteFab.setVisibility(View.GONE);
+            } else {
+                deleteFab.setVisibility(View.VISIBLE);
+            }
+        });
         colorCodeRecyclerView.setAdapter(colorCodeAdapter);
+
+        deleteFab.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle("Delete Color Codes")
+                .setMessage("Are you sure you want to delete the selected color codes?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    colorCodeAdapter.deleteSelectedItems();
+                    deleteFab.setVisibility(View.GONE);
+                })
+                .setNegativeButton("No", null)
+                .show());
 
         loadAllColorCodes();
     }
 
-    private void setupRecyclerView() {
-
-        ColorCodeModel itemOne = new ColorCodeModel("Low Stock", "Items that are about to run out of stock.", "#FF0000");
-        ColorCodeModel itemTwo = new ColorCodeModel("In Stock", "Items that are fully stocked and available.", "#026943");
-        ColorCodeModel itemThree = new ColorCodeModel("Monitor Stock", "Items that are at a medium stock level and should be monitored.", "#000000");
-        ColorCodeModel itemFour = new ColorCodeModel("New Arrival", "Items that are newly added to the inventory.", "#0000FF");
-        ColorCodeModel itemFive = new ColorCodeModel("On Hold", "Items that are on hold or reserved for customers.", "#00FFFF");
-        ColorCodeModel itemSix = new ColorCodeModel("On Sale", "Items that are on sale or have a discount.", "#FF00FF");
-        ColorCodeModel itemSeven = new ColorCodeModel("Restocking", "Items that are being restocked or on order.", "#FFA500");
-        ColorCodeModel itemEight = new ColorCodeModel("Discontinued", "Items that are discontinued or no longer available.", "#800080");
-        ColorCodeModel itemNine = new ColorCodeModel("Returned", "Items that are returned or being processed for return.", "#A52A2A");
-        ColorCodeModel itemTen = new ColorCodeModel("Inactive", "Items that are inactive or not currently for sale.", "#808080");
-
-        colorCodeModelList.add(itemOne);
-        colorCodeModelList.add(itemTwo);
-        colorCodeModelList.add(itemThree);
-        colorCodeModelList.add(itemFour);
-        colorCodeModelList.add(itemFive);
-        colorCodeModelList.add(itemSix);
-        colorCodeModelList.add(itemSeven);
-        colorCodeModelList.add(itemEight);
-        colorCodeModelList.add(itemNine);
-        colorCodeModelList.add(itemTen);
-
-        colorCodeAdapter.notifyDataSetChanged();
-//        colorCodeAdapter.notifyAll();
-    }
-
     private void loadAllColorCodes() {
-//        loadingScreen.setVisibility(View.VISIBLE);
         Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> result) {
                 colorCodeModelList.clear();
                 colorCodeModelList.addAll(result);
                 colorCodeAdapter.notifyDataSetChanged();
-//                loadingScreen.setVisibility(View.GONE);
-//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewColorCodesActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
-//                updatePaginationButtons(result.size());
             }
 
             @Override
             public void onFailure(String error) {
-//                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(ViewColorCodesActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });

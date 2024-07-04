@@ -25,17 +25,29 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ColorCodeModel> itemModelList;
+    private final Set<Integer> selectedItems;
+    private final OnSelectionChangedListener onSelectionChangedListener;
+    private boolean selectionMode = false;
 
-    public ColorCodeAdapter(Context context, List<ColorCodeModel> itemModelList) {
+    public interface OnSelectionChangedListener {
+        void onSelectionChanged(Set<Integer> selectedItems);
+    }
+
+    public ColorCodeAdapter(Context context, List<ColorCodeModel> itemModelList, OnSelectionChangedListener onSelectionChangedListener) {
         this.context = context;
         this.itemModelList = itemModelList;
+        this.selectedItems = new HashSet<>();
+        this.onSelectionChangedListener = onSelectionChangedListener;
     }
 
     @NonNull
@@ -44,25 +56,69 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.color_code_layout, parent, false));
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ColorCodeAdapter.ViewHolder holder, int position) {
-        Log.i("Adapter", "Adapter function.");
         ColorCodeModel model = itemModelList.get(position);
 
         holder.name.setText(model.getName());
         holder.description.setText(model.getDescription());
 
-        // Parse the color string and set the border color
         try {
             int color = Color.parseColor(model.getColor());
             GradientDrawable drawable = new GradientDrawable();
-//            drawable.setColor(R.color.background); // Set the background color to white
-            drawable.setStroke(4, color); // Set the border color and width (2dp in this case)
+            drawable.setStroke(4, color);
             drawable.setCornerRadius(12);
             holder.cardView.setBackground(drawable);
         } catch (IllegalArgumentException e) {
             Log.e("Adapter", "Invalid color string: " + model.getColor());
+        }
+
+        if (selectedItems.contains(position)) {
+            holder.cardView.setBackgroundColor(Color.LTGRAY);
+            holder.deleteIcon.setVisibility(View.VISIBLE);
+        } else {
+            int color = Color.parseColor(model.getColor());
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setStroke(4, color);
+            drawable.setCornerRadius(12);
+            holder.cardView.setBackground(drawable);
+            holder.deleteIcon.setVisibility(View.GONE);
+        }
+
+        holder.cardView.setOnClickListener(v -> {
+            if (selectionMode) {
+                toggleSelection(holder, position, model);
+            } else {
+                // Normal click action
+            }
+        });
+
+        holder.cardView.setOnLongClickListener(v -> {
+            selectionMode = true;
+            toggleSelection(holder, position, model);
+            return true;
+        });
+    }
+
+    private void toggleSelection(ViewHolder holder, int position, ColorCodeModel model) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position);
+            int color = Color.parseColor(model.getColor());
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setStroke(4, color);
+            drawable.setCornerRadius(12);
+            holder.cardView.setBackground(drawable);
+            holder.deleteIcon.setVisibility(View.GONE);
+        } else {
+            selectedItems.add(position);
+            holder.cardView.setBackgroundColor(Color.LTGRAY);
+            holder.deleteIcon.setVisibility(View.VISIBLE);
+        }
+
+        onSelectionChangedListener.onSelectionChanged(selectedItems);
+
+        if (selectedItems.isEmpty()) {
+            selectionMode = false;
         }
     }
 
@@ -71,16 +127,29 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         return itemModelList.size();
     }
 
+    public void deleteSelectedItems() {
+        List<ColorCodeModel> itemsToDelete = new ArrayList<>();
+        for (int position : selectedItems) {
+            itemsToDelete.add(itemModelList.get(position));
+        }
+        itemModelList.removeAll(itemsToDelete);
+        notifyDataSetChanged();
+        selectedItems.clear();
+        selectionMode = false;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView description;
         CardView cardView;
+        ImageView deleteIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.color_code_name);
             description = itemView.findViewById(R.id.color_code_description);
             cardView = itemView.findViewById(R.id.color_card_view);
+            deleteIcon = itemView.findViewById(R.id.delete_icon);
         }
     }
 }

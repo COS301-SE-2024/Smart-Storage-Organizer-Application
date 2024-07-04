@@ -345,7 +345,6 @@ public class HomeActivity extends AppCompatActivity {
     {
         String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
 
-
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.DeleteColour;
