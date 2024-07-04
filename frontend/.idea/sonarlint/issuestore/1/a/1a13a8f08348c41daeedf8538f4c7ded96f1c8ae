@@ -1,0 +1,38 @@
+
+’	java:S117|"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8Ìıù‡2J$570be92c-d678-412d-8608-e9635348d21a
+“	java:S117~"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(İ‡Ïš8Ïıù‡2J$6c468234-8359-4d0b-a18e-4332ccb26036
+™	java:S117¡"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨áÎ°ûÿÿÿÿ8Ğıù‡2J$b808b005-d70a-4840-bd90-e7b183ab7711
+“	java:S117¤"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8Ñıù‡2J$21b28c2f-d6a1-487b-b795-dacf92088f69
+’
+java:S1192Š"IUse already-defined constant 'REQ' instead of duplicating its value here.(å—ƒ÷şÿÿÿÿ8æıù‡2J$62e2e7a7-70ac-4a46-9e7e-240844966d9a
+|
+java:S1659&"4Declare "decreaseQuantityButton" on a separate line.(ß‰ûéúÿÿÿÿ8…şù‡2J$5eb9ae01-7af5-4cc5-80a6-12f2f53ee613
+¡
+java:S1450)"YRemove the "backButton" field and declare it as a local variable in the relevant methods.(Î¶Òöûÿÿÿÿ8‰şù‡2J$ba1f7839-9a59-4e44-b024-63adf29ef00b
+¥
+java:S1450$"]Remove the "editItemButton" field and declare it as a local variable in the relevant methods.(“Úüòşÿÿÿÿ8Œşù‡2J$0e7d9861-4be6-4508-982f-749f81832c38
+~	java:S107z"<Method has 8 parameters, which is greater than 7 authorized.(±ŞãŒ8¨şù‡2J$6734e76b-6975-4a18-a466-6d6fefec5b9d
+~	java:S125="<This block of commented-out lines of code should be removed.(ØÚÀ¯8ãşù‡2J$5d5481d6-df77-493a-ad2e-5510ea5fa5f6
+„
+java:S1117Y"<Rename "itemName" which hides the field declared at line 32.(ÍÉÃ©úÿÿÿÿ8ùşù‡2J$bc30bf7c-86b5-497d-b5ba-56cc5c9cd1f3
+†
+java:S1117Z"CRename "itemDescription" which hides the field declared at line 33.(ü»È8ùşù‡2J$4f2fd1f5-fe53-4847-a6c3-49688af8774e
+ˆ
+java:S1117["@Rename "itemLocation" which hides the field declared at line 34.(´ÙÕ¹ùÿÿÿÿ8üşù‡2J$28fc09c7-cbf0-480d-a60d-e75fa2a852d3
+Œ
+java:S1117^"JRename "increaseQuantityButton" which hides the field declared at line 38.(¢ì“n8‚ÿù‡2J$21bf1808-ae68-4d14-82c9-b809e1271d61
+
+java:S1117_"JRename "decreaseQuantityButton" which hides the field declared at line 38.(¨ó×8ÿù‡2J$157d8374-1391-44dc-91f7-5b31ff229cf8
+‰
+java:S1854¶"@Remove this useless assignment to local variable "responseData".(¶á£óÿÿÿÿÿ8İÿù‡2J$cab1f671-5d71-4543-95bf-cc5fbe7a4823
+z
+java:S1481¶"1Remove this unused "responseData" local variable.(¶á£óÿÿÿÿÿ8áÿù‡2J$570df536-723f-464d-8fdd-d05d543a0ad7
+	java:S125·"<This block of commented-out lines of code should be removed.(ÑˆŠÎ8âÿù‡2J$5d3caa7f-12c2-4082-a5f1-bdd7785198ed
+x
+java:S1068#"0Remove this unused "itemQuantity" private field.(íÿÎ¡ÿÿÿÿÿ8äÿù‡2J$6df60ae3-6ca0-41a7-ab0d-62b278d81eb6
+o
+java:S1068%"'Remove this unused "REQ" private field.(‚åß«ùÿÿÿÿ8åÿù‡2J$1a1ab010-d096-4c39-ba28-61ab82fb4458
+‚
+java:S1068&":Remove this unused "increaseQuantityButton" private field.(ß‰ûéúÿÿÿÿ8åÿù‡2J$0f67a0be-53f1-4894-a574-7c0148a45f45
+‚
+java:S1068&":Remove this unused "decreaseQuantityButton" private field.(ß‰ûéúÿÿÿÿ8åÿù‡2J$5d361bc8-371f-4050-adc8-b59f21d75698

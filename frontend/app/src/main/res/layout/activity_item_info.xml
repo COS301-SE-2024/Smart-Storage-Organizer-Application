@@ -70,6 +70,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_description" />
 
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/edit_item_button"
         android:layout_width="300dp"

@@ -1,0 +1,77 @@
+
+n	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8ìÄÎé‡2
+m	java:S117‘"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8îÄÎé‡2
+s	java:S117“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£Ü¤‚şÿÿÿÿ8ïÄÎé‡2
+m	java:S117â"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ğÄÎé‡2
+s	java:S117ä"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Â£®ïşÿÿÿÿ8ğÄÎé‡2
+m	java:S117À"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ğÄÎé‡2
+n	java:S117Â"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ïøÍå8ğÄÎé‡2
+
+java:S11043"]Make categoryModelList a static final constant or non-public and provide accessors if needed.(’ì´úÿÿÿÿ8õÄÎé‡2
+“
+java:S13193"qThe type of "categoryModelList" should be an interface such as "List" rather than the implementation "ArrayList".(’ì´úÿÿÿÿ8ûÄÎé‡2
+y
+java:S1192ø"VDefine a constant instead of duplicating this literal "View Response Results" 4 times.(¨Ì§ıÿÿÿÿ8›ÅÎé‡2
+}
+java:S1192‘"`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 3 times.(…çæX8›ÅÎé‡2
+m
+java:S1192Ö"ODefine a constant instead of duplicating this literal "Request Method" 3 times.(ú»Ç—8œÅÎé‡2
+q
+java:S1192 "SDefine a constant instead of duplicating this literal "GET request failed" 3 times.(¢Ö¯¢8œÅÎé‡2
+n
+java:S1192M"LDefine a constant instead of duplicating this literal "category_id" 3 times.(êÍÙ¦ıÿÿÿÿ8œÅÎé‡2
+s
+java:S1192Ö"UDefine a constant instead of duplicating this literal "GET request failed: " 3 times.(ú»Ç—8œÅÎé‡2
+b
+java:S1192S"FDefine a constant instead of duplicating this literal "email" 3 times.(Ú¢.8œÅÎé‡2
+p
+java:S1192£"RDefine a constant instead of duplicating this literal "View Item Details" 4 times.(ÌÒ£ê8ÅÎé‡2
+i
+java:S1192­"KDefine a constant instead of duplicating this literal "statusCode" 3 times.(‰ÜŠÅ8ÅÎé‡2
+n	java:S116*"SRename this field "Category" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(˜Ğ58¤ÅÎé‡2
+F
+java:S1659*"*Declare "notFoundText" on a separate line.(˜Ğ58¿ÅÎé‡2
+W
+java:S1659,"5Declare "currentSelectedCategory" on a separate line.(Ü½Ùˆúÿÿÿÿ8¿ÅÎé‡2
+s
+java:S1450*"WRemove the "Category" field and declare it as a local variable in the relevant methods.(˜Ğ58ÁÅÎé‡2
+
+java:S14505"_Remove the "itemRecyclerView" field and declare it as a local variable in the relevant methods.(Á†ŸÖûÿÿÿÿ8ÂÅÎé‡2
+]	java:S125R"<This block of commented-out lines of code should be removed.(ˆ÷Œƒúÿÿÿÿ8ˆÆÎé‡2
+O
+java:S1602€",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8™ÆÎé‡2
+k	java:S100‹"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íßû¦8ŸÆÎé‡2
+M
+java:S1481­"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8×ÆÎé‡2
+I
+java:S1481®"+Remove this unused "status" local variable.(©©­ı8×ÆÎé‡2
+M
+java:S1481³"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8ÚÆÎé‡2
+^	java:S125¼"<This block of commented-out lines of code should be removed.(‰“¶Ìÿÿÿÿÿ8áÆÎé‡2
+^	java:S125À"<This block of commented-out lines of code should be removed.(Çù–¨şÿÿÿÿ8ãÆÎé‡2
+Y	java:S125Ë"<This block of commented-out lines of code should be removed.(²éšÁ8åÆÎé‡2
+p	java:S100Ş"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹õ‹Äıÿÿÿÿ8çÆÎé‡2
+u
+java:S3776Ş"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(‹õ‹Äıÿÿÿÿ8éÆÎé‡2
+Y	java:S125ú"<This block of commented-out lines of code should be removed.(Œ“8öÆÎé‡2
+M
+java:S1481€"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8÷ÆÎé‡2
+^	java:S125"<This block of commented-out lines of code should be removed.(¡ûÖ¾şÿÿÿÿ8÷ÆÎé‡2
+M
+java:S1481ˆ"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8øÆÎé‡2
+O
+java:S1602",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8úÆÎé‡2
+^	java:S125¥"<This block of commented-out lines of code should be removed.(¹ˆŞòÿÿÿÿÿ8„ÇÎé‡2
+k	java:S100¼"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û‡±ú8‡ÇÎé‡2
+p
+java:S3776¼"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(Û‡±ú8ˆÇÎé‡2
+Y	java:S125Ø"<This block of commented-out lines of code should be removed.(Œ“8˜ÇÎé‡2
+M
+java:S1481Ş"/Remove this unused "statusCode" local variable.(‰ÜŠÅ8šÇÎé‡2
+^	java:S125ß"<This block of commented-out lines of code should be removed.(¡ûÖ¾şÿÿÿÿ8šÇÎé‡2
+M
+java:S1481æ"*Remove this unused "items" local variable.(ğŠÖııÿÿÿÿ8ÇÎé‡2
+O
+java:S1602ì",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8 ÇÎé‡2
+^	java:S125„"<This block of commented-out lines of code should be removed.(¹ˆŞòÿÿÿÿÿ8¬ÇÎé‡2
+Y	java:S125"<This block of commented-out lines of code should be removed.(ÑˆŠÎ8²ÇÎé‡2
