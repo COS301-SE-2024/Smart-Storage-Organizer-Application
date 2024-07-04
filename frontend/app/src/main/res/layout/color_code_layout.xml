@@ -4,7 +4,7 @@
     android:id="@+id/color_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="16dp"
     android:layout_margin="12dp"
     android:paddingVertical="32dp">
 
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DIGITAL DESIGN"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorSecondary"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"/>
 
@@ -39,7 +39,7 @@
                 android:layout_marginBottom="100dp"
                 android:layout_marginEnd="32dp"
                 android:text="Creating Usability with Motion: The UX in Motion Manifesto"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorSecondary"
                 android:textSize="24sp"/>
         </LinearLayout>
 

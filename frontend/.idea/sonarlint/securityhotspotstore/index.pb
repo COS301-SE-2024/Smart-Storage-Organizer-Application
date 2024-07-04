@@ -15,3 +15,9 @@ Uapp/src/main/java/com/example/smartstorageorganizer/ui/settings/SettingsFragmen
 Mapp/src/main/java/com/example/smartstorageorganizer/adapters/ItemAdapter.java,7\d\7d098373f516d2bfc7fe3b8ca7508c2824fb36be
 |
 Lapp/src/main/java/com/example/smartstorageorganizer/model/CategoryModel.java,e\3\e3e6d44e57a8a3fd18ba9f31a7aae2937007493a
+t
+Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0607d6b6e614428b9a1fa3bef3bf2a7e11fc
+@
+local.properties,0\7\0712df971a99ac4d2fccb8e0fb19f377f3374cca
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc

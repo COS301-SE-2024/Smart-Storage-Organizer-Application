@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +44,7 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.color_code_layout, parent, false));
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull ColorCodeAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
@@ -50,10 +53,14 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         holder.name.setText(model.getName());
         holder.description.setText(model.getDescription());
 
-        // Parse the color string and set the card background color
+        // Parse the color string and set the border color
         try {
             int color = Color.parseColor(model.getColor());
-            holder.cardView.setCardBackgroundColor(color);
+            GradientDrawable drawable = new GradientDrawable();
+//            drawable.setColor(R.color.background); // Set the background color to white
+            drawable.setStroke(4, color); // Set the border color and width (2dp in this case)
+            drawable.setCornerRadius(12);
+            holder.cardView.setBackground(drawable);
         } catch (IllegalArgumentException e) {
             Log.e("Adapter", "Invalid color string: " + model.getColor());
         }
