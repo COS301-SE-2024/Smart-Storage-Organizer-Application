@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.unitModel;
 
@@ -545,6 +546,116 @@ public class Utils {
                         }
 
                         activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void addColourGroup(String colourcode, String title, String description, String email, Activity activity, OperationCallback<Boolean> callback)
+    {
+        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\", \"createremail\":\""+email+"\"}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void fetchAllColour(Activity activity, OperationCallback<List<ColorCodeModel>> callback)
+    {
+        String json = "{}";
+
+        List<ColorCodeModel> colorCodeModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "GET request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            ColorCodeModel colorCode = new ColorCodeModel();
+                            colorCode.setColor(itemObject.getString("colourcode"));
+                            colorCode.setName(itemObject.getString("title"));
+                            colorCode.setDescription(itemObject.getString("description"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+                            colorCodeModelList.add(colorCode);
+                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(colorCodeModelList));
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
                             Log.e(message, "JSON parsing error: " + e.getMessage());

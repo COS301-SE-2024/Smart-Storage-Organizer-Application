@@ -1,6 +1,8 @@
 package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +16,12 @@ import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ViewColorCodesActivity extends AppCompatActivity {
     private RecyclerView colorCodeRecyclerView;
@@ -45,7 +50,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
         colorCodeAdapter = new ColorCodeAdapter(this, colorCodeModelList);
         colorCodeRecyclerView.setAdapter(colorCodeAdapter);
 
-        setupRecyclerView();
+        loadAllColorCodes();
     }
 
     private void setupRecyclerView() {
@@ -74,5 +79,27 @@ public class ViewColorCodesActivity extends AppCompatActivity {
 
         colorCodeAdapter.notifyDataSetChanged();
 //        colorCodeAdapter.notifyAll();
+    }
+
+    private void loadAllColorCodes() {
+//        loadingScreen.setVisibility(View.VISIBLE);
+        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> result) {
+                colorCodeModelList.clear();
+                colorCodeModelList.addAll(result);
+                colorCodeAdapter.notifyDataSetChanged();
+//                loadingScreen.setVisibility(View.GONE);
+//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                Toast.makeText(ViewColorCodesActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                updatePaginationButtons(result.size());
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                loadingScreen.setVisibility(View.GONE);
+                Toast.makeText(ViewColorCodesActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

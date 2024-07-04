@@ -1,58 +1,69 @@
 
-“	java:S117š"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ğ†›Ç‡2J$57b9eb4d-1dab-4bbe-beb4-d8026baefc02
-”	java:S117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡Üˆ8ñ†›Ç‡2J$e8cf7ed6-41d8-4cc7-aefe-daa29f2272a4
-“	java:S117Ä"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ñ†›Ç‡2J$55f42447-ede3-4d7f-a5dc-246444cb9400
-™	java:S117Æ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µ¹Á÷úÿÿÿÿ8ñ†›Ç‡2J$f5967c61-1630-4b80-a33a-f251deba1667
-“	java:S117ğ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ñ†›Ç‡2J$8d62dbd1-52c2-484d-af8e-2ece30c7324d
-”	java:S117ò"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾Ğ‹º8ñ†›Ç‡2J$42f987a5-c1db-4c6a-8e27-508276e6f61f
+“	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8°Âıü‡2J$9d2e1d57-e0fc-41fc-b931-238fa6653149
+”	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡Üˆ8°Âıü‡2J$2f9533db-0cf6-43e0-a5bc-b259c11afe24
+“	java:S117Å"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8°Âıü‡2J$59884d2f-c3a8-4877-b239-41fca77556dd
+™	java:S117Ç"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µ¹Á÷úÿÿÿÿ8±Âıü‡2J$9782527f-8b78-48f6-bac9-bd4e9a4b40d9
+“	java:S117ñ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8±Âıü‡2J$da010bfb-7d89-40c9-8e92-999caacbb659
+”	java:S117ó"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾Ğ‹º8±Âıü‡2J$6a103390-ec5a-4de2-8d0b-f574fb63e399
+“	java:S117º"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8²Âıü‡2J$6fd1fbc9-ea24-494b-962d-840af49e3d12
+”	java:S117¼"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­óÍ›8²Âıü‡2J$8ecd0c17-9dcd-432c-b0cb-51aff59d468e
+“	java:S117æ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8¨ûÕı‡2J$42c77795-987c-4d2b-9943-c85b3d695085
+™	java:S117è"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©’Û‘ùÿÿÿÿ8¨ûÕı‡2J$40d0ba31-0d96-4b3b-8002-9e2c583a3344
 ¨
-java:S1192"`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 5 times.(Ô‡¶ıÿÿÿÿ8ƒ‡›Ç‡2J$ad2253e0-302f-42b5-b338-86c8c3f27f6e
+java:S1192 "`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 7 times.(Ô‡¶ıÿÿÿÿ8ØÂıü‡2J$7b2e4341-4657-4675-b364-b1267d7287d4
 ¥
-java:S1192°"aDefine a constant instead of duplicating this literal "View Response Results Body Array" 3 times.(îÕÁğ8„‡›Ç‡2J$8a61781e-b822-4a04-91df-aa06bc404531
+java:S1192±"aDefine a constant instead of duplicating this literal "View Response Results Body Array" 4 times.(îÕÁğ8ØÂıü‡2J$3e0112fb-3bfa-49f3-b768-66d9941d2176
 –
-java:S1192"RDefine a constant instead of duplicating this literal "\", \"offset\":\"" 3 times.(¨ã‚ß8„‡›Ç‡2J$c1bb4bf0-10da-40ad-9742-d12e6a22fce7
+java:S1192"RDefine a constant instead of duplicating this literal "\", \"offset\":\"" 3 times.(¨ã‚ß8ÙÂıü‡2J$6a2fa7ae-65f5-46d4-a2b9-c9b2a821ebd0
 ›
-java:S11928"SDefine a constant instead of duplicating this literal "GET request failed" 3 times.(ğ­Úåıÿÿÿÿ8…‡›Ç‡2J$16a1060e-090f-4cb9-bf1b-39efd376bf06
-œ
-java:S1192"YDefine a constant instead of duplicating this literal "POST request succeeded: " 4 times.(ƒ‚âî8…‡›Ç‡2J$a7306b43-ea68-4855-8681-ca1c10cd00b6
-‘
-java:S1192¹"MDefine a constant instead of duplicating this literal "colourcoding" 3 times.(ö™ä8†‡›Ç‡2J$53d99f0f-d876-4716-973f-c119983f3c8f
-Œ
-java:S1192º"HDefine a constant instead of duplicating this literal "barcode" 3 times.(¼½À»8†‡›Ç‡2J$899b9f95-bd67-4dce-a982-c5175199c20c
-
-java:S1192È"UDefine a constant instead of duplicating this literal "JSON parsing error: " 3 times.(Ò‚šßüÿÿÿÿ8†‡›Ç‡2J$c4eb21c1-138d-475d-beca-e169c356b4e5
-š
-java:S1192%"RDefine a constant instead of duplicating this literal "{\"useremail\":\"" 3 times.(Îéëñıÿÿÿÿ8†‡›Ç‡2J$dac9ec3f-fdd2-4a85-957f-979228758805
-”
-java:S1192¿"KDefine a constant instead of duplicating this literal "item_image" 3 times.(—è¹€üÿÿÿÿ8†‡›Ç‡2J$10e87e1a-5d15-4b0b-a4d3-5ac606ed872d
+java:S11929"SDefine a constant instead of duplicating this literal "GET request failed" 4 times.(ğ­Úåıÿÿÿÿ8ÙÂıü‡2J$ab8eaaf3-6b49-4c06-ae93-d178227a6626
 
-java:S1192Î"TDefine a constant instead of duplicating this literal "GET request failed:" 3 times.(àİÀúÿÿÿÿ8†‡›Ç‡2J$43190f69-86d9-4aa7-aa52-6b08fefa0ad4
-‹
-java:S1192»"GDefine a constant instead of duplicating this literal "qrcode" 3 times.(Ô“Ñò8†‡›Ç‡2J$d6e24cd2-b6e4-4eed-83ca-926c8614dce6
-
-java:S1192¸"LDefine a constant instead of duplicating this literal "description" 3 times.(ûâÏ§8‡‡›Ç‡2J$56a40ed1-423f-4bc4-8d94-3aa9673b904c
-—
-java:S1192u"TDefine a constant instead of duplicating this literal "POST request failed" 4 times.(çá‡”8‡‡›Ç‡2J$22a0799b-dba1-4133-b683-f64a9361783f
+java:S1192€"YDefine a constant instead of duplicating this literal "POST request succeeded: " 5 times.(ƒ‚âî8ÙÂıü‡2J$86379bfc-8f76-4912-819e-3956030bd96d
+‘
+java:S1192º"MDefine a constant instead of duplicating this literal "colourcoding" 3 times.(ö™ä8ÚÂıü‡2J$fdfb3804-7357-4f44-ab5b-9cd2aae27771
+Œ
+java:S1192»"HDefine a constant instead of duplicating this literal "barcode" 3 times.(¼½À»8ÚÂıü‡2J$1e441966-1338-491f-a97d-84ef954bf5ee
+
+java:S1192É"UDefine a constant instead of duplicating this literal "JSON parsing error: " 4 times.(Ò‚šßüÿÿÿÿ8ÚÂıü‡2J$273a802a-7869-470f-bc67-bab6f2f57858
 š
-java:S1192„"VDefine a constant instead of duplicating this literal "POST request failed: " 4 times.(ˆ«—˜8‡‡›Ç‡2J$c3ca22dc-aed9-453f-b227-5d210ce9d28a
+java:S1192&"RDefine a constant instead of duplicating this literal "{\"useremail\":\"" 3 times.(Îéëñıÿÿÿÿ8ÛÂıü‡2J$59209fb0-c00a-4ee0-b6f0-1c177fea1f0e
+”
+java:S1192À"KDefine a constant instead of duplicating this literal "item_image" 3 times.(—è¹€üÿÿÿÿ8ÛÂıü‡2J$f0b994b0-0ca2-4d1a-bad1-2d4a3f0dfa1d
+
+java:S1192Ï"TDefine a constant instead of duplicating this literal "GET request failed:" 4 times.(àİÀúÿÿÿÿ8ÛÂıü‡2J$b3ca6a3a-37ac-488f-84e0-3ff2f91268e7
+‹
+java:S1192¼"GDefine a constant instead of duplicating this literal "qrcode" 3 times.(Ô“Ñò8ÜÂıü‡2J$544735c7-3229-488a-842c-144b6b8c5dc7
+
+java:S1192¹"LDefine a constant instead of duplicating this literal "description" 4 times.(ûâÏ§8ßÂıü‡2J$1d36c22c-4fd1-4665-8664-36f4375bc5d5
+—
+java:S1192v"TDefine a constant instead of duplicating this literal "POST request failed" 5 times.(çá‡”8ßÂıü‡2J$379a24c1-bc78-4067-973c-ecf73463df8e
+š
+java:S1192…"VDefine a constant instead of duplicating this literal "POST request failed: " 5 times.(ˆ«—˜8àÂıü‡2J$ca6422e8-16a9-4e27-b5f2-0fd516140ad3
 ’
-java:S1192…"NDefine a constant instead of duplicating this literal "Response code" 5 times.(Ì¢­8ˆ‡›Ç‡2J$39a2e325-ecf9-4b16-ab32-6a25253fdd2d
+java:S1192†"NDefine a constant instead of duplicating this literal "Response code" 6 times.(Ì¢­8áÂıü‡2J$fe18c2af-3321-4e0d-b8b9-482098386bc8
 Š
-java:S1192¾"FDefine a constant instead of duplicating this literal "email" 3 times.(İ§ğ8ˆ‡›Ç‡2J$32e94366-e309-4d5d-82c1-f4082ae892c1
+java:S1192¿"FDefine a constant instead of duplicating this literal "email" 3 times.(İ§ğ8áÂıü‡2J$09678b44-676b-41aa-883c-20bd45c67f57
 Œ
-java:S1192¶"HDefine a constant instead of duplicating this literal "item_id" 3 times.(ãğš8ˆ‡›Ç‡2J$6dca1095-3a44-4297-81f8-0c4b4c9421f0
+java:S1192·"HDefine a constant instead of duplicating this literal "item_id" 3 times.(ãğš8âÂıü‡2J$0670e173-3d9c-4d9f-8643-ff8fea74c9b2
 
-java:S1192·"JDefine a constant instead of duplicating this literal "item_name" 3 times.(‹ØÂM8ˆ‡›Ç‡2J$b56ec5db-345a-4955-a1d6-d1bb0a4333d7
+java:S1192¸"JDefine a constant instead of duplicating this literal "item_name" 3 times.(‹ØÂM8âÂıü‡2J$2948448c-17e4-4c70-b872-63c4be2e6ec9
 Œ
-java:S1192¼"HDefine a constant instead of duplicating this literal "quanity" 3 times.(ÙÔğş8‰‡›Ç‡2J$896fb925-5e68-4bbf-803a-76edb5042161
+java:S1192½"HDefine a constant instead of duplicating this literal "quanity" 3 times.(ÙÔğş8âÂıü‡2J$525fb4ff-9dc2-441b-a70f-43c328bf4271
+˜
+java:S1192œ"ODefine a constant instead of duplicating this literal "Response code:" 3 times.(é¦±Äøÿÿÿÿ8ğ×Øı‡2J$eb4dedab-d095-4d48-b539-80f4446016ad
 ’
-java:S1192½"IDefine a constant instead of duplicating this literal "location" 3 times.(¦¿­‹úÿÿÿÿ8‰‡›Ç‡2J$72a867dd-563d-47a3-aa0e-a67f5b088b03
-	java:S125"<This block of commented-out lines of code should be removed.(ú½›¯8Ğ‡›Ç‡2J$4f79169f-15d3-4514-b818-f7272207dbac
-„	java:S125À"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8İ‡›Ç‡2J$422bc098-24d0-4016-a0b8-e6f21a78f081
-~	java:S125×"<This block of commented-out lines of code should be removed.(»‰¡k8á‡›Ç‡2J$922dd9f2-b987-4135-8c3d-bf1b8b3bede7
+java:S1192¾"IDefine a constant instead of duplicating this literal "location" 3 times.(¦¿­‹úÿÿÿÿ8ãÂıü‡2J$c57f03fc-0c3d-46f3-84ac-0ffc532c028e
+	java:S125"<This block of commented-out lines of code should be removed.(ú½›¯8ÉÃıü‡2J$eac506aa-757f-414b-b9ab-9ddf6f38ec5f
+„	java:S125Á"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8ØÃıü‡2J$3426c628-928d-4d8d-94c0-3a8f79de689f
+~	java:S125Ø"<This block of commented-out lines of code should be removed.(»‰¡k8ÛÃıü‡2J$7114eb0b-1209-4c65-853c-558f624b90d0
 †
-java:S1854ú"BRemove this useless assignment to local variable "numPagesString".(ñÃÒí8íò¹Ç‡2J$b188074f-ccf3-4925-9b14-f71496762c7f
+java:S1854û"BRemove this useless assignment to local variable "numPagesString".(ñÃÒí8ãÃıü‡2J$1cc7f9e2-fe06-48c1-a46c-50ff98be283d
 w
-java:S1481ú"3Remove this unused "numPagesString" local variable.(ñÃÒí8ïò¹Ç‡2J$0c47deb0-ad36-4257-ac62-c623f312aaeb
-„	java:S125Œ"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8ï‡›Ç‡2J$a32f3a0a-5e04-4140-a876-69f34b7127cd
-„	java:S125"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8ªˆ›Ç‡2J$d4b04c94-6d3f-4274-b7a8-a150b8c7254b
+java:S1481û"3Remove this unused "numPagesString" local variable.(ñÃÒí8çÃıü‡2J$76dde015-597f-41d1-b505-333032aa7f7a
+„	java:S125"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8íÃıü‡2J$f45424a0-a2f4-480a-b7a8-300ef013d17b
+„	java:S125Ÿ"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8ªÄıü‡2J$3192d526-7cec-4156-8502-1607ef05ed54
+|
+java:S1854é"8Remove this useless assignment to local variable "body".(Òà…È8³ıÕı‡2J$e0c3d67c-105c-4278-9a46-b56e12ac19eb
+m
+java:S1481é")Remove this unused "body" local variable.(Òà…È8µıÕı‡2J$f0e97865-654b-4318-a9c2-39b6f2d189df
+„	java:S125"<This block of commented-out lines of code should be removed.(š“æèùÿÿÿÿ8ÎÙØı‡2J$b1f02959-55cf-4aeb-8afb-dc0bd52473fc
