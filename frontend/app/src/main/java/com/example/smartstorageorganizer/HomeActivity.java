@@ -325,6 +325,22 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
     }
 
+    public void FetchAllColour()
+    {
+        String json = "{}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .get()
+                .build();
+    }
+
     public void DeleteColour(int colourid)
     {
         String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
