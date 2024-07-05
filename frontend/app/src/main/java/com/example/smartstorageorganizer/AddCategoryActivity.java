@@ -26,9 +26,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
+import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -40,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class AddCategoryActivity extends AppCompatActivity {
     private static final int GALLERY_CODE = 1;
@@ -66,6 +69,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private LottieAnimationView loadingScreen;
     private List<CategoryModel> categoryModelList = new ArrayList<>();
     private Spinner categorySpinner;
+    private String currentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_category);
         initViews();
         setupWindowInsets();
+        getDetails();
         fetchParentCategories();
         setupUploadButton();
         setupAddButton();
@@ -108,6 +113,33 @@ public class AddCategoryActivity extends AppCompatActivity {
         Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "email":
+                                currentEmail = attribute.getValue();
+                                break;
+                            default:
+                        }
+
+
+
+
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    future.complete(true);
+                },
+                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
+
+        );
+        return future;
     }
 
     private void fetchParentCategories() {
@@ -311,7 +343,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     private void addNewCategory(int parentCategory, String categoryName, String url) {
-        Utils.addCategory(parentCategory, categoryName, "NULL", url, this, new OperationCallback<Boolean>() {
+        Utils.addCategory(parentCategory, categoryName, currentEmail, url, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

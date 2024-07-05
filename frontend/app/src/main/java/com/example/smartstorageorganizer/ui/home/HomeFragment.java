@@ -37,6 +37,7 @@ import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
+import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
@@ -583,6 +584,7 @@ public class HomeFragment extends Fragment {
         Button addItemButton = dialogView.findViewById(R.id.addItemButton);
         Button addCategoryButton = dialogView.findViewById(R.id.addCategoryButton);
         Button addUnitButton = dialogView.findViewById(R.id.addUnitButton);
+        Button addColorButton = dialogView.findViewById(R.id.addColorButton);
 
         // Create the AlertDialog
         alertDialog = builder.create();
@@ -606,6 +608,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), UnitActivity.class);
+                startActivity(intent);
+            }
+        });
+        addColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
+                intent.putExtra("email", currentEmail);
                 startActivity(intent);
             }
         });

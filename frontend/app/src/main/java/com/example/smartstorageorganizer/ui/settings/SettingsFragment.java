@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.HelpActivity;
 import com.example.smartstorageorganizer.ManualActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;

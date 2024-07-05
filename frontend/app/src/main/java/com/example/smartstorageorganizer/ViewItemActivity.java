@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,8 +32,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ViewItemActivity extends AppCompatActivity {
+    private static final int PAGE_SIZE = 6;
+    private int currentPage = 1;
     private TextView notFoundText;
     private ImageView backButton;
     private Spinner mySpinner;
@@ -45,6 +49,10 @@ public class ViewItemActivity extends AppCompatActivity {
     private boolean firstTime = true;
     private List<CategoryModel> categoryModelList = new ArrayList<>();
     private RecyclerView itemRecyclerView;
+    private Button prevButton;
+    private Button nextButton;
+    private TextView pageNumber;
+    private String currentSelectedOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class ViewItemActivity extends AppCompatActivity {
         loadInitialData();
         setupSpinnerListener();
         setupSortByListener();
+        setupPaginationButtons();
     }
 
     private void initializeViews() {
@@ -68,12 +77,42 @@ public class ViewItemActivity extends AppCompatActivity {
         loadingScreen = findViewById(R.id.loadingScreen);
         notFoundText = findViewById(R.id.notFoundText);
         backButton = findViewById(R.id.back_home_button);
+        prevButton = findViewById(R.id.prevButton);
+        nextButton = findViewById(R.id.nextButton);
+        pageNumber = findViewById(R.id.pageNumber);
         category.setText(getIntent().getStringExtra("category"));
         categoryID = getIntent().getStringExtra("category_id");
     }
 
     private void setupBackButton() {
         backButton.setOnClickListener(v -> finish());
+    }
+
+    private void setupPaginationButtons() {
+        prevButton.setOnClickListener(v -> {
+//            firstTime = true;
+            if (currentPage > 1) {
+                itemModelList.clear();
+                itemAdapter.notifyDataSetChanged();
+                currentPage--;
+                firstTime = false;
+                loadInitialData();
+                pageNumber.setText("Page " + currentPage);
+            }
+        });
+
+        nextButton.setOnClickListener(v -> {
+            itemModelList.clear();
+            itemAdapter.notifyDataSetChanged();
+            currentPage++;
+            firstTime = false;
+            loadInitialData();
+            pageNumber.setText("Page " + currentPage);
+        });
+    }
+    private void updatePaginationButtons(int resultSize) {
+        prevButton.setEnabled(currentPage > 1);
+        nextButton.setEnabled(resultSize == PAGE_SIZE);
     }
 
     private void setupRecyclerView() {
@@ -85,21 +124,68 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadInitialData() {
-        loadItemsByCategory(Integer.parseInt(categoryID));
-        fetchAndSetupCategories();
+        if (firstTime) {
+            currentSelectedCategory = "All";
+        }
+        if (Objects.equals(getIntent().getStringExtra("category"), "All")){
+            loadAllItems();
+        }
+        else {
+            if (!currentSelectedCategory.equals("All")) {
+                CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
+                if (subCategory != null) {
+                    loadItemsBySubCategory(Integer.parseInt(subCategory.getCategoryID()));
+                }
+            } else {
+                loadItemsByCategory(Integer.parseInt(categoryID));
+                fetchAndSetupCategories();            }
+        }
     }
 
-    private void loadItemsByCategory(int categoryId) {
+    private void loadAllItems() {
         loadingScreen.setVisibility(View.VISIBLE);
-        Utils.filterByCategory(categoryId, this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                itemAdapter.notifyDataSetChanged();
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                updatePaginationButtons(result.size());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                loadingScreen.setVisibility(View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadItemsByCategory(int categoryId) {
+        loadingScreen.setVisibility(View.VISIBLE);
+        Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+            @Override
+            public void onSuccess(List<ItemModel> result) {
+                itemModelList.clear();
+                itemModelList.addAll(result);
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
+                loadingScreen.setVisibility(View.GONE);
+                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                updatePaginationButtons(result.size());
             }
 
             @Override
@@ -121,9 +207,11 @@ public class ViewItemActivity extends AppCompatActivity {
                     categories.add(category.getCategoryName());
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, categories);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mySpinner.setAdapter(adapter);
+                if(firstTime){
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, categories);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    mySpinner.setAdapter(adapter);
+                }
             }
 
             @Override
@@ -135,6 +223,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     private void setupSortByListener(){
         String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        currentSelectedOption = "Sort by";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortBySpinner.setAdapter(adapter);
@@ -142,7 +231,7 @@ public class ViewItemActivity extends AppCompatActivity {
         sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String currentSelectedOption = parentView.getItemAtPosition(position).toString();
+                currentSelectedOption = parentView.getItemAtPosition(position).toString();
 
                 if (currentSelectedOption.equals("Sort by")) {
                     return;
@@ -182,6 +271,8 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                currentPage = 1;
+                pageNumber.setText("Page " + currentPage);
                 if (firstTime) {
                     firstTime = false;
                     return;
@@ -217,14 +308,20 @@ public class ViewItemActivity extends AppCompatActivity {
         loadingScreen.setVisibility(View.VISIBLE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
-        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                itemAdapter.notifyDataSetChanged();
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
                 loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                updatePaginationButtons(result.size());
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
@@ -266,5 +363,27 @@ public class ViewItemActivity extends AppCompatActivity {
             LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
             return date1.compareTo(date2);
         });
+    }
+
+    public void setupSort(String sortType) {
+        switch (sortType) {
+            case "A to Z":
+                sortItemModelsAscending(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Z to A":
+                sortItemModelsDescending(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Newest to Oldest":
+                sortItemModelsByNewest(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            case "Oldest to Newest":
+                sortItemModelsByOldest(itemModelList);
+                itemAdapter.notifyDataSetChanged();
+                break;
+            default:
+        }
     }
 }
