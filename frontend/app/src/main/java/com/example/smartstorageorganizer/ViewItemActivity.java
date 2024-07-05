@@ -42,6 +42,7 @@ public class ViewItemActivity extends AppCompatActivity {
     private Spinner mySpinner;
     private Spinner sortBySpinner;
     private String categoryID;
+    private String colorCodeID;
     private String currentSelectedCategory;
     private List<ItemModel> itemModelList;
     private ItemAdapter itemAdapter;
@@ -64,7 +65,9 @@ public class ViewItemActivity extends AppCompatActivity {
         setupBackButton();
         setupRecyclerView();
         loadInitialData();
-        setupSpinnerListener();
+        if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
+            setupSpinnerListener();
+        }
         setupSortByListener();
         setupPaginationButtons();
     }
@@ -80,8 +83,13 @@ public class ViewItemActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
-        category.setText(getIntent().getStringExtra("category"));
-        categoryID = getIntent().getStringExtra("category_id");
+        if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
+            category.setText(getIntent().getStringExtra("category"));
+            categoryID = getIntent().getStringExtra("category_id");
+        }
+        else {
+            colorCodeID = getIntent().getStringExtra("color_code_id");
+        }
     }
 
     private void setupBackButton() {
@@ -124,27 +132,60 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadInitialData() {
-        if (firstTime) {
-            currentSelectedCategory = "All";
-        }
-        if (Objects.equals(getIntent().getStringExtra("category"), "All")){
-            loadAllItems();
+        if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
+            if (firstTime) {
+                currentSelectedCategory = "All";
+            }
+            if (Objects.equals(getIntent().getStringExtra("category"), "All")){
+                loadAllItems();
+            }
+            else {
+                if (!currentSelectedCategory.equals("All")) {
+                    CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
+                    if (subCategory != null) {
+                        loadItemsBySubCategory(Integer.parseInt(subCategory.getCategoryID()));
+                    }
+                } else {
+                    loadItemsByCategory(Integer.parseInt(categoryID));
+                    fetchAndSetupCategories();            }
+            }
         }
         else {
-            if (!currentSelectedCategory.equals("All")) {
-                CategoryModel subCategory = findCategoryByName(currentSelectedCategory);
-                if (subCategory != null) {
-                    loadItemsBySubCategory(Integer.parseInt(subCategory.getCategoryID()));
-                }
-            } else {
-                loadItemsByCategory(Integer.parseInt(categoryID));
-                fetchAndSetupCategories();            }
+            colorCodeID = getIntent().getStringExtra("color_code_id");
+            fetchByColorCode(Integer.parseInt(colorCodeID));
         }
     }
 
     private void loadAllItems() {
         loadingScreen.setVisibility(View.VISIBLE);
         Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
+            @Override
+            public void onSuccess(List<ItemModel> result) {
+                itemModelList.clear();
+                itemModelList.addAll(result);
+                if(!Objects.equals(currentSelectedOption, "Sort by")){
+                    setupSort(currentSelectedOption);
+                }
+                else {
+                    itemAdapter.notifyDataSetChanged();
+                }
+                loadingScreen.setVisibility(View.GONE);
+                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                updatePaginationButtons(result.size());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                loadingScreen.setVisibility(View.GONE);
+                Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchByColorCode(int colorCodeId) {
+        loadingScreen.setVisibility(View.VISIBLE);
+        Utils.fetchByColour(colorCodeId,this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();

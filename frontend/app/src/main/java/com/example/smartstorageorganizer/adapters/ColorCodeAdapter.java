@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 
@@ -89,7 +90,12 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
                 toggleSelection(holder, position, model);
             } else {
                 // Normal click action
+                Intent intent = new Intent(v.getContext(), ViewItemActivity.class);
+                intent.putExtra("color_code_id", itemModelList.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("category", "");
+                intent.putExtra("category_id", "");
 
+                context.startActivity(intent);
             }
         });
 
