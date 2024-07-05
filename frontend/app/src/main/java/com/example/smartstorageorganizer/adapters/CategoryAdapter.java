@@ -60,6 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
             intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
+            intent.putExtra("color_code_id", "");
 
             context.startActivity(intent);
         });
