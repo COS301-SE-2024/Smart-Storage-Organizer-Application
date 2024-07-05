@@ -30,4 +30,9 @@
         android:name="com.example.smartstorageorganizer.ui.help.HelpFragment"
         android:label="Help"
         tools:layout="@layout/fragment_help" />
+    <activity
+        android:id="@+id/nav_color_code"
+        android:name="com.example.smartstorageorganizer.ViewColorCodesActivity"
+        android:label="activity_view_color_codes"
+        tools:layout="@layout/activity_view_color_codes" />
 </navigation>

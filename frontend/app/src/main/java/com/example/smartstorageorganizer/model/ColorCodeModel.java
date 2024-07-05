@@ -4,12 +4,13 @@ public class ColorCodeModel {
     private String name;
     private String description;
     private String color;
+    private String id;
 
     public ColorCodeModel() {
 
     }
 
-    public ColorCodeModel(String name, String description, String color) {
+    public ColorCodeModel(String name, String description, String color, String id) {
         this.name = name;
         this.description = description;
         this.color = color;
@@ -37,5 +38,13 @@ public class ColorCodeModel {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -10,6 +10,11 @@
             android:title="@string/menu_home"
             android:color="@color/colorPrimary"/>
         <item
+            android:id="@+id/nav_color_code"
+            android:icon="@drawable/baseline_question_mark_24"
+            android:title="Color Coding"
+            android:textColor="@color/colorPrimary"/>
+        <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/outline_notifications_24"
             android:title="Notifications"

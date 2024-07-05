@@ -650,7 +650,7 @@ public class Utils {
                             colorCode.setColor(itemObject.getString("colourcode"));
                             colorCode.setName(itemObject.getString("title"));
                             colorCode.setDescription(itemObject.getString("description"));
-//                            item.setCreatedAt(itemObject.getString("created_at"));
+                            colorCode.setId(itemObject.getString("id"));
 
                             colorCodeModelList.add(colorCode);
                         }
@@ -666,6 +666,48 @@ public class Utils {
                     activity.runOnUiThread(() -> {
                         Log.e(message, "GET request failed:" + response);
                         callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void deleteColour(int colourId, Activity activity, OperationCallback<Boolean> callback)
+    {
+        String json = "{\"colourid\":\""+Integer.toString(colourId)+"\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.DeleteColour;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
                     });
                 }
             }

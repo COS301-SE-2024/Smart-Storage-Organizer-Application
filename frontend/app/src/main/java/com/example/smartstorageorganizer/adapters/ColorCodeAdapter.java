@@ -138,6 +138,14 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         selectionMode = false;
     }
 
+    public List<ColorCodeModel> getSelectedItems() {
+        List<ColorCodeModel> selectedColorCodes = new ArrayList<>();
+        for (int position : selectedItems) {
+            selectedColorCodes.add(itemModelList.get(position));
+        }
+        return selectedColorCodes;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView description;
