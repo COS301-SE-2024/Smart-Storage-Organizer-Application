@@ -1,9 +1,14 @@
 package com.example.smartstorageorganizer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,16 +16,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.concurrent.CompletableFuture;
+
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AddColorCodeActivity extends AppCompatActivity {
-    private TextView gfgTextView;
-
-    private Button mSetColorButton, mPickColorButton;
-
     private View mColorPreview;
 
     private int mDefaultColor;
+    private TextInputEditText titleEditText;
+    private TextInputEditText descriptionEditText;
+    private String currentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,23 +40,27 @@ public class AddColorCodeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_color_code);
 
-        gfgTextView = findViewById(R.id.gfg_heading);
-        mPickColorButton = findViewById(R.id.pick_color_button);
-        mSetColorButton = findViewById(R.id.set_color_button);
+        TextView gfgTextView = findViewById(R.id.gfg_heading);
+        Button mPickColorButton = findViewById(R.id.pick_color_button);
+        Button addColorCodeButton = findViewById(R.id.add_colorcode_button);
         mColorPreview = findViewById(R.id.preview_selected_color);
+        titleEditText = findViewById(R.id.colorCodeName);
+        descriptionEditText = findViewById(R.id.colorCodeDescription);
+
+        getDetails();
 
         mDefaultColor = 0;
 
-        mPickColorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openColorPickerDialogue();
-            }
-        });
-        mSetColorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gfgTextView.setTextColor(mDefaultColor);
+        mPickColorButton.setOnClickListener(v -> openColorPickerDialogue());
+        addColorCodeButton.setOnClickListener(v -> {
+            gfgTextView.setTextColor(mDefaultColor);
+            String color = convertIntToHexColor(mDefaultColor);
+            String titleInput = titleEditText.getText().toString().trim();
+            String descriptionInput = descriptionEditText.getText().toString().trim();
+
+            if (validateForm(titleInput, descriptionInput)) {
+                //call the add color code function
+                addNewColorCode(color, titleInput, descriptionInput);
             }
         });
 
@@ -55,10 +71,45 @@ public class AddColorCodeActivity extends AppCompatActivity {
         });
     }
 
-    public void openColorPickerDialogue() {
+    public CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        // the AmbilWarnaDialog callback needs 3 parameters
-        // one is the context, second is default color,
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "email":
+                                currentEmail = attribute.getValue();
+                                break;
+                            default:
+                        }
+                    }
+                    Log.i("progress", "User attributes fetched successfully");
+                    future.complete(true);
+                },
+                error -> {
+                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    future.complete(false);
+                }
+        );
+        return future;
+    }
+
+    public boolean validateForm(String title, String description) {
+        if (TextUtils.isEmpty(title)) {
+            this.titleEditText.setError("Title is required.");
+            this.titleEditText.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(description)) {
+            this.descriptionEditText.setError("Description is required.");
+            this.descriptionEditText.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    public void openColorPickerDialogue() {
         final AmbilWarnaDialog colorPickerDialogue = new AmbilWarnaDialog(this, mDefaultColor,
                 new AmbilWarnaDialog.OnAmbilWarnaListener() {
                     @Override
@@ -71,18 +122,41 @@ public class AddColorCodeActivity extends AppCompatActivity {
 
                     @Override
                     public void onOk(AmbilWarnaDialog dialog, int color) {
-                        // change the mDefaultColor to
-                        // change the GFG text color as
-                        // it is returned when the OK
-                        // button is clicked from the
-                        // color picker dialog
                         mDefaultColor = color;
-
-                        // now change the picked color
-                        // preview box to mDefaultColor
                         mColorPreview.setBackgroundColor(mDefaultColor);
                     }
                 });
         colorPickerDialogue.show();
+    }
+
+    private String convertIntToHexColor(int color) {
+        return String.format("#%06X", (0xFFFFFF & color));
+    }
+
+    private void addNewColorCode(String colorCode, String title, String description) {
+        Utils.addColourGroup(colorCode, title, description, currentEmail, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    showToast("Color Code added successfully");
+                    navigateToHome();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                showToast("Failed to add category: " + error);
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(AddColorCodeActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void navigateToHome() {
+        Intent intent = new Intent(AddColorCodeActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

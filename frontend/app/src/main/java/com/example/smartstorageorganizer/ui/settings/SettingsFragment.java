@@ -18,6 +18,7 @@ import com.example.smartstorageorganizer.HelpActivity;
 import com.example.smartstorageorganizer.ManualActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewColorCodesActivity;
 import com.example.smartstorageorganizer.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -31,9 +32,15 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         Button profile = root.findViewById(R.id.profile);
+        Button color = root.findViewById(R.id.color);
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);
+            startActivity(intent);
+        });
+
+        color.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ViewColorCodesActivity.class);
             startActivity(intent);
         });
 

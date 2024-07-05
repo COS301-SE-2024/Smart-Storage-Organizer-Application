@@ -34,7 +34,7 @@
             android:id="@+id/colorCodeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="Title"
             android:inputType="textAutoComplete" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,13 +82,25 @@
         android:layout_marginTop="8dp" />
 
     <Button
-        android:id="@+id/set_color_button"
+        android:id="@+id/add_colorcode_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Set Color" />
+        android:text="Finish" />
+
+<!--    <Button-->
+<!--        android:id="@+id/set_color_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layout_marginStart="32dp"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:text="Set Color" />-->
+
+
 
 </LinearLayout>

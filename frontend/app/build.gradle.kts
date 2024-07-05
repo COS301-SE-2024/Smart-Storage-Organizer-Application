@@ -62,6 +62,14 @@ android {
         buildConfigField("String", "ModifyCategoryName", "\"${localProperties["ModifyCategoryName"]}\"");
         buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"");
 
+        buildConfigField("String", "AddColourEndPoint", "\"${localProperties["AddColourEndPoint"]}\"");
+
+        buildConfigField("String", "AddItemToColourEndPoint", "\"${localProperties["AddItemToColourEndPoint"]}\"");
+
+        buildConfigField("String", "FetchByColourEndPoint", "\"${localProperties["FetchByColourEndPoint"]}\"");
+
+        buildConfigField("String", "DeleteColour", "\"${localProperties["DeleteColour"]}\"");
+
     }
 
     buildTypes {

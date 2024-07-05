@@ -258,5 +258,84 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
+
+    public void AddColourGroup(String colourcode, String title, String description)
+    {
+        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+    public void AddItemToColour(int colourid, int itemid)
+    {
+        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\", \"itemid\":\""+Integer.toString(itemid)+"\" }";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+    public void FetchByColour(int colourid)
+    {
+        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+    public void FetchAllColour()
+    {
+        String json = "{}";
+
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .get()
+                .build();
+    }
+
+    public void DeleteColour(int colourid)
+    {
+        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.DeleteColour;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
 }
 
