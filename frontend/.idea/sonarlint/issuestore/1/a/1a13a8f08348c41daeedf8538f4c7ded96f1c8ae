@@ -1,0 +1,9 @@
+
+™	java:S117¼"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¨áÎ°ûÿÿÿÿ8‚àªžˆ2J$76855841-4f3f-47b6-a10a-42ec7fba656c
+“	java:S117¿"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ƒàªžˆ2J$a17544f9-1d42-46ef-80d8-30b7d1076b6c
+„	java:S107„"<Method has 8 parameters, which is greater than 7 authorized.(Æ£¡ôøÿÿÿÿ8šàªžˆ2J$ace065e2-046f-4eb0-8c54-9357ad1e97f7
+	java:S107’"<Method has 8 parameters, which is greater than 7 authorized.(ýš´Å8šàªžˆ2J$d4143ce2-ff6a-4c54-a7e8-e1e5ebd91da1
+
+java:S1854=">Remove this useless assignment to local variable "backButton".(®Ž‰ó8¯àªžˆ2J$a20a4289-5079-41f6-b546-7f79ecbe33d5
+
+java:S1117=">Rename "backButton" which hides the field declared at line 40.(®Ž‰ó8°àªžˆ2J$e0af8425-3016-4c52-92c4-1ff715b00a19
