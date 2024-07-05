@@ -1,21 +1,20 @@
-
 V
-java:S1144ô"3Remove this unused private "navigateToHome" method.(µ¼»®ÿÿÿÿÿ8ÿ‡ÅÆ‡2
+java:S1144Ã´"3Remove this unused private "navigateToHome" method.(ÂµÂ¼Â»Â®Ã¿Ã¿Ã¿Ã¿Ã¿8Ã¿â€¡Ã…Ã†â€¡2
 
-java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ë•¿Ç†2J$0dac8d0e-3d56-4409-8c5c-ff5404e410a2
+java:S1874Â¯"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã«â€¢Â¿Ã‡â€ 2J$0dac8d0e-3d56-4409-8c5c-ff5404e410a2
 
-java:S1874¯"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ğ•¿Ç†2J$155b95cf-d2b9-47fa-9fa0-e2ca7627d1d7
+java:S1874Â¯"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã°â€¢Â¿Ã‡â€ 2J$155b95cf-d2b9-47fa-9fa0-e2ca7627d1d7
 v
-java:S1874°"2Remove this use of "setMessage"; it is deprecated.(¯ıË8ñ•¿Ç†2J$9965b703-7641-4be4-be84-66c31af655ad
+java:S1874Â°"2Remove this use of "setMessage"; it is deprecated.(Â¯Ã½Ã‹Â8Ã±â€¢Â¿Ã‡â€ 2J$9965b703-7641-4be4-be84-66c31af655ad
 Y
-java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2
+java:S1874Ã…"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã¬Ë†Ã…Ã†â€¡2
 Y
-java:S1874Å"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ìˆÅÆ‡2
+java:S1874Ã…"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã¬Ë†Ã…Ã†â€¡2
 P
-java:S1874Æ"2Remove this use of "setMessage"; it is deprecated.(¯ıË8íˆÅÆ‡2
+java:S1874Ã†"2Remove this use of "setMessage"; it is deprecated.(Â¯Ã½Ã‹Â8Ã­Ë†Ã…Ã†â€¡2
 Y
-java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8üˆÅÆ‡2
+java:S1874Ã"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã¼Ë†Ã…Ã†â€¡2
 Y
-java:S1874İ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8ıˆÅÆ‡2
+java:S1874Ã"6Remove this use of "ProgressDialog"; it is deprecated.(Â½Â¥Ã’Ã¶Ã¾Ã¿Ã¿Ã¿Ã¿8Ã½Ë†Ã…Ã†â€¡2
 P
-java:S1874Ş"2Remove this use of "setMessage"; it is deprecated.(‡ƒ”8şˆÅÆ‡2
+java:S1874Ã"2Remove this use of "setMessage"; it is deprecated.(â€¡ÂÆ’â€8Ã¾Ë†Ã…Ã†â€¡2

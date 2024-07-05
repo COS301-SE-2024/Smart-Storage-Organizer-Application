@@ -364,6 +364,7 @@ public class Utils {
     public static void deleteCategory(int id, String email, Activity activity, OperationCallback<Boolean> callback)
     {
         String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+        Log.d("Delete Item Payload Cc", "JSON Payload: " + json);  // Log the JSON payload
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();

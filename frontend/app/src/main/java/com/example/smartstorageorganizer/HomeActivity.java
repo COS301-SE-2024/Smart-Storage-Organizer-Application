@@ -3,49 +3,35 @@ package com.example.smartstorageorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
-import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
     public TextView fullName;
@@ -75,22 +61,19 @@ public class HomeActivity extends AppCompatActivity {
         ImageView logoutButtonIcon = binding.logoutButtonIcon;
 
         View header = navigationView.getHeaderView(0);
-        fullName = (TextView) header.findViewById(R.id.fullName);
+        fullName = header.findViewById(R.id.fullName);
         profileImage = header.findViewById(R.id.profileImage);
 //        fullName.setText("Ezekiel Makau");
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonLoader.setVisibility(View.VISIBLE);
-                buttonLoader.playAnimation();
-                logoutButtonText.setVisibility(View.GONE);
-                logoutButtonIcon.setVisibility(View.GONE);
-                SignOut();
+        logout.setOnClickListener(v -> {
+            buttonLoader.setVisibility(View.VISIBLE);
+            buttonLoader.playAnimation();
+            logoutButtonText.setVisibility(View.GONE);
+            logoutButtonIcon.setVisibility(View.GONE);
+            SignOut();
 //                Snackbar.make(v, "Logging out", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null)
 //                        .setAnchorView(R.id.fab).show();
-            }
         });
 
         // Passing each menu ID as a set of Ids because each
@@ -177,8 +160,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
                 // Sign Out completed with some errors. User is signed out of the device.
-                AWSCognitoAuthSignOutResult.PartialSignOut partialSignOutResult =
-                        (AWSCognitoAuthSignOutResult.PartialSignOut) signOutResult;
                 //move to the different page
                 future.complete(true);
                 runOnUiThread(() -> {
@@ -205,7 +186,8 @@ public class HomeActivity extends AppCompatActivity {
 
     public void DeleteCategory(int id, String email)
     {
-        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+        String json = "{\"useremail\":\""+email+"\", \"id\":\""+ id +"\" }";
+        Log.d("1Delete Item Payload", "JSON Payload: " + json);  // Log the JSON payload
 
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
