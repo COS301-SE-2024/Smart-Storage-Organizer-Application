@@ -32,7 +32,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.ViewHolder> {
-
     private final Context context;
     private final List<ColorCodeModel> itemModelList;
     private final Set<Integer> selectedItems;
@@ -90,6 +89,7 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
                 toggleSelection(holder, position, model);
             } else {
                 // Normal click action
+
             }
         });
 

@@ -674,7 +674,7 @@ public class Utils {
 
     public static void deleteColour(int colourId, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"colourid\":\""+Integer.toString(colourId)+"\"}";
+        String json = "{\"id\":\""+Integer.toString(colourId)+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
