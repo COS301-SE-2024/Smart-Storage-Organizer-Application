@@ -38,12 +38,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final Context context;
     private final List<ItemModel> itemModelList;
 
-    private final OkHttpClient client;
-
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
         this.itemModelList = itemModelList;
-        this.client = new OkHttpClient();
+        new OkHttpClient();
     }
 
     @NonNull
@@ -58,7 +56,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.name.setText(itemModelList.get(position).getItemName());
         holder.description.setText(itemModelList.get(position).getDescription());
 
-        if(!Objects.equals(itemModelList.get(position).getItemImage(), "empty")){
+        if (!Objects.equals(itemModelList.get(position).getItemImage(), "empty")) {
             Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
@@ -82,7 +80,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     .setMessage("Are you sure you want to delete this item?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         // Handle the delete action
-                        Log.i("1ItemId: ",itemModelList.get(holder.getAdapterPosition()).getItemId());
+                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
                         deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId(), holder.getAdapterPosition());
 //                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
 
@@ -126,36 +124,42 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 //    }
 
     // Method to handle item deletion
-    private void deleteItem(String itemId, int position)
-    {
-        try
-        {
+    private void deleteItem(String itemId, int position) {
+        try {
             // Convert itemId to integer
             int itemIdInt = Integer.parseInt(itemId);
-            String json = "{\"id\":\"" + itemIdInt + "\"}";
+            String json = "{\"item_id\":\"" + itemIdInt + "\"}";
             Log.d("Delete Item Payload", "JSON Payload: " + json);  // Log the JSON payload
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
             String API_URL = BuildConfig.DeleteItemEndPoint;
             Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
             RequestBody body = RequestBody.create(json, JSON);
-
             Request request = new Request.Builder()
                     .url(API_URL)
                     .post(body)
                     .build();
 
-            client.newCall(request).enqueue(new Callback()
-            {
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     // Handle request failure
                     Log.e("Delete Item", "Error deleting item", e);
+                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
                 }
 
                 @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         // Remove item from list and notify adapter
+
+                        // Parse the response body
+                        String responseBody = response.body().string();
+
+                        // Log the successful response and its body
+                        Log.d("Delete Item Response", "Response: " + response);
+                        Log.d("Delete Item Response Body", "Response Body: " + responseBody);
+
                         ((android.app.Activity) context).runOnUiThread(() -> {
                             itemModelList.remove(position);
                             notifyItemRemoved(position);
@@ -165,16 +169,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                         });
                     } else {
                         // Handle failure response
-                        Log.e("Delete Item", "Failed to delete item");
+                        String errorBody = response.body().string();
+                        Log.e("Delete Item", "Failed to delete item. Response code: " + response.code() + ", message: " + response.message());
+                        Log.e("Delete Item", "Error body: " + errorBody);
+
+                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
+
                     }
                 }
             });
         } catch (NumberFormatException e) {
-        // Handle the exception if itemId is not a valid integer
-        Log.e("Delete Item", "Invalid itemId: " + itemId, e);
+            // Handle the exception if itemId is not a valid integer
+            Log.e("Delete Item", "Invalid itemId: " + itemId, e);
+            ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
-
 }
 
 
