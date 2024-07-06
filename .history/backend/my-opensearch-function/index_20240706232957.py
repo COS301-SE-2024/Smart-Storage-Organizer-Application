@@ -5,8 +5,8 @@ import sys
 sys.path.append('package')
 import requests
 
-masterUser1 = ''
-masterUser= ''
+masterUser1 = 'MasterUser1'
+masterUser= 'Password123#'
 
 region = 'eu-north-1' # For example, us-west-1
 service = 'es'
@@ -49,8 +49,8 @@ def lambda_handler(event, context):
     response['body'] = r.text
     return response
 
-event={
-    'search':'balck'
-}
-context={}
-print(lambda_handler(event, context))
+# event={
+#     'search':'balck'
+# }
+# context={}
+# print(lambda_handler(event, context))  
