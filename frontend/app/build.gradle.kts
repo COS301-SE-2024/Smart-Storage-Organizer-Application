@@ -109,6 +109,12 @@ dependencies {
 
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
     implementation("log4j:log4j:1.2.17")
+//    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    // Example for using ZXing
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation ("com.google.zxing:core:3.3.3")
+
+
 
     // for Cognito
     implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")

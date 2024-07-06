@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.smartstorageorganizer.AddColorCodeActivity;
+import com.example.smartstorageorganizer.CodeScannerActivity;
 import com.example.smartstorageorganizer.HelpActivity;
 import com.example.smartstorageorganizer.ManualActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
@@ -32,17 +33,17 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         Button profile = root.findViewById(R.id.profile);
-        Button color = root.findViewById(R.id.color);
+//        Button color = root.findViewById(R.id.color);
 
         profile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ProfileManagementActivity.class);
             startActivity(intent);
         });
 
-        color.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ViewColorCodesActivity.class);
-            startActivity(intent);
-        });
+//        color.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), CodeScannerActivity.class);
+//            startActivity(intent);
+//        });
 
         return root;
     }

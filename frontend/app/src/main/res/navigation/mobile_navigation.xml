@@ -35,4 +35,9 @@
         android:name="com.example.smartstorageorganizer.ViewColorCodesActivity"
         android:label="activity_view_color_codes"
         tools:layout="@layout/activity_view_color_codes" />
+    <activity
+        android:id="@+id/nav_code_scanner"
+        android:name="com.example.smartstorageorganizer.CodeScannerActivity"
+        android:label="activity_code_scanner"
+        tools:layout="@layout/activity_code_scanner" />
 </navigation>

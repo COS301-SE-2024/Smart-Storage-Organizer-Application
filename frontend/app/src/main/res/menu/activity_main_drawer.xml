@@ -25,6 +25,11 @@
             android:title="Settings"
             android:textColor="@color/colorPrimary"/>
         <item
+            android:id="@+id/nav_code_scanner"
+            android:icon="@drawable/baseline_qr_code_24"
+            android:title="Scan QR Code"
+            android:textColor="@color/colorPrimary"/>
+        <item
             android:id="@+id/nav_help"
             android:icon="@drawable/baseline_question_mark_24"
             android:title="Help"
