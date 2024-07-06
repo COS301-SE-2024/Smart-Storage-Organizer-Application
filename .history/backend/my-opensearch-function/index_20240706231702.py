@@ -50,7 +50,7 @@ def lambda_handler(event, context):
     return response
 
 event={
-    'search':'balck'
+    'q':'balck'
 }
 context={}
 print(lambda_handler(event, context))  

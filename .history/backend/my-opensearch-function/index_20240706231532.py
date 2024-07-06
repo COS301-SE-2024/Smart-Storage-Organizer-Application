@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         "size": 25,
         "query": {
             "multi_match": {
-                "query": event['search'],
+                "query": event['q'],
                 "fields": ["item_name^4", "description^2", "colourcoding"],
                  "fuzziness": "AUTO"
             }
@@ -50,7 +50,7 @@ def lambda_handler(event, context):
     return response
 
 event={
-    'search':'balck'
+    'q':'balck'
 }
 context={}
 print(lambda_handler(event, context))  
