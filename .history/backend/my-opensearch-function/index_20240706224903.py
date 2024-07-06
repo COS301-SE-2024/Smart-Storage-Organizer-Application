@@ -13,7 +13,7 @@ service = 'es'
 #credentials = boto3.Session().get_credentials()
 #awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = 'https://search-sssearch-c2fixnkqyk2rux5ymz74atoebi.eu-north-1.es.amazonaws.com' # The OpenSearch domain endpoint with https:// and without a trailing slash
+host = 'https://search-sssearch-c2fixnkqyk2rux5ymz74atoebi.aos.eu-north-1.on.aws/_dashboards' # The OpenSearch domain endpoint with https:// and without a trailing slash
 index = 'items'
 url = host + '/' + index + '/_search'
 
@@ -27,8 +27,7 @@ def lambda_handler(event, context):
         "query": {
             "multi_match": {
                 "query": event['q'],
-                "fields": ["item_name^4", "description^2", "colourcoding"],
-                 "fuzziness": "AUTO"
+                "fields": ["item_name^4", "description^2", "colourcoding"]
             }
         }
     }
@@ -53,7 +52,7 @@ def lambda_handler(event, context):
     return response
 
 event={
-    "q": "maggo"
+    "q": "mars"
 }
 context={}
 print(lambda_handler(event, context))

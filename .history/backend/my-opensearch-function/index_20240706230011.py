@@ -53,7 +53,7 @@ def lambda_handler(event, context):
     return response
 
 event={
-    "q": "maggo"
+    "q": "magogo"
 }
 context={}
 print(lambda_handler(event, context))
