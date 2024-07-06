@@ -52,3 +52,8 @@ def lambda_handler(event, context):
     response['body'] = r.text
     return response
 
+event={
+    "q": "Black"
+}
+context={}
+print(lambda_handler(event, context))
