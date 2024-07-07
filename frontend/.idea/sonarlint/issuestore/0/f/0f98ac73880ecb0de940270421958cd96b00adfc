@@ -1,215 +1,147 @@
 
-p
-java:S1604R"(Make this anonymous inner class a lambda(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8â”°ï¿½ï¿½2J$ea0be9f1-7f55-4d0f-936f-5295a30f21ee
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½2J$f4751662-3e3b-429d-a29b-264965ddf253
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$60f996e0-fba9-4263-9a81-10f34f4f3c77
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$365d0256-8223-4bfc-937c-fcc0bad2db36
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$c99476eb-deb5-40ef-bc29-88f8d31dcc06
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$eb438c09-76c6-4d1c-a177-ac262f1fcd45
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$eab20a4f-7087-4611-814f-f49c378a8d0d
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ú—ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$740ff410-e041-4441-918d-d9c57e2f80fe
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7b6c400d-7270-49a2-b131-a8d222931d29
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Üˆ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$1d929694-1da2-4356-a50d-bc524c8875ce
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚ï¿½j8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b23115b4-77ba-4c0b-bbc4-dd5dff78c3bb
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚ï¿½j8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9ab0e320-5cbc-4279-bbfd-b69b6aaef0d6
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$6bd96281-95c3-49a7-bc2e-fcab90f95977
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ğ‹ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$03b59b27-2f82-45ea-a88f-5ee0f9f1592b
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½2J$29749ee4-1ccc-4d30-a915-20ac38112200
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Í›8ï¿½ï¿½ï¿½ï¿½2J$3f8ec899-9865-45eb-ae81-a319d6726e18
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½2J$071decbb-1f33-4a61-b50c-a41fa0e88c23
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$4d7a8adc-bc34-4621-8774-db36def36d4e
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½2J$d4f4305e-10ac-44b9-a59d-95df34652b71
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$23a834cb-f25b-4600-943d-806be3758cce
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½2J$fd53fe94-95cb-4186-a02e-9403266554f5
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$c54758b7-cb91-40ff-b7c4-04ab451f84da
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½2J$2aee2019-0de1-4b26-9675-152b1b453138
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Ğï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$8d4a474d-ded9-48fb-a70c-7bbd910bf1e2
-ï¿½
-java:S11043"TMake fullName a static final constant or non-public and provide accessors if needed.(ï¿½Ã®ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$ef452d6a-405d-4f31-a575-3ec4a2e4312b
-ï¿½
-java:S11044"XMake profileImage a static final constant or non-public and provide accessors if needed.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e336a6c5-3827-46ba-86de-4b588a373cd6
-ï¿½
-java:S11045"`Make mAppBarConfiguration a static final constant or non-public and provide accessors if needed.(ï¿½Ñ±ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$3e50902b-25db-4cdf-99be-fba57d01f07d
-ï¿½
-java:S11046"SMake binding a static final constant or non-public and provide accessors if needed.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$24224769-db17-4c2f-b598-cd01a5410324
-ï¿½
-java:S11047"WMake currentName a static final constant or non-public and provide accessors if needed.(ï¿½Õ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d346d5d1-8c1a-4b0a-a4fd-ecba4a679822
-ï¿½
-java:S11047"ZMake currentSurname a static final constant or non-public and provide accessors if needed.(ï¿½Õ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$12644ebd-ea21-4591-b5fd-a589c69ff7ba
-ï¿½
-java:S11047"ZMake currentPicture a static final constant or non-public and provide accessors if needed.(ï¿½Õ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$62bc0118-afee-457d-8ae9-c9763750aee2
-ï¿½
-java:S1192ï¿½"aDefine a constant instead of duplicating this literal "application/json; charset=utf-8" 10 times.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9b4eb8d9-e8f2-4802-a5f9-302680964204
-ï¿½
-java:S1192ï¿½"QDefine a constant instead of duplicating this literal "{\"colourid\":\"" 3 times.(Í£ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$92abb10e-3883-4589-8375-b5432c944543
-ï¿½
-java:S16597"KDeclare "currentSurname" and all following declarations on a separate line.(ï¿½Õ8ï˜°ï¿½ï¿½2J$53b6f43b-223c-4cce-9d55-59855071a9d4
-t
-java:S1602B",Remove useless curly braces around statement(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ó™ï¿½ï¿½ï¿½2J$8e52ae6e-79f3-4a83-be92-6efdd9d55043
-}	java:S125P"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½K8ã™°ï¿½ï¿½2J$a2f029b2-372e-438b-a6d4-63aaadc232c9
-~	java:S125\"<This block of commented-out lines of code should be removed.(ï¿½Øï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9955660c-f58d-4a16-a85d-f0fb43a37316
-j	java:S131ï¿½""Add a default case to this switch.(ï¿½ï¿½Ì­ï¿½ï¿½ï¿½ï¿½ï¿½8Ä¦ï¿½ï¿½ï¿½2J$d5846b91-1cef-4531-abf1-4878d4d67acc
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½Ù¤ï¿½8Ô¦ï¿½ï¿½ï¿½2J$363d2dc8-df56-4111-9bf9-eb452de45eab
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ö¦ï¿½ï¿½ï¿½2J$4eb8ad8d-77c3-4822-af96-b0f7f21b9483
-ï¿½
-java:S1481ï¿½"9Remove this unused "partialSignOutResult" local variable.(ï¿½ß’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ù¦ï¿½ï¿½ï¿½2J$24ac4533-a800-4b9b-8fd7-bd9ba877cd58
+m	java:S117Á"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8’ŸäÇˆ2
+n	java:S117Ã"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‹©¼ò8•ŸäÇˆ2
+m	java:S117Ï"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8–ŸäÇˆ2
+s	java:S117Ñ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(µ¹Á÷úÿÿÿÿ8—ŸäÇˆ2
+m	java:S117İ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8™ŸäÇˆ2
+n	java:S117ß"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íÿ“£8šŸäÇˆ2
+n	java:S117ç"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÒÚ—8œŸäÇˆ2
+m	java:S117ë"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8ŸäÇˆ2
+n	java:S117í"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¡Üˆ8ŸŸäÇˆ2
+m	java:S117ö"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚¯j8 ŸäÇˆ2
+m	java:S117ö"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚¯j8 ŸäÇˆ2
+m	java:S117û"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8 ŸäÇˆ2
+n	java:S117ı"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾Ğ‹º8 ŸäÇˆ2
+m	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8¢ŸäÇˆ2
+n	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­óÍ›8¢ŸäÇˆ2
+m	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8¢ŸäÇˆ2
+s	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©èú•úÿÿÿÿ8£ŸäÇˆ2
+m	java:S117«"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8£ŸäÇˆ2
+s	java:S117­"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©’Û‘ùÿÿÿÿ8£ŸäÇˆ2
+m	java:S117»"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8£ŸäÇˆ2
+s	java:S117½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(©’Û‘ùÿÿÿÿ8¤ŸäÇˆ2
+m	java:S117Ê"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8¤ŸäÇˆ2
+s	java:S117Ì"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ïãĞÿÿÿÿÿ8¥ŸäÇˆ2
+q
+java:S1104%"TMake fullName a static final constant or non-public and provide accessors if needed.(ùÃ®‘8¦ŸäÇˆ2
 u
-java:S1602ï¿½",Remove useless curly braces around statement(ç‘‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ã¦°ï¿½ï¿½2J$6219eee5-a163-4429-9ffb-d5a2df942f24
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Òï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ç¦°ï¿½ï¿½2J$089966fb-d442-43fd-a450-d0008036a184
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ë¦°ï¿½ï¿½2J$e82b7a25-0961-43dc-ba47-23be647a0c36
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¦°ï¿½ï¿½2J$837fcc70-040e-4330-add8-dd3209784a27
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ş²ï¿½ï¿½ï¿½2J$897dae5a-4519-485f-a5f6-3f7bf6912730
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ß²ï¿½ï¿½ï¿½2J$44cafc0f-f526-4a3a-b67b-03a30132ec81
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ß²ï¿½ï¿½ï¿½2J$34b2927e-67fa-4f77-b01e-d430e303bc0d
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8à²°ï¿½ï¿½2J$c820c6cf-cf54-41a0-b0ca-3d7e1509cb2f
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8à²°ï¿½ï¿½2J$e70cc422-e617-4e1f-bb12-50b3f4b76c13
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8à²°ï¿½ï¿½2J$04f39537-5d71-40af-9d8e-ca3c206576f2
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8á²°ï¿½ï¿½2J$f7a6cad3-32be-4ae0-9d36-0b1f13ca4b6c
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8â²°ï¿½ï¿½2J$bc263d30-1637-408d-aba4-2de16303eb4b
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8â²°ï¿½ï¿½2J$dff63a88-0243-4352-951d-15d36d926d99
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8â²°ï¿½ï¿½2J$c5e3e1ed-3e01-4a66-8e71-36c4c6104d50
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ã²°ï¿½ï¿½2J$b89ed38f-92b2-40e4-ad69-d9158806fdf7
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ã²°ï¿½ï¿½2J$391c85cf-1160-4a07-9c6d-6d4d8cacc530
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ú—ï¿½8ã²°ï¿½ï¿½2J$44ae5389-ef58-489f-a3a6-8026918d3217
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ã²°ï¿½ï¿½2J$d9b28ac8-bee2-4a2c-b941-77d716e0a7e0
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ã²°ï¿½ï¿½2J$31a1a01e-b507-465f-b8e8-0349466080e6
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ä²°ï¿½ï¿½2J$5f7743a6-8db9-45bd-b7aa-42e4ecfc5c70
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ä²°ï¿½ï¿½2J$346bb391-b490-411a-8c60-2465905145cd
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚ï¿½j8ä²°ï¿½ï¿½2J$4ba68ff2-49c7-4d95-b646-63394282f0d5
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8å²°ï¿½ï¿½2J$39758aa7-bf94-464d-b47d-d9ba9fbaf67c
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8æ²°ï¿½ï¿½2J$2f673d75-c5f3-4d24-a1d5-697351db1b80
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ç²°ï¿½ï¿½2J$2f6efebd-58da-4ff9-b74c-314ae18e7345
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ç²°ï¿½ï¿½2J$4157beca-0db2-47fb-bd16-30194e360e9f
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½i8ï¿½ï¿½ï¿½ï¿½2J$afd5f4cc-ec7a-4ef7-bce9-1fc4f25f2d97
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$1638c72b-6bbc-4ed9-829b-8e943818027c
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$15a0570c-05ab-412b-a9e4-3cd0c44395b4
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$347a3101-090f-41a7-bc1c-165e78d01731
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$940b055e-77ff-408a-b250-35a147ec84d5
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$551ffa88-174d-4e60-b738-d66e439f04d5
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$2e327c6f-7b1f-4f7f-9c3a-f26bdc51fcc1
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$b311cb9b-3be8-4f4e-ab06-e5b49d798f5f
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$3784529e-2a2f-4246-ba91-cb90a2353b47
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$b07a366e-4344-41a8-8c0a-5122ff4dc5d9
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ç­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$f96febc8-6b4a-4ab5-adc4-e66fd1512bde
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$86b3d182-5781-43d0-a879-1f3638fc503b
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$f19fb350-39a7-4c3a-af4c-169cfbbab514
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$4ca25eaa-ca74-4671-8f17-039a36e6afa6
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$5e40a29c-f6f3-42f7-9bb9-a851438f0310
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$f21b34bb-82d2-4fd2-b260-e1683b7d7ce9
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$d1bbfbc0-27ec-484a-8d73-8c52a5a0c81f
-|
-java:S1854ï¿½"8Remove this useless assignment to local variable "body".(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$6017e661-5804-4f2f-86af-32e24e1d6fb5
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$911ae1a3-9c02-4de0-86ce-9dd7f4234a0a
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$7c197dc7-a6d2-4c37-8313-c9be39a46a3a
-m
-java:S1481ï¿½")Remove this unused "body" local variable.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$02f5a58f-d71c-4665-890b-9e8a536c617c
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$da43a821-f221-4a2f-8383-7b1d2a88e7ed
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$45925275-13a3-4559-a8ed-6afe2e4b4659
-~
-java:S1854ï¿½";Remove this useless assignment to local variable "request".(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$8567eb12-b9a9-47a1-adb4-4942eca58390
-ï¿½
-java:S1854ï¿½":Remove this useless assignment to local variable "client".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$edf5558d-3622-47b1-832f-f6a334ec2b01
-t
-java:S1481ï¿½"+Remove this unused "client" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½2J$0c261da6-edd2-496c-90cc-1076d30ea573
-o
-java:S1481ï¿½",Remove this unused "request" local variable.(ï¿½ï¿½ï¿½d8ï¿½ï¿½ï¿½ï¿½2J$09ac7701-249d-42c2-b77c-41489e601765
+java:S1104&"XMake profileImage a static final constant or non-public and provide accessors if needed.(Œõ“Ã8§ŸäÇˆ2
+}
+java:S1104'"`Make mAppBarConfiguration a static final constant or non-public and provide accessors if needed.(ŠÑ±Æ8©ŸäÇˆ2
 p
-java:S1604R"(Make this anonymous inner class a lambda(Â±Â¿ÂºÂ®Ã¾Ã¿Ã¿Ã¿Ã¿8Ã˜Â´Å½Ã½â€ 2J$324758df-51cd-4f9b-b493-c52a0341c182
-â€œ	java:S117Ã“"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â€¦Ã§Ã¦X8Ã™Â´Å½Ã½â€ 2J$5411882c-6035-431b-ab61-6d7d7f0f59bc
-â€	java:S117Ã•"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â€¹Â©Â¼Ã²8Ã™Â´Å½Ã½â€ 2J$492c4d29-a7c9-4998-8cfd-5b7966097f90
-â€œ	java:S117Ã¡"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â€¦Ã§Ã¦X8Ã™Â´Å½Ã½â€ 2J$b7d05fd7-1e2b-425c-8f2f-723d04fef3f6
-â„¢	java:S117Ã£"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂµÂ¹ÃÃ·ÃºÃ¿Ã¿Ã¿Ã¿8Ã™Â´Å½Ã½â€ 2J$3d22dccf-4f62-459e-b564-e3a88869fcc8
-â€œ	java:S117Ã¯"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â€¦Ã§Ã¦X8Â³Ãƒâ€™Ã½â€ 2J$50bfa6d7-c368-4f9e-90e9-2b80e6cf9af3
-â€	java:S117Ã±"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã­Ã¿â€œÂ£8Â´Ãƒâ€™Ã½â€ 2J$cb082d4a-596e-447d-9c44-a2e592c14382
-â€”
-java:S11043"TMake fullName a static final constant or non-public and provide accessors if needed.(Ã¹ÃƒÂ®â€˜8ÃœÂ´Å½Ã½â€ 2J$019ec248-99e4-4901-80c0-2fc7cf1dc18a
-â€º
-java:S11044"XMake profileImage a static final constant or non-public and provide accessors if needed.(Å’Ãµâ€œÃƒ8ÃœÂ´Å½Ã½â€ 2J$46ca25cc-3afe-46d2-a59b-c463e16d2250
-Â£
-java:S11045"`Make mAppBarConfiguration a static final constant or non-public and provide accessors if needed.(Å Ã‘Â±Ã†8ÃœÂ´Å½Ã½â€ 2J$118483b1-ecca-42a4-bde7-fcca5821d2a0
-â€“
-java:S11046"SMake binding a static final constant or non-public and provide accessors if needed.(Ã•Ã¹Ã€Ã8Ã¢Â´Å½Ã½â€ 2J$63e37f29-51f4-4120-825b-550c728674b8
-Å¡
-java:S11047"WMake currentName a static final constant or non-public and provide accessors if needed.(Ã Â Ã•Â8Ã¢Â´Å½Ã½â€ 2J$2cc0a575-9fbe-498d-b831-0c6d6605a6a7
-Â
-java:S11047"ZMake currentSurname a static final constant or non-public and provide accessors if needed.(Ã Â Ã•Â8Ã£Â´Å½Ã½â€ 2J$11478ab6-72ec-4efc-9e7b-b12075cc71e4
-Â
-java:S11047"ZMake currentPicture a static final constant or non-public and provide accessors if needed.(Ã Â Ã•Â8Ã£Â´Å½Ã½â€ 2J$ba2321e6-03a4-4c8e-a2aa-4df3a761627e
-Â£
-java:S1192Ã“"`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 3 times.(â€¦Ã§Ã¦X8Ã‰Ãƒâ€™Ã½â€ 2J$10e8a8db-eadb-4e45-afb1-cd09a082dbaf
-Å½
-java:S16597"KDeclare "currentSurname" and all following declarations on a separate line.(Ã Â Ã•Â8â€°ÂµÅ½Ã½â€ 2J$51ee46b9-be03-4561-9b00-34eba6e3d1cb
+java:S1104("SMake binding a static final constant or non-public and provide accessors if needed.(ÕùÀÁ8ªŸäÇˆ2
 t
-java:S1602B",Remove useless curly braces around statement(ÂÃ·Ã¦ÂºÃ»Ã¿Ã¿Ã¿Ã¿8Â³ÂµÅ½Ã½â€ 2J$e33117bb-9511-4ba5-8eb7-34c312d942a5
-}	java:S125P"<This block of commented-out lines of code should be removed.(Æ’ÂÂªK8ÃÂµÅ½Ã½â€ 2J$8f0eb897-26a7-43f2-849d-fc5fe7c15e3c
-~	java:S125\"<This block of commented-out lines of code should be removed.(Â¹Ã˜ÂÂµ8Ã’ÂµÅ½Ã½â€ 2J$9fbd7536-9a2c-49a6-b4a5-8a6b2e9f9cc3
-j	java:S131â‚¬""Add a default case to this switch.(â€¹Ã½ÃŒÂ­Ã¼Ã¿Ã¿Ã¿Ã¿8Ã§ÂµÅ½Ã½â€ 2J$80125f54-70b6-46b4-ba08-e1658692a92f
-	java:S125â€¹"<This block of commented-out lines of code should be removed.(Ã‚Ã™Â¤Ã…8ÃªÂµÅ½Ã½â€ 2J$6b53ec27-f81f-4c5b-bac5-88188347f1d0
-â€“	java:S100Â¤"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã·ÃÂ¥Ã’Ã»Ã¿Ã¿Ã¿Ã¿8Ã±ÂµÅ½Ã½â€ 2J$29199104-5f8d-4e20-b5c2-ba072153a010
-â€š
-java:S1481Â´"9Remove this unused "partialSignOutResult" local variable.(â€ ÃŸâ€™Â¼Ã¸Ã¿Ã¿Ã¿Ã¿8â€¹Â¶Å½Ã½â€ 2J$1a820cea-1488-415a-8887-6b05dad8b38f
-u
-java:S1602Ã…",Remove useless curly braces around statement(Ã§â€˜â€¹Ã´Ã¼Ã¿Ã¿Ã¿Ã¿8â€˜Â¶Å½Ã½â€ 2J$ed3a2389-416f-40a1-8ed2-17abbe609da9
-â€“	java:S100Ã"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã’ÂÃ¾Ã²Ã¹Ã¿Ã¿Ã¿Ã¿8â€™Â¶Å½Ã½â€ 2J$43347def-832f-4bbf-b748-1646df940988
+java:S1104)"WMake currentName a static final constant or non-public and provide accessors if needed.(à Õ8¬ŸäÇˆ2
+w
+java:S1104)"ZMake currentSurname a static final constant or non-public and provide accessors if needed.(à Õ8®ŸäÇˆ2
+w
+java:S1104)"ZMake currentPicture a static final constant or non-public and provide accessors if needed.(à Õ8°ŸäÇˆ2
 ~
-java:S1854Ã˜";Remove this useless assignment to local variable "request".(Å½Â´Ãd8â€“Â¶Å½Ã½â€ 2J$b123cabd-24b3-491c-b76a-cc8020bb3326
-Æ’
-java:S1854Ã”":Remove this useless assignment to local variable "client".(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8â€”Â¶Å½Ã½â€ 2J$10a4042f-26e5-45f7-83c1-6940b95448d7
-t
-java:S1481Ã”"+Remove this unused "client" local variable.(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8Â³Â¶Å½Ã½â€ 2J$0fb2f209-4dff-454d-bdc1-fa9ce5e0ff0e
+java:S1192Á"aDefine a constant instead of duplicating this literal "application/json; charset=utf-8" 10 times.(…çæX8ÌŸäÇˆ2
 o
-java:S1481Ã˜",Remove this unused "request" local variable.(Å½Â´Ãd8ÃˆÂ¶Å½Ã½â€ 2J$f27e9b10-ca4c-4560-b137-0b501b1fa7ae
-â€“	java:S100Ã"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â€˜Â§Ã¾ÂµÃ¹Ã¿Ã¿Ã¿Ã¿8Ã‹Â¶Å½Ã½â€ 2J$2d058df1-4f26-410e-963d-4c8901172d5a
-~
-java:S1854Ã¦";Remove this useless assignment to local variable "request".(Å½Â´Ãd8Ã‹Â¶Å½Ã½â€ 2J$ed215606-6469-47ba-9d16-a9abf49d543d
-Æ’
-java:S1854Ã¢":Remove this useless assignment to local variable "client".(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8ÃÂ¶Å½Ã½â€ 2J$3a001ed9-8adc-479c-9775-563315c8fb9f
-t
-java:S1481Ã¢"+Remove this unused "client" local variable.(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8ÃÂ¶Å½Ã½â€ 2J$2feb5ab5-3130-4c68-8d98-dd0d1642659f
-o
-java:S1481Ã¦",Remove this unused "request" local variable.(Å½Â´Ãd8ÃÂ¶Å½Ã½â€ 2J$5b5020c7-4d1c-41c6-837b-61f2c8b0bea5
-â€˜	java:S100Ã«"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ã·Â§â€”Å¡8Â»Ã‰â€™Ã½â€ 2J$d00821ce-7e82-45f1-afc0-ccce76573e9b
-~
-java:S1854Ã´";Remove this useless assignment to local variable "request".(Å½Â´Ãd8Â¾Ã‰â€™Ã½â€ 2J$638ec53b-eff0-48a3-bed1-f941534904ac
-Æ’
-java:S1854Ã°":Remove this useless assignment to local variable "client".(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8Â¾Ã‰â€™Ã½â€ 2J$6b06fe05-dab0-4876-a858-7d8388226944
-t
-java:S1481Ã°"+Remove this unused "client" local variable.(Ã¼â‚¬Â±Ã¦ÃºÃ¿Ã¿Ã¿Ã¿8Â¿Ã‰â€™Ã½â€ 2J$82c4f69b-1cf2-4c81-a772-08775afb2e04
-o
-java:S1481Ã´",Remove this unused "request" local variable.(Å½Â´Ãd8Ã…Ã‰â€™Ã½â€ 2J$18799c45-169d-4533-98c1-6f3d114e2aa2
+java:S1192˜"QDefine a constant instead of duplicating this literal "{\"colourid\":\"" 3 times.(Í£ÚÔ8ÌŸäÇˆ2
+h
+java:S1659)"KDeclare "currentSurname" and all following declarations on a separate line.(à Õ8êŸäÇˆ2
+N
+java:S16024",Remove useless curly braces around statement(÷æºûÿÿÿÿ8‘ äÇˆ2
+W	java:S125B"<This block of commented-out lines of code should be removed.(ƒªK8˜ äÇˆ2
+X	java:S125L"<This block of commented-out lines of code should be removed.(¹Øµ8œ äÇˆ2
+C	java:S131o""Add a default case to this switch.(‹ıÌ­üÿÿÿÿ8Â äÇˆ2
+X	java:S125z"<This block of commented-out lines of code should be removed.(ÂÙ¤Å8È äÇˆ2
+p	java:S100“"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷Á¥Òûÿÿÿÿ8Ò äÇˆ2
+O
+java:S1602²",Remove useless curly braces around statement(ç‘‹ôüÿÿÿÿ8î äÇˆ2
+p	java:S100»"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Òşòùÿÿÿÿ8ñ äÇˆ2
+X
+java:S1854Æ";Remove this useless assignment to local variable "request".(´Ád8ò äÇˆ2
+]
+java:S1854Â":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8ó äÇˆ2
+N
+java:S1481Â"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8¡äÇˆ2
+I
+java:S1481Æ",Remove this unused "request" local variable.(´Ád8˜¡äÇˆ2
+p	java:S100Ë"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘§şµùÿÿÿÿ8™¡äÇˆ2
+X
+java:S1854Ô";Remove this useless assignment to local variable "request".(´Ád8š¡äÇˆ2
+]
+java:S1854Ğ":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8š¡äÇˆ2
+N
+java:S1481Ğ"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8¡äÇˆ2
+I
+java:S1481Ô",Remove this unused "request" local variable.(´Ád8 ¡äÇˆ2
+k	java:S100Ù"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷§—š8¡¡äÇˆ2
+X
+java:S1854â";Remove this useless assignment to local variable "request".(´Ád8¡¡äÇˆ2
+]
+java:S1854Ş":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8£¡äÇˆ2
+N
+java:S1481Ş"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8¥¡äÇˆ2
+I
+java:S1481â",Remove this unused "request" local variable.(´Ád8¨¡äÇˆ2
+k	java:S100ç"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÒÚ—8ª¡äÇˆ2
+X
+java:S1854ğ";Remove this useless assignment to local variable "request".(´Ád8«¡äÇˆ2
+]
+java:S1854ì":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8¬¡äÇˆ2
+N
+java:S1481ì"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8¯¡äÇˆ2
+I
+java:S1481ğ",Remove this unused "request" local variable.(´Ád8³¡äÇˆ2
+j	java:S100ö"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ì‚¯j8´¡äÇˆ2
+X
+java:S1854€";Remove this useless assignment to local variable "request".(´Ád8µ¡äÇˆ2
+]
+java:S1854ü":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8µ¡äÇˆ2
+N
+java:S1481ü"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8¹¡äÇˆ2
+I
+java:S1481€",Remove this unused "request" local variable.(´Ád8¼¡äÇˆ2
+j	java:S100†"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾ñÇi8½¡äÇˆ2
+X
+java:S1854";Remove this useless assignment to local variable "request".(´Ád8¾¡äÇˆ2
+]
+java:S1854Œ":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8¿¡äÇˆ2
+N
+java:S1481Œ"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8Â¡äÇˆ2
+I
+java:S1481",Remove this unused "request" local variable.(´Ád8Å¡äÇˆ2
+k	java:S100–"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’€ıŒ8Æ¡äÇˆ2
+X
+java:S1854 ";Remove this useless assignment to local variable "request".(´Ád8È¡äÇˆ2
+]
+java:S1854œ":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8È¡äÇˆ2
+N
+java:S1481œ"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8Ë¡äÇˆ2
+I
+java:S1481 ",Remove this unused "request" local variable.(´Ád8Í¡äÇˆ2
+p	java:S100¦"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ˆÇ­­şÿÿÿÿ8Î¡äÇˆ2
+X
+java:S1854°";Remove this useless assignment to local variable "request".(´Ád8Ï¡äÇˆ2
+]
+java:S1854¬":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8Ï¡äÇˆ2
+N
+java:S1481¬"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8Ò¡äÇˆ2
+I
+java:S1481°",Remove this unused "request" local variable.(´Ád8Õ¡äÇˆ2
+p	java:S100¶"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÀÎÅõøÿÿÿÿ8Ö¡äÇˆ2
+X
+java:S1854À";Remove this useless assignment to local variable "request".(´Ád8×¡äÇˆ2
+V
+java:S1854¾"8Remove this useless assignment to local variable "body".(Òà…È8×¡äÇˆ2
+]
+java:S1854¼":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8×¡äÇˆ2
+N
+java:S1481¼"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8Ú¡äÇˆ2
+G
+java:S1481¾")Remove this unused "body" local variable.(Òà…È8Û¡äÇˆ2
+I
+java:S1481À",Remove this unused "request" local variable.(´Ád8Ş¡äÇˆ2
+p	java:S100Æ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®ø™¹ùÿÿÿÿ8Ş¡äÇˆ2
+X
+java:S1854Ï";Remove this useless assignment to local variable "request".(´Ád8ß¡äÇˆ2
+]
+java:S1854Ë":Remove this useless assignment to local variable "client".(ü€±æúÿÿÿÿ8à¡äÇˆ2
+N
+java:S1481Ë"+Remove this unused "client" local variable.(ü€±æúÿÿÿÿ8â¡äÇˆ2
+I
+java:S1481Ï",Remove this unused "request" local variable.(´Ád8å¡äÇˆ2

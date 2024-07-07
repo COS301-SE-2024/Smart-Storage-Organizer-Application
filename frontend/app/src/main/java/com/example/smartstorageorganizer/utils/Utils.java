@@ -1,11 +1,21 @@
 package com.example.smartstorageorganizer.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -18,6 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -28,7 +39,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Utils {
+public class Utils
+{
     private static String type = "application/json; charset=utf-8";
     private static String message = "Request Method";
 
@@ -76,6 +88,9 @@ public class Utils {
                             CategoryModel parentCategory = new CategoryModel();
                             parentCategory.setCategoryID(itemObject.getString("id"));
                             parentCategory.setCategoryName(itemObject.getString("categoryname"));
+                            if(categoryId == 0){
+                                parentCategory.setImageUrl(itemObject.getString("icon"));
+                            }
 
                             categoryModelList.add(parentCategory);
                         }
@@ -784,6 +799,236 @@ public class Utils {
                     activity.runOnUiThread(() -> {
                         Log.e(message, "GET request failed:" + response);
                         callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void fetchRecentItems(String email, Activity activity, OperationCallback<List<ItemModel>> callback)
+    {
+        String json = "{\"email\":\""+email+"\" }";
+
+        List<ItemModel> itemModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByEmailEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "GET request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            ItemModel item = new ItemModel();
+                            item.setItemId(itemObject.getString("item_id"));
+                            item.setItemName(itemObject.getString("item_name"));
+                            item.setDescription(itemObject.getString("description"));
+                            item.setColourCoding(itemObject.getString("colourcoding"));
+                            item.setBarcode(itemObject.getString("barcode"));
+                            item.setQrcode(itemObject.getString("qrcode"));
+                            item.setQuantity(itemObject.getString("quanity"));
+                            item.setLocation(itemObject.getString("location"));
+                            item.setEmail(itemObject.getString("email"));
+                            item.setItemImage(itemObject.getString("item_image"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+                            itemModelList.add(item);
+                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void fetchCategorySuggestions(String name, String description, String email, Activity activity, OperationCallback<List<CategoryModel>> callback)
+    {
+        // API endpoint that can return category suggestions based on the item
+        String API_URL = BuildConfig.RecommendCategoryEndPoint;
+        OkHttpClient client = new OkHttpClient();
+
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            jsonObject.put("itemname", name);
+            jsonObject.put("itemdescription", description);
+            jsonObject.put("useremail", email);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback()
+        {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) //in case of network error i.e if HTTP req fails
+            {
+                e.printStackTrace();
+
+                activity.runOnUiThread(() ->
+                        Toast.makeText(activity, "Failed-03 to fetch category suggestions", Toast.LENGTH_SHORT).show()
+                );
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                // if HTTP req is successful
+                if (response.isSuccessful())
+                {
+                    // response body converted to string
+                    final String responseData = response.body().string();
+                    Log.i("1Response Data", responseData);
+                    activity.runOnUiThread(() ->
+                    {
+                        try
+                        {
+                            if (responseData.isEmpty()) {
+                                throw new JSONException("Empty or null response data");
+                            }
+
+                            // Parse the response as a JSON object
+                            JSONObject jsonObject = new JSONObject(responseData);
+
+                            JSONObject categoryObject = jsonObject.getJSONObject("category");
+                            CategoryModel parentCategory = new CategoryModel();
+                            parentCategory.setCategoryID(categoryObject.getString("id"));
+                            parentCategory.setCategoryName(categoryObject.getString("categoryname"));
+
+                            // Extract the subcategory name
+                            JSONObject subcategoryObject = jsonObject.getJSONObject("subcategory");
+                            CategoryModel subCategory = new CategoryModel();
+                            subCategory.setCategoryID(subcategoryObject.getString("id"));
+                            subCategory.setCategoryName(subcategoryObject.getString("categoryname"));
+
+                            List<CategoryModel> categoryModelList = new ArrayList<>();
+                            categoryModelList.add(parentCategory);
+                            categoryModelList.add(subCategory);
+
+                            activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
+
+                        } catch (JSONException e) {
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    });
+                } else {
+                    activity.runOnUiThread(() ->
+                            Toast.makeText(activity, "Failed-02 to fetch category suggestions", Toast.LENGTH_SHORT).show()
+                    );
+                }
+            }
+        });
+    }
+
+    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail, Activity activity, OperationCallback<Boolean> callback) {
+        // Provide default values for the remaining attributes
+        int subCategory = 0;
+        String colourcoding = "default";
+        String barcode = "default";
+        String qrcode = "default";
+        int quantity = 1;
+        String location = "default";
+        String email = userEmail;
+        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\", \"category\":\""+3+"\", \"sub_category\":\""+5+"\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemEndPoint;
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("item_image", item_image);
+            jsonObject.put("item_name", item_name);
+            jsonObject.put("description", description);
+            jsonObject.put("category", parentCategory);
+            jsonObject.put("sub_category", category);
+            jsonObject.put("colourcoding", colourcoding);
+            jsonObject.put("barcode", barcode);
+            jsonObject.put("qrcode", qrcode);
+            jsonObject.put("quanity", quantity);
+            jsonObject.put("location", location);
+            jsonObject.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
                     });
                 }
             }
