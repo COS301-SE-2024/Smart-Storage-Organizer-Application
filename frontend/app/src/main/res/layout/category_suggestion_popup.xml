@@ -11,19 +11,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select New Category"
+        android:text="Select Category"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Parent Category"
+        android:text="Category"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"/>
 
     <Spinner
-        android:id="@+id/ParentSpinner"
+        android:id="@+id/suggestionSpinner"
         android:layout_width="match_parent"
         android:minHeight="55dp"
         android:layout_height="wrap_content"
@@ -35,12 +35,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sub Category"
+        android:text="Color Code (Optional)"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"/>
 
     <Spinner
-        android:id="@+id/subcategorySpinner"
+        android:id="@+id/colorSpinner"
         android:layout_width="match_parent"
         android:minHeight="55dp"
         android:layout_height="wrap_content"
@@ -49,6 +49,13 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/spinner_background" />
 
-
+    <Button
+        android:id="@+id/button_add_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"/>
 
 </LinearLayout>

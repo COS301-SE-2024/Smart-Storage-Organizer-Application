@@ -11,7 +11,6 @@ java:S1659&"4Declare "decreaseQuantityButton" on a separate line.(ß‰ûéúÿÿÿÿ8èÌ
 java:S1450)"YRemove the "backButton" field and declare it as a local variable in the relevant methods.(Î¶Òöûÿÿÿÿ8éÌçˆ2J$c8f62e2a-81f5-4b1b-8fbf-690d46da5f45
 ¥
 java:S1450$"]Remove the "editItemButton" field and declare it as a local variable in the relevant methods.(“Úüòşÿÿÿÿ8êÌçˆ2J$a76e3728-3ff5-4a84-a813-bda9b42442cc
-~	java:S107z"<Method has 8 parameters, which is greater than 7 authorized.(±ŞãŒ8ìÌçˆ2J$f61a8a54-205c-434d-8736-a7b262194295
 ~	java:S125="<This block of commented-out lines of code should be removed.(ØÚÀ¯8†Íçˆ2J$3555cc76-f705-4cbb-9607-ff5e2199116b
 „
 java:S1117Y"<Rename "itemName" which hides the field declared at line 32.(ÍÉÃ©úÿÿÿÿ8•Íçˆ2J$199a78a4-2a78-4b5b-8977-04cc3fe8bb52

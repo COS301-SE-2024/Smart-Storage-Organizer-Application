@@ -1,157 +1,51 @@
 
-q
-java:S1604ï¿½"(Make this anonymous inner class a lambda(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$813b2894-abe0-4020-b37c-703956f305c1
-q
-java:S1604ï¿½"(Make this anonymous inner class a lambda(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e0b39f6a-1429-4070-ab42-3187d607cae7
-q
-java:S1604ï¿½"(Make this anonymous inner class a lambda(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$2a46123b-2083-473a-917e-e8d24d7dff8e
-l
-java:S1604ï¿½"(Make this anonymous inner class a lambda(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$cfd6f362-2608-4681-9e35-7256bac9746c
-l
-java:S1604ï¿½"(Make this anonymous inner class a lambda(Ç’ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d20d3c0d-f7f1-4738-976d-b2e22e708b4a
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$4362ed5e-a13b-4f9a-a5fe-a367e6eaafe6
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ù‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b7cd3d59-1acc-4db7-b00e-7cd9fe9869bc
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ø¸h8ï¿½ï¿½ï¿½ï¿½ï¿½2J$a8e3f8f8-45aa-4569-b385-55a8f32e716e
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÑœÓŸ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b29b240e-5ab2-45b3-b184-80704ce39167
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÑœÓŸ8ï¿½ï¿½ï¿½ï¿½ï¿½2J$791bb96f-d7cf-488a-a1f0-d7ac181b319a
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$3470206c-3699-4b2e-9ad5-e08439236961
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e47b98e5-d935-4cc9-9342-714f2816e391
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7a88d968-f0d1-4c92-b6d0-66effeb66737
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$4237df38-76da-4920-a6d3-fea0f46bba70
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ü¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d239f3ce-e580-4b6d-a71b-3ec4952dcd2c
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½M8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7866aa89-e4eb-4df6-b020-a87e508f3a35
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Ò¦8ï¿½ï¿½ï¿½ï¿½ï¿½2J$4bf58ee2-473f-4860-9331-e38f65fd4a47
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ßï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$40391c3d-6f87-4ca6-8c14-e1c6d1b17602
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$85d588f3-c5ae-45ea-92bf-f5b5e850bb68
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$45e11904-adb3-438b-9e3d-807804536aa2
-ï¿½	java:S117ï¿½"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ü¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7644dd5c-f634-439a-a816-dbbfd3e3073b
-ï¿½
-java:S1192ï¿½"HDefine a constant instead of duplicating this literal "AddItem" 6 times.(ï¿½Êï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$eea4255e-9959-4104-8c06-18f6adbd0288
-ï¿½
-java:S1192ï¿½"`Define a constant instead of duplicating this literal "application/json; charset=utf-8" 6 times.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b2bdaf53-fb15-4276-b155-865045207afb
-ï¿½
-java:S1192ï¿½"ODefine a constant instead of duplicating this literal "Request Method" 6 times.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$56310649-4296-4478-a3f0-ab97d5b2eef4
-ï¿½
-java:S1192ï¿½"SDefine a constant instead of duplicating this literal "GET request failed" 3 times.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$08381603-4c8f-4cf0-ba2e-f128797c5f39
-ï¿½
-java:S1192ï¿½"UDefine a constant instead of duplicating this literal "GET request failed: " 3 times.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$558d85bc-ae5e-49a7-8275-67f55171e192
-ï¿½
-java:S1192ï¿½"GDefine a constant instead of duplicating this literal "status" 3 times.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7f051a9e-2dc9-49bc-8406-ca91566de702
-ï¿½
-java:S1192ï¿½"KDefine a constant instead of duplicating this literal "statusCode" 3 times.(ï¿½ÜŠï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9e4b6b6b-1420-465e-a210-3a51c3f122a3
-ï¿½
-java:S1192ï¿½"HDefine a constant instead of duplicating this literal "default" 4 times.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$8be167af-4dfd-41ca-ad0d-31cc6b04879e
-ï¿½
-java:S1192ï¿½"FDefine a constant instead of duplicating this literal "email" 5 times.(İ§ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$1098ab07-1f5d-473a-98a6-3f30bb8e8eac
-ï¿½
-java:S1192ï¿½"MDefine a constant instead of duplicating this literal "categoryname" 8 times.(ï¿½ï¿½Í§ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$0ebbca04-3461-42e7-aaa2-343c83051eda
-ï¿½	java:S116J"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½×¾ï¿½ï¿½ï¿½ï¿½ï¿½8Ã¥ï¿½ï¿½ï¿½2J$144895ea-ef76-4513-a869-4263aa4ed203
-ï¿½	java:S116M"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ã¥ï¿½ï¿½ï¿½2J$3b54158e-d315-4f53-a182-b19edd91dddf
-ï¿½	java:S116P"ZRename this field "ChooseImageList" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ä¥ï¿½ï¿½ï¿½2J$c3078200-193d-479c-af59-b1f93f827220
-ï¿½	java:S116["`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ä¥ï¿½ï¿½ï¿½2J$d00b54d5-c881-48a6-8fd4-5ed1953ea2ac
-{
-java:S1659L"8Declare "currentSelectedSubcategory" on a separate line.(ï¿½ï¿½ï¿½ï¿½8Ö¥ï¿½ï¿½ï¿½2J$ba85c753-e343-4736-bd85-64a138c448ff
-s
-java:S1659Q"0Declare "subcategorySpinner" on a separate line.(ï¿½ï¿½ï¿½ï¿½8×¥ï¿½ï¿½ï¿½2J$ac25b965-e68c-4abd-b6bd-73c166ca626c
-{
-java:S1659["3Declare "category_RecyclerView" on a separate line.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8×¥ï¿½ï¿½ï¿½2J$a906437c-7744-4580-a700-f560f11d003b
-l
-java:S1659\")Declare "currentName" on a separate line.(ï¿½Ë”ï¿½8Ø¥ï¿½ï¿½ï¿½2J$c644241d-c283-43d8-9183-3f579479d267
-z
-java:S1659^"2Declare "subcategoryModelList" on a separate line.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ø¥ï¿½ï¿½ï¿½2J$c84156a0-fc21-4d8f-99e5-97f8a8ccc75e
-x
-java:S1659_"0Declare "subcategoryAdapter" on a separate line.(æ®‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ù¥ï¿½ï¿½ï¿½2J$27c1f1bc-fd11-485b-873e-96386a71de30
-n
-java:S1659`"+Declare "subcategoryId" on a separate line.(Ë¬ï¿½ï¿½8Ú¥ï¿½ï¿½ï¿½2J$0119296f-8256-4fe2-b7a8-f52d389857fc
-h
-java:S1659c"&Declare "itemName" on a separate line.(ï¿½ï¿½P8Ú¥ï¿½ï¿½ï¿½2J$07d05c1e-1354-44b4-8fa3-6116ac73bbc9
-ï¿½
-java:S1450["dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Û¥ï¿½ï¿½ï¿½2J$75c07c74-2046-48c2-aabf-9ba2a3969dc2
-ï¿½
-java:S1450^"cRemove the "subcategoryModelList" field and declare it as a local variable in the relevant methods.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Û¥ï¿½ï¿½ï¿½2J$64e93b86-02e8-4eb4-ab46-55869d41a808
-ï¿½
-java:S1161h":Add the "@Override" annotation above this method signature(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$de37be86-7c43-4da2-871d-dacaa498a31a
-t
-java:S1602o",Remove useless curly braces around statement(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$c6b3c9c1-d02f-4d6a-b6bc-4ff45a640578
-ï¿½	java:S125t"<This block of commented-out lines of code should be removed.(ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$3a116ba0-335c-4fad-9494-1499ed828eec
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Öï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$a2c5da63-c5fd-43b6-b6c0-11f073159c85
-s
-java:S1481ï¿½"/Remove this unused "statusCode" local variable.(ï¿½ÜŠï¿½8Ã¦ï¿½ï¿½ï¿½2J$da656171-6d3a-4487-9972-938d919541d3
-o
-java:S1481ï¿½"+Remove this unused "status" local variable.(ï¿½ï¿½ï¿½ï¿½8Ã¦ï¿½ï¿½ï¿½2J$72932c0e-795c-4dc8-8405-51fa57e85eeb
-s
-java:S1481ï¿½"*Remove this unused "items" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Æ¦ï¿½ï¿½ï¿½2J$09143db4-d092-4b78-ada2-d7497fd7ae5e
-ï¿½
-java:S1301ï¿½"KReplace this "switch" statement by "if" statements to increase readability.(ï¿½ï¿½Ì­ï¿½ï¿½ï¿½ï¿½ï¿½8Ï¦ï¿½ï¿½ï¿½2J$6c4f258d-ed9c-4ae7-ae0c-84cdcccec042
-j	java:S131ï¿½""Add a default case to this switch.(ï¿½ï¿½Ì­ï¿½ï¿½ï¿½ï¿½ï¿½8Ğ¦ï¿½ï¿½ï¿½2J$e5c670bc-6498-41c8-a707-f9a001c35457
-ï¿½
-java:S3776ï¿½"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$1072ce4e-9897-4eff-8b62-ccc9a4145af9
-x
-java:S1481ï¿½"/Remove this unused "itemImage1" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ù¦ï¿½ï¿½ï¿½2J$35f34246-f596-4c2b-83f4-9936bfcb10ab
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½8Ú¦ï¿½ï¿½ï¿½2J$965ffffa-f26b-4de9-abbe-2df1e189b077
-ï¿½	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Û¦ï¿½ï¿½ï¿½2J$e2846488-17e9-468b-a937-f0ba918b0c2d
-ï¿½
-java:S1186ï¿½"ï¿½Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ô—ï¿½48Ü¦ï¿½ï¿½ï¿½2J$411e5bfe-2fe3-497d-947e-71441cd62736
-s
-java:S1874ï¿½"/Remove this use of "Handler"; it is deprecated.(ï¿½ï¿½ï¿½8á¦¯ï¿½ï¿½2J$bc376742-c5e7-4b28-b9f5-8e0e77726aab
-|
-java:S1117ï¿½"8Rename "name" which hides the field declared at line 85.(ï¿½ï¿½8å¦¯ï¿½ï¿½2J$c9014023-4578-4a08-a7ab-c30a6d585a8f
-s
-java:S1481ï¿½"/Remove this unused "itemImageS" local variable.(ï¿½ï¿½ï¿½ï¿½8ê¦¯ï¿½ï¿½2J$39a91368-6b34-4a95-a31e-b95735f9fe04
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½8ï¦¯ï¿½ï¿½2J$e6b4702e-0ac2-4bb9-a874-908c1384f569
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½8ï¦¯ï¿½ï¿½2J$c054b533-1ac8-4c1e-9ea1-fec5d1a04a1b
-ï¿½
-java:S3776ï¿½"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(ï¿½Ïˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ò¦¯ƒï¿½2J$9016f98e-1e28-4401-a8da-7748275af3a5
-ï¿½
-java:S1186ï¿½"ï¿½Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ï¿½Æºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b9125eec-5b4b-4705-8f77-7df1e4a20a3d
-ï¿½
-java:S1854ï¿½"CRemove this useless assignment to local variable "categoriesArray".(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$32e75d1a-522a-4a91-b0e8-4e97eb11a125
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$25368c47-7c32-4059-9e5e-cdc69dd95bd6
-x
-java:S1481ï¿½"4Remove this unused "categoriesArray" local variable.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$ad12be2e-fad9-4d8b-ab8a-2f24ffbbf039
-{
-java:S1854ï¿½"8Remove this useless assignment to local variable "JSON".(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$622a9375-5e77-41a3-b0fc-47e7ab81e1f7
-ï¿½
-java:S1854ï¿½"8Remove this useless assignment to local variable "json".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b0449d4a-8a54-45c0-bb41-6d9822cddafd
-y
-java:S1481ï¿½"0Remove this unused "subCategory" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e9831a89-8432-4e2d-a7c6-8994447841c7
+·
+java:S4165 "nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8ü«Éîˆ2J$bd7c23e2-ec80-49ae-ad6c-548203c51760
+´
+java:S4165±"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8ı«Éîˆ2J$e195c463-0f23-41d7-b950-f4c80fad006b
+¡
+java:S1192„"]Define a constant instead of duplicating this literal "Category Fetching failed... " 3 times.(Šî˜ú8ı«Éîˆ2J$fd1ddbc9-4e95-4541-9c63-850412447ab6
+
+java:S1192œ"FDefine a constant instead of duplicating this literal "email" 3 times.(ÄÇãøÿÿÿÿ8ı«Éîˆ2J$355a0e0e-8af6-40c8-b98b-c0156ef1a3ef
+¥	java:S116?"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğ›×¾üÿÿÿÿ8ÿ«Éîˆ2J$c9eef740-7bff-4f0f-bb57-e8923fe5fd53
+š	java:S116B"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ÚÅÉüÿÿÿÿ8ÿ«Éîˆ2J$5e9791af-7ab5-4b3f-8b2a-134429605a8c
+§	java:S116O"`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ğÎûÿÿÿÿ8ÿ«Éîˆ2J$3fb58ecb-8d71-4800-ba26-2446c3645497
 r
-java:S1481ï¿½")Remove this unused "json" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$bcd63909-d82f-49da-b987-e57e6cd7939b
+java:S1659="*Declare "colorSpinner" on a separate line.(®Õ”Ğÿÿÿÿÿ8ƒ¬Éîˆ2J$ba26b4e7-2705-4518-8695-9be966e594bb
+{
+java:S1659A"8Declare "currentSelectedSubcategory" on a separate line.(¼¿‡È8ƒ¬Éîˆ2J$a58b6d11-6ff1-4f67-aa87-0533fb3724bc
+s
+java:S1659E"0Declare "subcategorySpinner" on a separate line.(ÌÀŠÏ8ƒ¬Éîˆ2J$f1a27deb-157a-4040-9693-4859bd0bcc6d
+{
+java:S1659O"3Declare "category_RecyclerView" on a separate line.(‘ğÎûÿÿÿÿ8ƒ¬Éîˆ2J$4751dc76-2030-4ad7-88f9-0ebfe8f55012
 l
-java:S1481ï¿½")Remove this unused "JSON" local variable.(ï¿½ï¿½ï¿½X8ï¿½ï¿½ï¿½ï¿½ï¿½2J$0918760c-198f-46c6-a1f1-b0feba231a1c
+java:S1659P")Declare "currentName" on a separate line.(óË”³8ƒ¬Éîˆ2J$3b31208f-cb1f-4bea-a81d-e079f10a8179
+n
+java:S1659T"+Declare "subcategoryId" on a separate line.(Ë¬‚·8ƒ¬Éîˆ2J$0f34c5ea-2109-4179-92d7-98b9827fad2a
+h
+java:S1659V"&Declare "itemName" on a separate line.(è·ÜP8ƒ¬Éîˆ2J$b6a5fd88-049f-4c4f-82e6-bd354cf0b715
+¬
+java:S1450O"dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(‘ğÎûÿÿÿÿ8ƒ¬Éîˆ2J$12f8378c-31fe-4760-b0d6-d4942147be59
+Ÿ
+java:S1450E"\Remove the "parentSpinner" field and declare it as a local variable in the relevant methods.(ÌÀŠÏ8ƒ¬Éîˆ2J$2020621a-fb27-456c-8914-2e012db08617
+
+java:S1117ì";Rename "adapter" which hides the field declared at line 76.(ÚÔ”8 ¬Éîˆ2J$177ec8c4-5c70-4c7a-ac60-3a31049b6008
+Ê
+java:S1186ı"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¹Æº×şÿÿÿÿ8 ¬Éîˆ2J$675ea982-1742-49d7-a48d-5882308663d9
+ˆ
+java:S1117È"?Rename "alertDialog" which hides the field declared at line 81.(™§Üïøÿÿÿÿ8¦¬Éîˆ2J$0aee66a0-e7a5-47c4-b971-65b465655cff
 o
-java:S1602ï¿½",Remove useless curly braces around statement(Í¸ï¿½8É§ï¿½ï¿½ï¿½2J$e6a1b280-3881-4be5-ae74-1fbbf740bcd1
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½8É§ï¿½ï¿½ï¿½2J$c9c8a5a0-2a1d-478e-bb55-8f6291f291c4
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½8Ë§ï¿½ï¿½ï¿½2J$bd4fb115-1867-46ae-b63c-86ad576e9602
-s
-java:S1481ï¿½"/Remove this unused "statusCode" local variable.(ï¿½ÜŠï¿½8Ô§ï¿½ï¿½ï¿½2J$bd0d1018-7251-4a79-95a7-fc68069c44c1
-o
-java:S1481ï¿½"+Remove this unused "status" local variable.(ï¿½ï¿½ï¿½ï¿½8Ô§ï¿½ï¿½ï¿½2J$e604d14d-429a-4d81-8752-983b9b7716b1
-s
-java:S1481ï¿½"*Remove this unused "items" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Õ§ï¿½ï¿½ï¿½2J$e0d25605-02aa-42a1-bd8a-096a5eb471d6
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½8Û§ï¿½ï¿½ï¿½2J$370b751f-fbc7-4a0e-b2fe-385f175ec36d
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½8Ü§ï¿½ï¿½ï¿½2J$6af3d376-15b2-4d0e-bccc-49e359a1d60c
-ï¿½	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8İ§ï¿½ï¿½ï¿½2J$5174191f-f4c7-46be-82e6-d01cacb48205
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8Ş§ï¿½ï¿½ï¿½2J$34db469a-ae60-4823-b39f-91141a6ca50d
-ï¿½
-java:S1874ï¿½">Remove this use of "startActivityForResult"; it is deprecated.(ï¿½ï¿½ï¿½ï¿½8ß§ï¿½ï¿½ï¿½2J$dc3320c6-3fbc-431e-935f-e1dcd90aad36
-ï¿½	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½å‚ï¿½ï¿½ï¿½ï¿½ï¿½8à§¯ï¿½ï¿½2J$697b63ce-f39a-4257-a9e9-4f1e9b33493a
-ï¿½
-java:S1874ï¿½"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8á§¯ï¿½ï¿½2J$31f7cdf3-5f8f-42aa-8058-799ed1108283
-ï¿½
-java:S1161ï¿½":Add the "@Override" annotation above this method signature(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8á§¯ï¿½ï¿½2J$989a8f96-e061-4dee-83dc-d740e36459eb
-ï¿½
-java:S1874ï¿½"8Remove this use of "onActivityResult"; it is deprecated.(ï¿½ß¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8â§¯ï¿½ï¿½2J$313eb389-1e21-444e-83c5-d8c8e1a6735f
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½M8ò§¯ƒï¿½2J$3b0fce9b-388c-4a1d-be03-a6d2c45bc5a1
+java:S1602‚",Remove useless curly braces around statement(Í¸¿8¬¬Éîˆ2J$ce15f428-851d-42dd-917c-ce4f22532833
+„	java:S125¥"<This block of commented-out lines of code should be removed.(šæÜüùÿÿÿÿ8®¬Éîˆ2J$2806c2bd-6d9a-4798-a43e-1a457e42e244
+–	java:S100¬"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾‡¾÷şÿÿÿÿ8¯¬Éîˆ2J$c442c8af-28b3-4d17-ab4a-8da4e0fa1be0
+‚
+java:S1874²">Remove this use of "startActivityForResult"; it is deprecated.(¡æÖé8¯¬Éîˆ2J$385de595-2098-43e0-acf7-34c082e27564
+„	java:S125±"<This block of commented-out lines of code should be removed.(¯å‚şÿÿÿÿ8¯¬Éîˆ2J$84ea9350-17ac-402c-ab86-e4c4b8e2dc2e
+“
+java:S1874µ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8¯¬Éîˆ2J$07cd081c-28d2-48fa-84e1-27cbfad4c16d
+ƒ
+java:S1161µ":Add the "@Override" annotation above this method signature(ÉÎÍïıÿÿÿÿ8¯¬Éîˆ2J$57b9ea8a-b935-4bd3-a7a9-929e65618f3d
+
+java:S1874¶"8Remove this use of "onActivityResult"; it is deprecated.(ß¬©úÿÿÿÿ8°¬Éîˆ2J$8110821d-21d0-418c-8e12-ff32a0c673e2
 p
-java:S1602ï¿½",Remove useless curly braces around statement(ï¿½Üï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$cbbc5ab5-e9ec-4074-a0ce-a14f10825f74
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$03b45626-a2aa-4bd0-b682-8073d4efd2e8
-ï¿½	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$f66f3193-1b12-455a-96ce-b4f2bba3b6fd
-s
-java:S1481ï¿½"/Remove this unused "statusCode" local variable.(ï¿½ÜŠï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$f1065f65-998b-4ae5-a3d7-cd193c219c37
-o
-java:S1481ï¿½"+Remove this unused "status" local variable.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e4053861-6c30-4d88-b3d9-cec8e01d2e8f
-s
-java:S1481ï¿½"*Remove this unused "items" local variable.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$c12740d6-90e9-4fb1-9e0c-ac2154472d1c
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½Ü8ï¿½ï¿½ï¿½ï¿½ï¿½2J$02c8d611-5ec6-47f6-bde5-273585b796b9
-	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$01a13a4d-d4d7-44fe-a56f-9fd47b032a21
+java:S1602ë",Remove useless curly braces around statement(•Ü„8·¬Éîˆ2J$84192147-53f1-410c-8a4d-ee3338f2120e

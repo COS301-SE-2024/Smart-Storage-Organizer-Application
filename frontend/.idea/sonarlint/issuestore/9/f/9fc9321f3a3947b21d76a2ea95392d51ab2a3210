@@ -1,9 +1,9 @@
 
-q
-java:S1192~"OUse already-defined constant 'EMAIL_KEY' instead of duplicating its value here.(ÄÇãøÿÿÿÿ8ÉïÆü‡2
-m
-java:S1301}"KReplace this "switch" statement by "if" statements to increase readability.(‹ıÌ­üÿÿÿÿ8°ğÆü‡2
-‡
-java:S1874‡">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8•ÔÛ˜†2J$72534327-a5f3-44b5-9b1b-1f01d41a1082
+—
+java:S1192~"OUse already-defined constant 'EMAIL_KEY' instead of duplicating its value here.(ÄÇãøÿÿÿÿ8ÉïÆü‡2J$2494535f-d27c-442a-8330-7af3e2dfe40b
 “
-java:S1874‹"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8–ÔÛ˜†2J$0772d151-8143-4750-ac7f-a3de85abde0d
+java:S1301}"KReplace this "switch" statement by "if" statements to increase readability.(‹ıÌ­üÿÿÿÿ8°ğÆü‡2J$9022beef-a4db-4fe8-9f59-5afb4f56feb6
+‡
+java:S1874‡">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8•ÔÛ˜†2J$24622efb-65e2-47c6-a31c-72d0a6e71d9e
+“
+java:S1874‹"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8–ÔÛ˜†2J$ec69c314-f76c-478d-a6a9-c566d3a716b3
