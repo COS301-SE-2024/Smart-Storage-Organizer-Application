@@ -34,3 +34,5 @@ Lapp/src/main/java/com/example/smartstorageorganizer/ItemDetailsActivity.java,e
 Uapp/src/main/java/com/example/smartstorageorganizer/ui/settings/SettingsFragment.java,2\7\27bd5ee88ccba93f7992843c624358e84fb128bd
 ‚
 Rapp/src/main/java/com/example/smartstorageorganizer/ProfileManagementActivity.java,8\0\80aaf9c22a4686fc5c3a8f12e7600c5598ae8003
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e

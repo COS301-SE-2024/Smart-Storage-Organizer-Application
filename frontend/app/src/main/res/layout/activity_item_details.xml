@@ -86,14 +86,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Description"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/expand_arrow_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="0dp"
                     android:src="@drawable/baseline_keyboard_arrow_down_24" />
             </LinearLayout>
 
@@ -126,14 +126,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Unit"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/expand_arrow_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="0dp"
                     android:src="@drawable/baseline_keyboard_arrow_down_24" />
             </LinearLayout>
 
@@ -166,14 +166,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Category"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/expand_arrow_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="0dp"
                     android:src="@drawable/baseline_keyboard_arrow_down_24" />
             </LinearLayout>
 
@@ -206,14 +206,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Color Code"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/expand_arrow_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="0dp"
                     android:src="@drawable/baseline_keyboard_arrow_down_24" />
             </LinearLayout>
 
