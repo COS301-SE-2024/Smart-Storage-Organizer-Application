@@ -7,7 +7,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -28,10 +27,13 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".ItemDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CodeScannerActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="fullSensor"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".ViewColorCodesActivity"
             android:exported="false" />
