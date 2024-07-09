@@ -83,6 +83,11 @@ public class CodeScannerActivity extends AppCompatActivity {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
+                    intent.putExtra("item_name", "");
+                    intent.putExtra("item_id", result.getContents());
+                    startActivity(intent);
+                    finish();
                 }
             }
         }

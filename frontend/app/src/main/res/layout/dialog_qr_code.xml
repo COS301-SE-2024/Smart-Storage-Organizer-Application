@@ -19,4 +19,18 @@
         android:text="Scan this QR code"
         android:textSize="18sp"
         android:gravity="center" />
+
+    <Button
+        android:id="@+id/share_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/download_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download"
+        android:layout_marginTop="16dp" />
 </LinearLayout>
