@@ -24,10 +24,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class ItemDetailsActivity extends AppCompatActivity {
@@ -36,6 +40,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private ImageView expandArrowDescription, expandArrowUnit, expandArrowCategory, expandArrowColor;
     private ImageView itemImage;
     private int itemId;
+    private String qrCodeUrl;
     private boolean isDescriptionVisible = false;
     private boolean isUnitVisible = false;
     private boolean isCategoryVisible = false;
@@ -110,12 +115,14 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemDescription.setText(getIntent().getStringExtra("item_description"));
             itemUnit.setText(getIntent().getStringExtra("location"));
             itemColor.setText(getIntent().getStringExtra("color_code"));
+            qrCodeUrl = getIntent().getStringExtra("item_qrcode");
             //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
             //itemQuantity.setText(String.valueOf(currentQuantity));
         }
 
         else {
             itemId = Integer.parseInt(getIntent().getStringExtra("item_id"));
+            fetchItemDetails(itemId);
         }
     }
 
@@ -124,6 +131,33 @@ public class ItemDetailsActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    private void fetchItemDetails(int itemId) {
+        Utils.fetchByID(itemId,this, new OperationCallback<List<ItemModel>>() {
+            @Override
+            public void onSuccess(List<ItemModel> result) {
+                Glide.with(ItemDetailsActivity.this)
+                        .load(result.get(0).getItemImage())
+                        .placeholder(R.drawable.no_image)
+                        .error(R.drawable.no_image)
+                        .into(itemImage);
+
+                itemName.setText(result.get(0).getItemName());
+                itemDescription.setText(result.get(0).getDescription());
+                itemUnit.setText(result.get(0).getLocation());
+                itemColor.setText(result.get(0).getColourCoding());
+                qrCodeUrl = result.get(0).getQrcode();
+                Toast.makeText(ItemDetailsActivity.this, "Item details fetched successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                fetchItemsLoader.setVisibility(View.GONE);
+//                itemRecyclerView.setVisibility(View.VISIBLE);
+                Toast.makeText(ItemDetailsActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -146,7 +180,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         Button shareButton = qrView.findViewById(R.id.share_button);
         Button downloadButton = qrView.findViewById(R.id.download_button);
 
-        String qrCodeUrl = getIntent().getStringExtra("item_qrcode");
+//        String qrCodeUrl = getIntent().getStringExtra("item_qrcode");
 
         Glide.with(this)
                 .load(qrCodeUrl)

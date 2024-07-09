@@ -103,8 +103,15 @@ public class CodeScannerActivity extends AppCompatActivity {
         try {
             Result result = new MultiFormatReader().decode(binaryBitmap);
             Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
+            intent.putExtra("item_name", "");
+            intent.putExtra("item_id", result.getText());
+            startActivity(intent);
+            finish();
         } catch (ReaderException e) {
             Toast.makeText(this, "No QR code found in image", Toast.LENGTH_LONG).show();
         }
     }
+
+
 }
