@@ -71,6 +71,10 @@ android {
         buildConfigField("String", "DeleteColour", "\"${localProperties["DeleteColour"]}\"");
         buildConfigField("String", "GenerateQrcode", "\"${localProperties["GenerateQrcode"]}\"");
 
+        buildConfigField("String", "FetchByIDEndPoint", "\"${localProperties["FetchByIDEndPoint"]}\"");
+
+        buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"");
+
     }
 
     buildTypes {
