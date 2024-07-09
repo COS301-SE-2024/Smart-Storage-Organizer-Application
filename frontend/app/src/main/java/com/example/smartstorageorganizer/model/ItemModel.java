@@ -12,6 +12,8 @@ public class ItemModel {
     private String email;
     private String itemImage;
     private String createdAt;
+    private String parentCategoryId;
+    private String subCategoryId;
 
     public ItemModel() {
 
@@ -117,6 +119,23 @@ public class ItemModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    public String getParentCategoryId() {
+        return parentCategoryId;
+    }
+
+    public void setParentCategoryId(String parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
+    }
+
+    public String getSubCategoryId() {
+        return subCategoryId;
+    }
+
+    public void setSubCategoryId(String subCategoryId) {
+        this.subCategoryId = subCategoryId;
     }
 
 }
