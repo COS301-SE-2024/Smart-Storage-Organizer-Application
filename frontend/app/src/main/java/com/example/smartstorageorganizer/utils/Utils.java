@@ -205,6 +205,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
@@ -281,6 +283,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
@@ -556,6 +560,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
@@ -783,6 +789,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
@@ -857,6 +865,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);
@@ -1087,6 +1097,8 @@ public class Utils
                             item.setLocation(itemObject.getString("location"));
                             item.setEmail(itemObject.getString("email"));
                             item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                             itemModelList.add(item);

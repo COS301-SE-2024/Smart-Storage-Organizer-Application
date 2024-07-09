@@ -70,6 +70,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
             intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
             intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
+            intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
+            intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
             intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
 
 

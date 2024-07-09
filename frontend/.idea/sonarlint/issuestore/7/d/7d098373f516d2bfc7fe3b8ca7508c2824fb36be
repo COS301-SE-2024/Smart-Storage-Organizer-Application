@@ -1,13 +1,13 @@
 
-“	java:S117‰"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8µ°ó‘‰2J$47be1a80-dee0-4a21-bf5b-33cf3fb94389
-”	java:S117Š"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8œ¦ò‘‰2J$c0d5422e-5822-44e7-a935-01df3a754fe2
+“	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8µ°ó‘‰2J$94dfea81-9b32-4815-baaa-75b3436e01ff
+”	java:S117Œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8ş•ÿ¶‰2J$6d2595df-d0c9-458c-b6a8-ac92ec228c6a
 
-java:S1192S"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8»°ó‘‰2J$41501587-2c01-47de-87ee-76d35adc7c8e
+java:S1192U"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8–ÿ¶‰2J$0803fac6-42e8-4b8b-8b55-8e8f1d119e75
 o
-java:S1602P",Remove useless curly braces around statement(Å²şÙ8ë°ó‘‰2J$224bc75b-a778-4237-b35e-2afe6d21ac92
+java:S1602R",Remove useless curly braces around statement(Å²şÙ8š–ÿ¶‰2J$7b226654-0c8d-4efb-9b8d-5b17110f074e
 s
-java:S1874U"+Remove this use of "yes"; it is deprecated.(§µüÿÿÿÿ8ì°ó‘‰2J$86442398-b271-4bfb-a8d8-1a764d7e0417
-ƒ	java:S125Y"<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8î°ó‘‰2J$a72447fa-158e-483b-990a-ea9ae1b865c6
+java:S1874W"+Remove this use of "yes"; it is deprecated.(§µüÿÿÿÿ8›–ÿ¶‰2J$490b9bbe-aa8a-4842-bb13-5342a8999ef4
+ƒ	java:S125["<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8œ–ÿ¶‰2J$0ce4eaba-9da5-4098-ab0d-993d159390cd
 r
-java:S1874\"*Remove this use of "no"; it is deprecated.(ïİ†Šúÿÿÿÿ8î°ó‘‰2J$8115cb2f-aa08-4eec-9c87-7894f80d5988
-ƒ	java:S125z"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8ö°ó‘‰2J$5331ae20-46fe-4a74-b0e7-cc4458ef5b9f
+java:S1874^"*Remove this use of "no"; it is deprecated.(ïİ†Šúÿÿÿÿ8œ–ÿ¶‰2J$be898862-0498-4cd6-8cfe-556c2b684baa
+ƒ	java:S125|"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8¡–ÿ¶‰2J$3e3b15b7-62be-4b04-ae86-897bb3e0e19f
