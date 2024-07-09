@@ -28,3 +28,13 @@ Lapp/src/main/java/com/example/smartstorageorganizer/EditProfileActivity.java,b
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+|
+Lapp/src/main/java/com/example/smartstorageorganizer/ItemDetailsActivity.java,e\9\e944e1feaaafa4fff347efdef76e1ff10a4fb929
+…
+Uapp/src/main/java/com/example/smartstorageorganizer/ui/settings/SettingsFragment.java,2\7\27bd5ee88ccba93f7992843c624358e84fb128bd
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/ProfileManagementActivity.java,8\0\80aaf9c22a4686fc5c3a8f12e7600c5598ae8003
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+|
+Lapp/src/main/java/com/example/smartstorageorganizer/CodeScannerActivity.java,c\f\cf7e903039ee99f6487ccecbdce61713e02ec5ab

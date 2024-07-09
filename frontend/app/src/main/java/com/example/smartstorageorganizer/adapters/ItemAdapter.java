@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -62,12 +63,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
 //        to view on the next page whenever it clicks use onClick()
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = new Intent(view.getContext(), ItemInfoActivity.class);
+            Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
             intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
             intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
             intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
             intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
             intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
+            intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
+            intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
+
 
             context.startActivity(intent);
         });

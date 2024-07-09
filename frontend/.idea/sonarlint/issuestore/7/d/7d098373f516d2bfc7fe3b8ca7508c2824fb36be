@@ -1,0 +1,13 @@
+
+“	java:S117‰"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8µ°ó‘‰2J$6c03de80-0b56-4519-9b53-0a7c866356dd
+”	java:S117Š"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8œ¦ò‘‰2J$c216aa34-114a-4cf1-90c4-6c6b1b0cd703
+
+java:S1192S"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8»°ó‘‰2J$095f88ce-196c-4ed1-a070-3455f99d5ace
+o
+java:S1602P",Remove useless curly braces around statement(Å²şÙ8ë°ó‘‰2J$b7102637-d02d-45ca-a500-fcaf8999104b
+s
+java:S1874U"+Remove this use of "yes"; it is deprecated.(§µüÿÿÿÿ8ì°ó‘‰2J$0cf57fef-94b9-4aaf-a3fe-c878baa2f92b
+ƒ	java:S125Y"<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8î°ó‘‰2J$cd9516aa-41d3-4753-a53c-daeac0dd568a
+r
+java:S1874\"*Remove this use of "no"; it is deprecated.(ïİ†Šúÿÿÿÿ8î°ó‘‰2J$7825eaaa-b2e4-4a72-a6a6-4e98f240f17d
+ƒ	java:S125z"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8ö°ó‘‰2J$9dbd2d18-b9fe-411a-a488-d6f6ff046759
