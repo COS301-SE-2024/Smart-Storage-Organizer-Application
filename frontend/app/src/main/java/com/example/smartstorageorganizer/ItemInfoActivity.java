@@ -115,7 +115,8 @@ public class ItemInfoActivity extends AppCompatActivity {
         increaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "+"));
         decreaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "-"));
 
-        // Show the AlertDialog
+        // S
+        // w the AlertDialog
         alertDialog.show();
     }
 

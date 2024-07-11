@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +93,26 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle the search query and start SearchActivity
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                intent.putExtra("query", query);
+                startActivity(intent);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -337,20 +359,20 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
-    public void FetchByID(int id)
-    {
-        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByIDEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
+//    public void FetchByID(int id)
+//    {
+//        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
+//
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = BuildConfig.FetchByIDEndPoint;
+//        RequestBody body = RequestBody.create(json, JSON);
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//    }
 
 //    public void GenerateQrcode(int id)
 //    {
