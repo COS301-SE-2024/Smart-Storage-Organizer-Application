@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="50dp"
+    android:viewportWidth="200"
+    android:viewportHeight="100">
+
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M 0 30 L 200 00 L 200 230 L 1 100 Z" />
+</vector>
+
+
+
+
+    <!--1. increase top left to the right, decrease top left to the left-->
+<!--2. increase top left downward, decrease top left upwards-->
+<!--3. decrease moves the shape to the left, increase moves the shape to the right-->
+<!--4. increase top right downwards, decrease top right upwards-->
+<!--5. increase bottom right to the right, decrease bottom right to the left-->
+<!--6. increase bottom right to the right slowly, decrease bottom right to the left-->
+<!--7. increase bottom left to the right, decrease bottom left to the left-->
+<!--8. increase bottom left to the right, decrease bottom left to the left (slowly)-->

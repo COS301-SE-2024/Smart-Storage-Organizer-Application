@@ -27,8 +27,23 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
-            android:name=".DesignActivity"
+            android:name=".SearchOrganizationActivity"
             android:exported="false" />
+        <activity
+            android:name=".LandingActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ValidateUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DesignActivity"
+            android:exported="true"></activity>
         <activity
             android:name=".ItemDetailsActivity"
             android:exported="false"

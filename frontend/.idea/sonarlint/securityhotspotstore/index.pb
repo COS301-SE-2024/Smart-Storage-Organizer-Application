@@ -42,3 +42,13 @@ Lapp/src/main/java/com/example/smartstorageorganizer/CodeScannerActivity.java,c
 local.properties,0\7\0712df971a99ac4d2fccb8e0fb19f377f3374cca
 w
 Gapp/src/main/java/com/example/smartstorageorganizer/DesignActivity.java,6\b\6b8326a29c3da4847864aaeed7899d767fd5f0e9
+v
+Fapp/src/main/java/com/example/smartstorageorganizer/TrapeziumView.java,a\f\af44e49b47038a7a3548c64f036373484b12c32b
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/ValidateUserActivity.java,2\8\28b17734dddcfba7e9bbc139c21a851329f86e95
+x
+Happ/src/main/java/com/example/smartstorageorganizer/LandingActivity.java,c\4\c4890f71c489ed992035eb1d1ce872e6a4ab0b16
+ƒ
+Sapp/src/main/java/com/example/smartstorageorganizer/SearchOrganizationActivity.java,6\f\6f94ea76be01029737ea6bc5b112a091b522204f
+…
+Uapp/src/main/java/com/example/smartstorageorganizer/adapters/OrganizationAdapter.java,e\a\eab5fb1d8aaed9bc8f4019a0c50c47bfbd5cde00

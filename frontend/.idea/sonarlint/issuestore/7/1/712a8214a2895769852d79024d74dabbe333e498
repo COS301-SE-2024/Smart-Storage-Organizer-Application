@@ -1,8 +1,8 @@
 
-·
-java:S4165 "nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8““à‘‰2J$4c72bcd3-b99f-49ad-8af2-3c8842ce3718
 ´
 java:S4165±"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8•“à‘‰2J$9d6a4490-cfe4-4f7e-a3f5-b2ae639cd2c5
+·
+java:S4165 "nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8““à‘‰2J$4c72bcd3-b99f-49ad-8af2-3c8842ce3718
 ¡
 java:S1192„"]Define a constant instead of duplicating this literal "Category Fetching failed... " 3 times.(Šî˜ú8˜“à‘‰2J$a82b2b72-bb8e-40c5-9463-12ccadfae4a8
 
