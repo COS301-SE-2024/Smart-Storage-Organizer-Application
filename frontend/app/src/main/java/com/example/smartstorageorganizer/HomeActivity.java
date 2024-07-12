@@ -49,9 +49,9 @@ public class HomeActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarHome.toolbar);
 
-        getDetails().thenAccept(getDetails->{
-            Log.i("AuthDemo", "User is signed in");
-        });
+//        getDetails().thenAccept(getDetails->{
+//            Log.i("AuthDemo", "User is signed in");
+//        });
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+//        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);

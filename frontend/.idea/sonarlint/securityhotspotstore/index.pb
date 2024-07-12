@@ -50,5 +50,5 @@ x
 Happ/src/main/java/com/example/smartstorageorganizer/LandingActivity.java,c\4\c4890f71c489ed992035eb1d1ce872e6a4ab0b16
 ƒ
 Sapp/src/main/java/com/example/smartstorageorganizer/SearchOrganizationActivity.java,6\f\6f94ea76be01029737ea6bc5b112a091b522204f
-…
-Uapp/src/main/java/com/example/smartstorageorganizer/adapters/OrganizationAdapter.java,e\a\eab5fb1d8aaed9bc8f4019a0c50c47bfbd5cde00
+v
+Fapp/src/main/java/com/example/smartstorageorganizer/LoginActivity.java,a\9\a9a66cd010d432899dc37704e4cdd839a3df698d

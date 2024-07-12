@@ -42,7 +42,15 @@ public class SearchOrganizationActivity extends AppCompatActivity {
         findViewById(R.id.nextButton).setOnClickListener(v -> {
             Intent intent = new Intent(SearchOrganizationActivity.this, ValidateUserActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
         });
     }
+
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+//    }
+
 }
