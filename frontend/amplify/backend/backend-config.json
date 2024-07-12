@@ -1,27 +1,21 @@
 {
   "auth": {
-    "smart": {
+    "amplyAuth": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
+        "mfaConfiguration": "OPTIONAL",
         "mfaTypes": [
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ],
+          "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
           "EMAIL",
-          "NAME",
           "FAMILY_NAME",
-          "ADDRESS",
+          "NAME",
           "PHONE_NUMBER",
           "PICTURE"
         ],
@@ -38,7 +32,7 @@
     }
   },
   "storage": {
-    "s3smartstoragef0629f01": {
+    "s3frontendstorage5dbd9817": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"
