@@ -66,8 +66,7 @@ def lambda_handler(event, context):
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-        if 'type'  in event:
-                return add_unit(conn,curr,event)
+        response=add_unit(conn,curr,event)
     except Exception as e:
       conn.rollback()
       return {
@@ -78,12 +77,9 @@ def lambda_handler(event, context):
     finally:
        curr.close()
        conn.close()
-    return {
-            'statusCode': 200,
-            'body': 'Operation Successful'
-        }
+    return response
 
-event={"type":"AddUnit","Unit_Name":"Unit 5","Unit_Capacity":100,"Unit_QR":"QR1","constraints":"1,2,3,4", "unit_capacity_used":0}
+# event={"Unit_Name":"Unit 5","Unit_Capacity":100,"Unit_QR":"QR1","constraints":"1,2,3,4", "unit_capacity_used":0}
 
-context={}
-print(lambda_handler(event, context))
+# context={}
+# print(lambda_handler(event, context))
