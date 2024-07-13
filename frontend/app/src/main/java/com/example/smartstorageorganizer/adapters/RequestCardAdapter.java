@@ -48,6 +48,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
         }
         else {
             color = Color.parseColor("#00DC32");
+            holder.status.setBackgroundColor(Color.parseColor("#D3F8D3"));
         }
         holder.status.setTextColor(color);
 

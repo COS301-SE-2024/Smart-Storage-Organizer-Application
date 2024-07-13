@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -22,6 +23,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -33,6 +35,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +52,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private int itemId;
     private String qrCodeUrl;
     private CardView cardViewDescription, cardViewUnit, cardViewCategory, cardViewColorCode;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private ConstraintLayout detailedLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,16 @@ public class ItemDetailsActivity extends AppCompatActivity {
         initViews();
         setupWindowInsets();
 
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+        detailedLayout = findViewById(R.id.detailedLayout_one);
+                new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                detailedLayout.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
         cardViewDescription.setOnClickListener(v -> {
             if (isExpanded) {
                 collapse(itemDescription);
@@ -259,6 +274,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 itemUnit.setText(result.get(0).getLocation());
                 itemColorCode.setText(result.get(0).getColourCoding());
                 qrCodeUrl = result.get(0).getQrcode();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                detailedLayout.setVisibility(View.VISIBLE);
                 Toast.makeText(ItemDetailsActivity.this, "Item details fetched successfully", Toast.LENGTH_SHORT).show();
             }
 

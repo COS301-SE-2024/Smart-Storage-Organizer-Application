@@ -37,6 +37,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
         UserModel cardItem = usersList.get(position);
 //        holder.date.setText(cardItem.getDate());
         holder.name.setText(cardItem.getName());
+        if (Objects.equals(cardItem.getStatus(), "Active")) {
+            holder.declineButton.setVisibility(View.GONE);
+            holder.declineButton.setPadding(16, 8, 16, 8);
+            holder.approveButton.setText(cardItem.getStatus());
+        }
 //        holder.description.setText(cardItem.getDescription());
 //        holder.status.setText(cardItem.getStatus());
 //        int color;
@@ -62,14 +67,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
     }
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView date, name, description, status;
+        TextView date, name, description, status, approveButton, declineButton;
 
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.date);
             name = itemView.findViewById(R.id.name);
-//            description = itemView.findViewById(R.id.description);
+            description = itemView.findViewById(R.id.description);
             status = itemView.findViewById(R.id.status);
+            approveButton = itemView.findViewById(R.id.approveButton);
+            declineButton = itemView.findViewById(R.id.declineButton);
         }
     }
 }

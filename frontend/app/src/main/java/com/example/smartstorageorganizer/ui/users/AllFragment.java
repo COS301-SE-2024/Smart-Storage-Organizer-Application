@@ -34,14 +34,11 @@ public class AllFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         List<UserModel> cardItemList = new ArrayList<>();
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
+        cardItemList.add(new UserModel("12/07/2024", "ezekiel@gmail.com", "Active"));
+        cardItemList.add(new UserModel("12/07/2024", "victor@gmail.com", "Active"));
+        cardItemList.add(new UserModel("12/07/2024", "tshegofatso@gmail.com", "Active"));
+        cardItemList.add(new UserModel("12/07/2024", "siyabonga@gmail.com", "Active"));
+        cardItemList.add(new UserModel("12/07/2024", "mosa@gmail.com", "Active"));
 
         UsersAdapter requestAdapter = new UsersAdapter(getContext(), cardItemList);
         recyclerView.setAdapter(requestAdapter);

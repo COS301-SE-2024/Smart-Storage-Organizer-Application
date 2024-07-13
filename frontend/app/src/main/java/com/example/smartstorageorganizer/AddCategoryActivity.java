@@ -179,6 +179,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private void handleAddButtonClick() {
         loadingScreen.setVisibility(View.VISIBLE);
         addCategoryLayout.setVisibility(View.GONE);
+        addButton.setVisibility(View.GONE);
         if (isParentCategorySelected()) {
             handleParentCategory();
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
@@ -357,6 +358,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                 showToast("Failed to add category: " + error);
                 loadingScreen.setVisibility(View.GONE);
                 addCategoryLayout.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
             }
         });
     }

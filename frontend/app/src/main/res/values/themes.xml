@@ -45,6 +45,11 @@
         <item name="cornerSize">44dp</item> <!-- Adjust the radius as needed -->
     </style>
 
+    <style name="RoundedItem">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
     <style name="Theme.SmartStorageOrganizer.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

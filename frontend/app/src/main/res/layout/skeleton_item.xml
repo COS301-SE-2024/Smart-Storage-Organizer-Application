@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Skeleton for item image -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/skeleton_color" />
+
+    <!-- Skeleton for item name -->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="20dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@color/skeleton_color" />-->
+
+<!--    &lt;!&ndash; Skeleton for item description &ndash;&gt;-->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="20dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:background="@color/skeleton_color" />-->
+
+</LinearLayout>

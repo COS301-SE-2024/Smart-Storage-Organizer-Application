@@ -105,7 +105,7 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.12.2")
 
     implementation ("com.github.yukuku:ambilwarna:2.0.1");
-
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
 
     implementation("org.slf4j:slf4j-api:1.7.30")

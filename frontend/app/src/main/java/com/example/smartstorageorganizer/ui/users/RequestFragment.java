@@ -36,13 +36,10 @@ public class RequestFragment extends Fragment {
 
         List<UserModel> cardItemList = new ArrayList<>();
         cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "ezemakau@gmail.com", "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
-        cardItemList.add(new UserModel("12/07/2024", "Edit Product Name" , "Pending"));
+        cardItemList.add(new UserModel("12/07/2024", "mosa@gmail.com", "Pending"));
+        cardItemList.add(new UserModel("12/07/2024", "victor@gmail.com", "Pending"));
+        cardItemList.add(new UserModel("12/07/2024", "siyabonga@gmail.com", "Pending"));
+        cardItemList.add(new UserModel("12/07/2024", "tshegofatso@gmail.com", "Pending"));
 
         UsersAdapter requestAdapter = new UsersAdapter(getContext(), cardItemList);
         recyclerView.setAdapter(requestAdapter);

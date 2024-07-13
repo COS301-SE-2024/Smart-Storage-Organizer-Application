@@ -8,26 +8,70 @@
     android:background="@color/background"
     tools:context=".ItemDetailsActivity">
 
-    <!--    <RelativeLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent">-->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1500"
+        app:shimmer_repeat_mode="restart">
 
-    <!--        <com.airbnb.lottie.LottieAnimationView-->
-    <!--            android:id="@+id/loading_animation_detailed"-->
-    <!--            app:lottie_rawRes="@raw/loading"-->
-    <!--            android:layout_width="150dp"-->
-    <!--            android:layout_height="150dp"-->
-    <!--            android:layout_centerInParent="true"-->
-    <!--            app:lottie_autoPlay="false"-->
-    <!--            app:lottie_loop="true"-->
-    <!--            android:visibility="gone"/>-->
-    <!--    </RelativeLayout>-->
+        <!-- Add skeleton views here -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Skeleton for QR code -->
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/skeleton_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Skeleton for item image -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+
+            <!-- Skeleton for card views -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detailedLayout_one"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -60,7 +104,7 @@
                         android:id="@+id/itemImage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
+                        android:scaleType="center"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cart_toolbar" />
@@ -123,7 +167,6 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="14dp"
                             android:layout_marginEnd="46dp"
-                            android:text=""
                             android:textSize="16dp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"

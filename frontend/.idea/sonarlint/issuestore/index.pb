@@ -86,3 +86,5 @@ Napp/src/main/java/com/example/smartstorageorganizer/adapters/UsersAdapter.java
 Mapp/src/main/java/com/example/smartstorageorganizer/RegistrationActivity.java,9\a\9ab2988c86d087eab2f546fdd5ba4abf534c8949
 }
 Mapp/src/main/java/com/example/smartstorageorganizer/AddColorCodeActivity.java,5\9\597b389a56edd6a4f666f820daf54c1e5b4f207e
+Å
+Qapp/src/main/java/com/example/smartstorageorganizer/adapters/SkeletonAdapter.java,9\4\944708ca2b9072f7507574cfad578ef46207f07a

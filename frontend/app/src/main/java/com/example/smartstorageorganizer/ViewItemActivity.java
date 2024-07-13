@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,15 +17,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
+import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +58,9 @@ public class ViewItemActivity extends AppCompatActivity {
     private Button nextButton;
     private TextView pageNumber;
     private String currentSelectedOption;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView recyclerView;
+    private NestedScrollView itemsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,12 @@ public class ViewItemActivity extends AppCompatActivity {
         }
         setupSortByListener();
         setupPaginationButtons();
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Set the SkeletonAdapter
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(10); // Assuming 10 skeleton items
+        recyclerView.setAdapter(skeletonAdapter);
     }
 
     private void initializeViews() {
@@ -83,6 +96,11 @@ public class ViewItemActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
+
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+        recyclerView = findViewById(R.id.recycler_view);
+        itemsLayout = findViewById(R.id.newstedScrollview);
+
         if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
             category.setText(getIntent().getStringExtra("category"));
             categoryID = getIntent().getStringExtra("category_id");
@@ -157,7 +175,12 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadAllItems() {
-        loadingScreen.setVisibility(View.VISIBLE);
+//        loadingScreen.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        itemsLayout.setVisibility(View.GONE);
+        sortBySpinner.setVisibility(View.GONE);
+        mySpinner.setVisibility(View.GONE);
         Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
@@ -169,22 +192,32 @@ public class ViewItemActivity extends AppCompatActivity {
                 else {
                     itemAdapter.notifyDataSetChanged();
                 }
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
                 updatePaginationButtons(result.size());
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                itemsLayout.setVisibility(View.VISIBLE);
+                sortBySpinner.setVisibility(View.VISIBLE);
+                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(String error) {
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void fetchByColorCode(int colorCodeId) {
-        loadingScreen.setVisibility(View.VISIBLE);
+//        loadingScreen.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        itemsLayout.setVisibility(View.GONE);
+        sortBySpinner.setVisibility(View.GONE);
+        mySpinner.setVisibility(View.GONE);
         Utils.fetchByColour(colorCodeId,this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
@@ -196,22 +229,32 @@ public class ViewItemActivity extends AppCompatActivity {
                 else {
                     itemAdapter.notifyDataSetChanged();
                 }
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
                 updatePaginationButtons(result.size());
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                itemsLayout.setVisibility(View.VISIBLE);
+                sortBySpinner.setVisibility(View.VISIBLE);
+                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(String error) {
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void loadItemsByCategory(int categoryId) {
-        loadingScreen.setVisibility(View.VISIBLE);
+//        loadingScreen.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        itemsLayout.setVisibility(View.GONE);
+        sortBySpinner.setVisibility(View.GONE);
+        mySpinner.setVisibility(View.GONE);
         Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
@@ -223,15 +266,20 @@ public class ViewItemActivity extends AppCompatActivity {
                 else {
                     itemAdapter.notifyDataSetChanged();
                 }
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
                 updatePaginationButtons(result.size());
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                itemsLayout.setVisibility(View.VISIBLE);
+                sortBySpinner.setVisibility(View.VISIBLE);
+                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(String error) {
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -253,6 +301,11 @@ public class ViewItemActivity extends AppCompatActivity {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     mySpinner.setAdapter(adapter);
                 }
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                itemsLayout.setVisibility(View.VISIBLE);
+                sortBySpinner.setVisibility(View.VISIBLE);
+                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -346,7 +399,12 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void loadItemsBySubCategory(int subcategoryId) {
-        loadingScreen.setVisibility(View.VISIBLE);
+//        loadingScreen.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        itemsLayout.setVisibility(View.GONE);
+        sortBySpinner.setVisibility(View.GONE);
+        mySpinner.setVisibility(View.GONE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
         Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
@@ -360,15 +418,20 @@ public class ViewItemActivity extends AppCompatActivity {
                 else {
                     itemAdapter.notifyDataSetChanged();
                 }
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 updatePaginationButtons(result.size());
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                itemsLayout.setVisibility(View.VISIBLE);
+                sortBySpinner.setVisibility(View.VISIBLE);
+                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(String error) {
-                loadingScreen.setVisibility(View.GONE);
+//                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
