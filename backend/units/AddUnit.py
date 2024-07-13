@@ -1,20 +1,17 @@
 import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import os
 
-username="MasterUser"
-password="MasterDb#ss1"
-host_address="smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com"
-DBname="postgres"
 con = None
 def get_db_connection():
     global con
     if con is None or con.closed:
         con = psycopg2.connect(
-            host=host_address,
-            database=DBname,
-            user=username,
-            password=password
+            host=os.environ.get('Host_address'),
+            database=os.environ.get('DB_Name'),
+            user=os.environ.get('Username'),
+            password=os.environ.get('Password')
          )
     return con
 def search_unit(conn,curr,name):
