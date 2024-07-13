@@ -1,54 +1,49 @@
 
 ·
-java:S4165 "nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8““à‘‰2J$19107414-80cb-4b3e-890b-be7ce176add9
+java:S4165 "nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8ùÈÌŞŠ2J$fb69bb2f-688d-41f5-9b80-2a6e4d3ca1f8
 ´
-java:S4165±"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8•“à‘‰2J$232ff8a3-f051-4dec-b47c-577f9eb6d598
-¡
-java:S1192„"]Define a constant instead of duplicating this literal "Category Fetching failed... " 3 times.(Šî˜ú8˜“à‘‰2J$d1c8d21f-cf99-4b97-947b-62a582f80853
+java:S4165±"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8÷ÈÌŞŠ2J$98ab6c9b-b71f-417c-8b27-fa68bb24eb1c
 
-java:S1192œ"FDefine a constant instead of duplicating this literal "email" 3 times.(ÄÇãøÿÿÿÿ8˜“à‘‰2J$6fe4fa4b-d496-4a3f-8409-bacf8fad41c9
-¥	java:S116?"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğ›×¾üÿÿÿÿ8¥“à‘‰2J$e29e2b4a-9077-4b63-9400-4d30189ab97c
-š	java:S116B"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ÚÅÉüÿÿÿÿ8§“à‘‰2J$3f5ba311-04c9-4d7a-95ac-d1bebe077d82
-§	java:S116O"`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ğÎûÿÿÿÿ8¨“à‘‰2J$4ecbef1e-f683-4662-aae3-2104379b45ec
+java:S1192œ"FDefine a constant instead of duplicating this literal "email" 3 times.(ÄÇãøÿÿÿÿ8ûÈÌŞŠ2J$36ecff19-8cd4-4e53-b2a5-d8a7b913ce0d
+¥	java:S116?"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğ›×¾üÿÿÿÿ8ÿÈÌŞŠ2J$5e2ce5b7-4ab0-4987-9c25-fc2542985bd8
+š	java:S116B"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ÚÅÉüÿÿÿÿ8ÿÈÌŞŠ2J$a92dd250-503c-4eb4-b915-585136daa2dd
+§	java:S116O"`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ğÎûÿÿÿÿ8ÿÈÌŞŠ2J$95d22c77-8498-44ff-a3dc-111d81156fa5
 r
-java:S1659="*Declare "colorSpinner" on a separate line.(®Õ”Ğÿÿÿÿÿ8¼“à‘‰2J$d457d8dc-5992-4dc3-96c8-aaac9f51f96e
+java:S1659="*Declare "colorSpinner" on a separate line.(®Õ”Ğÿÿÿÿÿ8ˆÉÌŞŠ2J$d0a5ae8e-94d1-4245-9d8e-0f3a0fb9a8c7
 {
-java:S1659A"8Declare "currentSelectedSubcategory" on a separate line.(¼¿‡È8¾“à‘‰2J$0bd9a5b2-8aaf-4420-9d81-2c179500f199
+java:S1659A"8Declare "currentSelectedSubcategory" on a separate line.(¼¿‡È8ˆÉÌŞŠ2J$5558d6b6-9c95-4710-b588-d53411704f57
 s
-java:S1659E"0Declare "subcategorySpinner" on a separate line.(ÌÀŠÏ8À“à‘‰2J$d8b6a948-b88f-4bbe-bfda-77daf9d7db78
+java:S1659E"0Declare "subcategorySpinner" on a separate line.(ÌÀŠÏ8ˆÉÌŞŠ2J$d0a81d78-dfb9-4a8d-899b-f84b513e5c5c
 {
-java:S1659O"3Declare "category_RecyclerView" on a separate line.(‘ğÎûÿÿÿÿ8Á“à‘‰2J$9ffc9428-014c-4db6-8bc4-feb59cd8ce05
+java:S1659O"3Declare "category_RecyclerView" on a separate line.(‘ğÎûÿÿÿÿ8ˆÉÌŞŠ2J$e3571942-48df-446b-80c6-6f42089b5092
 l
-java:S1659P")Declare "currentName" on a separate line.(óË”³8Â“à‘‰2J$a8db6f62-4ff7-4280-b445-ef96b4e9bd40
+java:S1659P")Declare "currentName" on a separate line.(óË”³8ˆÉÌŞŠ2J$1d634440-f2f3-4b8d-ad4c-4f2c513eb884
 n
-java:S1659T"+Declare "subcategoryId" on a separate line.(Ë¬‚·8Ä“à‘‰2J$2ab75615-1c7c-493a-bb8e-56173f3e58e0
+java:S1659T"+Declare "subcategoryId" on a separate line.(Ë¬‚·8ˆÉÌŞŠ2J$53a8720a-d758-4e53-8c55-bb22249406c4
 h
-java:S1659V"&Declare "itemName" on a separate line.(è·ÜP8Ç“à‘‰2J$eca14f1e-a7c5-4e97-8510-33faa62db08e
+java:S1659V"&Declare "itemName" on a separate line.(è·ÜP8ˆÉÌŞŠ2J$58c74d27-a571-4ce9-ab84-94e58b2e78d7
 ¬
-java:S1450O"dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(‘ğÎûÿÿÿÿ8È“à‘‰2J$23f23e7c-1bf5-4b72-b156-541b844fca27
+java:S1450O"dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(‘ğÎûÿÿÿÿ8‰ÉÌŞŠ2J$8ef18ed3-98ec-4851-8a83-74dfc9656d9b
 Ÿ
-java:S1450E"\Remove the "parentSpinner" field and declare it as a local variable in the relevant methods.(ÌÀŠÏ8É“à‘‰2J$2505f095-587c-4263-bd36-4fddcc54559e
-R
-java:S1144“"/Remove this unused private "getDetails" method.(óÒä®şÿÿÿÿ8ë˜¡®Š2
-]	java:S125c"<This block of commented-out lines of code should be removed.(·Ñ‚îúÿÿÿÿ8ˆ™¡®Š2
+java:S1450E"\Remove the "parentSpinner" field and declare it as a local variable in the relevant methods.(ÌÀŠÏ8ŠÉÌŞŠ2J$3bcabe48-8699-4090-a976-1f7b0594799d
 
-java:S1117ì";Rename "adapter" which hides the field declared at line 76.(ÚÔ”8÷”à‘‰2J$f7cbe73f-f3c0-4072-9d99-b264e9162427
+java:S1117ì";Rename "adapter" which hides the field declared at line 76.(ÚÔ”8ÏÉÌŞŠ2J$2915a239-6753-47b7-a4d5-79f2affe690a
 Ê
-java:S1186ı"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¹Æº×şÿÿÿÿ8ú”à‘‰2J$6d3d66f2-21fd-442e-882e-e017d4a547a7
+java:S1186ı"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¹Æº×şÿÿÿÿ8ÑÉÌŞŠ2J$1f933f42-3bfa-487a-ac0c-79d1b6ad8efb
 ˆ
-java:S1117È"?Rename "alertDialog" which hides the field declared at line 81.(™§Üïøÿÿÿÿ8¥•à‘‰2J$2d338bc3-3e76-4f41-be23-141a56ef7696
+java:S1117È"?Rename "alertDialog" which hides the field declared at line 81.(™§Üïøÿÿÿÿ8êÉÌŞŠ2J$57807b9c-7781-49e9-888e-ec01be4057a7
 o
-java:S1602‚",Remove useless curly braces around statement(Í¸¿8Ş•à‘‰2J$99b3f26e-85e8-4cdf-af22-de43a61b4d1d
-„	java:S125¥"<This block of commented-out lines of code should be removed.(šæÜüùÿÿÿÿ8ı•à‘‰2J$9af30ea9-c4c3-4f08-9e1f-a050ef82f28c
-–	java:S100¬"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾‡¾÷şÿÿÿÿ8ÿ•à‘‰2J$1932a7aa-6609-4687-a1dc-f83e1a5d419e
+java:S1602‚",Remove useless curly braces around statement(Í¸¿8ÿÉÌŞŠ2J$f7989348-01b3-4fec-8573-5285be3f9186
+„	java:S125¥"<This block of commented-out lines of code should be removed.(šæÜüùÿÿÿÿ8‡ÊÌŞŠ2J$4bd9ba2e-8335-4cdf-a295-a31154d3a883
+–	java:S100¬"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾‡¾÷şÿÿÿÿ8ˆÊÌŞŠ2J$fa633541-0085-4a2b-84f3-1a45a9afab99
 ‚
-java:S1874²">Remove this use of "startActivityForResult"; it is deprecated.(¡æÖé8„–à‘‰2J$ffd85828-5c4f-4dd3-9d45-5f81ae5d0e81
-„	java:S125±"<This block of commented-out lines of code should be removed.(¯å‚şÿÿÿÿ8„–à‘‰2J$1087b5dc-b75e-47ec-88ec-25aae79f421d
+java:S1874²">Remove this use of "startActivityForResult"; it is deprecated.(¡æÖé8ŠÊÌŞŠ2J$d7f3bde4-6696-4bc5-b99c-bb327625367a
+„	java:S125±"<This block of commented-out lines of code should be removed.(¯å‚şÿÿÿÿ8ŠÊÌŞŠ2J$5b3b52eb-14d9-4e68-98f7-dbee438eb34b
 “
-java:S1874µ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8†–à‘‰2J$43c4c91d-9fc9-4e97-8fba-5d515cbbfaa5
+java:S1874µ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ŒÊÌŞŠ2J$f3e57b41-6b02-43fa-9699-4b7188b88f8f
 ƒ
-java:S1161µ":Add the "@Override" annotation above this method signature(ÉÎÍïıÿÿÿÿ8‰–à‘‰2J$08804802-3956-4f83-ac40-4191b2aeb501
+java:S1161µ":Add the "@Override" annotation above this method signature(ÉÎÍïıÿÿÿÿ8ÊÌŞŠ2J$2d8fa7e2-2893-4e98-b137-5c601a620239
 
-java:S1874¶"8Remove this use of "onActivityResult"; it is deprecated.(ß¬©úÿÿÿÿ8–à‘‰2J$344b7621-0893-4286-bd23-d2e6fbad5138
+java:S1874¶"8Remove this use of "onActivityResult"; it is deprecated.(ß¬©úÿÿÿÿ8ÊÌŞŠ2J$310ccc17-6b06-4872-8ee7-aec95d27f162
 p
-java:S1602ë",Remove useless curly braces around statement(•Ü„8Ê–à‘‰2J$226ee99a-3c03-41dd-946d-15abb7f0ad27
+java:S1602ë",Remove useless curly braces around statement(•Ü„8¢ÊÌŞŠ2J$8d83ee79-3837-49c1-bf76-183de04f158b

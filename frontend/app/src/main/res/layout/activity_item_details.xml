@@ -62,7 +62,6 @@
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:src="@drawable/samsung"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cart_toolbar" />
 
@@ -124,7 +123,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginTop="14dp"
                             android:layout_marginEnd="46dp"
-                            android:text="Plain Wireless"
+                            android:text=""
                             android:textSize="16dp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"

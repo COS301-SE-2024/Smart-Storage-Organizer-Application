@@ -27,23 +27,23 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SearchOrganizationActivity"
             android:exported="false" />
         <activity
             android:name=".LandingActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".ValidateUserActivity"
             android:exported="false" />
         <activity
             android:name=".DesignActivity"
-            android:exported="true"></activity>
+            android:exported="false" />
         <activity
             android:name=".ItemDetailsActivity"
             android:exported="false"
@@ -96,7 +96,7 @@
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar" />
+            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar"/>
         <activity
             android:name=".EmailVerificationActivity"
             android:exported="false" />

@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
         FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
@@ -374,7 +374,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -493,10 +493,10 @@ public class HomeFragment extends Fragment {
     }
     public String getObjectUrl(String key)
     {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+        String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         addItem(url, itemName.getText().toString().trim(), itemDescription.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
 
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+        return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
 
     @Override

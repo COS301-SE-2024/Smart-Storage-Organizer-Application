@@ -52,7 +52,7 @@ android {
         buildConfigField("String", "AddUnitEndPoint", "\"${localProperties["AddUnitEndPoint"]}\"");
 
 
-        buildConfigField( "String", "ChangeQuantityEndPoint", "\"${localProperties["ChangeQuantityEndPoint"]}\"");
+//        buildConfigField( "String", "ChangeQuantityEndPoint", "\"${localProperties["ChangeQuantityEndPoint"]}\"");
         buildConfigField( "String", "DeleteItemEndPoint", "\"${localProperties["DeleteItemEndPoint"]}\"");
         buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
 
