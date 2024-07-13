@@ -45,7 +45,14 @@ def get_all_units(conn,curr):
     query="SELECT * FROM UNITS"
     curr.execute(query)
     conn.commit()
-    return curr.fetchall()
+    results= curr.fetchall()
+    if results:
+        units = [{'id': row['unit_id'], 'name': row['unit_name'] ,'capacity':row['unit_capacity'],'capacity_used':row['unit_capacity_used']
+                 } for row in results]
+        return {
+        'statusCode': 200,
+        'body': json.dumps(units)
+        }
 
 
 def get_category_constraints(conn, curr, category_id):

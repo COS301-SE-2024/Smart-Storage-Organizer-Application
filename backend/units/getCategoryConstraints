@@ -58,9 +58,9 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={
-    "category_id": 1
-}
+# event={
+#     "category_id": 1
+# }
 
-context={}
-print(lambda_handler(event, context))
+# context={}
+# print(lambda_handler(event, context))
