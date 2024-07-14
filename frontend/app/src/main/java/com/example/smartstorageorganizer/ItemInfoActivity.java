@@ -112,8 +112,8 @@ public class ItemInfoActivity extends AppCompatActivity {
             postEditItem(name, description, colorCode, "asdffd", "00111100", currentQuantity, location, itemId);
             alertDialog.dismiss();
         });
-        increaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "+"));
-        decreaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "-"));
+//        increaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "+"));
+//        decreaseQuantityButton.setOnClickListener(v -> changeQuantity(itemId, "-"));
 
         // Show the AlertDialog
         alertDialog.show();
@@ -156,36 +156,36 @@ public class ItemInfoActivity extends AppCompatActivity {
     }
 
 
-    private void changeQuantity(int id, String sign) {
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.ChangeQuantityEndPoint;
-
-        String json = "{\"item_id\":\"" + id + "\", \"sign\":\"" + sign + "\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                }
-            }
-        });
-    }
+//    private void changeQuantity(int id, String sign) {
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = BuildConfig.ChangeQuantityEndPoint;
+//
+//        String json = "{\"item_id\":\"" + id + "\", \"sign\":\"" + sign + "\" }";
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        RequestBody body = RequestBody.create(json, JSON);
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    final String responseData = response.body().string();
+//
+//                } else {
+//                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+//                }
+//            }
+//        });
+//    }
 
 }

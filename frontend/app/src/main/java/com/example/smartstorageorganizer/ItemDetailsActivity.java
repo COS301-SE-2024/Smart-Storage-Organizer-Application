@@ -7,15 +7,23 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -27,6 +35,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,74 +44,190 @@ import java.util.List;
 import java.util.Objects;
 
 public class ItemDetailsActivity extends AppCompatActivity {
-    private TextView itemName, itemDescription, itemUnit, itemCategory, itemColor;
-    private LinearLayout expandableLayoutDescription, expandableLayoutUnit, expandableLayoutCategory, expandableLayoutColor;
-    private ImageView expandArrowDescription, expandArrowUnit, expandArrowCategory, expandArrowColor;
-    private ImageView itemImage;
+    float v = 0;
+    private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
+    private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode;
+    private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
+    private ImageView itemImage, qrCode;
     private int itemId;
     private String qrCodeUrl;
-    private boolean isDescriptionVisible = false;
-    private boolean isUnitVisible = false;
-    private boolean isCategoryVisible = false;
-    private boolean isColorVisible = false;
+    private CardView cardViewDescription, cardViewUnit, cardViewCategory, cardViewColorCode;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private ConstraintLayout detailedLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_item_details);
-
-        // Initialize views
-        ImageView backButton = findViewById(R.id.back_button);
-        ImageView qrCodeButton = findViewById(R.id.qr_code_button);
-
         initViews();
         setupWindowInsets();
 
-        // Set click listeners
-        expandableLayoutDescription.setOnClickListener(v -> {
-            toggleVisibility(itemDescription, expandArrowDescription, isDescriptionVisible);
-            isDescriptionVisible = !isDescriptionVisible;
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+        detailedLayout = findViewById(R.id.detailedLayout_one);
+                new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                detailedLayout.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
+        cardViewDescription.setOnClickListener(v -> {
+            if (isExpanded) {
+                collapse(itemDescription);
+                rotateArrow(arrow, 180, 0);
+            } else {
+                expand(itemDescription);
+                rotateArrow(arrow, 0, 180);
+            }
+            isExpanded = !isExpanded;
         });
 
-        expandableLayoutUnit.setOnClickListener(v -> {
-            toggleVisibility(itemUnit, expandArrowUnit, isUnitVisible);
-            isUnitVisible = !isUnitVisible;
+        // Initialize views for Unit accordion
+
+        cardViewUnit.setOnClickListener(v -> {
+            if (isUnitExpanded) {
+                collapse(itemUnit);
+                rotateArrow(arrowUnit, 180, 0);
+            } else {
+                expand(itemUnit);
+                rotateArrow(arrowUnit, 0, 180);
+            }
+            isUnitExpanded = !isUnitExpanded;
         });
 
-        expandableLayoutCategory.setOnClickListener(v -> {
-            toggleVisibility(itemCategory, expandArrowCategory, isCategoryVisible);
-            isCategoryVisible = !isCategoryVisible;
+        // Initialize views for Category accordion
+
+        cardViewCategory.setOnClickListener(v -> {
+            if (isCategoryExpanded) {
+                collapse(itemCategory);
+                rotateArrow(arrowCategory, 180, 0);
+            } else {
+                expand(itemCategory);
+                rotateArrow(arrowCategory, 0, 180);
+            }
+            isCategoryExpanded = !isCategoryExpanded;
         });
 
-        expandableLayoutColor.setOnClickListener(v -> {
-            toggleVisibility(itemColor, expandArrowColor, isColorVisible);
-            isColorVisible = !isColorVisible;
+        // Initialize views for Color Code accordion
+
+        cardViewColorCode.setOnClickListener(v -> {
+            if (isColorCodeExpanded) {
+                collapse(itemColorCode);
+                rotateArrow(arrowColorCode, 180, 0);
+            } else {
+                expand(itemColorCode);
+                rotateArrow(arrowColorCode, 0, 180);
+            }
+            isColorCodeExpanded = !isColorCodeExpanded;
         });
 
-        // Back button functionality
-        backButton.setOnClickListener(v -> onBackPressed());
+        qrCode.setOnClickListener(v -> showQRCodeDialog());
 
-        // QR code button functionality
-        qrCodeButton.setOnClickListener(v -> showQRCodeDialog());
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void expand(final View v) {
+        v.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        final int targetHeight = v.getMeasuredHeight();
+
+        v.getLayoutParams().height = 0;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? RelativeLayout.LayoutParams.WRAP_CONTENT
+                        : (int) (targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+
+    private void collapse(final View v) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if (interpolatedTime == 1) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+
+    private void rotateArrow(ImageView arrow, float fromDegree, float toDegree) {
+        RotateAnimation rotate = new RotateAnimation(fromDegree, toDegree,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(300);
+        rotate.setFillAfter(true);
+        arrow.startAnimation(rotate);
     }
 
     private void initViews() {
-        itemName = findViewById(R.id.item_name);
-        itemDescription = findViewById(R.id.item_description);
-        itemUnit = findViewById(R.id.item_unit);
-        itemCategory = findViewById(R.id.item_category);
-        itemColor = findViewById(R.id.item_color);
-        itemImage = findViewById(R.id.item_image);
+        itemName = findViewById(R.id.itemName);
+        itemImage = findViewById(R.id.itemImage);
+        qrCode = findViewById(R.id.qrCode);
 
-        expandableLayoutDescription = findViewById(R.id.expandable_layout_description);
-        expandableLayoutUnit = findViewById(R.id.expandable_layout_unit);
-        expandableLayoutCategory = findViewById(R.id.expandable_layout_category);
-        expandableLayoutColor = findViewById(R.id.expandable_layout_color);
+        cardViewDescription = findViewById(R.id.cardViewDescription);
+        itemDescription = findViewById(R.id.itemDescription);
+        arrow = findViewById(R.id.arrow);
 
-        expandArrowDescription = findViewById(R.id.expand_arrow_description);
-        expandArrowUnit = findViewById(R.id.expand_arrow_unit);
-        expandArrowCategory = findViewById(R.id.expand_arrow_category);
-        expandArrowColor = findViewById(R.id.expand_arrow_color);
+        cardViewDescription.setTranslationX(800);
+        cardViewDescription.setAlpha(v);
+        cardViewDescription.animate().translationX(0).alpha(1).setDuration(400).setStartDelay(300).start();
+
+        cardViewUnit = findViewById(R.id.cardViewUnit);
+        itemUnit = findViewById(R.id.itemUnit);
+        arrowUnit = findViewById(R.id.arrowUnit);
+
+        cardViewUnit.setTranslationX(800);
+        cardViewUnit.setAlpha(v);
+        cardViewUnit.animate().translationX(0).alpha(1).setDuration(500).setStartDelay(300).start();
+
+        cardViewCategory = findViewById(R.id.cardViewCategory);
+        itemCategory = findViewById(R.id.itemCategory);
+        arrowCategory = findViewById(R.id.arrowCategory);
+
+        cardViewCategory.setTranslationX(800);
+        cardViewCategory.setAlpha(v);
+        cardViewCategory.animate().translationX(0).alpha(1).setDuration(600).setStartDelay(300).start();
+
+        cardViewColorCode = findViewById(R.id.cardViewColorCode);
+        itemColorCode = findViewById(R.id.itemColorCode);
+        arrowColorCode = findViewById(R.id.arrowColorCode);
+
+        cardViewColorCode.setTranslationX(800);
+        cardViewColorCode.setAlpha(v);
+        cardViewColorCode.animate().translationX(0).alpha(1).setDuration(700).setStartDelay(300).start();
+
+
         if (!Objects.equals(getIntent().getStringExtra("item_name"), "")) {
             Glide.with(this)
                     .load(getIntent().getStringExtra("item_image"))
@@ -114,7 +239,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemId = Integer.parseInt(getIntent().getStringExtra("item_id"));
             itemDescription.setText(getIntent().getStringExtra("item_description"));
             itemUnit.setText(getIntent().getStringExtra("location"));
-            itemColor.setText(getIntent().getStringExtra("color_code"));
+            itemColorCode.setText(getIntent().getStringExtra("color_code"));
             qrCodeUrl = getIntent().getStringExtra("item_qrcode");
             //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
             //itemQuantity.setText(String.valueOf(currentQuantity));
@@ -147,8 +272,11 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 itemName.setText(result.get(0).getItemName());
                 itemDescription.setText(result.get(0).getDescription());
                 itemUnit.setText(result.get(0).getLocation());
-                itemColor.setText(result.get(0).getColourCoding());
+                itemColorCode.setText(result.get(0).getColourCoding());
                 qrCodeUrl = result.get(0).getQrcode();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                detailedLayout.setVisibility(View.VISIBLE);
                 Toast.makeText(ItemDetailsActivity.this, "Item details fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
@@ -159,16 +287,6 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 Toast.makeText(ItemDetailsActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void toggleVisibility(View view, ImageView arrow, boolean isVisible) {
-        if (isVisible) {
-            view.setVisibility(View.GONE);
-            arrow.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
-        } else {
-            view.setVisibility(View.VISIBLE);
-            arrow.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
-        }
     }
 
     private void showQRCodeDialog() {

@@ -40,6 +40,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">54dp</item> <!-- Adjust the radius as needed -->
     </style>
+    <style name="RoundedCornersLogin">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">44dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
+    <style name="RoundedItem">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item> <!-- Adjust the radius as needed -->
+    </style>
 
     <style name="Theme.SmartStorageOrganizer.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -50,5 +59,10 @@
 
     <style name="Theme.SmartStorageOrganizer.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 
 </resources>

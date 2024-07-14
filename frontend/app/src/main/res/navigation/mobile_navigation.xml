@@ -40,4 +40,14 @@
         android:name="com.example.smartstorageorganizer.CodeScannerActivity"
         android:label="activity_code_scanner"
         tools:layout="@layout/activity_code_scanner" />
+    <activity
+        android:id="@+id/nav_requests"
+        android:name="com.example.smartstorageorganizer.RequestsActivity"
+        android:label="activity_requests"
+        tools:layout="@layout/activity_requests" />
+    <activity
+        android:id="@+id/nav_users"
+        android:name="com.example.smartstorageorganizer.UsersActivity"
+        android:label="activity_users"
+        tools:layout="@layout/activity_users" />
 </navigation>
