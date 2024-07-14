@@ -36,7 +36,7 @@
                 android:text="Asus Vivobook"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/colorSecondary" />
 
             <TextView
                 android:id="@+id/description"
@@ -47,7 +47,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textSize="14sp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/colorSecondary" />
 
             <LinearLayout
                 android:layout_width="match_parent"

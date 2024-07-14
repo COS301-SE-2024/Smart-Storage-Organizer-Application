@@ -3,11 +3,14 @@ package com.example.smartstorageorganizer.ui.home;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +97,7 @@ public class HomeFragment extends Fragment {
     private ShimmerFrameLayout shimmerFrameLayoutRecent;
     private TextView recentText;
     private RecyclerView recyclerViewRecent;
+    ProgressDialog progressDialogAddingItem;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -205,19 +209,38 @@ public class HomeFragment extends Fragment {
         return future;
     }
 
-    private void showAddItemPopup()
-    {
+    private void showAddItemPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.add_item_popup, null);
         builder.setView(dialogView);
 
-        itemImage  = dialogView.findViewById(R.id.item_image);
+        itemImage = dialogView.findViewById(R.id.item_image);
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
 
-        alertDialog = builder.create();
+        // Disable the button initially
+        buttonNext.setEnabled(false);
+
+        // Add text change listeners to enable the button when both fields are filled
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String nameInput = itemName.getText().toString().trim();
+                String descriptionInput = itemDescription.getText().toString().trim();
+                buttonNext.setEnabled(!nameInput.isEmpty() && !descriptionInput.isEmpty());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        };
+
+        itemName.addTextChangedListener(textWatcher);
+        itemDescription.addTextChangedListener(textWatcher);
 
         itemImage.setOnClickListener(v -> OpenGallery());
 
@@ -226,6 +249,7 @@ public class HomeFragment extends Fragment {
             alertDialog.dismiss();
         });
 
+        alertDialog = builder.create();
         alertDialog.show();
     }
 
@@ -239,17 +263,34 @@ public class HomeFragment extends Fragment {
         suggestionSpinner = dialogView.findViewById(R.id.suggestionSpinner);
         colorSpinner = dialogView.findViewById(R.id.colorSpinner);
         Button addButton = dialogView.findViewById(R.id.button_add_item);
+        Button reloadButton = dialogView.findViewById(R.id.button_reload);
 
         dialog = builder.create();
-
-        getSuggestedCategory(itemName, itemDescription);
-
-        addButton.setOnClickListener(v -> uploadItemImage(file));
-
         dialog.show();
+
+        // Show loading dialog while fetching suggestions
+        ProgressDialog progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Suggesting a category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
+
+        progressDialogAddingItem = new ProgressDialog(requireActivity());
+        progressDialogAddingItem.setMessage("Adding Item...");
+        progressDialog.setCancelable(false);
+
+        addButton.setOnClickListener(v -> {
+            progressDialogAddingItem.show();
+            uploadItemImage(file);
+        });
+        reloadButton.setOnClickListener(v -> {
+            progressDialog.show();
+            getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
+        });
     }
 
-    private void getSuggestedCategory(String itemName, String itemDescription) {
+    private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
         Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
@@ -258,7 +299,7 @@ public class HomeFragment extends Fragment {
                 parentCategoryId = suggestedCategory.get(0).getCategoryID();
                 subcategoryId = suggestedCategory.get(1).getCategoryID();
                 List<String> categories = new ArrayList<>();
-                categories.add(suggestedCategory.get(0).getCategoryName()+ " - "+suggestedCategory.get(1).getCategoryName());
+                categories.add(suggestedCategory.get(0).getCategoryName() + " - " + suggestedCategory.get(1).getCategoryName());
                 categories.add("Add Custom Category");
 
                 // Populate the Spinner
@@ -266,13 +307,10 @@ public class HomeFragment extends Fragment {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 suggestionSpinner.setAdapter(adapter);
 
-                suggestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                suggestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        if (categories.get(position).equals("Add Custom Category"))
-                        {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (categories.get(position).equals("Add Custom Category")) {
                             // Show dialog to input custom category
                             showCustomCategoryDialog(categories, adapter);
                         }
@@ -282,12 +320,19 @@ public class HomeFragment extends Fragment {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+                // Hide the loading dialog and reload button after suggestions are fetched
+                progressDialog.dismiss();
+                reloadButton.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(String error) {
                 Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
 
+                // Hide the loading dialog and show the reload button in case of failure
+                progressDialog.dismiss();
+                reloadButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -396,6 +441,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
+                progressDialogAddingItem.hide();
                 Intent intent = new Intent(requireActivity(), HomeActivity.class);
                 startActivity(intent);
                 requireActivity().finish();
@@ -404,7 +450,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(String error) {
                 Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
-
+                progressDialogAddingItem.hide();
             }
         });
     }
