@@ -42,3 +42,5 @@ W
 'amplify/backend/IAMroles/AdminRole.json,a\1\a1af93afd22ca6f1cd3d163009b66086b0d78264
 Y
 )amplify/backend/IAMroles/ManagerRole.json,f\0\f0326a36cc20b955a36396bd7ce812a7277c05c1
+X
+(amplify/backend/IAMroles/normalRole.json,8\d\8d3782760e6ddc6bb51e7aa2e488e6cd9e334887
