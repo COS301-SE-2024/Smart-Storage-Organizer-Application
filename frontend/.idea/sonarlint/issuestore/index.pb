@@ -38,3 +38,7 @@ P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 |
 Lapp/src/main/java/com/example/smartstorageorganizer/CodeScannerActivity.java,c\f\cf7e903039ee99f6487ccecbdce61713e02ec5ab
+W
+'amplify/backend/IAMroles/AdminRole.json,a\1\a1af93afd22ca6f1cd3d163009b66086b0d78264
+Y
+)amplify/backend/IAMroles/ManagerRole.json,f\0\f0326a36cc20b955a36396bd7ce812a7277c05c1
