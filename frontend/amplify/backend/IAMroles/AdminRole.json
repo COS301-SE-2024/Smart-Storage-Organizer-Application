@@ -3,21 +3,17 @@
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:*",
-        "rds:*",
-        "lambda:*",
-        "cloudwatch:*",
-        "cognito-idp:AdminAddUserToGroup",
-        "cognito-idp:AdminRemoveUserFromGroup",
-        "cognito-idp:AdminUpdateUserAttributes"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "iam:PassRole",
-      "Resource": "*"
+      "Principal": {
+        "Service": [
+          "ec2.amazonaws.com",
+          "lambda.amazonaws.com"
+        ],
+        "AWS": [
+          "arn:aws:iam::123456789012:root",
+          "arn:aws:iam::098765432109:root"
+        ]
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }
