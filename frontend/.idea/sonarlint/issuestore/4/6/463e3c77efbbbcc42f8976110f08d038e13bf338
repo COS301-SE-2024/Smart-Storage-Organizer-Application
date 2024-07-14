@@ -1,36 +1,36 @@
 
 ‰
-java:S1192~"FDefine a constant instead of duplicating this literal "Page " 3 times.(»Ì»€8ÜŒõïŠ2J$c765484f-526c-416f-9340-a4a34ddbbbda
+java:S1192}"FDefine a constant instead of duplicating this literal "Page " 3 times.(»Ì»€8ÜŒõïŠ2J$38f2441a-75ff-4d1c-b29a-2ed702599d67
 Ÿ
-java:S1192Å"[Define a constant instead of duplicating this literal "Items fetched successfully" 4 times.(Â¼œ¢8ÜŒõïŠ2J$2785aa5a-30f6-42a4-b055-0e61cc105ab7
+java:S1192Ä"[Define a constant instead of duplicating this literal "Items fetched successfully" 4 times.(Â¼œ¢8ÜŒõïŠ2J$a669be49-a195-4fc2-82ab-d7b95f829bc4
 ‹
-java:S1192¿"GDefine a constant instead of duplicating this literal "Z to A" 3 times.(¹şç…8İŒõïŠ2J$386aac99-745b-4154-b4c4-6dd3e1b4c11e
+java:S1192¾"GDefine a constant instead of duplicating this literal "Z to A" 3 times.(¹şç…8İŒõïŠ2J$e3c9ed65-9995-468d-b1d1-321136c8bdfb
 •
-java:S1192¿"QDefine a constant instead of duplicating this literal "Newest to Oldest" 3 times.(¹şç…8İŒõïŠ2J$1374a882-7a2d-44ae-abed-3c84c8deacdd
+java:S1192¾"QDefine a constant instead of duplicating this literal "Newest to Oldest" 3 times.(¹şç…8İŒõïŠ2J$29f594d0-1303-4180-9c2a-2981a5585951
 ‹
-java:S1192¿"GDefine a constant instead of duplicating this literal "A to Z" 3 times.(¹şç…8İŒõïŠ2J$c4d723aa-ba72-425a-b63e-2abec72fbd1d
+java:S1192¾"GDefine a constant instead of duplicating this literal "A to Z" 3 times.(¹şç…8İŒõïŠ2J$1a06eaa0-ce02-4d41-9c72-caecfa574486
 ¡
-java:S1192Ñ"XDefine a constant instead of duplicating this literal "Failed to fetch items: " 4 times.(‘ƒø–øÿÿÿÿ8ŞŒõïŠ2J$e3e18936-7cd7-4dc0-8aef-48d22b600e70
+java:S1192Ğ"XDefine a constant instead of duplicating this literal "Failed to fetch items: " 4 times.(‘ƒø–øÿÿÿÿ8ŞŒõïŠ2J$8ea2cbf6-b0b2-47ac-b850-ec412316f472
 Œ
-java:S1192½"HDefine a constant instead of duplicating this literal "Sort by" 7 times.(ŞÅŠİ8ŞŒõïŠ2J$97615967-3091-4edd-852a-175ce1dd2353
+java:S1192¼"HDefine a constant instead of duplicating this literal "Sort by" 7 times.(ŞÅŠİ8ŞŒõïŠ2J$cb24dc77-5652-41f8-bc66-5e75df0698bb
 •
-java:S1192¿"QDefine a constant instead of duplicating this literal "Oldest to Newest" 3 times.(¹şç…8ßŒõïŠ2J$7dbfbfda-afdc-4fae-933e-e1e920cf7762
+java:S1192¾"QDefine a constant instead of duplicating this literal "Oldest to Newest" 3 times.(¹şç…8ßŒõïŠ2J$fae5dbff-292f-4251-8560-83c77c0af85c
 ¢
-java:S1192Ê"^Define a constant instead of duplicating this literal "yyyy-MM-dd HH:mm:ss.SSSSSSXXX" 4 times.(ØıÉ 8ßŒõïŠ2J$2458ad07-0b19-42c9-8f79-c836278cfe3a
+java:S1192É"^Define a constant instead of duplicating this literal "yyyy-MM-dd HH:mm:ss.SSSSSSXXX" 4 times.(ØıÉ 8ßŒõïŠ2J$920c1f3a-e5d7-41ed-b3ec-d57f1b166b3a
 Œ
-java:S1192K"IDefine a constant instead of duplicating this literal "category" 5 times.(â„¿Ø8¼ĞôïŠ2J$1e04983f-f77e-4203-b42d-6a20a9cdadae
-y
-java:S14505"\Remove the "loadingScreen" field and declare it as a local variable in the relevant methods.(×©«†8Ä¯òŠ2
-|	java:S125w"<This block of commented-out lines of code should be removed.(ÌÍp8ÄõïŠ2J$19988d58-8567-4324-bb6c-319374428be6
-	java:S125²"<This block of commented-out lines of code should be removed.(¥¾†¥8Àö‡ğŠ2J$d0d14fd2-0ffb-4848-8459-5e9e441ebae0
-	java:S125Ã"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8ğ˜‚ğŠ2J$e2b2f228-77f3-4f5c-9268-99fd847cdc71
-	java:S125Ğ"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8’†ğŠ2J$43b92d44-f615-4841-9c55-615a13d1df8a
-	java:S125×"<This block of commented-out lines of code should be removed.(¥¾†¥8ÖÎŠğŠ2J$e51a5ebf-50c3-495a-ae9a-31e9e79500a1
-	java:S125è"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¸ÿˆğŠ2J$44e6254a-9087-4550-bc8c-64212fa22fa3
-	java:S125õ"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8•°‹ğŠ2J$dd8faaad-2812-4f6e-9d9f-f3845a1be9ed
-	java:S125ü"<This block of commented-out lines of code should be removed.(¥¾†¥8¾ßŒğŠ2J$44319f58-399d-4876-b49b-3cc3556e38e9
-	java:S125"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¯®òŠ2J$92b3c99d-7b73-499b-81ee-053cfcacbbc5
-	java:S125š"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8Å¾®òŠ2J$5ca9b1fa-b924-44bf-88c8-2a6d26925675
-	java:S125’"<This block of commented-out lines of code should be removed.(¥¾†¥8œÉğŠ2J$5e00d9f4-5497-444f-9ff4-119b7f96f995
-	java:S125¥"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¾à®òŠ2J$be674f23-49e1-499e-933a-0269f0b99c87
-Y	java:S125²"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8ş¯òŠ2
+java:S1192K"IDefine a constant instead of duplicating this literal "category" 5 times.(â„¿Ø8¼ĞôïŠ2J$626dc738-a3ce-4bf8-abe7-2ca5121f30f2
+Ÿ
+java:S14505"\Remove the "loadingScreen" field and declare it as a local variable in the relevant methods.(×©«†8Ä¯òŠ2J$3d85bc20-0e55-4940-a2a5-008190296ca6
+|	java:S125v"<This block of commented-out lines of code should be removed.(ÌÍp8ÄõïŠ2J$617d7d90-49d4-468c-b208-aeeb8ffe3f10
+	java:S125±"<This block of commented-out lines of code should be removed.(¥¾†¥8Àö‡ğŠ2J$756a22b1-5b13-4453-97b6-ed182a2aeeff
+	java:S125Â"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8ğ˜‚ğŠ2J$4422b989-1397-4f89-a33b-5f0c04f57c81
+	java:S125Ï"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8’†ğŠ2J$3be53e93-af03-419f-8bd8-94be5e2c5aa3
+	java:S125Ö"<This block of commented-out lines of code should be removed.(¥¾†¥8ÖÎŠğŠ2J$6225e584-90a0-488a-9a17-349b08474e34
+	java:S125ç"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¸ÿˆğŠ2J$46d2bc47-7511-45aa-8984-48538900110b
+	java:S125ô"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8•°‹ğŠ2J$519eef3f-4be0-4dab-a211-9ef2af56b323
+	java:S125û"<This block of commented-out lines of code should be removed.(¥¾†¥8¾ßŒğŠ2J$06fc4101-d38a-4e18-a9bb-0bd172cb5b33
+	java:S125Œ"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¯®òŠ2J$18aebdbe-be95-44e5-9338-1b7560af7947
+	java:S125™"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8Å¾®òŠ2J$5109698b-74dc-4c9c-8b7f-ccdbd7527b29
+	java:S125‘"<This block of commented-out lines of code should be removed.(¥¾†¥8œÉğŠ2J$a675d9fc-41ae-4231-bb66-e63c88b9b7ff
+	java:S125¤"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8¾à®òŠ2J$915d428a-1ea0-4cad-bf1d-fd0d814db9c0
+	java:S125±"<This block of commented-out lines of code should be removed.(ÑÚŒÒ8ş¯òŠ2J$b67afc48-833d-4aa8-bea3-5350353ae1d7

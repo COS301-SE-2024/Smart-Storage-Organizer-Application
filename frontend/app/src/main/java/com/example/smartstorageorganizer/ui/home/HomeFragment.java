@@ -41,11 +41,13 @@ import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
+import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -87,6 +89,11 @@ public class HomeFragment extends Fragment {
     ImageView itemImage;
     private List<String> parentCategories = new ArrayList<>();
     private List<String> subCategories = new ArrayList<>();
+    private ShimmerFrameLayout shimmerFrameLayoutName;
+    private ShimmerFrameLayout shimmerFrameLayoutCategory;
+    private ShimmerFrameLayout shimmerFrameLayoutRecent;
+    private TextView recentText;
+    private RecyclerView recyclerViewRecent;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -102,7 +109,17 @@ public class HomeFragment extends Fragment {
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
         category_RecyclerView = root.findViewById(R.id.category_rec);
+        shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
+        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
+        shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
+        recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
+
+        StaggeredGridLayoutManager layoutManagerSkeleton = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
+        recyclerViewRecent.setAdapter(skeletonAdapter);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
@@ -130,15 +147,25 @@ public class HomeFragment extends Fragment {
                 itemModelList.clear();
                 itemModelList.addAll(result);
                 itemAdapter.notifyDataSetChanged();
-                fetchItemsLoader.setVisibility(View.GONE);
+
+                recentText.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutCategory.stopShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                shimmerFrameLayoutRecent.stopShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.GONE);
+
                 itemRecyclerView.setVisibility(View.VISIBLE);
                 Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String error) {
-                fetchItemsLoader.setVisibility(View.GONE);
-                itemRecyclerView.setVisibility(View.VISIBLE);
+                recentText.setVisibility(View.GONE);
+                shimmerFrameLayoutCategory.startShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutRecent.startShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+                itemRecyclerView.setVisibility(View.GONE);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -166,6 +193,8 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
                         loadRecentItems(currentEmail);
+                        shimmerFrameLayoutName.startShimmer();
+                        shimmerFrameLayoutName.setVisibility(View.GONE);
                         fetchParentCategories(0, currentEmail);
                     });
                     future.complete(true);

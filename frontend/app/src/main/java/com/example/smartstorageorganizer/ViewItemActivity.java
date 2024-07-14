@@ -80,8 +80,7 @@ public class ViewItemActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        // Set the SkeletonAdapter
-        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(10); // Assuming 10 skeleton items
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(10);
         recyclerView.setAdapter(skeletonAdapter);
     }
 
