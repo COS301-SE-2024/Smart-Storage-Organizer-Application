@@ -39,10 +39,6 @@ def lambda_handler(event, context):
         print(e)
         return {'statusCode': 500, 'body': json.dumps('Error processing your request')}
 
-event={
-    "headers": {
-        "Authorization": 'eyJraW'
-}
-}
+event={}
 context={}
 print(lambda_handler(event, context))
