@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "rds-db:connect",
+        "lambda:InvokeFunction",
+        "cloudwatch:GetMetricData",
+        "cognito-sync:*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::example-bucket/*",
+        "arn:aws:rds-db:us-east-1:123456789012:dbuser:db-ABCDEFGH/guest-user",
+        "arn:aws:lambda:us-east-1:123456789012:function:ExampleFunction",
+        "arn:aws:cognito-sync:us-east-1:123456789012:identitypool/us-east-1:example-identity-pool-id/*"
+      ]
+    }
+  ]
+}
