@@ -1,50 +1,76 @@
 import boto3
 import json
+from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
-    # Initialize the STS client
-    sts_client = boto3.client('sts')
+    # Parse the request body
+    body = json.loads(event['body'])
+    token = body.get('token')  # Expecting the JWT token from the client
 
-    # Map user types to roles
-    user_roles = {
-        'admin': 'arn:aws:iam::123456789012:role/AdminRole',
-        'manager': 'arn:aws:iam::123456789012:role/ManagerRole',
-        'normal': 'arn:aws:iam::123456789012:role/NormalRole',
-        'guest': 'arn:aws:iam::123456789012:role/GuestRole'
-    }
+    # Initialize Cognito IDP client
+    cognito_client = boto3.client('cognito-idp')
 
-    # Get the user type from the event
-    user_type = event.get('user_type')
+    # Cognito User Pool ID
+    user_pool_id = 'us-east-1_EPbgIUMEQ'  # Replace with your User Pool ID
 
-    if user_type not in user_roles:
-        return {
-            'statusCode': 400,
-            'body': json.dumps('Invalid user type')
+    try:
+        # Validate the token
+        response = cognito_client.get_user(
+            AccessToken=token
+        )
+
+        username = response['Username']
+        user_attributes = response['UserAttributes']
+
+        # Process user attributes as needed
+        # For example, you can extract the email or other attributes
+        email = next(attr['Value'] for attr in user_attributes if attr['Name'] == 'email')
+
+        # Map user roles based on attributes or custom claims in the token
+        # You may need to adapt this mapping based on your use case
+        user_roles = {
+            'admin@example.com': 'arn:aws:iam::123456789012:role/AdminRole',
+            'manager@example.com': 'arn:aws:iam::123456789012:role/ManagerRole',
+            'user@example.com': 'arn:aws:iam::123456789012:role/NormalRole',
+            # Add other mappings as needed
         }
 
-    # Assume the role for the user type
-    role_arn = user_roles[user_type]
-    assumed_role = sts_client.assume_role(
-        RoleArn=role_arn,
-        RoleSessionName='UserSession'
-    )
+        # Determine user role
+        user_type = None
+        for key, value in user_roles.items():
+            if email == key:
+                user_type = value
+                break
 
-    # Extract the temporary credentials
-    credentials = assumed_role['Credentials']
+        if user_type is None:
+            return {
+                'statusCode': 403,
+                'body': json.dumps('User not authorized')
+            }
 
-    # Use the assumed role credentials to perform actions
-    # Example: Creating an S3 client with the assumed role credentials
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id=credentials['AccessKeyId'],
-        aws_secret_access_key=credentials['SecretAccessKey'],
-        aws_session_token=credentials['SessionToken']
-    )
+        # Assume the role
+        sts_client = boto3.client('sts')
+        assumed_role = sts_client.assume_role(
+            RoleArn=user_type,
+            RoleSessionName=f'{username}_Session'
+        )
 
-    # Example: Listing buckets
-    response = s3_client.list_buckets()
+        credentials = assumed_role['Credentials']
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps(response)
-    }
+        # Return temporary credentials
+        response = {
+            'AccessKeyId': credentials['AccessKeyId'],
+            'SecretAccessKey': credentials['SecretAccessKey'],
+            'SessionToken': credentials['SessionToken']
+        }
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response)
+        }
+
+    except ClientError as e:
+        return {
+            'statusCode': 400,
+            'body': json.dumps(f'Error validating token: {str(e)}')
+        }
