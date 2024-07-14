@@ -46,3 +46,7 @@ X
 (amplify/backend/IAMroles/normalRole.json,8\d\8d3782760e6ddc6bb51e7aa2e488e6cd9e334887
 W
 'amplify/backend/IAMroles/guestRole.json,b\6\b6fa482747a062183191418069656799aa7b4ec3
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/RegistrationActivity.java,9\a\9ab2988c86d087eab2f546fdd5ba4abf534c8949
+^
+.amplify/backend/lambdafunctions/getUserRole.py,6\5\657f9f510edc79f2516a9960f1f3be463eb51f37
