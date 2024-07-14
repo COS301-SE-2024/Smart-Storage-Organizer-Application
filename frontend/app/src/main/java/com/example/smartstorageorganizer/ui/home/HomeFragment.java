@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment {
     private String currentEmail, currentName;
     AlertDialog alertDialog;
     private List<CategoryModel> categoryModelList;
+    private List<CategoryModel> subcategoryModelList;
     private CategoryAdapter categoryAdapter;
     private String parentCategoryId, subcategoryId;
     Button buttonNext;
@@ -127,6 +128,8 @@ public class HomeFragment extends Fragment {
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
+        subcategoryModelList = new ArrayList<>();
+
 
         categoryAdapter = new CategoryAdapter(requireActivity(), categoryModelList);
         category_RecyclerView.setAdapter(categoryAdapter);
@@ -356,7 +359,7 @@ public class HomeFragment extends Fragment {
                 // Get selected item
                 currentSelectedCategory = parentView.getItemAtPosition(position).toString();
                 String parentCategory = "";
-                parentCategory = findCategoryByName(currentSelectedCategory);
+                parentCategory = findCategoryByName(currentSelectedCategory, "parent");
                 parentCategoryId = parentCategory;
                 if(!Objects.equals(parentCategory, "")){
                     parentCategoryId = parentCategory;
@@ -373,7 +376,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 currentSelectedSubcategory = parentView.getItemAtPosition(position).toString();
-                String subCategory = findCategoryByName(currentSelectedSubcategory);
+                String subCategory = findCategoryByName(currentSelectedSubcategory, "sub");
                 subcategoryId = subCategory;
                 if(!Objects.equals(subCategory, "")) {
                     subcategoryId = subCategory;
@@ -455,15 +458,28 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private String findCategoryByName(String categoryName) {
-        for (CategoryModel category : categoryModelList) {
-            if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
-                requireActivity().runOnUiThread(() -> {
-                    Log.e("Filtering: ", category.getCategoryID());
-                });
-                return category.getCategoryID();
+    private String findCategoryByName(String categoryName, String type) {
+        if(Objects.equals(type, "parent")){
+            for (CategoryModel category : categoryModelList) {
+                if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                    requireActivity().runOnUiThread(() -> {
+                        Log.e("Filtering: ", category.getCategoryID());
+                    });
+                    return category.getCategoryID();
+                }
             }
         }
+        else {
+            for (CategoryModel category : subcategoryModelList) {
+                if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                    requireActivity().runOnUiThread(() -> {
+                        Log.e("Filtering: ", category.getCategoryID());
+                    });
+                    return category.getCategoryID();
+                }
+            }
+        }
+
         return ""; // Return null if no category with the given name is found
     }
 
@@ -472,6 +488,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId != 0) {
+                    subCategories.clear();
+                    subcategoryModelList.clear();
+                    subcategoryModelList.addAll(result);
                     for (CategoryModel category : result) {
                         subCategories.add(category.getCategoryName());
                     }
@@ -569,6 +588,7 @@ public class HomeFragment extends Fragment {
     public String getObjectUrl(String key)
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
+        Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
         addItem(url, itemName.getText().toString().trim(), itemDescription.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
