@@ -66,15 +66,15 @@ def lambda_handler(event, context):
             }
 
 
-# event={
-#      "header":{
-#         'Authorization':""
-#      },
-#      "body":{
-#     'username':"ezemakau@gmail.com",
-#     'role':"normalUser"
-#      }
-# }
-# context={}
+event={
+     "header":{
+        'Authorization':""
+     },
+     "body":{
+    'username':"ezemakau@gmail.com",
+    'role':"normalUser"
+     }
+}
+context={}
 
-# print(lambda_handler(event, context))
+print(lambda_handler(event, context))
