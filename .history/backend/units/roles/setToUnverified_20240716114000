@@ -1,0 +1,34 @@
+import jwt
+import requests
+from jwt.algorithms import RSAAlgorithm
+
+def get_public_key_from_jwks(jwks_url, kid):
+    # Fetch the JWKS
+    jwks = requests.get(jwks_url).json()
+    # Extract the public key
+    for key in jwks['keys']:
+        if key['kid'] == kid:
+            return RSAAlgorithm.from_jwk(jwt.json_encode(key))
+    raise ValueError("Public key not found.")
+
+def verify_token(id_token, jwks_url, audience, issuer):
+    # Decode the token header without verification to obtain the KID
+    unverified_header = jwt.get_unverified_header(id_token)
+    kid = unverified_header['kid']
+    
+    # Obtain the public key
+    public_key = get_public_key_from_jwks(jwks_url, kid)
+    
+    # Verify the token
+    decoded_token = jwt.decode(id_token, public_key, algorithms=["RS256"], audience=audience, issuer=issuer)
+    
+    return decoded_token
+
+# Example usage
+id_token = "your_id_token_here"
+jwks_url = "https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json"
+audience = "your_app_client_id"
+issuer = "https://cognito-idp.{region}.amazonaws.com/{userPoolId}"
+
+verified_token = verify_token(id_token, jwks_url, audience, issuer)
+print(verified_token)

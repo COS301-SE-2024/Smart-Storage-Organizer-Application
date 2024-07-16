@@ -1,0 +1,16 @@
+import os
+import boto3
+
+def lambda_handler(event, context):
+    # TODO implement
+    client = boto3.client('cognito-idp')
+    response = client.admin_list_groups_for_user(
+        UserPoolId=os.environ['UserPoolId'],
+        Username=event['username']
+    )
+    return response['Groups']
+
+
+event={}
+context={}
+print(lambda_handler(event, context))

@@ -1,0 +1,21 @@
+import jwt  # PyJWT
+import requests
+
+def get_user_info_from_id_token(id_token):
+    # Decode the token (without verification)
+    decoded_token = jwt.decode(id_token, options={"verify_signature": False})
+    
+    # Extract user info
+    user_info = {
+        "username": decoded_token.get("cognito:username"),
+        "email": decoded_token.get("email"),
+        "groups": decoded_token.get("cognito:groups", [])
+    }
+    
+    return user_info
+
+# Example usage
+id_token = "your_id_token_here"
+user_info = get_user_info_from_id_token(id_token)
+print(user_info)
+

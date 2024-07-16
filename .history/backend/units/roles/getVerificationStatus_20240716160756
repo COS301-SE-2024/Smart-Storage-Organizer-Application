@@ -1,0 +1,22 @@
+import os
+import boto3
+
+def lambda_handler(event, context):
+    # TODO implement
+    client = boto3.client('cognito-idp')
+    response = client.admin_list_groups_for_user(
+        UserPoolId='us-east-1_EPbgIUMEQ',
+        Username=event['username']
+    )
+    groups=response['Groups']
+    for group in groups:
+        if group['GroupName']=='verifiedUsers':
+            return {
+                'statusCode': 200,
+                'body': 'verified'
+            }
+    return {
+        'statusCode': 200,
+        'body': 'unverified'
+    }
+

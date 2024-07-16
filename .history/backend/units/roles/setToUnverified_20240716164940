@@ -1,0 +1,23 @@
+import os
+import boto3
+
+def lambda_handler(event, context):
+    # TODO implement
+    client = boto3.client('cognito-idp')
+    response = client.admin_add_user_to_group(
+        UserPoolId='us-east-1_EPbgIUMEQ',
+        Username=event['username'],
+        GroupName='unVerifiedUsers'
+    )
+    print(response)
+    return {
+        'statusCode': 200,
+        'body': response
+    }
+
+event={
+    "username": "zhouvel7@gmail.com"
+
+}
+context={}
+print(lambda_handler(event, context))
