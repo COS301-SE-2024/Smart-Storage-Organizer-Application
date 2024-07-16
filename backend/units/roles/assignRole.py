@@ -53,6 +53,7 @@ def lambda_handler(event, context):
                         print(f"Removed {username} from {group}")
                     except cognito_idp.exceptions.ClientError as error:
                         print(f"Error removing {username} from {group}: {error}")
+            
             assign_role(event)
             return {
             'statusCode': 200,
@@ -71,7 +72,7 @@ def lambda_handler(event, context):
 #      },
 #      "body":{
 #     'username':"ezemakau@gmail.com",
-#     'role':"Admin"
+#     'role':"normalUser"
 #      }
 # }
 # context={}
