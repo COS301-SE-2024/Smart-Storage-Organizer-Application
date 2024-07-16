@@ -1,7 +1,7 @@
 import boto3
 import os
 cognito_idp = boto3.client('cognito-idp')
-user_pool_id = os.environ['USER_POOL_ID']
+user_pool_id = 'us-east-1_EPbgIUMEQ'
 
 def list_user_groups(user_pool_id, username):
     try:
@@ -23,7 +23,7 @@ def assign_role(event):
     )
 
 def lambda_handler(event, context):
-    if 'username' not in event['body'] or 'role' not in event['body']:
+    if 'username' not in event or 'role' not in event:
         return {
             'statusCode': 400,
             'body': 'Missing required fields'
@@ -40,7 +40,7 @@ def lambda_handler(event, context):
             if event['body']['role'] in user_groups:
                 return {
                     'statusCode': 409,
-                    'body': 'User is already in the '+event['body']['role']+' group'
+                    'body': 'User is already in the '+event['role']+' group'
                 }
             else :
                  for group in user_groups:
@@ -65,15 +65,15 @@ def lambda_handler(event, context):
             }
 
 
-# event={
-#      "header":{
-#         'Authorization':""
-#      },
-#      "body":{
-#     'username':"ezemakau@gmail.com",
-#     'role':"Admin"
-#      }
-# }
-# context={}
+event={
+     "header":{
+        'Authorization':""
+     },
+     "body":{
+    'username':"ezemakau@gmail.com",
+    'role':"Admin"
+     }
+}
+context={}
 
-# print(lambda_handler(event, context))
+print(lambda_handler(event, context))

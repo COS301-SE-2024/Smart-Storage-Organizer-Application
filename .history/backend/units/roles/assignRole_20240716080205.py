@@ -18,29 +18,29 @@ def assign_role(event):
    
     cognito_idp.admin_add_user_to_group(
         UserPoolId=user_pool_id,
-        Username=event['body']['username'],
-        GroupName=event['body']['role']
+        Username=event['username'],
+        GroupName=event['role']
     )
 
 def lambda_handler(event, context):
-    if 'username' not in event['body'] or 'role' not in event['body']:
+    if 'username' not in event or 'role' not in event:
         return {
             'statusCode': 400,
             'body': 'Missing required fields'
         }
-    if event['body']['role'] not in ['Admin', 'normalUser', 'Manager', 'guestUser']:
+    if event['role'] not in ['Admin', 'normalUser', 'Manager', 'guestUser']:
         return {
             'statusCode': 400,
             'body': 'Invalid role'
         }
     try:
-            username = event['body']['username']
+            username = event['username']
             user_groups = list_user_groups(user_pool_id, username)
             print(f"User {username} is in groups: {user_groups}")
-            if event['body']['role'] in user_groups:
+            if event['role'] in user_groups:
                 return {
                     'statusCode': 409,
-                    'body': 'User is already in the '+event['body']['role']+' group'
+                    'body': 'User is already in the '+event['role']+' group'
                 }
             else :
                  for group in user_groups:
@@ -56,7 +56,7 @@ def lambda_handler(event, context):
             assign_role(event)
             return {
             'statusCode': 200,
-            'body': 'User has been assigned to the '+event['body']['role']+' group'
+            'body': 'User has been assigned to the '+event['role']+' group'
          }
     except Exception as e:
             return {
@@ -66,7 +66,7 @@ def lambda_handler(event, context):
 
 
 # event={
-#      "header":{
+#      header:{
 #         'Authorization':""
 #      },
 #      "body":{
