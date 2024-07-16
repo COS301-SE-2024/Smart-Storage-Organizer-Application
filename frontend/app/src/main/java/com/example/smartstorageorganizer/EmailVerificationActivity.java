@@ -20,6 +20,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -115,7 +117,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     future.complete(true);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        navigateToMainActivity(email);
+                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
                     });
                 },
                 error -> {
@@ -189,6 +191,23 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         resendOtpTextView.setEnabled(false);
         countDownTimer.start();
+    }
+
+    private void setUserToUnverified(String username, String authorization) {
+        UserUtils.setUserToUnverified(username, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    navigateToMainActivity(username);
+                    Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "user verification failed", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

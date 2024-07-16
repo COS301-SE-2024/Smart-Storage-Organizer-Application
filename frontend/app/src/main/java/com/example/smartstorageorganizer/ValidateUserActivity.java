@@ -54,20 +54,6 @@ public class ValidateUserActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.request_popup, null);
         builder.setView(dialogView);
 
-//        itemImage  = dialogView.findViewById(R.id.item_image);
-//        itemName = dialogView.findViewById(R.id.item_name);
-//        itemDescription = dialogView.findViewById(R.id.item_description);
-//        buttonNext = dialogView.findViewById(R.id.button_next_item);
-
-//        alertDialog = builder.create();
-
-//        itemImage.setOnClickListener(v -> OpenGallery());
-//
-//        buttonNext.setOnClickListener(v -> {
-//            showSuggestionPopup(itemName.getText().toString(), itemDescription.getText().toString());
-//            alertDialog.dismiss();
-//        });
-
         builder.show();
     }
 
