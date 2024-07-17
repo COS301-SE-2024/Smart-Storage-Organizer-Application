@@ -5,230 +5,425 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:background="@color/background"
     tools:context=".ItemDetailsActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1500"
+        app:shimmer_repeat_mode="restart">
 
-        <ImageView
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:src="@drawable/baseline_arrow_back_ios_24"
-            android:contentDescription="Back Button" />
-
-        <ImageView
-            android:id="@+id/qr_code_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/baseline_qr_code_24"
-            android:contentDescription="QR Code Button" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- ScrollView to make content scrollable -->
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
+        <!-- Add skeleton views here -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/item_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:src="@drawable/no_image" />
-
-            <TextView
-                android:id="@+id/item_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text=""
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <!-- Description Section -->
-            <LinearLayout
-                android:id="@+id/expandable_layout_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:paddingBottom="0dp">
-
-                <TextView
-                    android:id="@+id/expand_text_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Description"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/expand_arrow_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:src="@drawable/baseline_keyboard_arrow_down_24" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <!-- Skeleton for QR code -->
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:background="@color/skeleton_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Unit Section -->
-            <LinearLayout
-                android:id="@+id/expandable_layout_unit"
+            <!-- Skeleton for item image -->
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:paddingBottom="0dp">
+                android:background="@color/skeleton_color" />
 
-                <TextView
-                    android:id="@+id/expand_text_unit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Unit"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/expand_arrow_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:src="@drawable/baseline_keyboard_arrow_down_24" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_unit"
+            <!-- Skeleton for card views -->
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <!-- Category Section -->
-            <LinearLayout
-                android:id="@+id/expandable_layout_category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:paddingBottom="0dp">
+                android:background="@color/skeleton_color" />
 
-                <TextView
-                    android:id="@+id/expand_text_category"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Category"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/expand_arrow_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:src="@drawable/baseline_keyboard_arrow_down_24" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_category"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <!-- Color Code Section -->
-            <LinearLayout
-                android:id="@+id/expandable_layout_color"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:paddingBottom="0dp">
+                android:background="@color/skeleton_color" />
 
-                <TextView
-                    android:id="@+id/expand_text_color"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Color Code"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/expand_arrow_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:src="@drawable/baseline_keyboard_arrow_down_24" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_color"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/colorSecondary"
-                android:text=""
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/skeleton_color" />
         </LinearLayout>
-    </ScrollView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detailedLayout_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/Theme.SmartStorageOrganizer">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:contentScrim="@color/background"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+                    app:expandedTitleTextAppearance="@style/Theme.SmartStorageOrganizer"
+                    app:collapsedTitleTextAppearance="@style/Theme.SmartStorageOrganizer"
+                    android:id="@+id/collapsing_toolbar">
+
+                    <ImageView
+                        android:id="@+id/itemImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cart_toolbar" />
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/actionBarToolbar"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="0dp"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_collapseMode="pin">
+
+                        <ImageView
+                            android:id="@+id/backButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_arrow_back_ios_24"/>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/qrCode"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/baseline_qr_code_24"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.appcompat.widget.Toolbar>
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/detailed_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/background">
+
+                        <TextView
+                            android:id="@+id/itemName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_marginEnd="46dp"
+                            android:textSize="16dp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/share"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/edit"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardViewDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/white"
+                                android:elevation="4dp"
+                                app:cardCornerRadius="8dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorPrimary">
+
+                                    <TextView
+                                        android:id="@+id/tvDescription"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_toStartOf="@+id/arrow"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toLeftOf="@+id/arrow"
+                                        android:background="@color/colorPrimary"
+                                        android:padding="16dp"
+                                        android:text="Description"
+                                        android:textColor="@color/colorSecondary"
+                                        android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:id="@+id/arrow"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="false"
+                                        android:layout_marginTop="16dp"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/baseline_keyboard_arrow_down_24" />
+
+                                    <TextView
+                                        android:id="@+id/itemDescription"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/tvDescription"
+                                        android:background="@android:color/white"
+                                        android:textColor="@color/black"
+                                        android:padding="16dp"
+                                        android:text="Tweened animation calculates animation information such as size, rotation, start point, and endpoint. These animations are slower and less flexible. An example of View animation can be used if we want to expand a specific layout in that place we can use View Animation. The example of View Animation can be seen in Expandable RecyclerView."
+                                        android:textSize="14sp"
+                                        android:visibility="gone" />
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Accordion for Unit -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardViewUnit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/white"
+                                android:elevation="4dp"
+                                app:cardCornerRadius="8dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorPrimary">
+
+                                    <TextView
+                                        android:id="@+id/tvDescriptionUnit"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_toStartOf="@+id/arrowUnit"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toLeftOf="@+id/arrowUnit"
+                                        android:background="@color/colorPrimary"
+                                        android:padding="16dp"
+                                        android:text="Unit"
+                                        android:textColor="@color/colorSecondary"
+                                        android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:id="@+id/arrowUnit"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="false"
+                                        android:layout_marginTop="16dp"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/baseline_keyboard_arrow_down_24" />
+
+                                    <TextView
+                                        android:id="@+id/itemUnit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/tvDescriptionUnit"
+                                        android:background="@android:color/white"
+                                        android:textColor="@color/black"
+                                        android:padding="16dp"
+                                        android:text="Details about Unit."
+                                        android:textSize="14sp"
+                                        android:visibility="gone" />
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Accordion for Category -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardViewCategory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/white"
+                                android:elevation="4dp"
+                                app:cardCornerRadius="8dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorPrimary">
+
+                                    <TextView
+                                        android:id="@+id/tvDescriptionCategory"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_toStartOf="@+id/arrowCategory"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toLeftOf="@+id/arrowCategory"
+                                        android:background="@color/colorPrimary"
+                                        android:padding="16dp"
+                                        android:text="Category"
+                                        android:textColor="@color/colorSecondary"
+                                        android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:id="@+id/arrowCategory"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="false"
+                                        android:layout_marginTop="16dp"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/baseline_keyboard_arrow_down_24" />
+
+                                    <TextView
+                                        android:id="@+id/itemCategory"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/tvDescriptionCategory"
+                                        android:background="@android:color/white"
+                                        android:textColor="@color/black"
+                                        android:padding="16dp"
+                                        android:text="Details about Category."
+                                        android:textSize="14sp"
+                                        android:visibility="gone" />
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Accordion for Color Code -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardViewColorCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:background="@color/white"
+                                android:elevation="4dp"
+                                app:cardCornerRadius="8dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorPrimary">
+
+                                    <TextView
+                                        android:id="@+id/tvDescriptionColorCode"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_toStartOf="@+id/arrowColorCode"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toLeftOf="@+id/arrowColorCode"
+                                        android:background="@color/colorPrimary"
+                                        android:padding="16dp"
+                                        android:text="Color Code"
+                                        android:textColor="@color/colorSecondary"
+                                        android:textSize="16sp" />
+
+                                    <ImageView
+                                        android:id="@+id/arrowColorCode"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="false"
+                                        android:layout_marginTop="16dp"
+                                        android:layout_marginEnd="16dp"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/baseline_keyboard_arrow_down_24" />
+
+                                    <TextView
+                                        android:id="@+id/itemColorCode"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/tvDescriptionColorCode"
+                                        android:background="@android:color/white"
+                                        android:textColor="@color/black"
+                                        android:padding="16dp"
+                                        android:text="Details about Color Code."
+                                        android:textSize="14sp"
+                                        android:visibility="gone" />
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,15 @@
 
-“	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8µ°ó‘‰2J$94dfea81-9b32-4815-baaa-75b3436e01ff
-”	java:S117Œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8ş•ÿ¶‰2J$6d2595df-d0c9-458c-b6a8-ac92ec228c6a
+“	java:S117‘"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8†é¥‚‹2J$77f6a13d-a253-4447-8385-c100f3ed22cb
+”	java:S117’"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8‡é¥‚‹2J$fee51fcb-35c5-4664-83a2-40baeb6125e0
 
-java:S1192U"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8–ÿ¶‰2J$0803fac6-42e8-4b8b-8b55-8e8f1d119e75
+java:S1192y"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8é¥‚‹2J$f70adf00-b709-42a1-b7cd-e3b1cd28fbc3
 o
-java:S1602R",Remove useless curly braces around statement(Å²şÙ8š–ÿ¶‰2J$7b226654-0c8d-4efb-9b8d-5b17110f074e
+java:S1602S",Remove useless curly braces around statement(Å²şÙ8êé¥‚‹2J$456f0e41-d3ba-4655-bc18-0a771bf6078b
 s
-java:S1874W"+Remove this use of "yes"; it is deprecated.(§µüÿÿÿÿ8›–ÿ¶‰2J$490b9bbe-aa8a-4842-bb13-5342a8999ef4
-ƒ	java:S125["<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8œ–ÿ¶‰2J$0ce4eaba-9da5-4098-ab0d-993d159390cd
-r
-java:S1874^"*Remove this use of "no"; it is deprecated.(ïİ†Šúÿÿÿÿ8œ–ÿ¶‰2J$be898862-0498-4cd6-8cfe-556c2b684baa
-ƒ	java:S125|"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8¡–ÿ¶‰2J$3e3b15b7-62be-4b04-ae86-897bb3e0e19f
+java:S1874{"+Remove this use of "yes"; it is deprecated.(§µüÿÿÿÿ8‹ê¥‚‹2J$edcae0c8-3e18-4d31-827f-a4df30f9c2e6
+t
+java:S1602{",Remove useless curly braces around statement(§µüÿÿÿÿ8‹ê¥‚‹2J$77591e93-b8d7-4b14-b133-bbf4597ed7d7
+ƒ	java:S125}"<This block of commented-out lines of code should be removed.(ğÉÅ¦üÿÿÿÿ8Œê¥‚‹2J$9a434402-299a-4174-9a17-4f71f7c59f9d
+ƒ	java:S125"<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8ê¥‚‹2J$34b4a055-ee91-4e99-98f3-84db30f3318f
+s
+java:S1874‚"*Remove this use of "no"; it is deprecated.(ïİ†Šúÿÿÿÿ8ê¥‚‹2J$ee5f3cc9-7d3f-43d6-9222-d163c151633b

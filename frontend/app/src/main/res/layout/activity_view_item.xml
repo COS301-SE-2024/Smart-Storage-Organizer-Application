@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_rawRes="@raw/loading"
-        android:visibility="visible"
+        android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"/>
 
@@ -77,14 +77,14 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:background="@drawable/spinner_background"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <Spinner
         android:id="@+id/category_filter"
         android:layout_width="120dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -107,6 +107,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1500"
+        app:shimmer_repeat_mode="restart"
+        android:layout_marginTop="62dp"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_filter">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/skeleton_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/skeleton_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="76dp"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/newstedScrollview"
         android:layout_width="match_parent"
@@ -115,6 +160,7 @@
         android:layout_marginBottom="60dp"
         android:fillViewport="true"
         android:overScrollMode="never"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

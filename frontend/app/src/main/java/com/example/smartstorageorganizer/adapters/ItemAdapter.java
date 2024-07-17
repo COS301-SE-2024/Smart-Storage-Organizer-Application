@@ -21,6 +21,7 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,20 +81,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
+            showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
             // Show a confirmation dialog or directly delete the item
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete Item")
-                    .setMessage("Are you sure you want to delete this item?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        // Handle the delete action
-                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
-                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId(), holder.getAdapterPosition());
-//                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
-
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
         });
     }
 
@@ -119,17 +108,34 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         }
     }
-    // Method to handle item deletion
-//    @SuppressLint("NotifyDataSetChanged")
-//    private void deleteItem(int position) {
-//        // Implement your delete logic here
-//        itemModelList.remove(position);
-//        notifyItemRemoved(position);
-//        // Optionally, notify the adapter that the data set has changed
-//        notifyDataSetChanged();
-//    }
 
-    // Method to handle item deletion
+    private void showBottomSheetDialog(int position, String itemId) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+
+        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+
+        deleteItem.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // Handle the delete action
+//                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
+                        deleteItem(itemId, position);
+//                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
+
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
     private void deleteItem(String itemId, int position) {
         try {
             // Convert itemId to integer

@@ -45,7 +45,7 @@ public class CodeScannerActivity extends AppCompatActivity {
         Button scanButton = findViewById(R.id.scan_button);
         scanButton.setOnClickListener(view -> {
             IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
             integrator.setPrompt("Scan a QR Code");
             integrator.setCameraId(0);  // Use a specific camera of the device
             integrator.setBeepEnabled(true);

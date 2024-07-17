@@ -34,6 +34,18 @@
             android:icon="@drawable/baseline_question_mark_24"
             android:title="Help"
             android:textColor="@color/colorPrimary"/>
+
+        <item
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/baseline_question_mark_24"
+            android:title="Requests"
+            android:textColor="@color/colorPrimary"/>
+
+        <item
+            android:id="@+id/nav_users"
+            android:icon="@drawable/baseline_question_mark_24"
+            android:title="Users"
+            android:textColor="@color/colorPrimary"/>
 <!--        <item-->
 <!--            android:id="@+id/action_faq"-->
 <!--            android:title="FAQ"-->

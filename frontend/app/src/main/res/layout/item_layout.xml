@@ -71,13 +71,12 @@
         <!-- Delete Icon -->
         <ImageView
             android:id="@+id/delete_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="bottom|end"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top|end"
             android:layout_margin="8dp"
-            android:background="@android:color/white"
-            android:padding="4dp"
-            android:src="@drawable/baseline_delete_24"
+            android:padding="0dp"
+            android:src="@drawable/baseline_more_vert_24"
             android:contentDescription="@string/delete_icon_description"/>
     </FrameLayout>
 </androidx.cardview.widget.CardView>

@@ -28,6 +28,15 @@
     <string name="previous">Previous</string>
     <string name="qr_code">QR Code</string>
 
+    <string name="blink">BLINK</string>
+    <string name="clockwise">ROTATE</string>
+    <string name="fade">FADE</string>
+    <string name="move">MOVE</string>
+    <string name="slide">SLIDE</string>
+    <string name="zoom">ZOOM</string>
+    <string name="stop_animation">STOP ANIMATION</string>
+    <string name="course_rating">Course Rating</string>
+    <string name="course_name">Course Name</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -83,5 +92,7 @@
     <string name="default_backgrounditemimage">default_backgroundItemImage</string>
     <string name="item_name">Item name</string>
     <string name="item_details_go_here">Item details go here.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
