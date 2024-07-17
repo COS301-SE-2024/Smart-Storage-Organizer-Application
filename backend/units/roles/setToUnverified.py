@@ -3,8 +3,13 @@ import boto3
 
 def lambda_handler(event, context):
     client = boto3.client('cognito-idp')
+    responseRemove=client.admin_remove_user_from_group(
+        UserPoolId='us-east-1_EPbgIUMEQ',
+        Username=event['body']['username'],
+        GroupName='verifiedUsers'
+    )
     response = client.admin_add_user_to_group(
-        UserPoolId=os.environ['USER_POOL_ID'],
+        UserPoolId='us-east-1_EPbgIUMEQ',
         Username=event['body']['username'],
         GroupName='unVerifiedUsers'
     )
@@ -19,8 +24,15 @@ def lambda_handler(event, context):
     }
 
 # event={
-#     "username": "zhouvel7@gmail.com"
+#   "header": {
+#     "Authorization": " "
+#   },
+#   "body": {
+#     "username": "ezemakau@gmail.com"
 
+  
+#   }
 # }
+
 # context={}
 # print(lambda_handler(event, context))
