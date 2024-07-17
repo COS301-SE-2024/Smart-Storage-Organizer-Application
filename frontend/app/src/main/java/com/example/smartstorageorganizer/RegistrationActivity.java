@@ -156,6 +156,7 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "Makro"));
 
         try {
             buttonLoader.setVisibility(View.VISIBLE);
@@ -168,16 +169,16 @@ public class RegistrationActivity extends AppCompatActivity {
                     passwordText,
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
-                        Log.i(TAG, "Sign-up successful: " + result.toString());
+                        Log.i("MyAmplifyApp", "Sign-up successful: " + result.toString());
                         moveToVerificationActivity(emailText);
                     },
                     error -> {
-                        Log.e(TAG, "Sign-up failed", error);
+                        Log.e("MyAmplifyApp", "Sign-up failed", error);
                         handleSignUpFailure(emailText, error);
                     }
             );
         } catch (Exception e) {
-            Log.e(TAG, "Sign-up exception", e);
+            Log.e("MyAmplifyApp", "Sign-up exception", e);
             handleSignUpException();
         }
     }

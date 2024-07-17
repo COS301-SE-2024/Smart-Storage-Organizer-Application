@@ -40,7 +40,8 @@ public class SearchOrganizationActivity extends AppCompatActivity {
         autoCompleteTextView.setThreshold(1);
 
         findViewById(R.id.nextButton).setOnClickListener(v -> {
-            Intent intent = new Intent(SearchOrganizationActivity.this, ValidateUserActivity.class);
+            Intent intent = new Intent(SearchOrganizationActivity.this, RegistrationActivity.class);
+
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();

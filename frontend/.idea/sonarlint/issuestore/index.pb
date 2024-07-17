@@ -88,3 +88,9 @@ Mapp/src/main/java/com/example/smartstorageorganizer/RegistrationActivity.java,
 Mapp/src/main/java/com/example/smartstorageorganizer/AddColorCodeActivity.java,5\9\597b389a56edd6a4f666f820daf54c1e5b4f207e
 Å
 Qapp/src/main/java/com/example/smartstorageorganizer/adapters/SkeletonAdapter.java,9\4\944708ca2b9072f7507574cfad578ef46207f07a
+x
+Happ/src/main/java/com/example/smartstorageorganizer/utils/UserUtils.java,8\0\8027aff29cad2edcc0100f64ba841c3e359564a2
+Ä
+Papp/src/test/java/com/example/smartstorageorganizer/EditProfileActivityTest.java,3\3\3378155149634c4e9e34d872e6844f3e1edbba5c
+Ç
+Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.java,4\1\4171c039aa7e2fe87b69241020ae05d60652eecb
