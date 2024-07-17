@@ -29,25 +29,18 @@
                         "authenticationFlowType": "USER_SRP_AUTH",
                         "mfaConfiguration": "OPTIONAL",
                         "mfaTypes": [
-                            "SMS",
-                            "TOTP"
+                            "SMS"
                         ],
                         "passwordProtectionSettings": {
                             "passwordPolicyMinLength": 8,
-                            "passwordPolicyCharacters": [
-                                "REQUIRES_LOWERCASE",
-                                "REQUIRES_NUMBERS",
-                                "REQUIRES_SYMBOLS",
-                                "REQUIRES_UPPERCASE"
-                            ]
+                            "passwordPolicyCharacters": []
                         },
                         "signupAttributes": [
-                            "ADDRESS",
-                            "BIRTHDATE",
+                            "EMAIL",
                             "FAMILY_NAME",
                             "NAME",
                             "PHONE_NUMBER",
-                            "PROFILE"
+                            "PICTURE"
                         ],
                         "socialProviders": [],
                         "usernameAttributes": [
@@ -60,7 +53,7 @@
                 },
                 "S3TransferUtility": {
                     "Default": {
-                        "Bucket": "smartstorageapp-storage-5239e40ec4c4a-staging",
+                        "Bucket": "frontend-storage-5dbd9817acab2-dev",
                         "Region": "us-east-1"
                     }
                 }

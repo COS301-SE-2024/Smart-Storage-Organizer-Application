@@ -75,6 +75,15 @@ android {
 
         buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"");
 
+        buildConfigField("String", "SetRoleEndPoint", "\"${localProperties["SetRoleEndPoint"]}\"");
+        buildConfigField("String", "getUserRoles", "\"${localProperties["getUserRoles"]}\"");
+        buildConfigField("String", "getUserVerifIcationStatus", "\"${localProperties["getUserVerifIcationStatus"]}\"");
+        buildConfigField("String", "setUserToUnverified", "\"${localProperties["setUserToUnverified"]}\"");
+        buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"");
+        buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"");
+
+
+
     }
 
     buildTypes {

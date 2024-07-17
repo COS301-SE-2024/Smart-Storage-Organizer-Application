@@ -7,7 +7,7 @@
     "CredentialsProvider": {
         "CognitoIdentity": {
             "Default": {
-                "PoolId": "us-east-1:e4e7717b-f9ec-4b0b-8b4e-36a26c2c9dee",
+                "PoolId": "us-east-1:5c00f33c-71b8-4ed1-9180-081e4de19f06",
                 "Region": "us-east-1"
             }
         }
@@ -15,7 +15,7 @@
     "CognitoUserPool": {
         "Default": {
             "PoolId": "us-east-1_EPbgIUMEQ",
-            "AppClientId": "kh6b9f0l067pkp6bmtrd69uue",
+            "AppClientId": "6r6e71set4mof2i3tvkgv6inem",
             "Region": "us-east-1"
         }
     },
@@ -24,25 +24,18 @@
             "authenticationFlowType": "USER_SRP_AUTH",
             "mfaConfiguration": "OPTIONAL",
             "mfaTypes": [
-                "SMS",
-                "TOTP"
+                "SMS"
             ],
             "passwordProtectionSettings": {
                 "passwordPolicyMinLength": 8,
-                "passwordPolicyCharacters": [
-                    "REQUIRES_LOWERCASE",
-                    "REQUIRES_NUMBERS",
-                    "REQUIRES_SYMBOLS",
-                    "REQUIRES_UPPERCASE"
-                ]
+                "passwordPolicyCharacters": []
             },
             "signupAttributes": [
-                "ADDRESS",
-                "BIRTHDATE",
+                "EMAIL",
                 "FAMILY_NAME",
                 "NAME",
                 "PHONE_NUMBER",
-                "PROFILE"
+                "PICTURE"
             ],
             "socialProviders": [],
             "usernameAttributes": [
@@ -55,7 +48,7 @@
     },
     "S3TransferUtility": {
         "Default": {
-            "Bucket": "smartstorageapp-storage-5239e40ec4c4a-staging",
+            "Bucket": "frontend-storage-5dbd9817acab2-dev",
             "Region": "us-east-1"
         }
     }
