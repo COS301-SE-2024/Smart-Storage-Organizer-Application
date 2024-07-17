@@ -74,6 +74,14 @@ android {
         buildConfigField("String", "FetchByIDEndPoint", "\"${localProperties["FetchByIDEndPoint"]}\"");
 
         buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"");
+        buildConfigField("String","getParentCategoryByChildId","\"${localProperties["getParentCategoryByChildId"]}\"")
+        buildConfigField("String","getUserRoles","\"${localProperties["getUserRoles"]}\"")
+        buildConfigField("String","SetRoleEndPoint","\"${localProperties["SetRoleEndPoint"]}\"")
+        buildConfigField("String","getUserVerifIcationStatus","\"${localProperties["getUserVerifIcationStatus"]}\"")
+        buildConfigField("String","setUserToUnverified","\"${localProperties["setUserToUnverified"]}\"")
+        buildConfigField("String","setUserToVerified","\"${localProperties["setUserToVerified"]}\"")
+        buildConfigField("String","getUsersInGroup","\"${localProperties["getUsersInGroup"]}\"")
+
 
     }
 
