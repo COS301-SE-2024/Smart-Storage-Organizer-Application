@@ -19,6 +19,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.model.unitModel;
 
 import org.json.JSONArray;
@@ -166,9 +167,6 @@ public class UserUtils {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String bodyString = jsonObject.getString("body");
 
-//                        JSONObject bodyObject = new JSONObject(bodyString);
-//                        String status = bodyObject.getString("status");
-
                         activity.runOnUiThread(() -> {
                             Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
                             Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
@@ -192,7 +190,6 @@ public class UserUtils {
     }
 
     public static void setUserToUnverified(String username, String authorizationToken, Activity activity, OperationCallback<Boolean> callback) {
-        // Construct the JSON payload
         String json = "{"
                 + "\"header\": {"
                 + "\"Authorization\": \"" + authorizationToken + "\""
@@ -202,19 +199,14 @@ public class UserUtils {
                 + "}"
                 + "}";
 
-        // Define the media type
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-        // Create the OkHttpClient instance
         OkHttpClient client = new OkHttpClient();
 
-        // Define the API URL
         String API_URL = BuildConfig.setUserToUnverified;
 
-        // Create the request body with the JSON payload
         RequestBody body = RequestBody.create(json, JSON);
 
-        // Build the request
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(body)
@@ -240,9 +232,6 @@ public class UserUtils {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String bodyString = jsonObject.getString("body");
 
-//                        JSONObject bodyObject = new JSONObject(bodyString);
-//                        String status = bodyObject.getString("status");
-
                         activity.runOnUiThread(() -> {
                             Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
                             Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
@@ -258,6 +247,90 @@ public class UserUtils {
                 } else {
                     activity.runOnUiThread(() -> {
                         Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void getUsersInGroup(String username, String type, String authorizationToken, Activity activity, OperationCallback<List<UserModel>> callback) {
+        String json = "{"
+                + "\"header\": {"
+                + "\"Authorization\": \"" + authorizationToken + "\""
+                + "},"
+                + "\"body\": {"
+                + "\"username\": \"" + username + "\","
+                + "\"type\": \"" + type + "\""
+                + "}"
+                + "}";
+
+        List<UserModel> usersList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.getUsersInGroup;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.d("MyAmplifyApp Group", "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp Group", responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            UserModel user = new UserModel();
+                            user.setEmail(itemObject.getString("email"));
+                            user.setName(itemObject.getString("name"));
+                            user.setSurname(itemObject.getString("surname"));
+                            if(Objects.equals(type, "verifiedUsers")){
+                                user.setStatus("Active");
+                            }
+                            else {
+                                user.setStatus("Pending");
+                            }
+
+                            usersList.add(user);
+                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(usersList));
+
+
+                    }catch (JSONException e){
+                        activity.runOnUiThread(() -> {
+                            Log.e("MyAmplifyApp Group", "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.d("MyAmplifyApp Group", "POST request failed: " + response.code());
                         callback.onFailure("Response code" + response.code());
                     });
                 }

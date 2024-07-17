@@ -1,9 +1,9 @@
 
 —
-java:S1192~"OUse already-defined constant 'EMAIL_KEY' instead of duplicating its value here.(ÄÇãøÿÿÿÿ8ÿ×ÒìŠ2J$3a81acfb-c2de-4233-ae22-ebde5dbfe64e
+java:S1192~"OUse already-defined constant 'EMAIL_KEY' instead of duplicating its value here.(ÄÇãøÿÿÿÿ8ÿ×ÒìŠ2J$c4690b83-7964-4dd7-bf0f-c8f32b217559
 “
-java:S1301}"KReplace this "switch" statement by "if" statements to increase readability.(‹ıÌ­üÿÿÿÿ8àØÒìŠ2J$9efd1424-d3ff-45d8-aff7-31dc410137b5
+java:S1301}"KReplace this "switch" statement by "if" statements to increase readability.(‹ıÌ­üÿÿÿÿ8àØÒìŠ2J$d32c0588-b787-45d1-ace9-9a39d79df4f4
 ‡
-java:S1874ˆ">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ÙÒìŠ2J$04b5d92e-cbb4-48ba-a1d9-17673ae6a7a7
+java:S1874ˆ">Remove this use of "startActivityForResult"; it is deprecated.(ÒÈ°ıÿÿÿÿ8ÙÒìŠ2J$93299f48-4827-48fe-a461-db3471ef368b
 “
-java:S1874Œ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ÙÒìŠ2J$83eb532a-b187-4106-be4c-3eda66f0d3d2
+java:S1874Œ"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8ÙÒìŠ2J$2ab46ead-83e0-4b03-978b-fb202f7ecb3f

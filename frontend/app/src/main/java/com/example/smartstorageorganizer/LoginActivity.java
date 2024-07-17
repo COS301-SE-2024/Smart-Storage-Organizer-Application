@@ -45,7 +45,6 @@ import com.google.android.material.textfield.TextInputEditText;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "AmplifyQuickstart";
-
     private TextView signUpLink;
     private TextView loginButtonText;
     private ImageView loginButtonIcon;
@@ -326,9 +325,7 @@ public class LoginActivity extends AppCompatActivity {
                     else {
                         String emailInput = email.getText().toString().trim();
                         String passwordInput = password.getText().toString().trim();
-//                        signIn(emailInput, passwordInput);
-                        setUserToUnverified(username, "");
-                        hideLoading();
+                        signIn(emailInput, passwordInput);
                     }
                     Toast.makeText(LoginActivity.this, "check user verification successful: "+ result, Toast.LENGTH_LONG).show();
                 }
@@ -355,44 +352,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emailInput = email.getText().toString().trim();
                 String passwordInput = password.getText().toString().trim();
-                setUserToVerified(emailInput, "");
+//                setUserToVerified(emailInput, "");
             }
         });
 
         builder.show();
-    }
-
-    private void setUserToVerified(String username, String authorization) {
-        UserUtils.setUserToVerified(username, authorization, this, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(LoginActivity.this, "user verified successful: ", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                hideLoading();
-                Toast.makeText(LoginActivity.this, "user verification failed", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void setUserToUnverified(String username, String authorization) {
-        UserUtils.setUserToUnverified(username, authorization, this, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(LoginActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                hideLoading();
-                Toast.makeText(LoginActivity.this, "user verification failed", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }
