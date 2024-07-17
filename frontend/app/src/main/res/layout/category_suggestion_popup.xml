@@ -11,13 +11,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Category"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="32dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Category"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"/>
@@ -49,13 +42,28 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/spinner_background" />
 
-    <Button
-        android:id="@+id/button_add_item"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
+        android:orientation="horizontal"
         android:layout_gravity="end"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"/>
+        android:layout_marginEnd="24dp">
+        <Button
+            android:id="@+id/button_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Reload"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/button_add_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add" />
+    </LinearLayout>
+
+
 
 </LinearLayout>

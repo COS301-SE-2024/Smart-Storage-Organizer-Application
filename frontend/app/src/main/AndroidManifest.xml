@@ -27,15 +27,33 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchOrganizationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LandingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ValidateUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DesignActivity"
+            android:exported="false" />
+        <activity
             android:name=".ItemDetailsActivity"
             android:exported="false"
-            android:theme="@style/Theme.SmartStorageOrganizer"/>
+            android:theme="@style/Theme.SmartStorageOrganizer" />
         <activity
             android:name=".CodeScannerActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.SmartStorageOrganizer"/>
+            android:theme="@style/Theme.SmartStorageOrganizer" />
         <activity
             android:name=".ViewColorCodesActivity"
             android:exported="false" />
@@ -78,7 +96,7 @@
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar" />
+            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar"/>
         <activity
             android:name=".EmailVerificationActivity"
             android:exported="false" />
@@ -114,7 +132,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

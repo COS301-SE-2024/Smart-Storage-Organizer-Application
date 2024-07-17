@@ -3,11 +3,14 @@ package com.example.smartstorageorganizer.ui.home;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,11 +44,13 @@ import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
+import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -80,6 +85,7 @@ public class HomeFragment extends Fragment {
     private String currentEmail, currentName;
     AlertDialog alertDialog;
     private List<CategoryModel> categoryModelList;
+    private List<CategoryModel> subcategoryModelList;
     private CategoryAdapter categoryAdapter;
     private String parentCategoryId, subcategoryId;
     Button buttonNext;
@@ -87,6 +93,12 @@ public class HomeFragment extends Fragment {
     ImageView itemImage;
     private List<String> parentCategories = new ArrayList<>();
     private List<String> subCategories = new ArrayList<>();
+    private ShimmerFrameLayout shimmerFrameLayoutName;
+    private ShimmerFrameLayout shimmerFrameLayoutCategory;
+    private ShimmerFrameLayout shimmerFrameLayoutRecent;
+    private TextView recentText;
+    private RecyclerView recyclerViewRecent;
+    ProgressDialog progressDialogAddingItem;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -102,10 +114,22 @@ public class HomeFragment extends Fragment {
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
         category_RecyclerView = root.findViewById(R.id.category_rec);
+        shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
+        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
+        shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
+        recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
+
+        StaggeredGridLayoutManager layoutManagerSkeleton = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
+        recyclerViewRecent.setAdapter(skeletonAdapter);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
+        subcategoryModelList = new ArrayList<>();
+
 
         categoryAdapter = new CategoryAdapter(requireActivity(), categoryModelList);
         category_RecyclerView.setAdapter(categoryAdapter);
@@ -130,15 +154,25 @@ public class HomeFragment extends Fragment {
                 itemModelList.clear();
                 itemModelList.addAll(result);
                 itemAdapter.notifyDataSetChanged();
-                fetchItemsLoader.setVisibility(View.GONE);
+
+                recentText.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutCategory.stopShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                shimmerFrameLayoutRecent.stopShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.GONE);
+
                 itemRecyclerView.setVisibility(View.VISIBLE);
                 Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String error) {
-                fetchItemsLoader.setVisibility(View.GONE);
-                itemRecyclerView.setVisibility(View.VISIBLE);
+                recentText.setVisibility(View.GONE);
+                shimmerFrameLayoutCategory.startShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutRecent.startShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+                itemRecyclerView.setVisibility(View.GONE);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -166,6 +200,8 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
                         loadRecentItems(currentEmail);
+                        shimmerFrameLayoutName.startShimmer();
+                        shimmerFrameLayoutName.setVisibility(View.GONE);
                         fetchParentCategories(0, currentEmail);
                     });
                     future.complete(true);
@@ -176,19 +212,38 @@ public class HomeFragment extends Fragment {
         return future;
     }
 
-    private void showAddItemPopup()
-    {
+    private void showAddItemPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.add_item_popup, null);
         builder.setView(dialogView);
 
-        itemImage  = dialogView.findViewById(R.id.item_image);
+        itemImage = dialogView.findViewById(R.id.item_image);
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
 
-        alertDialog = builder.create();
+        // Disable the button initially
+        buttonNext.setEnabled(false);
+
+        // Add text change listeners to enable the button when both fields are filled
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String nameInput = itemName.getText().toString().trim();
+                String descriptionInput = itemDescription.getText().toString().trim();
+                buttonNext.setEnabled(!nameInput.isEmpty() && !descriptionInput.isEmpty());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        };
+
+        itemName.addTextChangedListener(textWatcher);
+        itemDescription.addTextChangedListener(textWatcher);
 
         itemImage.setOnClickListener(v -> OpenGallery());
 
@@ -197,6 +252,7 @@ public class HomeFragment extends Fragment {
             alertDialog.dismiss();
         });
 
+        alertDialog = builder.create();
         alertDialog.show();
     }
 
@@ -210,17 +266,34 @@ public class HomeFragment extends Fragment {
         suggestionSpinner = dialogView.findViewById(R.id.suggestionSpinner);
         colorSpinner = dialogView.findViewById(R.id.colorSpinner);
         Button addButton = dialogView.findViewById(R.id.button_add_item);
+        Button reloadButton = dialogView.findViewById(R.id.button_reload);
 
         dialog = builder.create();
-
-        getSuggestedCategory(itemName, itemDescription);
-
-        addButton.setOnClickListener(v -> uploadItemImage(file));
-
         dialog.show();
+
+        // Show loading dialog while fetching suggestions
+        ProgressDialog progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setMessage("Suggesting a category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
+
+        progressDialogAddingItem = new ProgressDialog(requireActivity());
+        progressDialogAddingItem.setMessage("Adding Item...");
+        progressDialog.setCancelable(false);
+
+        addButton.setOnClickListener(v -> {
+            progressDialogAddingItem.show();
+            uploadItemImage(file);
+        });
+        reloadButton.setOnClickListener(v -> {
+            progressDialog.show();
+            getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
+        });
     }
 
-    private void getSuggestedCategory(String itemName, String itemDescription) {
+    private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
         Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
@@ -229,7 +302,7 @@ public class HomeFragment extends Fragment {
                 parentCategoryId = suggestedCategory.get(0).getCategoryID();
                 subcategoryId = suggestedCategory.get(1).getCategoryID();
                 List<String> categories = new ArrayList<>();
-                categories.add(suggestedCategory.get(0).getCategoryName()+ " - "+suggestedCategory.get(1).getCategoryName());
+                categories.add(suggestedCategory.get(0).getCategoryName() + " - " + suggestedCategory.get(1).getCategoryName());
                 categories.add("Add Custom Category");
 
                 // Populate the Spinner
@@ -237,13 +310,10 @@ public class HomeFragment extends Fragment {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 suggestionSpinner.setAdapter(adapter);
 
-                suggestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                suggestionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
-                        if (categories.get(position).equals("Add Custom Category"))
-                        {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (categories.get(position).equals("Add Custom Category")) {
                             // Show dialog to input custom category
                             showCustomCategoryDialog(categories, adapter);
                         }
@@ -253,12 +323,19 @@ public class HomeFragment extends Fragment {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+                // Hide the loading dialog and reload button after suggestions are fetched
+                progressDialog.dismiss();
+                reloadButton.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(String error) {
                 Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
 
+                // Hide the loading dialog and show the reload button in case of failure
+                progressDialog.dismiss();
+                reloadButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -282,7 +359,7 @@ public class HomeFragment extends Fragment {
                 // Get selected item
                 currentSelectedCategory = parentView.getItemAtPosition(position).toString();
                 String parentCategory = "";
-                parentCategory = findCategoryByName(currentSelectedCategory);
+                parentCategory = findCategoryByName(currentSelectedCategory, "parent");
                 parentCategoryId = parentCategory;
                 if(!Objects.equals(parentCategory, "")){
                     parentCategoryId = parentCategory;
@@ -299,7 +376,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 currentSelectedSubcategory = parentView.getItemAtPosition(position).toString();
-                String subCategory = findCategoryByName(currentSelectedSubcategory);
+                String subCategory = findCategoryByName(currentSelectedSubcategory, "sub");
                 subcategoryId = subCategory;
                 if(!Objects.equals(subCategory, "")) {
                     subcategoryId = subCategory;
@@ -367,6 +444,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
+                progressDialogAddingItem.hide();
                 Intent intent = new Intent(requireActivity(), HomeActivity.class);
                 startActivity(intent);
                 requireActivity().finish();
@@ -374,21 +452,34 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
+                progressDialogAddingItem.hide();
             }
         });
     }
 
-    private String findCategoryByName(String categoryName) {
-        for (CategoryModel category : categoryModelList) {
-            if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
-                requireActivity().runOnUiThread(() -> {
-                    Log.e("Filtering: ", category.getCategoryID());
-                });
-                return category.getCategoryID();
+    private String findCategoryByName(String categoryName, String type) {
+        if(Objects.equals(type, "parent")){
+            for (CategoryModel category : categoryModelList) {
+                if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                    requireActivity().runOnUiThread(() -> {
+                        Log.e("Filtering: ", category.getCategoryID());
+                    });
+                    return category.getCategoryID();
+                }
             }
         }
+        else {
+            for (CategoryModel category : subcategoryModelList) {
+                if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
+                    requireActivity().runOnUiThread(() -> {
+                        Log.e("Filtering: ", category.getCategoryID());
+                    });
+                    return category.getCategoryID();
+                }
+            }
+        }
+
         return ""; // Return null if no category with the given name is found
     }
 
@@ -397,6 +488,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId != 0) {
+                    subCategories.clear();
+                    subcategoryModelList.clear();
+                    subcategoryModelList.addAll(result);
                     for (CategoryModel category : result) {
                         subCategories.add(category.getCategoryName());
                     }
@@ -493,10 +587,11 @@ public class HomeFragment extends Fragment {
     }
     public String getObjectUrl(String key)
     {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+        String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
+        Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
         addItem(url, itemName.getText().toString().trim(), itemDescription.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
 
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/"+key+".png";
+        return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
 
     @Override

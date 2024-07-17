@@ -7,4 +7,6 @@
     <color name="colorSecondary">#000000</color>
     <color name="colorPrimary">#0582ca</color>
     <color name="background">#F2F2F2</color>
+    <color name="skeleton_color">#E0E0E0</color>
+
 </resources>

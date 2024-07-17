@@ -51,7 +51,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private static final String IMAGE_CACHE_NAME = "image.jpeg";
     private static final String IMAGE_CONTENT_TYPE = "image/png";
     private static final String IMAGE_PATH_FORMAT = "public/Category/%s.png";
-    private static final String STORAGE_URL_FORMAT = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/Category/%s.png";
+    private static final String STORAGE_URL_FORMAT = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Category/%s.png";
 
     private File imageFile;
     private RadioGroup radioGroup;
@@ -179,6 +179,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private void handleAddButtonClick() {
         loadingScreen.setVisibility(View.VISIBLE);
         addCategoryLayout.setVisibility(View.GONE);
+        addButton.setVisibility(View.GONE);
         if (isParentCategorySelected()) {
             handleParentCategory();
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
@@ -357,6 +358,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                 showToast("Failed to add category: " + error);
                 loadingScreen.setVisibility(View.GONE);
                 addCategoryLayout.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
             }
         });
     }
