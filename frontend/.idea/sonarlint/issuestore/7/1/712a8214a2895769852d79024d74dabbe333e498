@@ -1,8 +1,8 @@
 
-·
-java:S4165í"nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8°Ë‘ˆ‹2J$05bcce94-8b54-44d6-806b-a84987daa9b1
 ´
 java:S4165ş"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8€‘ˆ‹2J$8a4858cb-6558-4fb2-92c2-c107aa8c24e7
+·
+java:S4165í"nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8°Ë‘ˆ‹2J$05bcce94-8b54-44d6-806b-a84987daa9b1
 
 java:S1192¾"FDefine a constant instead of duplicating this literal "email" 3 times.(ÄÇãøÿÿÿÿ8ìîˆ‹2J$c638af52-7b73-4b42-a211-d61b112f0e97
 

@@ -17,50 +17,62 @@ import android.widget.Toast;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
 import com.example.smartstorageorganizer.adapters.UsersAdapter;
-import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class RequestFragment extends Fragment {
-
     View root;
     List<UserModel> cardItemList;
     UsersAdapter requestAdapter;
     String currentEmail;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        root =  inflater.inflate(R.layout.fragment_request, container, false);
+        root = inflater.inflate(R.layout.fragment_request, container, false);
 
-        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
-
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        shimmerFrameLayout = root.findViewById(R.id.shimmer_view_container);
+        recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         cardItemList = new ArrayList<>();
-
         requestAdapter = new UsersAdapter(getContext(), cardItemList);
         recyclerView.setAdapter(requestAdapter);
 
         return root;
     }
 
-    private CompletableFuture<Boolean> getDetails()
-    {
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
+    @Override
+    public void onResume() {
+        super.onResume();
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        refreshData();
+    }
+
+    private void refreshData() {
+        cardItemList.clear();
+        requestAdapter.notifyDataSetChanged();
+
+        getDetails().thenAccept(getDetails -> Log.i("AuthDemo", "User is signed in"));
+    }
+
+    private CompletableFuture<Boolean> getDetails() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
-
                     for (AuthUserAttribute attribute : attributes) {
                         switch (attribute.getKey().getKeyString()) {
                             case "email":
@@ -70,30 +82,34 @@ public class RequestFragment extends Fragment {
                             default:
                         }
                     }
-                    Log.i("progress","User attributes fetched successfully");
-
+                    Log.i("progress", "User attributes fetched successfully");
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
-
+                error -> {
+                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    future.complete(false);
+                }
         );
         return future;
     }
 
     private void getUsersInGroup(String username, String type, String authorizationToken) {
-//        String email = getIntent().getStringExtra(EMAIL_KEY);
         UserUtils.getUsersInGroup(username, type, authorizationToken, requireActivity(), new OperationCallback<List<UserModel>>() {
             @Override
             public void onSuccess(List<UserModel> result) {
                 cardItemList.addAll(result);
                 requestAdapter.notifyDataSetChanged();
 
-                Toast.makeText(requireActivity(), "user groups fetched successful: ", Toast.LENGTH_LONG).show();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                Toast.makeText(requireActivity(), "User groups fetched successfully", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(requireActivity(), "user groups fetched failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireActivity(), "Failed to fetch user groups", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -3,7 +3,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.users.RequestFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shimmer_auto_start="true"
+            app:shimmer_duration="1500"
+            app:shimmer_repeat_mode="restart"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:background="@color/skeleton_color" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/skeleton_color" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/skeleton_color" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/skeleton_color" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/skeleton_color" />
+                </LinearLayout>
+
+            </ScrollView>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +78,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </FrameLayout>

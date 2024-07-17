@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.EmailVerificationActivity;
 import com.example.smartstorageorganizer.LoginActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -41,7 +42,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         UserModel cardItem = usersList.get(position);
-        holder.name.setText(cardItem.getEmail());
+        holder.name.setText(cardItem.getEmail()+" ("+cardItem.getName()+")");
         if (Objects.equals(cardItem.getStatus(), "Active")) {
             holder.approveButton.setVisibility(View.GONE);
             holder.declineButton.setText(cardItem.getStatus());
@@ -61,7 +62,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            setUserToVerified(cardItem.getEmail(), "", holder.getAdapterPosition(), progressDialog);
+            setUserRole(cardItem.getEmail(), "guestUser", "", holder.getAdapterPosition(), progressDialog);
         });
     }
 
@@ -121,6 +122,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             public void onFailure(String error) {
 //                hideLoading();
                 Toast.makeText(context, "user verification failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setUserRole(String username, String role, String authorization, int position, ProgressDialog progressDialog) {
+        UserUtils.setUserRole(username, role, authorization, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    setUserToVerified(username, "", position, progressDialog);
+                    Toast.makeText(context, "user role set successfully ", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "user role set failed", Toast.LENGTH_LONG).show();
             }
         });
     }
