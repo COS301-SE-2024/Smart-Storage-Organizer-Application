@@ -2,13 +2,17 @@ package com.example.smartstorageorganizer.ui.home;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,6 +31,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,7 +63,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -66,6 +75,11 @@ public class HomeFragment extends Fragment {
     Spinner suggestionSpinner, colorSpinner;
     List<CategoryModel> suggestedCategory = new ArrayList<>();
     int PICK_IMAGE_MULTIPLE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+
+
     private static final int GALLERY_CODE = 1;
     private String currentSelectedCategory, currentSelectedSubcategory;
     Uri ImageUri;
@@ -99,6 +113,8 @@ public class HomeFragment extends Fragment {
     private TextView recentText;
     private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
+    private String imageFilePath;  // Global variable to hold the image file path
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -222,6 +238,9 @@ public class HomeFragment extends Fragment {
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
+        Button buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
+
+        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
 
         // Disable the button initially
         buttonNext.setEnabled(false);
@@ -254,6 +273,72 @@ public class HomeFragment extends Fragment {
 
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+    private void showImagePickerDialog() {
+        String[] options = {"Take Photo", "Choose from Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Action");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                takePhoto();
+            } else if (which == 1) {
+                OpenGallery();
+            }
+        });
+        builder.show();
+    }
+
+//    private void takePhoto() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
+
+    private void takePhoto() {
+        // Check if the CAMERA permission is granted
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request CAMERA permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        }
+        else
+        {
+            // Permission already granted, proceed with taking the photo
+//            dispatchTakePictureIntent();
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "${applicationId}.provider", photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        imageFilePath = image.getAbsolutePath();
+        return image;
     }
 
     private void showSuggestionPopup(String itemName, String itemDescription) {
@@ -530,7 +615,7 @@ public class HomeFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
 
             imagesEncodedList = new ArrayList<>();
 
