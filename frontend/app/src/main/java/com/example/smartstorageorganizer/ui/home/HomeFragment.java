@@ -222,6 +222,7 @@ public class HomeFragment extends Fragment {
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
+        Button buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
 
         // Disable the button initially
         buttonNext.setEnabled(false);

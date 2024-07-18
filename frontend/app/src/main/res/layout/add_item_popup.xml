@@ -24,6 +24,13 @@
         android:src="@drawable/no_image"
         android:layout_marginTop="16dp"
         android:layout_gravity="center"/>
+    <Button
+        android:id="@+id/button_take_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take Photo"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -54,22 +61,6 @@
                 android:hint="Description"
                 android:inputType="textAutoComplete"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_marginStart="24dp"-->
-<!--        android:layout_marginEnd="24dp"-->
-<!--        style="CustomTextInputOutlinedBox">-->
-<!--        <Spinner-->
-<!--            android:id="@+id/item_category_spinner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"/>-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-
-
         <Button
             android:id="@+id/button_next_item"
             android:layout_width="wrap_content"
