@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -66,6 +67,10 @@ public class HomeFragment extends Fragment {
     Spinner suggestionSpinner, colorSpinner;
     List<CategoryModel> suggestedCategory = new ArrayList<>();
     int PICK_IMAGE_MULTIPLE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
+
+
     private static final int GALLERY_CODE = 1;
     private String currentSelectedCategory, currentSelectedSubcategory;
     Uri ImageUri;
@@ -224,6 +229,8 @@ public class HomeFragment extends Fragment {
         buttonNext = dialogView.findViewById(R.id.button_next_item);
         Button buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
 
+        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
+
         // Disable the button initially
         buttonNext.setEnabled(false);
 
@@ -255,6 +262,28 @@ public class HomeFragment extends Fragment {
 
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+    private void showImagePickerDialog() {
+        String[] options = {"Take Photo", "Choose from Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Action");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                takePhoto();
+            } else if (which == 1) {
+                OpenGallery();
+            }
+        });
+        builder.show();
+    }
+
+    private void takePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     private void showSuggestionPopup(String itemName, String itemDescription) {
