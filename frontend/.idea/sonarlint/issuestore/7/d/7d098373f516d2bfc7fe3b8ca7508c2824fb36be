@@ -1,9 +1,9 @@
 
-“	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8“´úŸˆ2J$17466858-f6cf-433a-bd57-6bb2be256217
-”	java:S117Œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8“´úŸˆ2J$600ff804-1ab9-44e3-9e4e-140fab5c329a
-
-java:S1192U"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8—´úŸˆ2J$295b1306-0e00-4986-a2af-8f259aad55ab
-o
-java:S1602R",Remove useless curly braces around statement(Å²şÙ8·´úŸˆ2J$d7947c87-59c4-4b0f-8c06-5cf14d20d94c
-ƒ	java:S125["<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8¼´úŸˆ2J$cf930fcf-2352-4c35-ac90-65fff48fc9a5
-ƒ	java:S125|"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8Æ´úŸˆ2J$0342d13d-9ac8-46b4-bd63-19828c942897
+m	java:S117‹"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(…çæX8éû–Œ2
+n	java:S117Œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô²şò8êû–Œ2
+i
+java:S1192U"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(ÚÑîù8óû–Œ2
+I
+java:S1602R",Remove useless curly braces around statement(Å²şÙ8¦ü–Œ2
+]	java:S125["<This block of commented-out lines of code should be removed.(‰Î÷¡ıÿÿÿÿ8ªü–Œ2
+]	java:S125|"<This block of commented-out lines of code should be removed.(¢‡Îçûÿÿÿÿ8·ü–Œ2

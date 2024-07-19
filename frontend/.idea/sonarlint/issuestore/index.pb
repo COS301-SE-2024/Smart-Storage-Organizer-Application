@@ -38,3 +38,7 @@ P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 |
 Lapp/src/main/java/com/example/smartstorageorganizer/CodeScannerActivity.java,c\f\cf7e903039ee99f6487ccecbdce61713e02ec5ab
+w
+Gapp/src/main/java/com/example/smartstorageorganizer/SearchActivity.java,8\f\8fa1870da0f8b0cf9e0e9dadd917f79633d78ec0
+†
+Vapp/src/main/java/com/example/smartstorageorganizer/adapters/SearchResultsAdapter.java,2\c\2c26288ad19c6e2db531225e7d52c274fff47c32

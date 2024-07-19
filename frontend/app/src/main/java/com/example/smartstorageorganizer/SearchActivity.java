@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -66,8 +67,21 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
 
+        // Inflate the custom search view layout
+        searchItem.setActionView(R.layout.search_view_with_icon);
+
+        // Get references to the SearchView and the search icon
+        SearchView searchView = searchItem.getActionView().findViewById(R.id.search_view);
+        ImageView searchIcon = searchItem.getActionView().findViewById(R.id.search_icon);
+
+        // Set up the search icon click listener
+        searchIcon.setOnClickListener(v -> {
+            String query = searchView.getQuery().toString();
+            performSearch(query);
+        });
+
+        // Set up the query text listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -97,6 +111,10 @@ public class SearchActivity extends AppCompatActivity {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
+            private void run() {
+                adapter.updateData(searchResults);
+            }
+
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
@@ -109,9 +127,7 @@ public class SearchActivity extends AppCompatActivity {
                     String responseData = response.body().string();
                     // Assuming responseData is a JSON array of items
                     searchResults = parseSearchResults(responseData);
-                    runOnUiThread(() -> {
-                        adapter.updateData(searchResults);
-                    });
+                    runOnUiThread(this::run);
                 } else {
                     runOnUiThread(() -> Log.e("SearchActivity", "Search request failed: " + response.code()));
                 }
