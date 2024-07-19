@@ -67,6 +67,13 @@
                     android:paddingTop="4dp"
                     android:layout_gravity="center"/>
 
+                <ImageView
+                    android:id="@+id/tick_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check_24dp" />
+
             </LinearLayout>
         </LinearLayout>
         <!-- Delete Icon -->
