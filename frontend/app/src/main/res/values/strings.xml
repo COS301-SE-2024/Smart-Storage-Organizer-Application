@@ -99,5 +99,7 @@
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="nextbtn">Next</string>
+    <string name="no_items_found">No Items Found!</string>
+    <string name="welcome_to_your_smart_storage_organizer">Welcome to your smart storage organizer</string>
 
 </resources>

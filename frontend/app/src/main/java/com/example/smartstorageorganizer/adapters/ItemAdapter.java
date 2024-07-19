@@ -79,6 +79,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             context.startActivity(intent);
         });
 
+
+
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
