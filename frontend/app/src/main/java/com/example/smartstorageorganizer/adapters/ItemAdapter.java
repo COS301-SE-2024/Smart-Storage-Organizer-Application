@@ -4,6 +4,7 @@ package com.example.smartstorageorganizer.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,10 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,6 +42,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
+    private final Set<Integer> selectedItems = new HashSet<>();
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -79,6 +83,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             context.startActivity(intent);
         });
 
+        // Handle item long click to select
+        holder.itemView.setOnLongClickListener(view -> {
+            toggleSelection(holder.getAdapterPosition());
+            return true;
+        });
 
 
         // Handle delete icon click
@@ -86,6 +95,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
             // Show a confirmation dialog or directly delete the item
         });
+    }
+
+    private void toggleSelection(int position) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(Integer.valueOf(position));
+        } else {
+            selectedItems.add(position);
+        }
+        notifyItemChanged(position);
     }
 
     @Override
@@ -99,6 +117,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView description;
         ImageView itemImage;
         ImageView deleteIcon;
+        ImageView tickIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,6 +126,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);
             deleteIcon = itemView.findViewById(R.id.delete_icon);  // Initialize delete icon
+            tickIcon = itemView.findViewById(R.id.tick_icon);
 
         }
     }

@@ -13,3 +13,7 @@ D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+O
+amplify/team-provider-info.json,2\a\2a936681202283da3416fae7099b0d9b111fceb3
+S
+#amplify/backend/backend-config.json,9\4\947ed310829b54f4451f87fc5f31ae441d4abb2a
