@@ -185,6 +185,10 @@ dependencies {
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.amplifyframework:aws-api:2.16.1")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
+    implementation("com.amplifyframework:aws-pushnotifications:1.28.1")
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+
+
 
     // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
@@ -209,6 +213,8 @@ dependencies {
     implementation("com.amplifyframework:aws-storage-s3:2.16.1")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+
 
 
 

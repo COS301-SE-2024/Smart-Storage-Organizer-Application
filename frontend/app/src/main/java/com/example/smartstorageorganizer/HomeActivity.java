@@ -25,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -85,6 +87,21 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        FirebaseApp.initializeApp(this);
+
+        // Get FCM registration token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Get new FCM registration token
+                    String token = task.getResult();
+                    Log.d("HomeActivity", "FCM Registration Token: " + token);
+                });
     }
 
     @Override
@@ -93,6 +110,8 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -337,20 +356,20 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
-    public void FetchByID(int id)
-    {
-        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByIDEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
+//    public void FetchByID(int id)
+//    {
+//        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
+//
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = BuildConfig.FetchByIDEndPoint;
+//        RequestBody body = RequestBody.create(json, JSON);
+//
+//        Request request = new Request.Builder()
+//                .url(API_URL)
+//                .post(body)
+//                .build();
+//    }
 
 //    public void GenerateQrcode(int id)
 //    {
