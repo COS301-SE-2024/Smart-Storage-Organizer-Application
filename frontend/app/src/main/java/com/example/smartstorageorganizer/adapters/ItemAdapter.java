@@ -89,6 +89,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             return true;
         });
 
+        // Show/hide tick icon based on selection
+        if (selectedItems.contains(position)) {
+            holder.tickIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.tickIcon.setVisibility(View.GONE);
+        }
 
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
