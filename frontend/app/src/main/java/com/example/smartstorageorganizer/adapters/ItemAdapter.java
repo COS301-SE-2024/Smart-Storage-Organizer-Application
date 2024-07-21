@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +100,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         // Handle item long click to select
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(holder.getAdapterPosition());
+            if (!selectedItems.isEmpty()) {
+                showThreeDotMenu(view);
+            }
             return true;
         });
 
@@ -113,6 +118,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
             // Show a confirmation dialog or directly delete the item
         });
+    }
+
+    private void showThreeDotMenu(View view) {
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.select_items_menu, popup.getMenu());
+
+
+
+        popup.show();
     }
 
     private void toggleSelection(int position) {
