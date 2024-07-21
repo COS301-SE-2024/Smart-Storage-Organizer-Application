@@ -17,3 +17,7 @@ O
 amplify/team-provider-info.json,2\a\2a936681202283da3416fae7099b0d9b111fceb3
 S
 #amplify/backend/backend-config.json,9\4\947ed310829b54f4451f87fc5f31ae441d4abb2a
+}
+Mapp/src/main/java/com/example/smartstorageorganizer/AddColorCodeActivity.java,5\9\597b389a56edd6a4f666f820daf54c1e5b4f207e
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc

@@ -22,6 +22,7 @@
         tools:ignore="ScopedStorage" />
 
 
+
     <application
         android:name=".MyAmplifyApp"
         android:allowBackup="true"

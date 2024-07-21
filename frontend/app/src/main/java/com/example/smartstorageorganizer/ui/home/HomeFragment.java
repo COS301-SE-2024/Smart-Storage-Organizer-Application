@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer.ui.home;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -103,6 +104,7 @@ public class HomeFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private String parentCategoryId, subcategoryId;
     Button buttonNext;
+    Button buttonTakePhoto;
     EditText itemDescription, itemName;
     ImageView itemImage;
     private List<String> parentCategories = new ArrayList<>();
@@ -238,7 +240,7 @@ public class HomeFragment extends Fragment {
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
-        Button buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
+        buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
 
         buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
 
@@ -290,17 +292,11 @@ public class HomeFragment extends Fragment {
         builder.show();
     }
 
-//    private void takePhoto() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
-
     private void takePhoto() {
         // Check if the CAMERA permission is granted
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED)
+        {
             // Request CAMERA permission
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.CAMERA},
@@ -319,7 +315,7 @@ public class HomeFragment extends Fragment {
                     ex.printStackTrace();
                 }
                 if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "${applicationId}.provider", photoFile);
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.example.smartstorageorganizer.provider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
@@ -615,7 +611,7 @@ public class HomeFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK  && data != null) {
 
             imagesEncodedList = new ArrayList<>();
 
