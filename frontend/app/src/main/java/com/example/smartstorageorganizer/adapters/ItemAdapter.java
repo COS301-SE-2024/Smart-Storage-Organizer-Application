@@ -59,12 +59,24 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
+        ItemModel item = itemModelList.get(position);
+
         holder.name.setText(itemModelList.get(position).getItemName());
         holder.description.setText(itemModelList.get(position).getDescription());
 
         if (!Objects.equals(itemModelList.get(position).getItemImage(), "empty")) {
             Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
+
+        // Set background color based on color coding
+//        if (item.getColourCoding() != null && !item.getColourCoding().isEmpty()) {
+//            holder.itemView.setBackgroundColor(Color.parseColor(item.getColourCoding()));
+//        } else {
+//            // Default color if no color coding is set
+//            holder.itemView.setBackgroundColor(Color.WHITE);
+//        }
+//        updateColorCoding(item.getColourCoding());
+
 
 //        to view on the next page whenever it clicks use onClick()
         holder.itemView.setOnClickListener(view -> {
@@ -224,6 +236,56 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
+
+
+    private void updateColorCoding(String colorCode) {
+        for (Integer position : selectedItems) {
+            ItemModel item = itemModelList.get(position);
+            item.setColourCoding(colorCode); // Update the color coding in the model
+
+            // Optionally, update the server with the new color coding
+            updateItemColorCodingOnServer(item.getItemId(), colorCode);
+        }
+        notifyDataSetChanged(); // Refresh the RecyclerView to reflect the changes
+    }
+
+    private void updateItemColorCodingOnServer(String itemId, String colorCode) {
+        try {
+            String json = "{\"item_id\":\"" + itemId + "\", \"color_code\":\"" + colorCode + "\"}";
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            String API_URL = BuildConfig.AddColourEndPoint;
+            RequestBody body = RequestBody.create(json, JSON);
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    // Handle request failure
+                    Log.e("Update Color Coding", "Error updating color coding", e);
+                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        // Handle successful response
+                        Log.d("Update Color Coding", "Color coding updated successfully");
+                    } else {
+                        // Handle failure response
+                        Log.e("Update Color Coding", "Failed to update color coding. Response code: " + response.code());
+                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.e("Update Color Coding", "Exception occurred", e);
+        }
+    }
+
 }
 
 
