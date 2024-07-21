@@ -630,6 +630,7 @@ public class HomeFragment extends Fragment {
                 if (nfile.exists()) {
                     Bitmap myBitmap = BitmapFactory.decodeFile(nfile.getAbsolutePath());
                     itemImage.setImageBitmap(myBitmap);
+                    saveBitmapToGallery(myBitmap);
                     saveBitmapToFile(myBitmap);
                 }
             }
@@ -654,6 +655,20 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void saveBitmapToGallery(Bitmap bitmap) {
+        String savedImageURL = MediaStore.Images.Media.insertImage(
+                getActivity().getContentResolver(),
+                bitmap,
+                "MyImage",
+                "Image of something"
+        );
+        Uri savedImageURI = Uri.parse(savedImageURL);
+
+        // Optional: Display a toast message
+        Toast.makeText(getActivity(), "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
+    }
+
 
     public void uploadItemImage(File parentCategoryImage)
     {
