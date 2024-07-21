@@ -21,3 +21,5 @@ S
 Mapp/src/main/java/com/example/smartstorageorganizer/AddColorCodeActivity.java,5\9\597b389a56edd6a4f666f820daf54c1e5b4f207e
 u
 Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
+t
+Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0607d6b6e614428b9a1fa3bef3bf2a7e11fc

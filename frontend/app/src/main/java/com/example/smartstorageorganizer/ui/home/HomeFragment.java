@@ -521,6 +521,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
+        Toast.makeText(requireActivity(), "Before postAddItem ", Toast.LENGTH_LONG).show();
         Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail, requireActivity(), new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
@@ -626,9 +627,9 @@ public class HomeFragment extends Fragment {
                     saveBitmapToFile(getBitmapFromUri(ImageUri));
                 }
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                File nfile = new File(imageFilePath);
-                if (nfile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(nfile.getAbsolutePath());
+                file = new File(imageFilePath);
+                if (file.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                     itemImage.setImageBitmap(myBitmap);
                     saveBitmapToGallery(myBitmap);
                     saveBitmapToFile(myBitmap);
@@ -647,8 +648,8 @@ public class HomeFragment extends Fragment {
 
     private void saveBitmapToFile(Bitmap bitmap) {
         // Create a file to save the image
-        File imgfile = new File(requireActivity().getCacheDir(), "image.jpeg");
-        try (FileOutputStream fos = new FileOutputStream(imgfile)) {
+        file = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
         } catch (IOException e) {
