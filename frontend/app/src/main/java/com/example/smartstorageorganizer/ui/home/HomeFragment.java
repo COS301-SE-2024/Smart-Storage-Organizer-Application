@@ -366,12 +366,29 @@ public class HomeFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
             progressDialogAddingItem.show();
-            uploadItemImage(file);
+            File compressedFile = compressImage(file);
+            uploadItemImage(compressedFile);
         });
         reloadButton.setOnClickListener(v -> {
             progressDialog.show();
             getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
         });
+    }
+
+    // Compress the image to avoid taking time to upload to the server
+    private File compressImage(File file) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            File compressedFile = new File(requireActivity().getCacheDir(), "compressed_image.jpeg");
+            try (FileOutputStream fos = new FileOutputStream(compressedFile)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos); // Compress to 50%
+                fos.flush();
+            }
+            return compressedFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return file; // Fallback to original if compression fails
+        }
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
