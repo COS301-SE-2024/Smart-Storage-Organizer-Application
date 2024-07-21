@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -88,7 +89,6 @@ public class HomeFragment extends Fragment {
     File file;
     List<String> imagesEncodedList;
     private Spinner parentSpinner, subcategorySpinner;
-
     LottieAnimationView fetchItemsLoader;
     RecyclerView.LayoutManager layoutManager;
     private TextView name;
@@ -117,7 +117,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
     private String imageFilePath;  // Global variable to hold the image file path
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -316,12 +315,14 @@ public class HomeFragment extends Fragment {
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.example.smartstorageorganizer.provider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    Toast.makeText(context, "PhotoFile not null", Toast.LENGTH_SHORT).show();
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
         }
 
     }
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -616,41 +617,37 @@ public class HomeFragment extends Fragment {
                 if (data.getData() != null) {
                     ImageUri = data.getData();
                     itemImage.setImageURI(ImageUri);
-                    saveBitmapToFile();
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
                 } else if (data.getClipData() != null) {
                     ImageUri = data.getClipData().getItemAt(0).getUri();
                     itemImage.setImageURI(ImageUri);
-                    saveBitmapToFile();
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
                 }
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                File imgFile = new File(requireActivity().getCacheDir(), "image.jpeg");
-                if (imgFile.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                File nfile = new File(imageFilePath);
+                if (nfile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(nfile.getAbsolutePath());
                     itemImage.setImageBitmap(myBitmap);
                     saveBitmapToFile(myBitmap);
                 }
             }
         }
     }
-
-    private void saveBitmapToFile() {
-        BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        // Create a file to save the image
-        file = new File(requireActivity().getCacheDir(), "image.jpeg");
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
     private void saveBitmapToFile(Bitmap bitmap) {
         // Create a file to save the image
-        file = new File(requireActivity().getCacheDir(), "image.jpeg");
-        try (FileOutputStream fos = new FileOutputStream(file)) {
+        File imgfile = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(imgfile)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
         } catch (IOException e) {
