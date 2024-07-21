@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -240,9 +241,9 @@ public class HomeFragment extends Fragment {
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
-        buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
+//        buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
 
-        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
+//        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
 
         // Disable the button initially
         buttonNext.setEnabled(false);
@@ -266,7 +267,7 @@ public class HomeFragment extends Fragment {
         itemName.addTextChangedListener(textWatcher);
         itemDescription.addTextChangedListener(textWatcher);
 
-        itemImage.setOnClickListener(v -> OpenGallery());
+        itemImage.setOnClickListener(v -> showImagePickerDialog());
 
         buttonNext.setOnClickListener(v -> {
             showSuggestionPopup(itemName.getText().toString(), itemDescription.getText().toString());
@@ -304,8 +305,6 @@ public class HomeFragment extends Fragment {
         }
         else
         {
-            // Permission already granted, proceed with taking the photo
-//            dispatchTakePictureIntent();
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 File photoFile = null;
@@ -605,48 +604,57 @@ public class HomeFragment extends Fragment {
         galleryIntent.setType("image/*");
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //startActivityForResult(galleryIntent, GalleryPick);
         startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK  && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+                imagesEncodedList = new ArrayList<>();
 
-            imagesEncodedList = new ArrayList<>();
-
-            if (data.getData() != null) {
-                ImageUri = data.getData();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (data.getData() != null) {
+                    ImageUri = data.getData();
+                    itemImage.setImageURI(ImageUri);
+                    saveBitmapToFile();
+                } else if (data.getClipData() != null) {
+                    ImageUri = data.getClipData().getItemAt(0).getUri();
+                    itemImage.setImageURI(ImageUri);
+                    saveBitmapToFile();
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                File imgFile = new File(requireActivity().getCacheDir(), "image.jpeg");
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    itemImage.setImageBitmap(myBitmap);
+                    saveBitmapToFile(myBitmap);
                 }
             }
+        }
+    }
 
-            else if (data.getClipData() != null) {
-                ImageUri = data.getClipData().getItemAt(0).getUri();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
+    private void saveBitmapToFile() {
+        BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
 
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        // Create a file to save the image
+        file = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void saveBitmapToFile(Bitmap bitmap) {
+        // Create a file to save the image
+        file = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
