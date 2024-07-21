@@ -61,11 +61,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         Log.i("Adapter", "Adapter function.");
         ItemModel item = itemModelList.get(position);
 
-        holder.name.setText(itemModelList.get(position).getItemName());
-        holder.description.setText(itemModelList.get(position).getDescription());
+        holder.name.setText(item.getItemName());
+        holder.description.setText(item.getDescription());
 
-        if (!Objects.equals(itemModelList.get(position).getItemImage(), "empty")) {
-            Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
+        if (!Objects.equals(item.getItemImage(), "empty")) {
+            Glide.with(context).load(item.getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
         // Set background color based on color coding
