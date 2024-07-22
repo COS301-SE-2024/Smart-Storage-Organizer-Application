@@ -1,7 +1,10 @@
 package com.example.smartstorageorganizer.adapters;
 
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,6 +27,8 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
@@ -39,12 +44,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
+    private String currentEmail;
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -125,11 +132,96 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.select_items_menu, popup.getMenu());
 
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_select_all) {
+                selectAllItems();
+                return true;
+            } else if (itemId == R.id.action_assign_color) {
+                assignColorToSelectedItems();
+                return true;
+            } else {
+                return false;
+            }
+        });
 
 
         popup.show();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private void selectAllItems() {
+        // Add logic to select all items
+        for (int i = 0; i < itemModelList.size(); i++) {
+            selectedItems.add(i);
+        }
+        notifyDataSetChanged(); // Update the adapter to refresh the UI
+    }
+
+//    @SuppressLint("NotifyDataSetChanged")
+//    private void assignColorToSelectedItems() {
+//        // Add logic to assign color to selected items
+//        int color = getColorFromUser(); // Implement this method to get the desired color
+//        for (int position : selectedItems) {
+//            itemModelList.get(position).setColor(color); // Assuming your items have a setColor method
+//        }
+//        notifyDataSetChanged(); // Update the adapter to refresh the UI
+//    }
+
+    public interface OnColorSelectedListener {
+        void onColorSelected(int color);
+    }
+
+    private void assignColorToSelectedItems() {
+        showColorPickerDialog(context, color -> {
+            String colorCode = String.format("#%06X", (0xFFFFFF & color));
+            for (int position : selectedItems) {
+                 itemModelList.get(position);
+                addNewColorCode(colorCode, itemModelList.get(position).getItemName(), itemModelList.get(position).getDescription(), itemModelList.get(position).getItemId());
+            }
+            notifyDataSetChanged(); // Update the adapter to refresh the UI
+        });
+    }
+
+
+    private void showColorPickerDialog(Context context, OnColorSelectedListener listener) {
+        int initialColor = Color.RED; // Default color
+
+        AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(context, initialColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                // Color selected
+                listener.onColorSelected(color);
+            }
+
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+                // Action canceled
+            }
+        });
+
+        colorPickerDialog.show();
+    }
+
+    private void addNewColorCode(String colorCode, String title, String description, String itemId) {
+        Utils.addColourGroup(colorCode, title, description, currentEmail, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    // Assuming you might want to update the item on the server
+                    updateItemColorCodingOnServer(itemId, colorCode);
+//                    showToast("Color Code added successfully");
+                    // Optionally navigate or refresh the view
+                    // navigateToHome();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                showToast("Failed to add color code: " + error);
+            }
+        });
+    }
     private void toggleSelection(int position) {
         if (selectedItems.contains(position)) {
             selectedItems.remove(Integer.valueOf(position));
@@ -253,6 +345,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateColorCoding(String colorCode) {
         for (Integer position : selectedItems) {
             ItemModel item = itemModelList.get(position);
