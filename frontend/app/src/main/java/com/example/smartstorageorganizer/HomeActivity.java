@@ -85,6 +85,10 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        if (!isAdmin()) {
+            hideAdminMenuItems(navigationView.getMenu());
+        }
     }
 
     @Override
@@ -99,6 +103,17 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private boolean isAdmin() {
+        // Implement your logic to check if the user is an admin
+        // For example, check shared preferences, a database, or an API
+        return false; // Replace with actual logic
+    }
+
+    private void hideAdminMenuItems(Menu menu) {
+        menu.findItem(R.id.nav_requests).setVisible(false);
+        menu.findItem(R.id.nav_users).setVisible(false);
     }
 
     public CompletableFuture<Boolean> getDetails() {
