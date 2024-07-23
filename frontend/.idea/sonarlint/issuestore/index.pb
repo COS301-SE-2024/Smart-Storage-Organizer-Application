@@ -13,3 +13,17 @@ D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+€
+Papp/src/test/java/com/example/smartstorageorganizer/EditProfileActivityTest.java,3\3\3378155149634c4e9e34d872e6844f3e1edbba5c
+…
+Uapp/src/test/java/com/example/smartstorageorganizer/LoginActivityIntegrationTest.java,7\a\7a2883057338dec48edc55482c963f631636b32c
+
+Oapp/src/main/java/com/example/smartstorageorganizer/ViewColorCodesActivity.java,4\e\4ecb5ffa02d3bfc2fd990c4bb21dd29ebed3af01
+t
+Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0607d6b6e614428b9a1fa3bef3bf2a7e11fc
+ƒ
+Sapp/src/test/java/com/example/smartstorageorganizer/ViewColorCodesActivityTest.java,3\5\35f424a8c9e62a6e47affded5f6b633d16e84616
+z
+Japp/src/test/java/com/example/smartstorageorganizer/LoginActivityTest.java,d\5\d5926b97f81931e180a46460e93fdbe56a437f33
+‚
+Rapp/src/main/java/com/example/smartstorageorganizer/adapters/ColorCodeAdapter.java,0\9\09873ba46cbd442ef190284937f9fba16eddcc8c

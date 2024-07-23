@@ -1,8 +1,5 @@
 package com.example.smartstorageorganizer.adapters;
 
-
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,20 +13,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
-import com.example.smartstorageorganizer.model.ItemModel;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.ViewHolder> {
@@ -128,6 +120,15 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
         }
     }
 
+    public void selectItem(ColorCodeModel model) {
+        int position = itemModelList.indexOf(model);
+        if (position >= 0 && !selectedItems.contains(position)) {
+            selectedItems.add(position);
+            notifyItemChanged(position);
+            onSelectionChangedListener.onSelectionChanged(selectedItems);
+        }
+    }
+
     @Override
     public int getItemCount() {
         return itemModelList.size();
@@ -150,6 +151,10 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
             selectedColorCodes.add(itemModelList.get(position));
         }
         return selectedColorCodes;
+    }
+
+    public List<ColorCodeModel> getItemModelList() {
+        return itemModelList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -48,10 +48,10 @@ public class EditProfileActivityTest {
         String result;
 
         //When
-        when(editprofile.getObjectUrl(key)).thenReturn(key);
+        when(editprofile1.GetObjectUrl(key)).thenReturn(key);
 
         //Then
-        assertEquals(key, editprofile.getObjectUrl(key));
+        assertEquals(key, editprofile1.GetObjectUrl(key));
     }
 
     @Test
@@ -62,10 +62,10 @@ public class EditProfileActivityTest {
         AtomicBoolean result = new AtomicBoolean(false);
 
         //When
-        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(true));
+        when(editprofile1.UploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(true));
 
         //given
-        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
+        editprofile1.UploadProfilePicture(image).thenAccept(isResult->{
             if(isResult)
                 result.set(true);
             else
@@ -85,10 +85,10 @@ public class EditProfileActivityTest {
         AtomicBoolean result = new AtomicBoolean(false);
 
         //When
-        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(false));
+        when(editprofile1.UploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(false));
 
         //given
-        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
+        editprofile1.UploadProfilePicture(image).thenAccept(isResult->{
             if(isResult)
                 result.set(true);
             else
