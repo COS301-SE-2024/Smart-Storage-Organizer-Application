@@ -47,7 +47,7 @@ public class NewPasswordActivity extends AppCompatActivity {
         });
     }
 
-//    private CompletableFuture<Boolean> confirmResetPassword(String newPassword, String verificationCode) {
+    //    private CompletableFuture<Boolean> confirmResetPassword(String newPassword, String verificationCode) {
 //        Amplify.Auth.confirmPassword(
 //                newPassword,
 //                verificationCode,
