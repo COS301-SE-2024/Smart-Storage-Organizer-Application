@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.utils.ColorCodeManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
@@ -53,13 +54,13 @@ public class AddColorCodeActivity extends AppCompatActivity {
 
         mPickColorButton.setOnClickListener(v -> openColorPickerDialogue());
         addColorCodeButton.setOnClickListener(v -> {
+            mColorPreview.setVisibility(View.VISIBLE);
             gfgTextView.setTextColor(mDefaultColor);
             String color = convertIntToHexColor(mDefaultColor);
             String titleInput = titleEditText.getText().toString().trim();
             String descriptionInput = descriptionEditText.getText().toString().trim();
 
             if (validateForm(titleInput, descriptionInput)) {
-                //call the add color code function
                 addNewColorCode(color, titleInput, descriptionInput);
             }
         });
@@ -129,11 +130,11 @@ public class AddColorCodeActivity extends AppCompatActivity {
         colorPickerDialogue.show();
     }
 
-    private String convertIntToHexColor(int color) {
+    String convertIntToHexColor(int color) {
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
-    private void addNewColorCode(String colorCode, String title, String description) {
+    void addNewColorCode(String colorCode, String title, String description) {
         Utils.addColourGroup(colorCode, title, description, currentEmail, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

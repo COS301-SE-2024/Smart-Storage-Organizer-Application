@@ -211,6 +211,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
 
+    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.4.0")
 
 
 

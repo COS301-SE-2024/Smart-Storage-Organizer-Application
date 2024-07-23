@@ -1,15 +1,12 @@
 package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ApplicationProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
@@ -35,7 +32,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
 
-public class ViewColorCodesActivityTest {
+public class ViewColorCodesActivityIntegrationTest {
     private ViewColorCodesActivity activity;
     private RecyclerView colorCodeRecyclerView;
     private LottieAnimationView loadingScreen;
