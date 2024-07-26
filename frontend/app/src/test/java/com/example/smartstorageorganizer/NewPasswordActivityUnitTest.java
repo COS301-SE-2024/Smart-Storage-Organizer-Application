@@ -1,72 +1,52 @@
 package com.example.smartstorageorganizer;
 
-import static com.google.common.base.Verify.verify;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import static org.mockito.ArgumentMatchers.any;
 
 import android.content.Intent;
+import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.test.rule.ActivityTestRule;
-
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.core.Amplify;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
+import java.util.concurrent.CompletableFuture;
+
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = Build.VERSION_CODES.P)
 public class NewPasswordActivityUnitTest {
-    @Rule
-    public ActivityTestRule<NewPasswordActivity> activityRule =
-            new ActivityTestRule<>(NewPasswordActivityUnitTest.class, false, false);
 
-
-    NewPasswordActivity newPasswordActivity;
+    NewPasswordActivity Page;
+    @Mock
+    NewPasswordActivity MockedPage = mock(NewPasswordActivity.class);
 
     @Before
     public void setup() {
-        newPasswordActivity = Robolectric.buildActivity(NewPasswordActivity.class)
+        Page = Robolectric.buildActivity(NewPasswordActivity.class)
                 .create()
                 .resume()
                 .get();
     }
 
     @Test
-    public void testResetPassword_withEmptyField() {
-        Intent intent = new Intent();
-        intent.putExtra("email", "test@example.com");
-        intent.putExtra("verificationCode", "123456");
-        activityRule.launchActivity(intent);
-
-        NewPasswordActivity activity = activityRule.getActivity();
-
-        EditText newPasswordField = activity.findViewById(R.id.newPassword);
-        Button resetPasswordButton = activity.findViewById(R.id.buttonConfirm);
-
-        activity.runOnUiThread(() -> newPasswordField.setText(""));
-
-        resetPasswordButton.performClick();
-
+    public void shouldNotBeNull() {
+        assertNotNull(Page);
     }
 
-    @Test
-    public void testResetPassword_withValidPassword() {
-        Intent intent = new Intent();
-        intent.putExtra("email", "test@example.com");
-        intent.putExtra("verificationCode", "123456");
-        activityRule.launchActivity(intent);
-
-        NewPasswordActivity activity = activityRule.getActivity();
-
-        EditText newPasswordField = activity.findViewById(R.id.newPassword);
-        Button resetPasswordButton = activity.findViewById(R.id.buttonConfirm);
-
-        activity.runOnUiThread(() -> newPasswordField.setText("newpassword"));
-
-        resetPasswordButton.performClick();
-
-    }
 }

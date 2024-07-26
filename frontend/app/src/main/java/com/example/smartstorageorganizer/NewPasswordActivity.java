@@ -76,4 +76,6 @@ public class NewPasswordActivity extends AppCompatActivity {
                 error -> {Log.e("AuthQuickstart", error.toString());  future.complete(false);}
         );
     }
+
+
 }

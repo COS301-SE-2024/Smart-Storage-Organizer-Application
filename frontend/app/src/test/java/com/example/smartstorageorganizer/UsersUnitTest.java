@@ -35,15 +35,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
-public class HelpActivityTest {
+public class UsersUnitTest {
 
-    HelpActivity Page;
+    UsersActivity Page;
     @Mock
-    HelpActivity MockedPage = mock(HelpActivity.class);
+    UsersActivity MockedPage = mock(UsersActivity.class);
 
     @Before
     public void setup() {
-        Page = Robolectric.buildActivity(HelpActivity.class)
+        Page = Robolectric.buildActivity(UsersActivity.class)
                 .create()
                 .resume()
                 .get();
