@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
   "auth": {
-    "smart": {
+    "amplyAuth": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "CreatedSNSRole": "string",
@@ -12,7 +12,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "s3smartstoragef0629f01": {
+    "s3frontendstorage5dbd9817": {
       "BucketName": "string",
       "Region": "string"
     }

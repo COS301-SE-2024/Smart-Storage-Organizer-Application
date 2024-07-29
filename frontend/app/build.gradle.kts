@@ -74,7 +74,7 @@ android {
         buildConfigField("String", "FetchByIDEndPoint", "\"${localProperties["FetchByIDEndPoint"]}\"");
 
         buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"");
-        buildConfigField("String", "SearchItem", "\"${localProperties["SearchItem"]}\"");
+        buildConfigField("String", "SearchEndPoint", "\"${localProperties["SearchEndPoint"]}\"");
 
 
     }

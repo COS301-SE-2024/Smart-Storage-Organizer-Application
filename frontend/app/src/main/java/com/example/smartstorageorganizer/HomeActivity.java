@@ -28,6 +28,7 @@ import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.MediaType;
@@ -95,23 +96,23 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.home, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+//        SearchView searchView = (SearchView) searchItem.getActionView();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Handle the search query and start SearchActivity
-                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
-                intent.putExtra("query", query);
-                startActivity(intent);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                // Handle the search query and start SearchActivity
+//                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+//                intent.putExtra("query", query);
+//                startActivity(intent);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
 
         return true;
     }
@@ -359,34 +360,34 @@ public class HomeActivity extends AppCompatActivity {
                 .post(body)
                 .build();
     }
-//    public void FetchByID(int id)
-//    {
-//        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
-//
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = BuildConfig.FetchByIDEndPoint;
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//    }
+    public void FetchByID(int id)
+    {
+        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
 
-//    public void GenerateQrcode(int id)
-//    {
-//        String json = "{\"data\":\""+Integer.toString(id)+"\"}";
-//
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = BuildConfig.GenerateQrcode;
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//    }
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchByIDEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
+
+    public void GenerateQrcode(int id)
+    {
+        String json = "{\"data\":\""+Integer.toString(id)+"\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.GenerateQrcode;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+    }
 }
 
