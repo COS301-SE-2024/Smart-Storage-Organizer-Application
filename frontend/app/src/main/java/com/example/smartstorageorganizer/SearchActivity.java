@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SearchResultsAdapter adapter;
     private List<Item> searchResults;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,26 +109,22 @@ public class SearchActivity extends AppCompatActivity {
     private void startVoiceSearch() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search");
-        try {
-            startActivityForResult(intent, VOICE_SEARCH_REQUEST_CODE);
-        } catch (Exception e) {
-            Log.e("SearchActivity", "Voice search failed", e);
-        }
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now");
+        voiceSearchLauncher.launch(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == VOICE_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (results != null && !results.isEmpty()) {
-                String query = results.get(0);
-                performSearch(query);
+    private final ActivityResultLauncher<Intent> voiceSearchLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (matches != null && !matches.isEmpty()) {
+                        String query = matches.get(0);
+                        searchView.setQuery(query, true);
+                    }
+                }
             }
-        }
-    }
+    );
 
     private void performSearch(String query) {
         OkHttpClient client = new OkHttpClient();
