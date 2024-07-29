@@ -19,4 +19,12 @@
         android:src="@android:drawable/ic_menu_search"
         android:padding="8dp"
         android:contentDescription="Search" />
+    <ImageButton
+        android:id="@+id/voice_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:src="@drawable/ic_voice_search"
+        android:contentDescription="Voice Search"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
 </LinearLayout>

@@ -3,9 +3,11 @@ package com.example.smartstorageorganizer;
 import android.content.Intent;
 import android.media.RouteListingPreference;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -74,12 +76,15 @@ public class SearchActivity extends AppCompatActivity {
         // Get references to the SearchView and the search icon
         SearchView searchView = searchItem.getActionView().findViewById(R.id.search_view);
         ImageView searchIcon = searchItem.getActionView().findViewById(R.id.search_icon);
+        ImageButton voiceSearchButton = searchItem.getActionView().findViewById(R.id.voice_search_button);
 
         // Set up the search icon click listener
         searchIcon.setOnClickListener(v -> {
             String query = searchView.getQuery().toString();
             performSearch(query);
         });
+
+        voiceSearchButton.setOnClickListener(v -> startVoiceSearch());
 
         // Set up the query text listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -96,6 +101,30 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    private void startVoiceSearch() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search");
+        try {
+            startActivityForResult(intent, VOICE_SEARCH_REQUEST_CODE);
+        } catch (Exception e) {
+            Log.e("SearchActivity", "Voice search failed", e);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VOICE_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (results != null && !results.isEmpty()) {
+                String query = results.get(0);
+                performSearch(query);
+            }
+        }
     }
 
     private void performSearch(String query) {
