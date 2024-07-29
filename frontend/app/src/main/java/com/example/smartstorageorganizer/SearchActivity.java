@@ -84,7 +84,7 @@ public class SearchActivity extends AppCompatActivity {
         // Set up the search icon click listener
         searchIcon.setOnClickListener(v -> {
             String query = searchView.getQuery().toString();
-            performSearch(query);
+            performSearch(query, "", ""); // You can customize parentcategoryid and subcategoryid as needed
         });
 
         voiceSearchButton.setOnClickListener(v -> startVoiceSearch());
@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                performSearch(query);
+                performSearch(query, "", ""); // You can customize parentcategoryid and subcategoryid as needed
                 return true;
             }
 
@@ -126,11 +126,16 @@ public class SearchActivity extends AppCompatActivity {
             }
     );
 
-    private void performSearch(String query) {
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SearchItem;
-        String json = "{\"query\":\"" + query + "\"}";
+    private void performSearch(String query, String parentcategoryid, String subcategoryid) {
+        SearchForItem(query, parentcategoryid, subcategoryid);
+    }
+
+    public void SearchForItem(String target, String parentcategoryid, String subcategoryid) {
+        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
+
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.SearchEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
@@ -139,10 +144,6 @@ public class SearchActivity extends AppCompatActivity {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
-            private void run() {
-                adapter.updateData(searchResults);
-            }
-
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
@@ -153,9 +154,8 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
-                    // Assuming responseData is a JSON array of items
                     searchResults = parseSearchResults(responseData);
-                    runOnUiThread(this::run);
+                    runOnUiThread(() -> adapter.updateData(searchResults));
                 } else {
                     runOnUiThread(() -> Log.e("SearchActivity", "Search request failed: " + response.code()));
                 }
