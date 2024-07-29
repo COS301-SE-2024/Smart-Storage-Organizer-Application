@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
@@ -10,6 +11,7 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
+
 
 android {
 
@@ -213,11 +215,6 @@ dependencies {
     implementation("com.amplifyframework:aws-storage-s3:2.16.1")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
-
-
-
-
-
 
 
 }
