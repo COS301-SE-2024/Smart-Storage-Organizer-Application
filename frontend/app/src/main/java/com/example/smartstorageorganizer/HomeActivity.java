@@ -357,6 +357,17 @@ public class HomeActivity extends AppCompatActivity {
 
         String json = "{\"colourid\":\""+colourid+"\", \"itemid\":\""+itemid+"\" }";
 
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
     }
 
 
