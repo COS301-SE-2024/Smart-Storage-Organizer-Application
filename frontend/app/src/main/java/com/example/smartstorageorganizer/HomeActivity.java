@@ -352,6 +352,14 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
     }
 
+    public void AssignColour(String colourid, String itemid)
+    {
+
+        String json = "{\"colourid\":\""+colourid+"\", \"itemid\":\""+itemid+"\" }";
+
+    }
+
+
 //    public void GenerateQrcode(int id)
 //    {
 //        String json = "{\"data\":\""+Integer.toString(id)+"\"}";
