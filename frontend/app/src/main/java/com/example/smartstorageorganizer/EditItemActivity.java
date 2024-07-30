@@ -181,7 +181,7 @@ public class EditItemActivity extends AppCompatActivity {
         ItemImage.setImageURI(uri);
         BitmapDrawable drawable = (BitmapDrawable) ItemImage.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
-        ImageFile = new File(getCacheDir(), "image.jpeg");
+        ImageFile = new File(getCacheDir(), "image.png");
         saveBitmapToFile(bitmap, ImageFile);
 
     }
@@ -258,6 +258,7 @@ public class EditItemActivity extends AppCompatActivity {
                 //We not performing anything after text changes
             }
         });
+
         findViewById(R.id.save_button).setOnClickListener(v  -> {
             loadingScreen.setVisibility(View.VISIBLE);
             loadingScreen.playAnimation();
@@ -273,8 +274,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void UpdateDetails()
     {
-        Log.i("DrawContent", currentDraw.toString().trim());
-        Log.i("DrawContent", OpenGallery.toString());
+
 
         if(!OpenGallery)
         {
@@ -289,7 +289,9 @@ public class EditItemActivity extends AppCompatActivity {
             String colourcoding=getIntent().getStringExtra("colour_code");
             String parentcategory=getIntent().getStringExtra("parentcategory_id");
             String subcategory=getIntent().getStringExtra("subcategory_id");
-            Log.i("1Before Post didnt open", " whats the error");
+
+
+
 
             postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
             Log.i("2Before Post didnt open", " whats the error");
@@ -312,7 +314,7 @@ public class EditItemActivity extends AppCompatActivity {
         Log.i("data1111",  String.valueOf(parentcategory));
         Log.i("data1111", String.valueOf(subcategory));
 
-        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quantity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\" }";
+        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.EditItemEndPoint;
