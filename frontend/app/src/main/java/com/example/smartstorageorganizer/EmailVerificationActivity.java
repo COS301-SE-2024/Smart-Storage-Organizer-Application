@@ -222,13 +222,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         Button finishButton = dialogView.findViewById(R.id.finishButton);
 
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EmailVerificationActivity.this, LandingActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        finishButton.setOnClickListener(v -> {
+            Intent intent = new Intent(EmailVerificationActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         builder.show();
