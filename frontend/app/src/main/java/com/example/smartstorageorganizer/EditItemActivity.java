@@ -98,7 +98,6 @@ public class EditItemActivity extends AppCompatActivity {
         ItemName = findViewById(R.id.name);
         ItemDescription = findViewById(R.id.description);
         ItemQuantity = findViewById(R.id.quantity);
-        //categorySpinner = findViewById(R.id.category_spinner);
         Save=findViewById(R.id.save_button);
     }
 

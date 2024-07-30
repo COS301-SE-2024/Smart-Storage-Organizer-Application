@@ -91,6 +91,13 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
+                intent.putExtra("item_name", itemName.getText().toString());
+                intent.putExtra("item_description", itemDescription.getText().toString());
+                intent.putExtra("location", itemUnit.getText().toString());
+                intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+                intent.putExtra("item_id", itemId);
+                intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+
                 startActivity(intent);
             }
         });
