@@ -46,7 +46,7 @@ import java.util.Objects;
 public class ItemDetailsActivity extends AppCompatActivity {
     float v = 0;
     private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
-    private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode;
+    private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
     private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
     private ImageView itemImage, qrCode;
     private int itemId;
@@ -82,6 +82,17 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 rotateArrow(arrow, 0, 180);
             }
             isExpanded = !isExpanded;
+        });
+
+        //Share button open EditItemActivity
+        share = findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
+                startActivity(intent);
+            }
         });
 
         // Initialize views for Unit accordion
