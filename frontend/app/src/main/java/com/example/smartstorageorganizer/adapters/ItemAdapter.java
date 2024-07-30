@@ -1,6 +1,5 @@
 package com.example.smartstorageorganizer.adapters;
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,19 +18,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.OnColorFetchListener;
+import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewColorCodesActivity;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -52,11 +62,48 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
     private String currentEmail;
+    private List<ColorCodeModel> colorCodeModelList;
+    private ColorCodeAdapter colorCodeAdapter;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView colorCodeRecyclerView;
+    private OnColorFetchListener onColorFetchListener;
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
+
         this.context = context;
         this.itemModelList = itemModelList;
+        this.colorCodeModelList = colorCodeModelList;
+        this.colorCodeAdapter = colorCodeAdapter;
+        this.shimmerFrameLayout = shimmerFrameLayout;
+        this.colorCodeRecyclerView = colorCodeRecyclerView;
         new OkHttpClient();
+    }
+
+    public void setColorCodeLoadListener(OnColorFetchListener listener) {
+        this.onColorFetchListener = listener;
+    }
+    // Setter methods
+    public void setShimmerFrameLayout(ShimmerFrameLayout shimmerFrameLayout) {
+        this.shimmerFrameLayout = shimmerFrameLayout;
+    }
+
+    public void setColorCodeRecyclerView(RecyclerView colorCodeRecyclerView) {
+        this.colorCodeRecyclerView = colorCodeRecyclerView;
+    }
+
+    public void setColorCodeModelList(List<ColorCodeModel> colorCodeModelList) {
+        this.colorCodeModelList = colorCodeModelList;
+    }
+
+    public void setColorCodeAdapter(ColorCodeAdapter colorCodeAdapter) {
+        this.colorCodeAdapter = colorCodeAdapter;
+    }
+
+//    Getters
+
+    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
+        this.context = context1;
+        this.itemModelList = itemModelList1;
     }
 
     @NonNull
@@ -77,17 +124,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             Glide.with(context).load(item.getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
-        // Set background color based on color coding
-//        if (item.getColourCoding() != null && !item.getColourCoding().isEmpty()) {
-//            holder.itemView.setBackgroundColor(Color.parseColor(item.getColourCoding()));
-//        } else {
-//            // Default color if no color coding is set
-//            holder.itemView.setBackgroundColor(Color.WHITE);
-//        }
-//        updateColorCoding(item.getColourCoding());
-
-
-//        to view on the next page whenever it clicks use onClick()
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
             intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
@@ -158,70 +194,86 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         notifyDataSetChanged(); // Update the adapter to refresh the UI
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    private void assignColorToSelectedItems() {
-//        // Add logic to assign color to selected items
-//        int color = getColorFromUser(); // Implement this method to get the desired color
-//        for (int position : selectedItems) {
-//            itemModelList.get(position).setColor(color); // Assuming your items have a setColor method
-//        }
-//        notifyDataSetChanged(); // Update the adapter to refresh the UI
-//    }
-
-    public interface OnColorSelectedListener {
-        void onColorSelected(int color);
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     private void assignColorToSelectedItems() {
-        showColorPickerDialog(context, color -> {
-            String colorCode = String.format("#%06X", (0xFFFFFF & color));
-            for (int position : selectedItems) {
-                 itemModelList.get(position);
-                addNewColorCode(colorCode, itemModelList.get(position).getItemName(), itemModelList.get(position).getDescription(), itemModelList.get(position).getItemId());
-            }
-            notifyDataSetChanged(); // Update the adapter to refresh the UI
-        });
-    }
-
-
-    private void showColorPickerDialog(Context context, OnColorSelectedListener listener) {
-        int initialColor = Color.RED; // Default color
-
-        AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(context, initialColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
+            Log.e("1Error", "One of the UI components is not initialized.");
+            return;
+        }
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        colorCodeRecyclerView.setVisibility(View.GONE);
+        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
             @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                // Color selected
-                listener.onColorSelected(color);
-            }
+            public void onSuccess(List<ColorCodeModel> result) {
+                if (result != null && !result.isEmpty())
+                {
+                    colorCodeModelList.clear();
+                    colorCodeModelList.addAll(result);
+                    colorCodeAdapter.notifyDataSetChanged();
+//                loadingScreen.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                // Action canceled
-            }
-        });
-
-        colorPickerDialog.show();
-    }
-
-    private void addNewColorCode(String colorCode, String title, String description, String itemId) {
-        Utils.addColourGroup(colorCode, title, description, currentEmail, (Activity) context, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    // Assuming you might want to update the item on the server
-                    updateItemColorCodingOnServer(itemId, colorCode);
-//                    showToast("Color Code added successfully");
-                    // Optionally navigate or refresh the view
-                    // navigateToHome();
                 }
             }
 
             @Override
             public void onFailure(String error) {
-//                showToast("Failed to add color code: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+//    private void showColorPickerDialog(Context context, OnColorSelectedListener listener) {
+//        int initialColor = Color.RED; // Default color
+//
+//        AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(context, initialColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+//            @Override
+//            public void onOk(AmbilWarnaDialog dialog, int color) {
+//                // Color selected
+//                listener.onColorSelected(color);
+//            }
+//
+//            @Override
+//            public void onCancel(AmbilWarnaDialog dialog) {
+//                // Action canceled
+//            }
+//        });
+//
+//        colorPickerDialog.show();
+//    }
+
+//    private void addNewColorCode(String colorCode, String title, String description, String itemId) {
+//        Utils.addColourGroup(colorCode, title, description, currentEmail, (Activity) context, new OperationCallback<Boolean>() {
+//            @Override
+//            public void onSuccess(Boolean result) {
+//                if (Boolean.TRUE.equals(result)) {
+//                    // Assuming you might want to update the item on the server
+//                    updateItemColorCodingOnServer(itemId, colorCode);
+////                    showToast("Color Code added successfully");
+//                    // Optionally navigate or refresh the view
+//                    // navigateToHome();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+////                showToast("Failed to add color code: " + error);
+//            }
+//        });
+//    }
+
     private void toggleSelection(int position) {
         if (selectedItems.contains(position)) {
             selectedItems.remove(Integer.valueOf(position));
