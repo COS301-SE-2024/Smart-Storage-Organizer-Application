@@ -34,13 +34,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
-import com.amplifyframework.core.Amplify;
+
+
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import org.keycloak.admin.client.token.TokenService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -104,14 +104,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private CompletableFuture<Boolean> isSignedIn() {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Amplify.Auth.fetchAuthSession(
-                result -> future.complete(result.isSignedIn()),
-                error -> {
-                    Log.e(TAG, error.toString());
-                    future.completeExceptionally(error);
-                }
-        );
+       CompletableFuture<Boolean> future = new CompletableFuture<>();
+//        Amplify.Auth.fetchAuthSession(
+//                result -> future.complete(result.isSignedIn()),
+//                error -> {
+//                    Log.e(TAG, error.toString());
+//                    future.completeExceptionally(error);
+//                }
+//        );
         return future;
     }
 
@@ -164,46 +164,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     CompletableFuture<Boolean> signIn(String email, String password) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Amplify.Auth.signIn(
-                email,
-                password,
-                result -> {
-                    if (result.isSignedIn()) {
-                        fetchUserSession(email);
-                        future.complete(true);
-                    } else {
-                        handleSignInFailure("Sign in not complete.");
-                        future.complete(false);
-                    }
-                },
-                error -> handleSignInError(error, email, future)
-        );
+     CompletableFuture<Boolean> future = new CompletableFuture<>();
+//        Amplify.Auth.signIn(
+//                email,
+//                password,
+//                result -> {
+//                    if (result.isSignedIn()) {
+//                        fetchUserSession(email);
+//                        future.complete(true);
+//                    } else {
+//                        handleSignInFailure("Sign in not complete.");
+//                        future.complete(false);
+//                    }
+//                },
+//                error -> handleSignInError(error, email, future)
+//        );
         return future;
     }
 
     private void fetchUserSession(String email) {
-        Amplify.Auth.fetchAuthSession(
-                session -> {
-                    AWSCognitoAuthSession cognitoSession = (AWSCognitoAuthSession) session;
-                    String token = cognitoSession.getUserPoolTokensResult().getValue().getIdToken();
-                    fetchUserAttributes();
-                    makeApiRequest(token);
-                    runOnUiThread(() -> navigateToHome(email));
-                },
-                error -> Log.e(TAG, error.toString())
-        );
+//        Amplify.Auth.fetchAuthSession(
+//                session -> {
+//                    AWSCognitoAuthSession cognitoSession = (AWSCognitoAuthSession) session;
+//                    String token = cognitoSession.getUserPoolTokensResult().getValue().getIdToken();
+//                    fetchUserAttributes();
+//                    makeApiRequest(token);
+//                    runOnUiThread(() -> navigateToHome(email));
+//                },
+//                error -> Log.e(TAG, error.toString())
+//        );
     }
 
     private void fetchUserAttributes() {
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> {
-                    for (AuthUserAttribute attribute : attributes) {
-                        Log.i(TAG, attribute.getKey().getKeyString() + ": " + attribute.getValue());
-                    }
-                },
-                error -> Log.e(TAG, "Failed to fetch user attributes.", error)
-        );
+//        Amplify.Auth.fetchUserAttributes(
+//                attributes -> {
+//                    for (AuthUserAttribute attribute : attributes) {
+//                        Log.i(TAG, attribute.getKey().getKeyString() + ": " + attribute.getValue());
+//                    }
+//                },
+//                error -> Log.e(TAG, "Failed to fetch user attributes.", error)
+//        );
     }
 
     private void makeApiRequest(String token) {
@@ -277,11 +277,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void resendSignUpCode(String email) {
-        Amplify.Auth.resendSignUpCode(
-                email,
-                result -> Log.i(TAG, "ResendSignUp succeeded:"),
-                error -> Log.e(TAG, "ResendSignUp failed", error)
-        );
+//        Amplify.Auth.resendSignUpCode(
+//                email,
+//                result -> Log.i(TAG, "ResendSignUp succeeded:"),
+//                error -> Log.e(TAG, "ResendSignUp failed", error)
+//        );
     }
 
     private void navigateToHome() {
