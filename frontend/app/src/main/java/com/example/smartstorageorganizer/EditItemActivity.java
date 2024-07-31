@@ -278,7 +278,7 @@ public class EditItemActivity extends AppCompatActivity {
 
         if(!OpenGallery)
         {
-            Log.i("tttttt", "df");
+
             String itemName= Objects.requireNonNull(ItemName.getText()).toString().trim();
             String description=Objects.requireNonNull(ItemDescription.getText()).toString().trim();
             String quantity= Objects.requireNonNull(ItemQuantity.getText()).toString().trim();
@@ -310,9 +310,7 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
-        Log.i("data1111", String.valueOf(itemId));
-        Log.i("data1111",  String.valueOf(parentcategory));
-        Log.i("data1111", String.valueOf(subcategory));
+
 
         String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -371,7 +369,7 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     String getObjectUrl(String key) {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ItemImages/" + key + ".png";
+        String url ="https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         ImageUrl=url;
         String itemName= Objects.requireNonNull(ItemName.getText()).toString().trim();
         String description=Objects.requireNonNull(ItemDescription.getText()).toString().trim();
