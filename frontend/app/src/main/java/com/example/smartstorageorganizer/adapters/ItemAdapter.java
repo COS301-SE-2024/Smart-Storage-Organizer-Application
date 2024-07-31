@@ -67,6 +67,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView colorCodeRecyclerView;
     private OnColorFetchListener onColorFetchListener;
+    private boolean isSelectionMode = false;
+
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
 
@@ -140,18 +142,42 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             context.startActivity(intent);
         });
 
-        // Handle item long click to select
+//        // Handle item long click to select
+//        holder.itemView.setOnLongClickListener(view -> {
+//            toggleSelection(holder.getAdapterPosition());
+//            return true;
+//        });
+//
+//        // Show/hide tick icon based on selection
+//        if (selectedItems.contains(position)) {
+//            holder.tickIcon.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tickIcon.setVisibility(View.GONE);
+//        }
+
+
+//        updated onClick for selecting items
+        // Handle item long click to enter selection mode
         holder.itemView.setOnLongClickListener(view -> {
+            isSelectionMode = true; // Enable selection mode
             toggleSelection(holder.getAdapterPosition());
             return true;
         });
 
-        // Show/hide tick icon based on selection
+// Handle item click to toggle selection if in selection mode
+        holder.itemView.setOnClickListener(view -> {
+            if (isSelectionMode) {
+                toggleSelection(holder.getAdapterPosition());
+            }
+        });
+
+// Show/hide tick icon based on selection
         if (selectedItems.contains(position)) {
             holder.tickIcon.setVisibility(View.VISIBLE);
         } else {
             holder.tickIcon.setVisibility(View.GONE);
         }
+
 
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
@@ -242,34 +268,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         }
     }
-
-//    private void showBottomSheetDialog(int position, String itemId) {
-//        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-//        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
-//
-//        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
-//
-//        deleteItem.setOnClickListener(view -> {
-//            bottomSheetDialog.dismiss();
-//            new AlertDialog.Builder(context)
-//                    .setTitle("Delete Item")
-//                    .setMessage("Are you sure you want to delete this item?")
-//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                        // Handle the delete action
-////                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
-//                        deleteItem(itemId, position);
-////                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
-//
-//                    })
-//                    .setNegativeButton(android.R.string.no, null)
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show();
-//        });
-//
-//        bottomSheetDialog.setContentView(bottomSheetView);
-//        bottomSheetDialog.show();
-//    }
-
 
 //    Updated showBottomSheetDialog
 private void showBottomSheetDialog(int position, String itemId) {
