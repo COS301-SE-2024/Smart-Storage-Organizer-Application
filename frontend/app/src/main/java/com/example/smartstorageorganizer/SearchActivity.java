@@ -2,6 +2,8 @@ package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -41,14 +43,14 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+    }
 
-        searchView = findViewById(R.id.searchView);
-        recyclerView = findViewById(R.id.search_results_recycler_view);
-        searchResults = new ArrayList<>();
-        adapter = new SearchAdapter(searchResults);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -65,6 +67,20 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_search) {
+            // Handle the search action
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void SearchForItem(String target, String parentcategoryid, String subcategoryid) {
