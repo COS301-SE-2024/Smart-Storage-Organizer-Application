@@ -64,7 +64,10 @@ public class SearchActivity extends AppCompatActivity {
             String query = searchView.getQuery().toString();
             if (!query.isEmpty()) {
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-                SearchForItem(query, "", ""); // Adjust parameters as needed
+                SearchForItem(query, "*", "*");
+                searchResults.add(new SearchResult(query, query));
+                adapter.notifyDataSetChanged();
+//                SearchForItem(query, "", ""); // Adjust parameters as needed
             } else {
                 Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
             }
@@ -75,6 +78,8 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // Handle the search query submission
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+//                searchResults.add(new SearchResult("Title", "Description"));
+                adapter.notifyDataSetChanged();
                 SearchForItem(query, "", ""); // Adjust parameters as needed
                 return false;
             }
@@ -153,6 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                     String responseData = response.body().string();
                     List<SearchResult> searchResults = parseSearchResults(responseData);
                     future.complete(searchResults);
+
                 } else {
                     future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                 }
@@ -164,12 +170,18 @@ public class SearchActivity extends AppCompatActivity {
 
 
     private List<SearchResult> parseSearchResults(String responseData) {
-        // Parse the response data and return a list of SearchResult objects
-        // Placeholder implementation, adjust according to your actual response format
         List<SearchResult> results = new ArrayList<>();
-        // Example parsing logic (adjust according to your actual response format)
-        results.add(new SearchResult("Item 1", "Description 1"));
-        results.add(new SearchResult("Item 2", "Description 2"));
+        try {
+            JSONArray jsonArray = new JSONArray(responseData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String title = jsonObject.optString("title", "No Title");
+                String description = jsonObject.optString("description", "No Description");
+                results.add(new SearchResult(title, description));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return results;
     }
 }

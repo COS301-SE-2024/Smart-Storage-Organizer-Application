@@ -14,20 +14,21 @@
 
         <android.widget.SearchView
             android:id="@+id/searchView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:iconifiedByDefault="false" >
-
-            <ImageButton
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Search"
-                android:padding="8dp"
-                android:src="@android:drawable/ic_menu_search" />
+            android:iconifiedByDefault="false">
         </android.widget.SearchView>
+
+        <ImageButton
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_search" />
 
     </RelativeLayout>
 
