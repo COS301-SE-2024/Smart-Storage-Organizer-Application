@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Select All"
         android:padding="16dp"
-        android:textColor="@android:color/black" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/assign_color"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="Assign Color"
         android:padding="16dp"
-        android:textColor="@android:color/black" />
+        android:textSize="18sp" />
 
 
 

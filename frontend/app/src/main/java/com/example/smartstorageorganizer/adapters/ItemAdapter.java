@@ -143,9 +143,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         // Handle item long click to select
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(holder.getAdapterPosition());
-            if (!selectedItems.isEmpty()) {
-                showThreeDotMenu(view);
-            }
             return true;
         });
 
@@ -161,28 +158,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
             // Show a confirmation dialog or directly delete the item
         });
-    }
-
-    private void showThreeDotMenu(View view) {
-        PopupMenu popup = new PopupMenu(view.getContext(), view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.select_items_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.action_select_all) {
-                selectAllItems();
-                return true;
-            } else if (itemId == R.id.action_assign_color) {
-                assignColorToSelectedItems();
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-
-        popup.show();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -234,46 +209,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         });
     }
 
-
-//    private void showColorPickerDialog(Context context, OnColorSelectedListener listener) {
-//        int initialColor = Color.RED; // Default color
-//
-//        AmbilWarnaDialog colorPickerDialog = new AmbilWarnaDialog(context, initialColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-//            @Override
-//            public void onOk(AmbilWarnaDialog dialog, int color) {
-//                // Color selected
-//                listener.onColorSelected(color);
-//            }
-//
-//            @Override
-//            public void onCancel(AmbilWarnaDialog dialog) {
-//                // Action canceled
-//            }
-//        });
-//
-//        colorPickerDialog.show();
-//    }
-
-//    private void addNewColorCode(String colorCode, String title, String description, String itemId) {
-//        Utils.addColourGroup(colorCode, title, description, currentEmail, (Activity) context, new OperationCallback<Boolean>() {
-//            @Override
-//            public void onSuccess(Boolean result) {
-//                if (Boolean.TRUE.equals(result)) {
-//                    // Assuming you might want to update the item on the server
-//                    updateItemColorCodingOnServer(itemId, colorCode);
-////                    showToast("Color Code added successfully");
-//                    // Optionally navigate or refresh the view
-//                    // navigateToHome();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-////                showToast("Failed to add color code: " + error);
-//            }
-//        });
-//    }
-
     private void toggleSelection(int position) {
         if (selectedItems.contains(position)) {
             selectedItems.remove(Integer.valueOf(position));
@@ -308,33 +243,69 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
 
-    private void showBottomSheetDialog(int position, String itemId) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+//    private void showBottomSheetDialog(int position, String itemId) {
+//        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+//        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+//
+//        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+//
+//        deleteItem.setOnClickListener(view -> {
+//            bottomSheetDialog.dismiss();
+//            new AlertDialog.Builder(context)
+//                    .setTitle("Delete Item")
+//                    .setMessage("Are you sure you want to delete this item?")
+//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//                        // Handle the delete action
+////                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
+//                        deleteItem(itemId, position);
+////                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
+//
+//                    })
+//                    .setNegativeButton(android.R.string.no, null)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .show();
+//        });
+//
+//        bottomSheetDialog.setContentView(bottomSheetView);
+//        bottomSheetDialog.show();
+//    }
 
-        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
 
-        deleteItem.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete Item")
-                    .setMessage("Are you sure you want to delete this item?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        // Handle the delete action
-//                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
-                        deleteItem(itemId, position);
-//                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
+//    Updated showBottomSheetDialog
+private void showBottomSheetDialog(int position, String itemId) {
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+    View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
 
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        });
+    TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+    TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
+    TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
 
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
+    deleteItem.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    deleteItem(itemId, position);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    });
 
+    selectAllItems.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        selectAllItems(); // Implement your method to select all items
+    });
+
+    assignColor.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        assignColorToSelectedItems(); // Implement your method to assign color to selected items
+    });
+
+    bottomSheetDialog.setContentView(bottomSheetView);
+    bottomSheetDialog.show();
+}
     private void deleteItem(String itemId, int position) {
         try {
             // Convert itemId to integer
