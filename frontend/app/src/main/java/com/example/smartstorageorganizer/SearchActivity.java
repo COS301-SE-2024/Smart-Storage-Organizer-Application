@@ -1,24 +1,22 @@
 package com.example.smartstorageorganizer;
 
-import android.content.Intent;
-import android.media.RouteListingPreference;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartstorageorganizer.adapters.SearchResultsAdapter;
+import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.adapters.SearchAdapter;
+import com.example.smartstorageorganizer.model.SearchResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +33,8 @@ import okhttp3.Response;
 public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private SearchResultsAdapter adapter;
-    private List<Item> searchResults;
+    private SearchAdapter adapter;
+    private List<SearchResult> searchResults;
     private SearchView searchView;
 
     @Override
@@ -44,90 +42,29 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.search_results_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         searchResults = new ArrayList<>();
-        adapter = new SearchResultsAdapter(searchResults, new SearchResultsAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(RouteListingPreference.Item item) {
+        adapter = new SearchAdapter(searchResults);
 
-            }
-
-            @Override
-            public void onItemClick(Item item) {
-                Intent intent = new Intent(SearchActivity.this, ItemInfoActivity.class);
-                intent.putExtra("item_id", String.valueOf(item.getId()));
-                intent.putExtra("item_name", item.getName());
-                intent.putExtra("item_description", item.getDescription());
-                intent.putExtra("location", item.getLocation());
-                intent.putExtra("color_code", item.getColorCode());
-                startActivity(intent);
-            }
-        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        // Inflate the custom search view layout
-        searchItem.setActionView(R.layout.search_view_with_icon);
-
-        // Get references to the SearchView and the search icon
-        SearchView searchView = searchItem.getActionView().findViewById(R.id.search_view);
-        ImageView searchIcon = searchItem.getActionView().findViewById(R.id.search_icon);
-        ImageButton voiceSearchButton = searchItem.getActionView().findViewById(R.id.voice_search_button);
-
-        // Set up the search icon click listener
-        searchIcon.setOnClickListener(v -> {
-            String query = searchView.getQuery().toString();
-            performSearch(query, "", ""); // You can customize parentcategoryid and subcategoryid as needed
-        });
-
-        voiceSearchButton.setOnClickListener(v -> startVoiceSearch());
-
-        // Set up the query text listener
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                performSearch(query, "", ""); // You can customize parentcategoryid and subcategoryid as needed
-                return true;
+                // Handle the search query submission
+                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+                SearchForItem(query, "", ""); // Adjust parameters as needed
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // Handle text change event
                 return false;
             }
         });
-
-        return true;
-    }
-
-    private void startVoiceSearch() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now");
-        voiceSearchLauncher.launch(intent);
-    }
-
-    private final ActivityResultLauncher<Intent> voiceSearchLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (matches != null && !matches.isEmpty()) {
-                        String query = matches.get(0);
-                        searchView.setQuery(query, true);
-                    }
-                }
-            }
-    );
-
-    private void performSearch(String query, String parentcategoryid, String subcategoryid) {
-        SearchForItem(query, parentcategoryid, subcategoryid);
     }
 
     public void SearchForItem(String target, String parentcategoryid, String subcategoryid) {
@@ -163,9 +100,23 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private List<Item> parseSearchResults(String responseData) {
-        // Parse the JSON response data and return a list of Item objects
-        // This is a placeholder, you will need to implement this method based on your API response
-        return new ArrayList<>();
+    private List<SearchResult> parseSearchResults(String responseData) {
+        List<SearchResult> results = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(responseData);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                // Extract data from jsonObject and create SearchResult object
+                String title = jsonObject.getString("title");
+                String description = jsonObject.getString("description");
+                // Add other fields as needed
+                SearchResult searchResult = new SearchResult(title, description);
+                results.add(searchResult);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            runOnUiThread(() -> Toast.makeText(SearchActivity.this, "Failed to parse search results.", Toast.LENGTH_SHORT).show());
+        }
+        return results;
     }
 }

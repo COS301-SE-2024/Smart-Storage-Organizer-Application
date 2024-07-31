@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
     public AppBarConfiguration mAppBarConfiguration;
     public ActivityHomeBinding binding;
     public String currentName, currentSurname, currentPicture;
+    ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,18 @@ public class HomeActivity extends AppCompatActivity {
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+//        searchButton = findViewById(R.id.searchButton);
+//
+//        // Set the click listener for the search button
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Start the SearchActivity
+//                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         setSupportActionBar(binding.appBarHome.toolbar);
 
@@ -95,13 +109,17 @@ public class HomeActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) searchItem.getActionView();
+        MenuItem searchItem = menu.findItem(R.id.searchButton);
+        searchItem.setOnMenuItemClickListener(item -> {
+            // Start the SearchActivity
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            startActivity(intent);
+            return true;
+        });
 
 //        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override
 //            public boolean onQueryTextSubmit(String query) {
-//                // Handle the search query and start SearchActivity
 //                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
 //                intent.putExtra("query", query);
 //                startActivity(intent);

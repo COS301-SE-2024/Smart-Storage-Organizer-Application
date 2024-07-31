@@ -26,6 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
+        <activity android:name=".SearchActivity"></activity>
+
         <activity
             android:name=".ItemDetailsActivity"
             android:exported="false"

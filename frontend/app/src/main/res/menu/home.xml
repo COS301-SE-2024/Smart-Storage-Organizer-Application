@@ -12,4 +12,11 @@
         android:icon="@android:drawable/ic_menu_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
+    <item
+        android:id="@+id/searchButton"
+        android:title="Search"
+        android:src="@drawable/baseline_search_24"
+        android:layout_gravity="end"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"/>
 </menu>
