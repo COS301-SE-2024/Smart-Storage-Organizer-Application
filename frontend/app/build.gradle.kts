@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+import com.android.build.gradle.internal.packaging.defaultExcludes
 import java.util.Properties
 
 plugins {
@@ -13,6 +15,20 @@ if (localPropertiesFile.exists()) {
 
 android {
 
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/ASL-2.0.txt"
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/mimetypes.default"
+            excludes+="META-INF/mailcap.default"
+            excludes+="META-INF/LICENSE.md"
+            excludes+="META-INF/DEPENDENCIES"
+            excludes+="META-INF/jing-copying.html"
+            excludes+="META-INF/LGPL-3.0.txt"
+            // Add other exclusions if necessary
+        }
+    }
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -81,7 +97,7 @@ android {
         buildConfigField("String", "setUserToUnverified", "\"${localProperties["setUserToUnverified"]}\"");
         buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"");
         buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"");
-
+        buildConfigField("String","clientSecret","\"${localProperties["clientSecret"]}\"");
 
 
     }
@@ -123,27 +139,38 @@ dependencies {
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
 
+    // https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client
+    // https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client
 
+    //implementation("org.keycloak:keycloak-core:25.0.1")
+    implementation("org.keycloak:keycloak-admin-client:25.0.1") {
+        exclude(group = "com.sun.activation", module = "jakarta.activation")
+        exclude(group = "org.eclipse.angus", module = "angus-activation")
+    }
 
+    implementation("org.apache.xmlgraphics:batik-ext:1.14") // Add this dependenc
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
     implementation("log4j:log4j:1.2.17")
 //    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
     // Example for using ZXing
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.3.3")
+    implementation("jakarta.activation:jakarta.activation-api:2.1.2") {
+        exclude(group = "com.sun.activation", module = "jakarta.activation")
+        exclude(group = "org.eclipse.angus", module = "angus-activation")
+    }
 
-
-
-    // for Cognito
-    implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
-    implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
-
-    implementation ("com.amplifyframework:core:1.28.4")
-//    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
-    implementation ("com.amplifyframework:aws-auth-cognito:latest-version")
-
-
-
+    // Angus Activation
+    implementation("org.eclipse.angus:angus-activation:1.0.0") {
+        exclude(group = "com.sun.activation", module = "jakarta.activation")
+        exclude(group = "jakarta.activation", module = "jakarta.activation-api")
+    }
+    implementation("org.jboss.resteasy:resteasy-jackson2-provider:4.7.4.Final") {
+        exclude(group = "jakarta.activation", module = "jakarta.activation-api")
+    }
+    implementation("jakarta.activation:jakarta.activation-api:2.1.2") {
+        exclude(group = "com.sun.activation", module = "jakarta.activation")
+    }
     testImplementation ("org.robolectric:robolectric:4.6.1")
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -160,7 +187,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework.ui:authenticator:1.2.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
-    implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
+
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
     implementation ("com.airbnb.android:lottie:6.4.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
@@ -183,8 +210,7 @@ dependencies {
     testImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
     implementation("com.hbb20:ccp:2.5.0")
-    implementation("com.amplifyframework:aws-api:2.16.1")
-    implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
+
 
     // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
@@ -200,7 +226,7 @@ dependencies {
     implementation("com.hbb20:ccp:2.5.0");
 
     // Amplify API plugin for REST
-    implementation("com.amplifyframework:aws-api:1.35.4")
+
 
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 

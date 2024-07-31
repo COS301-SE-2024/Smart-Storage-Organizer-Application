@@ -14,8 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
-import com.amplifyframework.core.Amplify;
+//import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
+//import com.amplifyframework.core.Amplify;
 
 public class LandingActivity extends AppCompatActivity {
     private static final String TAG = "LandingActivity";
@@ -27,7 +27,7 @@ public class LandingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_landing);
 
-        signOut();
+       signOut();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,15 +51,15 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        Amplify.Auth.signOut(
-                signOutResult -> {
-                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
-                        handleSuccessfulSignOut();
-                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
-                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
-                    }
-                }
-        );
+//        Amplify.Auth.signOut(
+//                signOutResult -> {
+//                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+//                        handleSuccessfulSignOut();
+//                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+//                    }
+//                }
+//        );
     }
 
     private void handleSuccessfulSignOut() {

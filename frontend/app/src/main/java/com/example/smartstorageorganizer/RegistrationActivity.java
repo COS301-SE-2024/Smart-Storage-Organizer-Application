@@ -18,10 +18,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
-import com.amplifyframework.core.Amplify;
+//import com.amplifyframework.auth.AuthUserAttribute;
+//import com.amplifyframework.auth.AuthUserAttributeKey;
+//import com.amplifyframework.auth.options.AuthSignUpOptions;
+//import com.amplifyframework.core.Amplify;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
@@ -151,36 +151,36 @@ public class RegistrationActivity extends AppCompatActivity {
         String phoneText = countryCodePicker.getSelectedCountryCodeWithPlus() + phoneNumberEditText.getText().toString().trim();
         String passwordText = passwordEditText.getText().toString().trim();
 
-        ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), nameText));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "Makro"));
-
-        try {
-            buttonLoader.setVisibility(View.VISIBLE);
-            buttonLoader.playAnimation();
-            registerButtonText.setVisibility(View.GONE);
-            registerButtonIcon.setVisibility(View.GONE);
-
-            Amplify.Auth.signUp(
-                    emailText,
-                    passwordText,
-                    AuthSignUpOptions.builder().userAttributes(attributes).build(),
-                    result -> {
-                        Log.i("MyAmplifyApp", "Sign-up successful: " + result.toString());
-                        moveToVerificationActivity(emailText);
-                    },
-                    error -> {
-                        Log.e("MyAmplifyApp", "Sign-up failed", error);
-                        handleSignUpFailure(emailText, error);
-                    }
-            );
-        } catch (Exception e) {
-            Log.e("MyAmplifyApp", "Sign-up exception", e);
-            handleSignUpException();
-        }
+//        ArrayList<AuthUserAttribute> attributes = new ArrayList<>();
+//        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.name(), nameText));
+//        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
+//        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
+//        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
+//        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "Makro"));
+//
+//        try {
+//            buttonLoader.setVisibility(View.VISIBLE);
+//            buttonLoader.playAnimation();
+//            registerButtonText.setVisibility(View.GONE);
+//            registerButtonIcon.setVisibility(View.GONE);
+//
+//            Amplify.Auth.signUp(
+//                    emailText,
+//                    passwordText,
+//                    AuthSignUpOptions.builder().userAttributes(attributes).build(),
+//                    result -> {
+//                        Log.i("MyAmplifyApp", "Sign-up successful: " + result.toString());
+//                        moveToVerificationActivity(emailText);
+//                    },
+//                    error -> {
+//                        Log.e("MyAmplifyApp", "Sign-up failed", error);
+//                        handleSignUpFailure(emailText, error);
+//                    }
+//            );
+//        } catch (Exception e) {
+//            Log.e("MyAmplifyApp", "Sign-up exception", e);
+//            handleSignUpException();
+//        }
     }
 
     private void moveToVerificationActivity(String email) {

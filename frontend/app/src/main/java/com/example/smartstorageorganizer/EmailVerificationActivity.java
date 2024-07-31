@@ -22,7 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.amplifyframework.core.Amplify;
+//import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 
@@ -112,24 +112,24 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
     CompletableFuture<Boolean> confirmSignUp(String email, String code) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Amplify.Auth.confirmSignUp(
-                email,
-                code,
-                result -> {
-                    Log.i(AUTH_QUICK_START, result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-                    future.complete(true);
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
-                        showRequestSentDialog();
-                    });
-                },
-                error -> {
-                    future.complete(false);
-                    Log.e(AUTH_QUICK_START, error.toString());
-                    runOnUiThread(() -> Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show());
-                }
-        );
+//        Amplify.Auth.confirmSignUp(
+//                email,
+//                code,
+//                result -> {
+//                    Log.i(AUTH_QUICK_START, result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
+//                    future.complete(true);
+//                    runOnUiThread(() -> {
+//                        Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
+//                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+//                        showRequestSentDialog();
+//                    });
+//                },
+//                error -> {
+//                    future.complete(false);
+//                    Log.e(AUTH_QUICK_START, error.toString());
+//                    runOnUiThread(() -> Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show());
+//                }
+//        );
         return future;
     }
 
@@ -142,12 +142,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
     private void resendOtp() {
         String email = emailTextView.getText().toString();
-        Log.i(EMAIL, email);
-        Amplify.Auth.resendSignUpCode(
-                email,
-                result -> Log.i(AUTH_QUICK_START, "ResendSignUp succeeded"),
-                error -> Log.e(AUTH_QUICK_START, "ResendSignUp failed", error)
-        );
+//        Log.i(EMAIL, email);
+//        Amplify.Auth.resendSignUpCode(
+//                email,
+//                result -> Log.i(AUTH_QUICK_START, "ResendSignUp succeeded"),
+//                error -> Log.e(AUTH_QUICK_START, "ResendSignUp failed", error)
+//        );
     }
 
     private void setupOTPInputs() {

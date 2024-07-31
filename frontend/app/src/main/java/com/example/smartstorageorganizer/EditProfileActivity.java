@@ -25,10 +25,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.amplifyframework.auth.AuthUserAttribute;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.core.Amplify;
-import com.amplifyframework.storage.StoragePath;
+//import com.amplifyframework.auth.AuthUserAttribute;
+//import com.amplifyframework.auth.AuthUserAttributeKey;
+//import com.amplifyframework.core.Amplify;
+//import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
@@ -133,55 +133,55 @@ public class EditProfileActivity extends AppCompatActivity {
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
 
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> {
-
-                    for (AuthUserAttribute attribute : attributes) {
-                        switch (attribute.getKey().getKeyString()) {
-                            case "email":
-                                currentEmail = attribute.getValue();
-                                break;
-                            case "name":
-                                currentName = attribute.getValue();
-                                break;
-                            case "family_name":
-                                currentSurname = attribute.getValue();
-                                break;
-                            case "phone_number":
-                                currentPhone = attribute.getValue();
-                                break;
-                            case "address":
-                                currentAddress = attribute.getValue();
-                                break;
-                            case "picture":
-                                currentProfileUrl = attribute.getValue();
-                                break;
-                            case "custom:myCustomAttribute":
-                                customAttribute = attribute.getValue();
-                                break;
-                        }
-                    }
-                    Log.i("progress","User attributes fetched successfully");
-                    Log.i("progressEmail",currentPhone);
-                    runOnUiThread(() -> {
-                        email.setText(currentEmail);
-                        name.setText(currentName);
-                        surname.setText(currentSurname);
-                        phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
-                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
-
-                        address.setText(currentAddress);
-                        String country=currentPhone.substring(1, currentPhone.length()-9);
-                        cpp.setCountryForPhoneCode(Integer.parseInt(country));
-                        loadingScreen.setVisibility(View.GONE);
-//                        loadingScreen.pauseAnimation();
-                        content.setVisibility(View.VISIBLE);
-                    });
-                    future.complete(true);
-                },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
-
-        );
+//        Amplify.Auth.fetchUserAttributes(
+//                attributes -> {
+//
+//                    for (AuthUserAttribute attribute : attributes) {
+//                        switch (attribute.getKey().getKeyString()) {
+//                            case "email":
+//                                currentEmail = attribute.getValue();
+//                                break;
+//                            case "name":
+//                                currentName = attribute.getValue();
+//                                break;
+//                            case "family_name":
+//                                currentSurname = attribute.getValue();
+//                                break;
+//                            case "phone_number":
+//                                currentPhone = attribute.getValue();
+//                                break;
+//                            case "address":
+//                                currentAddress = attribute.getValue();
+//                                break;
+//                            case "picture":
+//                                currentProfileUrl = attribute.getValue();
+//                                break;
+//                            case "custom:myCustomAttribute":
+//                                customAttribute = attribute.getValue();
+//                                break;
+//                        }
+//                    }
+//                    Log.i("progress","User attributes fetched successfully");
+//                    Log.i("progressEmail",currentPhone);
+//                    runOnUiThread(() -> {
+//                        email.setText(currentEmail);
+//                        name.setText(currentName);
+//                        surname.setText(currentSurname);
+//                        phone.setText(currentPhone.substring(currentPhone.length()-9,currentPhone.length()));
+//                        Glide.with(this).load(currentProfileUrl).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
+//
+//                        address.setText(currentAddress);
+//                        String country=currentPhone.substring(1, currentPhone.length()-9);
+//                        cpp.setCountryForPhoneCode(Integer.parseInt(country));
+//                        loadingScreen.setVisibility(View.GONE);
+////                        loadingScreen.pauseAnimation();
+//                        content.setVisibility(View.VISIBLE);
+//                    });
+//                    future.complete(true);
+//                },
+//                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+//
+//        );
         return future;
     }
 
@@ -203,29 +203,29 @@ public class EditProfileActivity extends AppCompatActivity {
         String Address = Objects.requireNonNull(address.getText()).toString().trim();
         String Phone = Objects.requireNonNull(phone.getText()).toString().trim();
         if(!Name.equals(name)){
-            Amplify.Auth.updateUserAttribute(
-                    new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
-                    result -> Log.i("AuthDemo", "Updated name"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
-            );
+//            Amplify.Auth.updateUserAttribute(
+//                    new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
+//                    result -> Log.i("AuthDemo", "Updated name"),
+//                    error -> Log.e("AuthDemo", "Update failed", error)
+//            );
             future.complete(true);
         }
         if(!Surname.equals(surname)){
-            Amplify.Auth.updateUserAttribute(
-                    new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
-                    result -> Log.i("AuthDemo", "Updated surname"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
-            );
+//            Amplify.Auth.updateUserAttribute(
+//                    new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
+//                    result -> Log.i("AuthDemo", "Updated surname"),
+//                    error -> Log.e("AuthDemo", "Update failed", error)
+//            );
             future.complete(true);
         }
-        if(!Address.equals(address)){
-            Amplify.Auth.updateUserAttribute(
-                    new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
-                    result -> Log.i("AuthDemo", "Updated address"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
-            );
-            future.complete(true);
-        }
+//        if(!Address.equals(address)){
+//            Amplify.Auth.updateUserAttribute(
+//                    new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
+//                    result -> Log.i("AuthDemo", "Updated address"),
+//                    error -> Log.e("AuthDemo", "Update failed", error)
+//            );
+//            future.complete(true);
+//        }
         if(true){
             UploadProfilePicture(file);
         }
@@ -320,28 +320,28 @@ public class EditProfileActivity extends AppCompatActivity {
         long Time = System.nanoTime();
         String key= String.valueOf(Time);
         String Path="Public/ProfilePictures/"+key+".png";
-        Amplify.Storage.uploadFile(
-                StoragePath.fromString(Path),
-                ProfilePicture,
-                options,
-                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)); future.complete(true);},
-                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure); future.complete(false);}
-        );
+//        Amplify.Storage.uploadFile(
+//                StoragePath.fromString(Path),
+//                ProfilePicture,
+//                options,
+//                result ->{ Log.i("MyAmplifyApp", "Successfully uploaded: " + GetObjectUrl(key)); future.complete(true);},
+//                storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure); future.complete(false);}
+//        );
 
         return future;
     }
     public String GetObjectUrl(String key)
     {
         String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
-        Amplify.Auth.updateUserAttribute(
-                new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
-                resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
-                error -> Log.e("AuthDemo", "Update failed", error)
-        );
-        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-        startActivity(intent);
-        finish();
+//        Amplify.Auth.updateUserAttribute(
+//                new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
+//                resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
+//                error -> Log.e("AuthDemo", "Update failed", error)
+//        );
+//        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+//        startActivity(intent);
+//        finish();
 
         return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
     }
