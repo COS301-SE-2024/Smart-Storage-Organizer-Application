@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -65,6 +66,13 @@
                     android:textColor="@color/white"
                     android:paddingTop="4dp"
                     android:layout_gravity="center"/>
+
+                <ImageView
+                    android:id="@+id/tick_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_check_24dp" />
 
             </LinearLayout>
         </LinearLayout>

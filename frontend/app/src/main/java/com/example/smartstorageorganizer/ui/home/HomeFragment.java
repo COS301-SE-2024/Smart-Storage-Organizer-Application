@@ -3,11 +3,14 @@ package com.example.smartstorageorganizer.ui.home;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,7 +89,6 @@ public class HomeFragment extends Fragment {
     File file;
     List<String> imagesEncodedList;
     private Spinner parentSpinner, subcategorySpinner;
-
     LottieAnimationView fetchItemsLoader;
     RecyclerView.LayoutManager layoutManager;
     private TextView name;
@@ -103,6 +105,7 @@ public class HomeFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
     private String parentCategoryId, subcategoryId;
     Button buttonNext;
+    Button buttonTakePhoto;
     EditText itemDescription, itemName;
     ImageView itemImage;
     private List<String> parentCategories = new ArrayList<>();
@@ -114,7 +117,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
     private String imageFilePath;  // Global variable to hold the image file path
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -238,9 +240,9 @@ public class HomeFragment extends Fragment {
         itemName = dialogView.findViewById(R.id.item_name);
         itemDescription = dialogView.findViewById(R.id.item_description);
         buttonNext = dialogView.findViewById(R.id.button_next_item);
-        Button buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
+//        buttonTakePhoto = dialogView.findViewById(R.id.button_take_photo);
 
-        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
+//        buttonTakePhoto.setOnClickListener(v -> showImagePickerDialog());
 
         // Disable the button initially
         buttonNext.setEnabled(false);
@@ -264,7 +266,7 @@ public class HomeFragment extends Fragment {
         itemName.addTextChangedListener(textWatcher);
         itemDescription.addTextChangedListener(textWatcher);
 
-        itemImage.setOnClickListener(v -> OpenGallery());
+        itemImage.setOnClickListener(v -> showImagePickerDialog());
 
         buttonNext.setOnClickListener(v -> {
             showSuggestionPopup(itemName.getText().toString(), itemDescription.getText().toString());
@@ -290,17 +292,11 @@ public class HomeFragment extends Fragment {
         builder.show();
     }
 
-//    private void takePhoto() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
-
     private void takePhoto() {
         // Check if the CAMERA permission is granted
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED)
+        {
             // Request CAMERA permission
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.CAMERA},
@@ -308,8 +304,6 @@ public class HomeFragment extends Fragment {
         }
         else
         {
-            // Permission already granted, proceed with taking the photo
-//            dispatchTakePictureIntent();
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 File photoFile = null;
@@ -319,14 +313,16 @@ public class HomeFragment extends Fragment {
                     ex.printStackTrace();
                 }
                 if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "${applicationId}.provider", photoFile);
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.example.smartstorageorganizer.provider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    Toast.makeText(context, "PhotoFile not null", Toast.LENGTH_SHORT).show();
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
         }
 
     }
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -370,12 +366,29 @@ public class HomeFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
             progressDialogAddingItem.show();
-            uploadItemImage(file);
+            File compressedFile = compressImage(file);
+            uploadItemImage(compressedFile);
         });
         reloadButton.setOnClickListener(v -> {
             progressDialog.show();
             getSuggestedCategory(itemName, itemDescription, progressDialog, reloadButton);
         });
+    }
+
+    // Compress the image to avoid taking time to upload to the server
+    private File compressImage(File file) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            File compressedFile = new File(requireActivity().getCacheDir(), "compressed_image.jpeg");
+            try (FileOutputStream fos = new FileOutputStream(compressedFile)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos); // Compress to 50%
+                fos.flush();
+            }
+            return compressedFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return file; // Fallback to original if compression fails
+        }
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
@@ -525,6 +538,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
+        Toast.makeText(requireActivity(), "Before postAddItem ", Toast.LENGTH_LONG).show();
         Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail, requireActivity(), new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
@@ -609,50 +623,70 @@ public class HomeFragment extends Fragment {
         galleryIntent.setType("image/*");
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //startActivityForResult(galleryIntent, GalleryPick);
         startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+                imagesEncodedList = new ArrayList<>();
 
-            imagesEncodedList = new ArrayList<>();
-
-            if (data.getData() != null) {
-                ImageUri = data.getData();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (data.getData() != null) {
+                    ImageUri = data.getData();
+                    itemImage.setImageURI(ImageUri);
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                } else if (data.getClipData() != null) {
+                    ImageUri = data.getClipData().getItemAt(0).getUri();
+                    itemImage.setImageURI(ImageUri);
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                file = new File(imageFilePath);
+                if (file.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    itemImage.setImageBitmap(myBitmap);
+                    saveBitmapToGallery(myBitmap);
+                    saveBitmapToFile(myBitmap);
                 }
             }
-
-            else if (data.getClipData() != null) {
-                ImageUri = data.getClipData().getItemAt(0).getUri();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveBitmapToFile(Bitmap bitmap) {
+        // Create a file to save the image
+        file = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveBitmapToGallery(Bitmap bitmap) {
+        String savedImageURL = MediaStore.Images.Media.insertImage(
+                getActivity().getContentResolver(),
+                bitmap,
+                "MyImage",
+                "Image of something"
+        );
+        Uri savedImageURI = Uri.parse(savedImageURL);
+
+        // Optional: Display a toast message
+        Toast.makeText(getActivity(), "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
+    }
+
 
     public void uploadItemImage(File parentCategoryImage)
     {

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.OnColorFetchListener;
 import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ViewColorCodesActivity extends AppCompatActivity {
+public class ViewColorCodesActivity extends AppCompatActivity implements OnColorFetchListener {
     private RecyclerView colorCodeRecyclerView;
     private List<ColorCodeModel> colorCodeModelList;
     private ColorCodeAdapter colorCodeAdapter;
@@ -153,5 +154,10 @@ public class ViewColorCodesActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(ViewColorCodesActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void fetchByColorCode() {
+        loadAllColorCodes();
     }
 }

@@ -1,31 +1,51 @@
 package com.example.smartstorageorganizer.adapters;
 
-
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.OnColorFetchListener;
+import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewColorCodesActivity;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,16 +54,58 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
+    private final Set<Integer> selectedItems = new HashSet<>();
+    private String currentEmail;
+    private List<ColorCodeModel> colorCodeModelList;
+    private ColorCodeAdapter colorCodeAdapter;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView colorCodeRecyclerView;
+    private OnColorFetchListener onColorFetchListener;
+    private boolean isSelectionMode = false;
+
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
+
         this.context = context;
         this.itemModelList = itemModelList;
+        this.colorCodeModelList = colorCodeModelList;
+        this.colorCodeAdapter = colorCodeAdapter;
+        this.shimmerFrameLayout = shimmerFrameLayout;
+        this.colorCodeRecyclerView = colorCodeRecyclerView;
         new OkHttpClient();
+    }
+
+    public void setColorCodeLoadListener(OnColorFetchListener listener) {
+        this.onColorFetchListener = listener;
+    }
+    // Setter methods
+    public void setShimmerFrameLayout(ShimmerFrameLayout shimmerFrameLayout) {
+        this.shimmerFrameLayout = shimmerFrameLayout;
+    }
+
+    public void setColorCodeRecyclerView(RecyclerView colorCodeRecyclerView) {
+        this.colorCodeRecyclerView = colorCodeRecyclerView;
+    }
+
+    public void setColorCodeModelList(List<ColorCodeModel> colorCodeModelList) {
+        this.colorCodeModelList = colorCodeModelList;
+    }
+
+    public void setColorCodeAdapter(ColorCodeAdapter colorCodeAdapter) {
+        this.colorCodeAdapter = colorCodeAdapter;
+    }
+
+//    Getters
+
+    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
+        this.context = context1;
+        this.itemModelList = itemModelList1;
     }
 
     @NonNull
@@ -55,14 +117,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
-        holder.name.setText(itemModelList.get(position).getItemName());
-        holder.description.setText(itemModelList.get(position).getDescription());
+        ItemModel item = itemModelList.get(position);
 
-        if (!Objects.equals(itemModelList.get(position).getItemImage(), "empty")) {
-            Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
+        holder.name.setText(item.getItemName());
+        holder.description.setText(item.getDescription());
+
+        if (!Objects.equals(item.getItemImage(), "empty")) {
+            Glide.with(context).load(item.getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
-//        to view on the next page whenever it clicks use onClick()
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
             intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
@@ -79,11 +142,106 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             context.startActivity(intent);
         });
 
+//        // Handle item long click to select
+//        holder.itemView.setOnLongClickListener(view -> {
+//            toggleSelection(holder.getAdapterPosition());
+//            return true;
+//        });
+//
+//        // Show/hide tick icon based on selection
+//        if (selectedItems.contains(position)) {
+//            holder.tickIcon.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tickIcon.setVisibility(View.GONE);
+//        }
+
+
+//        updated onClick for selecting items
+        // Handle item long click to enter selection mode
+        holder.itemView.setOnLongClickListener(view -> {
+            isSelectionMode = true; // Enable selection mode
+            toggleSelection(holder.getAdapterPosition());
+            return true;
+        });
+
+// Handle item click to toggle selection if in selection mode
+        holder.itemView.setOnClickListener(view -> {
+            if (isSelectionMode) {
+                toggleSelection(holder.getAdapterPosition());
+            }
+        });
+
+// Show/hide tick icon based on selection
+        if (selectedItems.contains(position)) {
+            holder.tickIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.tickIcon.setVisibility(View.GONE);
+        }
+
+
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
             // Show a confirmation dialog or directly delete the item
         });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void selectAllItems() {
+        // Add logic to select all items
+        for (int i = 0; i < itemModelList.size(); i++) {
+            selectedItems.add(i);
+        }
+        notifyDataSetChanged(); // Update the adapter to refresh the UI
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void assignColorToSelectedItems() {
+        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
+            Log.e("1Error", "One of the UI components is not initialized.");
+            return;
+        }
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        colorCodeRecyclerView.setVisibility(View.GONE);
+        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> result) {
+                if (result != null && !result.isEmpty())
+                {
+                    colorCodeModelList.clear();
+                    colorCodeModelList.addAll(result);
+                    colorCodeAdapter.notifyDataSetChanged();
+//                loadingScreen.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                loadingScreen.setVisibility(View.GONE);
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
+                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void toggleSelection(int position) {
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(Integer.valueOf(position));
+        } else {
+            selectedItems.add(position);
+        }
+        notifyItemChanged(position);
     }
 
     @Override
@@ -97,6 +255,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView description;
         ImageView itemImage;
         ImageView deleteIcon;
+        ImageView tickIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,37 +264,46 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);
             deleteIcon = itemView.findViewById(R.id.delete_icon);  // Initialize delete icon
+            tickIcon = itemView.findViewById(R.id.tick_icon);
 
         }
     }
 
-    private void showBottomSheetDialog(int position, String itemId) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+//    Updated showBottomSheetDialog
+private void showBottomSheetDialog(int position, String itemId) {
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+    View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
 
-        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+    TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+    TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
+    TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
 
-        deleteItem.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete Item")
-                    .setMessage("Are you sure you want to delete this item?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        // Handle the delete action
-//                        Log.i("1ItemId: ", itemModelList.get(holder.getAdapterPosition()).getItemId());
-                        deleteItem(itemId, position);
-//                        deleteItem(itemModelList.get(holder.getAdapterPosition()).getItemId());
+    deleteItem.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    deleteItem(itemId, position);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    });
 
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        });
+    selectAllItems.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        selectAllItems(); // Implement your method to select all items
+    });
 
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
+    assignColor.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        assignColorToSelectedItems(); // Implement your method to assign color to selected items
+    });
 
+    bottomSheetDialog.setContentView(bottomSheetView);
+    bottomSheetDialog.show();
+}
     private void deleteItem(String itemId, int position) {
         try {
             // Convert itemId to integer
@@ -196,6 +364,57 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateColorCoding(String colorCode) {
+        for (Integer position : selectedItems) {
+            ItemModel item = itemModelList.get(position);
+            item.setColourCoding(colorCode); // Update the color coding in the model
+
+            // Optionally, update the server with the new color coding
+            updateItemColorCodingOnServer(item.getItemId(), colorCode);
+        }
+        notifyDataSetChanged(); // Refresh the RecyclerView to reflect the changes
+    }
+
+    private void updateItemColorCodingOnServer(String itemId, String colorCode) {
+        try {
+            String json = "{\"item_id\":\"" + itemId + "\", \"color_code\":\"" + colorCode + "\"}";
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            String API_URL = BuildConfig.AddColourEndPoint;
+            RequestBody body = RequestBody.create(json, JSON);
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    // Handle request failure
+                    Log.e("Update Color Coding", "Error updating color coding", e);
+                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        // Handle successful response
+                        Log.d("Update Color Coding", "Color coding updated successfully");
+                    } else {
+                        // Handle failure response
+                        Log.e("Update Color Coding", "Failed to update color coding. Response code: " + response.code());
+                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.e("Update Color Coding", "Exception occurred", e);
+        }
+    }
+
 }
 
 
