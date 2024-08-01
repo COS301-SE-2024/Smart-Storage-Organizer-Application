@@ -82,6 +82,9 @@ android {
         buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"");
         buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"");
 
+        buildConfigField("String", "RecommendMultipleEndPoint", "\"${localProperties["RecommendMultipleEndPoint"]}\"");
+        buildConfigField("String", "CreateCategoryAIEndPoint", "\"${localProperties["CreateCategoryAIEndPoint"]}\"");
+
 
 
     }
