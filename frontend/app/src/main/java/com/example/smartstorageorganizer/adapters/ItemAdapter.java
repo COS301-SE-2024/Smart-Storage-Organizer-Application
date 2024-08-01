@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -68,6 +69,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private RecyclerView colorCodeRecyclerView;
     private OnColorFetchListener onColorFetchListener;
     private boolean isSelectionMode = false;
+    private List<String> selectedItemsForColor = new ArrayList<>(); // This list should be populated as items are selected
+
 
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
@@ -84,29 +87,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void setColorCodeLoadListener(OnColorFetchListener listener) {
         this.onColorFetchListener = listener;
     }
-    // Setter methods
-    public void setShimmerFrameLayout(ShimmerFrameLayout shimmerFrameLayout) {
-        this.shimmerFrameLayout = shimmerFrameLayout;
-    }
 
-    public void setColorCodeRecyclerView(RecyclerView colorCodeRecyclerView) {
-        this.colorCodeRecyclerView = colorCodeRecyclerView;
-    }
-
-    public void setColorCodeModelList(List<ColorCodeModel> colorCodeModelList) {
-        this.colorCodeModelList = colorCodeModelList;
-    }
-
-    public void setColorCodeAdapter(ColorCodeAdapter colorCodeAdapter) {
-        this.colorCodeAdapter = colorCodeAdapter;
-    }
-
-//    Getters
-
-    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
-        this.context = context1;
-        this.itemModelList = itemModelList1;
-    }
+//    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
+//        this.context = context1;
+//        this.itemModelList = itemModelList1;
+//    }
 
     @NonNull
     @Override
@@ -141,20 +126,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
             context.startActivity(intent);
         });
-
-//        // Handle item long click to select
-//        holder.itemView.setOnLongClickListener(view -> {
-//            toggleSelection(holder.getAdapterPosition());
-//            return true;
-//        });
-//
-//        // Show/hide tick icon based on selection
-//        if (selectedItems.contains(position)) {
-//            holder.tickIcon.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.tickIcon.setVisibility(View.GONE);
-//        }
-
 
 //        updated onClick for selecting items
         // Handle item long click to enter selection mode
@@ -256,8 +227,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     ColorCodeModel selectedColor = colorCodeModelList.get(which);
                     String colourId = selectedColor.getId();
                     Log.d("Selected Color", "Color ID: " + colourId);
+                    Log.d("Selected Item", "Item ID: " + itemId);
+
                     // Assign the selected color to the item
                     assignColorToItem(itemId, selectedColor);
+
+                    //assigned to color db
+                    AssignColour(colourId,itemId);
                 });
                 builder.show();
             }
@@ -275,6 +251,38 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         // This might involve updating a database, sending a request to a server, etc.
         Log.d("AssignColor", "Item ID: " + itemId + " assigned to color: " + colorCode.getName());
     }
+
+    public void AssignColour(String colourid, String itemid) {
+        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Log.e("AssignColour", "Request failed: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    Log.d("AssignColour", "Successfully assigned color to items");
+                } else {
+                    Log.e("AssignColour", "Failed to assign color: " + response.message());
+                }
+            }
+        });
+    }
+
 
     private void toggleSelection(int position) {
         if (selectedItems.contains(position)) {
@@ -309,42 +317,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         }
     }
+    private List<String> getSelectedItemIds() {
+        // This method should return the list of IDs for the selected items
+        // Replace this with the actual logic for retrieving selected item IDs
+        List<String> selectedItemIds = new ArrayList<>();
+        // Example: Add selected item IDs to the list
+        selectedItemIds.add("item1");
+        selectedItemIds.add("item2");
+        // Add more item IDs as necessary
+        return selectedItemIds;
+    }
 
-//    Updated showBottomSheetDialog
-//private void showBottomSheetDialog(int position, String itemId) {
-//    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-//    View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
-//
-//    TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
-//    TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
-//    TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
-//
-//    deleteItem.setOnClickListener(view -> {
-//        bottomSheetDialog.dismiss();
-//        new AlertDialog.Builder(context)
-//                .setTitle("Delete Item")
-//                .setMessage("Are you sure you want to delete this item?")
-//                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                    deleteItem(itemId, position);
-//                })
-//                .setNegativeButton(android.R.string.no, null)
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .show();
-//    });
-//
-//    selectAllItems.setOnClickListener(view -> {
-//        bottomSheetDialog.dismiss();
-//        selectAllItems(); // Implement your method to select all items
-//    });
-//
-//    assignColor.setOnClickListener(view -> {
-//        bottomSheetDialog.dismiss();
-//        assignItemToColor(); // Implement your method to assign color to selected items
-//    });
-//
-//    bottomSheetDialog.setContentView(bottomSheetView);
-//    bottomSheetDialog.show();
-//}
 
 
 //    updated showBottomSheetDialog
@@ -378,11 +361,14 @@ private void showBottomSheetDialog(int position, String itemId) {
         bottomSheetDialog.dismiss();
         // Assuming context is an instance of Activity
         if (context instanceof Activity) {
+            // Replace with the actual list of selected item IDs
+            List<String> selectedItemIds = getSelectedItemIds(); // Method to retrieve selected item IDs
             assignItemToColor((Activity) context, itemId);
         } else {
             Toast.makeText(context, "Unable to assign color. Context is not an activity.", Toast.LENGTH_SHORT).show();
         }
     });
+
 
     bottomSheetDialog.setContentView(bottomSheetView);
     bottomSheetDialog.show();
