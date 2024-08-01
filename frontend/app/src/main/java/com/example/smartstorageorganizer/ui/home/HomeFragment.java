@@ -500,6 +500,8 @@ public class HomeFragment extends Fragment {
                 }
                 else {
                     categoryModelList.clear();
+                    CategoryModel allCategory = new CategoryModel("All", "all", "all");
+                    categoryModelList.add(allCategory);
                     categoryModelList.addAll(result);
                     categoryAdapter.notifyDataSetChanged();
                     for (CategoryModel category : categoryModelList) {

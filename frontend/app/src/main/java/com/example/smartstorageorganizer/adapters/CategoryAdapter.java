@@ -53,7 +53,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.name.setText(categoryModelList.get(position).getCategoryName());
 
         if (!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")) {
-            Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
+            if(!Objects.equals(categoryModelList.get(position).getCategoryID(), "all")){
+                Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
+            }
+            else {
+                holder.image.setImageResource(R.drawable.all_category);
+            }
         }
 
         holder.itemView.setOnClickListener(view -> {
