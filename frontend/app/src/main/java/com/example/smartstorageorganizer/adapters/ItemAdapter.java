@@ -196,43 +196,83 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void assignColorToSelectedItems() {
-        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
-            Log.e("1Error", "One of the UI components is not initialized.");
-            return;
-        }
-        shimmerFrameLayout.startShimmer();
-        shimmerFrameLayout.setVisibility(View.VISIBLE);
-        colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
-            @Override
-            public void onSuccess(List<ColorCodeModel> result) {
-                if (result != null && !result.isEmpty())
-                {
-                    colorCodeModelList.clear();
-                    colorCodeModelList.addAll(result);
-                    colorCodeAdapter.notifyDataSetChanged();
-//                loadingScreen.setVisibility(View.GONE);
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
-                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
-                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
+//    private void assignColorToSelectedItems() {
+//        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
+//            Log.e("1Error", "One of the UI components is not initialized.");
+//            return;
+//        }
+//        shimmerFrameLayout.startShimmer();
+//        shimmerFrameLayout.setVisibility(View.VISIBLE);
+//        colorCodeRecyclerView.setVisibility(View.GONE);
+//        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
+//            @Override
+//            public void onSuccess(List<ColorCodeModel> result) {
+//                if (result != null && !result.isEmpty())
+//                {
+//                    colorCodeModelList.clear();
+//                    colorCodeModelList.addAll(result);
+//                    colorCodeAdapter.notifyDataSetChanged();
+////                loadingScreen.setVisibility(View.GONE);
+//                    shimmerFrameLayout.stopShimmer();
+//                    shimmerFrameLayout.setVisibility(View.GONE);
+//                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+//                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
+//                }
+//                else
+//                {
+//                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+////                loadingScreen.setVisibility(View.GONE);
+//                shimmerFrameLayout.stopShimmer();
+//                shimmerFrameLayout.setVisibility(View.GONE);
+//                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
+
+//    updated assignItemToColor load the list of the available colors
+    public void assignItemToColor(Activity activity, String itemId) {
+        // Fetch all available color codes
+        Utils.fetchAllColour(activity, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
+                // Create an array of color names to display to the user
+                String[] colorNames = new String[colorCodeModelList.size()];
+                for (int i = 0; i < colorCodeModelList.size(); i++) {
+                    colorNames[i] = colorCodeModelList.get(i).getName();
                 }
+
+                // Show the color options to the user (e.g., in a dialog)
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("Choose a color for the item");
+                builder.setItems(colorNames, (dialog, which) -> {
+                    // Get the selected color code
+                    ColorCodeModel selectedColor = colorCodeModelList.get(which);
+
+                    // Assign the selected color to the item
+                    assignColorToItem(itemId, selectedColor);
+                });
+                builder.show();
             }
 
             @Override
-            public void onFailure(String error) {
-//                loadingScreen.setVisibility(View.GONE);
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
-                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
+            public void onFailure(String errorMessage) {
+                // Handle the error (e.g., show a toast or log the error)
+                Toast.makeText(activity, "Failed to fetch colors: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void assignColorToItem(String itemId, ColorCodeModel colorCode) {
+        // Your logic to assign the colorCode to the item with the given itemId
+        // This might involve updating a database, sending a request to a server, etc.
+        Log.d("AssignColor", "Item ID: " + itemId + " assigned to color: " + colorCode.getName());
     }
 
     private void toggleSelection(int position) {
@@ -270,6 +310,43 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
 //    Updated showBottomSheetDialog
+//private void showBottomSheetDialog(int position, String itemId) {
+//    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+//    View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+//
+//    TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+//    TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
+//    TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
+//
+//    deleteItem.setOnClickListener(view -> {
+//        bottomSheetDialog.dismiss();
+//        new AlertDialog.Builder(context)
+//                .setTitle("Delete Item")
+//                .setMessage("Are you sure you want to delete this item?")
+//                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//                    deleteItem(itemId, position);
+//                })
+//                .setNegativeButton(android.R.string.no, null)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .show();
+//    });
+//
+//    selectAllItems.setOnClickListener(view -> {
+//        bottomSheetDialog.dismiss();
+//        selectAllItems(); // Implement your method to select all items
+//    });
+//
+//    assignColor.setOnClickListener(view -> {
+//        bottomSheetDialog.dismiss();
+//        assignItemToColor(); // Implement your method to assign color to selected items
+//    });
+//
+//    bottomSheetDialog.setContentView(bottomSheetView);
+//    bottomSheetDialog.show();
+//}
+
+
+//    updated showBottomSheetDialog
 private void showBottomSheetDialog(int position, String itemId) {
     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
     View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
@@ -298,12 +375,18 @@ private void showBottomSheetDialog(int position, String itemId) {
 
     assignColor.setOnClickListener(view -> {
         bottomSheetDialog.dismiss();
-        assignColorToSelectedItems(); // Implement your method to assign color to selected items
+        // Assuming context is an instance of Activity
+        if (context instanceof Activity) {
+            assignItemToColor((Activity) context, itemId);
+        } else {
+            Toast.makeText(context, "Unable to assign color. Context is not an activity.", Toast.LENGTH_SHORT).show();
+        }
     });
 
     bottomSheetDialog.setContentView(bottomSheetView);
     bottomSheetDialog.show();
 }
+
     private void deleteItem(String itemId, int position) {
         try {
             // Convert itemId to integer
