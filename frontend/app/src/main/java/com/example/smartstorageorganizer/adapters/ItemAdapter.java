@@ -254,7 +254,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 builder.setItems(colorNames, (dialog, which) -> {
                     // Get the selected color code
                     ColorCodeModel selectedColor = colorCodeModelList.get(which);
-
+                    String colourId = selectedColor.getId();
+                    Log.d("Selected Color", "Color ID: " + colourId);
                     // Assign the selected color to the item
                     assignColorToItem(itemId, selectedColor);
                 });
@@ -354,7 +355,7 @@ private void showBottomSheetDialog(int position, String itemId) {
     TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
     TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
     TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
-
+    Log.d("AssignItem", "Item ID: " + itemId);
     deleteItem.setOnClickListener(view -> {
         bottomSheetDialog.dismiss();
         new AlertDialog.Builder(context)
