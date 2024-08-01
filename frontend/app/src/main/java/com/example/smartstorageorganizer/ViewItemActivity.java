@@ -29,6 +29,7 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -61,6 +62,7 @@ public class ViewItemActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class ViewItemActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
@@ -488,5 +491,32 @@ public class ViewItemActivity extends AppCompatActivity {
                 break;
             default:
         }
+    }
+
+    private void setupBottomNavigationBar() {
+//        ImageView deleteButton = findViewById(R.id.bottom_nav_delete);
+//        ImageView colorButton = findViewById(R.id.bottom_nav_color);
+//        ImageView shareButton = findViewById(R.id.bottom_nav_share);
+//        TextView selectAllButton = findViewById(R.id.bottom_nav_select_all);
+//
+//        deleteButton.setOnClickListener(view -> {
+//            // Handle delete action
+//        });
+//
+//        colorButton.setOnClickListener(view -> {
+//            // Handle color assign action
+//        });
+//
+//        shareButton.setOnClickListener(view -> {
+//            // Handle share action
+//        });
+//
+//        selectAllButton.setOnClickListener(view -> {
+//            // Handle select all action
+//        });
+    }
+
+    public void updateBottomNavigationBar(boolean isVisible) {
+        bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 }
