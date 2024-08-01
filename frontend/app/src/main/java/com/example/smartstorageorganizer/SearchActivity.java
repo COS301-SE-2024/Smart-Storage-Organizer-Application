@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.adapters.SearchAdapter;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
 import com.example.smartstorageorganizer.utils.Utils;
 
@@ -39,10 +40,13 @@ import okhttp3.Response;
 public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private List<SearchResult> searchResults;
+    private List<ItemModel> searchResults;
     private SearchView searchView;
     private ImageButton searchButton;
     private RecyclerView searchResultsRecyclerView;
+
+    private SearchAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
 
-        SearchAdapter adapter = new SearchAdapter(searchResults);
+        adapter = new SearchAdapter(searchResults);
         searchResultsRecyclerView.setAdapter(adapter);
 //
         searchButton.setOnClickListener(v -> {
@@ -65,8 +69,8 @@ public class SearchActivity extends AppCompatActivity {
             if (!query.isEmpty()) {
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                 SearchForItem(query, "*", "*");
-                searchResults.add(new SearchResult(query, query));
-                adapter.notifyDataSetChanged();
+//                searchResults.add(new ItemModel());
+//                adapter.notifyDataSetChanged();
 //                SearchForItem(query, "", ""); // Adjust parameters as needed
             } else {
                 Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
@@ -80,7 +84,8 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
 //                searchResults.add(new SearchResult("Title", "Description"));
                 adapter.notifyDataSetChanged();
-                SearchForItem(query, "", ""); // Adjust parameters as needed
+                SearchForItem(query, "9", "*"); // Adjust parameters as needed
+
                 return false;
             }
 
@@ -156,8 +161,62 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
-                    List<SearchResult> searchResults = parseSearchResults(responseData);
-                    future.complete(searchResults);
+//                    List<Ite> searchResults = parseSearchResults(responseData);
+                    Log.i("Search Result", responseData);
+//                    future.complete(searchResults);
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        runOnUiThread(() -> Log.e("Search Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            JSONObject itemObj = new JSONObject(itemObject.getString("_source"));
+
+
+                            runOnUiThread(() -> {
+                                try {
+                                    Log.i("Search Results convert", itemObj.getString("item_id"));
+                                    Log.i("Search Results convert", itemObj.getString("item_name"));
+                                    Log.i("Search Results convert", itemObj.getString("description"));
+                                    Log.i("Search Results convert", itemObj.getString("colourcoding"));
+                                    Log.i("Search Results convert", itemObj.getString("barcode"));
+                                    Log.i("Search Results convert", itemObj.getString("qrcode"));
+                                    Log.i("Search Results convert", itemObj.getString("quanity"));
+                                    Log.i("Search Results convert", itemObj.getString("email"));
+                                    Log.i("Search Results convert", itemObj.getString("item_image"));
+                                    Log.i("Search Results convert", itemObj.getString("subcategoryid"));
+                                    Log.i("Search Results convert", itemObj.getString("parentcategoryid"));
+//                                    Log.e("Search Results Body Array", itemObject.getString("_source") );
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+
+                            ItemModel item = new ItemModel();
+                            item.setItemId(itemObj.getString("item_id"));
+                            item.setItemName(itemObj.getString("item_name"));
+                            item.setDescription(itemObj.getString("description"));
+                            item.setColourCoding(itemObj.getString("colourcoding"));
+                            item.setBarcode(itemObj.getString("barcode"));
+                            item.setQrcode(itemObj.getString("qrcode"));
+                            item.setQuantity(itemObj.getString("quanity"));
+                            item.setLocation(itemObj.getString("location"));
+                            item.setEmail(itemObj.getString("email"));
+                            item.setItemImage(itemObj.getString("item_image"));
+                            item.setParentCategoryId(itemObj.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObj.getString("subcategoryid"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+                            searchResults.add(item);
+//                            adapter.notifyDataSetChanged();
+                        }
+
+                    }catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 } else {
                     future.completeExceptionally(new IOException("Search request failed: " + response.code()));
@@ -169,19 +228,19 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    private List<SearchResult> parseSearchResults(String responseData) {
-        List<SearchResult> results = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(responseData);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String title = jsonObject.optString("title", "No Title");
-                String description = jsonObject.optString("description", "No Description");
-                results.add(new SearchResult(title, description));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return results;
-    }
+//    private List<SearchResult> parseSearchResults(String responseData) {
+//        List<SearchResult> results = new ArrayList<>();
+//        try {
+//            JSONArray jsonArray = new JSONArray(responseData);
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                String title = jsonObject.optString("title", "No Title");
+//                String description = jsonObject.optString("description", "No Description");
+//                results.add(new SearchResult(title, description));
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return results;
+//    }
 }

@@ -9,15 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
 
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
-    private List<SearchResult> searchResults;
+    private List<ItemModel> searchResults;
 
-    public SearchAdapter(List<SearchResult> searchResults) {
+    public SearchAdapter(List<ItemModel> searchResults) {
         this.searchResults = searchResults;
     }
 
@@ -30,8 +31,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SearchResult searchResult = searchResults.get(position);
-        holder.titleTextView.setText(searchResult.getTitle());
+        ItemModel searchResult = searchResults.get(position);
+        holder.titleTextView.setText(searchResult.getItemName());
         holder.descriptionTextView.setText(searchResult.getDescription());
     }
 
@@ -40,7 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         return searchResults.size();
     }
 
-    public void updateData(List<SearchResult> newSearchResults) {
+    public void updateData(List<ItemModel> newSearchResults) {
         searchResults = newSearchResults;
         notifyDataSetChanged();
     }
