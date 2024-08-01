@@ -3,43 +3,29 @@ package com.example.smartstorageorganizer.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.OnColorFetchListener;
-import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
-import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.ViewColorCodesActivity;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,43 +41,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
-    private String currentEmail;
-    private List<ColorCodeModel> colorCodeModelList;
-    private ColorCodeAdapter colorCodeAdapter;
-    private ShimmerFrameLayout shimmerFrameLayout;
-    private RecyclerView colorCodeRecyclerView;
-    private OnColorFetchListener onColorFetchListener;
     private boolean isSelectionMode = false;
-    private List<String> selectedItemsForColor = new ArrayList<>(); // This list should be populated as items are selected
-
-
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
 
         this.context = context;
         this.itemModelList = itemModelList;
-        this.colorCodeModelList = colorCodeModelList;
-        this.colorCodeAdapter = colorCodeAdapter;
-        this.shimmerFrameLayout = shimmerFrameLayout;
-        this.colorCodeRecyclerView = colorCodeRecyclerView;
         new OkHttpClient();
     }
-
-    public void setColorCodeLoadListener(OnColorFetchListener listener) {
-        this.onColorFetchListener = listener;
-    }
-
-//    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
-//        this.context = context1;
-//        this.itemModelList = itemModelList1;
-//    }
 
     @NonNull
     @Override
@@ -165,47 +128,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
         notifyDataSetChanged(); // Update the adapter to refresh the UI
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-//    private void assignColorToSelectedItems() {
-//        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
-//            Log.e("1Error", "One of the UI components is not initialized.");
-//            return;
-//        }
-//        shimmerFrameLayout.startShimmer();
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        colorCodeRecyclerView.setVisibility(View.GONE);
-//        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
-//            @Override
-//            public void onSuccess(List<ColorCodeModel> result) {
-//                if (result != null && !result.isEmpty())
-//                {
-//                    colorCodeModelList.clear();
-//                    colorCodeModelList.addAll(result);
-//                    colorCodeAdapter.notifyDataSetChanged();
-////                loadingScreen.setVisibility(View.GONE);
-//                    shimmerFrameLayout.stopShimmer();
-//                    shimmerFrameLayout.setVisibility(View.GONE);
-//                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
-//                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-//                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-////                loadingScreen.setVisibility(View.GONE);
-//                shimmerFrameLayout.stopShimmer();
-//                shimmerFrameLayout.setVisibility(View.GONE);
-//                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
 
 //    updated assignItemToColor load the list of the available colors
     public void assignItemToColor(Activity activity, String itemId) {
@@ -286,7 +208,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private void toggleSelection(int position) {
         if (selectedItems.contains(position)) {
-            selectedItems.remove(Integer.valueOf(position));
+            selectedItems.remove(position);
         } else {
             selectedItems.add(position);
         }
@@ -317,18 +239,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         }
     }
-    private List<String> getSelectedItemIds() {
-        // This method should return the list of IDs for the selected items
-        // Replace this with the actual logic for retrieving selected item IDs
-        List<String> selectedItemIds = new ArrayList<>();
-        // Example: Add selected item IDs to the list
-        selectedItemIds.add("item1");
-        selectedItemIds.add("item2");
-        // Add more item IDs as necessary
-        return selectedItemIds;
-    }
-
-
 
 //    updated showBottomSheetDialog
 private void showBottomSheetDialog(int position, String itemId) {
@@ -362,14 +272,11 @@ private void showBottomSheetDialog(int position, String itemId) {
         // Assuming context is an instance of Activity
         if (context instanceof Activity) {
             // Replace with the actual list of selected item IDs
-            List<String> selectedItemIds = getSelectedItemIds(); // Method to retrieve selected item IDs
             assignItemToColor((Activity) context, itemId);
         } else {
             Toast.makeText(context, "Unable to assign color. Context is not an activity.", Toast.LENGTH_SHORT).show();
         }
     });
-
-
     bottomSheetDialog.setContentView(bottomSheetView);
     bottomSheetDialog.show();
 }
@@ -434,57 +341,6 @@ private void showBottomSheetDialog(int position, String itemId) {
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateColorCoding(String colorCode) {
-        for (Integer position : selectedItems) {
-            ItemModel item = itemModelList.get(position);
-            item.setColourCoding(colorCode); // Update the color coding in the model
-
-            // Optionally, update the server with the new color coding
-            updateItemColorCodingOnServer(item.getItemId(), colorCode);
-        }
-        notifyDataSetChanged(); // Refresh the RecyclerView to reflect the changes
-    }
-
-    private void updateItemColorCodingOnServer(String itemId, String colorCode) {
-        try {
-            String json = "{\"item_id\":\"" + itemId + "\", \"color_code\":\"" + colorCode + "\"}";
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            String API_URL = BuildConfig.AddColourEndPoint;
-            RequestBody body = RequestBody.create(json, JSON);
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(body)
-                    .build();
-
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    // Handle request failure
-                    Log.e("Update Color Coding", "Error updating color coding", e);
-                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        // Handle successful response
-                        Log.d("Update Color Coding", "Color coding updated successfully");
-                    } else {
-                        // Handle failure response
-                        Log.e("Update Color Coding", "Failed to update color coding. Response code: " + response.code());
-                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Log.e("Update Color Coding", "Exception occurred", e);
-        }
-    }
-
 }
 
 
