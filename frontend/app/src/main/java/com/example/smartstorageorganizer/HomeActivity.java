@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
     private boolean isAdmin() {
         // Implement your logic to check if the user is an admin
         // For example, check shared preferences, a database, or an API
-        return false; // Replace with actual logic
+        return true; // Replace with actual logic
     }
 
     private void hideAdminMenuItems(Menu menu) {

@@ -13,6 +13,10 @@
         android:icon="@drawable/baseline_share_24"
         android:title="Share" />
     <item
+        android:id="@+id/navigation_categorize"
+        android:icon="@drawable/baseline_category_24"
+        android:title="Categorize" />
+    <item
         android:id="@+id/navigation_select_all"
         android:icon="@drawable/baseline_border_all_24"
         android:title="Select All" />

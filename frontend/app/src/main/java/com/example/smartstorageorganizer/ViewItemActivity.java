@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -98,6 +99,8 @@ public class ViewItemActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        Menu menu = bottomNavigationView.getMenu();
+        menu.removeItem(R.id.navigation_categorize);
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
