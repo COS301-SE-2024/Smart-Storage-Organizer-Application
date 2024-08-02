@@ -217,4 +217,34 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
+
+    public String getSelectedItemsIds() {
+        StringBuilder selectedIds = new StringBuilder();
+        for (int position : selectedItems) {
+            if (selectedIds.length() > 0) {
+                selectedIds.append(",");
+            }
+            selectedIds.append(itemModelList.get(position).getItemId());
+        }
+        return selectedIds.toString();
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

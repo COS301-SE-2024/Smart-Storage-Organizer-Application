@@ -1,11 +1,13 @@
 package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +54,8 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
-    private BottomNavigationView bottomNavigationView;
+    private LinearLayout bottomNavigationView;
+    List<String> selectedItemsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         loadInitialData();
         setupSortByListener();
         setupPaginationButtons();
+        setupBottomNavigationBar();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -132,6 +136,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemRecyclerView.setHasFixedSize(true);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemModelList = new ArrayList<>();
+        selectedItemsList = new ArrayList<>();
         recentAdapter = new RecentAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
     }
@@ -245,15 +250,44 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    public void suggestCategory() {
+    public void suggestCategory(String selectedIds) {
         //call api to suggest
+        Toast.makeText(UncategorizedItemsActivity.this, "Clicked:"+selectedIds, Toast.LENGTH_LONG).show();
+
     }
 
     private void setupBottomNavigationBar() {
-        // Implement if needed
+        LinearLayout deleteButton = findViewById(R.id.delete);
+        LinearLayout colorButton = findViewById(R.id.color);
+        LinearLayout shareButton = findViewById(R.id.share);
+        LinearLayout selectAllButton = findViewById(R.id.select_all);
+        LinearLayout categorizeButton = findViewById(R.id.categorize);
+
+        deleteButton.setOnClickListener(view -> {
+            // Handle delete action
+        });
+
+        colorButton.setOnClickListener(view -> {
+            // Handle color assign action
+        });
+
+        shareButton.setOnClickListener(view -> {
+            // Handle share action
+        });
+
+        selectAllButton.setOnClickListener(view -> {
+            // Handle select all action
+        });
+        categorizeButton.setOnClickListener(view -> {
+            // Handle select all action
+            String selectedIds = recentAdapter.getSelectedItemsIds();
+            suggestCategory(selectedIds);
+        });
     }
 
     public void updateBottomNavigationBar(boolean isVisible) {
+        LinearLayout paginationLayout = findViewById(R.id.paginationLayout);
+        paginationLayout.setVisibility(isVisible ? View.GONE : View.VISIBLE);
         bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 }
