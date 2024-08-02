@@ -1198,7 +1198,7 @@ public class Utils
         });
     }
 
-    public static void RecommendMultiple(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
+    public static void RecommendMultipleCategories(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
     {
         String json = "{\"id\":\""+id+"\"}";
 
@@ -1219,7 +1219,7 @@ public class Utils
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 activity.runOnUiThread(() -> {
-                    Log.e(message, "GET request failed", e);
+                    Log.e(message, "GET Suggested request failed", e);
                     callback.onFailure(e.getMessage());
                 });
             }
@@ -1232,14 +1232,26 @@ public class Utils
 
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
+                        String bodyString = jsonObject.getString("response");
                         JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                        activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
 
                         for (int i = 0; i < bodyArray.length(); i++) {
                             JSONObject itemObject = bodyArray.getJSONObject(i);
-                            String categoryString = jsonObject.getString("category");
-                            String subcategoryString = jsonObject.getString("subcategory");
+
+                            String itemIdString = itemObject.getString("id");
+                            String categoryString = itemObject.getString("category");
+                            JSONObject categoryObject = new JSONObject(categoryString);
+                            String subcategoryString = itemObject.getString("subcategory");
+                            JSONObject subcategoryObject = new JSONObject(subcategoryString);
+
+                            SuggestedCategoryModel suggestedCategory = new SuggestedCategoryModel();
+
+                            suggestedCategory.setItemId(itemIdString);
+                            suggestedCategory.setCategoryId(categoryObject.getString("id"));
+                            suggestedCategory.setCategoryName(categoryObject.getString("categoryname"));
+                            suggestedCategory.setSubcategoryId(subcategoryObject.getString("id"));
+                            suggestedCategory.setSubcategoryName(subcategoryObject.getString("categoryname"));
 
                             activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
                             activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
@@ -1260,18 +1272,19 @@ public class Utils
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
 //                            itemModelList.add(item);
+                            categoryModelList.add(suggestedCategory);
                         }
 
                         activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "JSON parsing error: " + e.getMessage());
+                            Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
                             callback.onFailure(e.getMessage());
                         });
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed:" + response);
+                        Log.e(message, "GET Suggested request failed:" + response);
                         callback.onFailure("Response code:" + response.code());
                     });
                 }

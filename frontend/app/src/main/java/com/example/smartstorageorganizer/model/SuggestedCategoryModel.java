@@ -1,12 +1,13 @@
 package com.example.smartstorageorganizer.model;
 
 public class SuggestedCategoryModel {
+    String itemId;
     String categoryId;
     String categoryName;
     String subcategoryId;
     String subcategoryName;
 
-    SuggestedCategoryModel(){}
+    public SuggestedCategoryModel(){}
 
     public String getCategoryId() {
         return categoryId;
@@ -38,5 +39,13 @@ public class SuggestedCategoryModel {
 
     public void setSubcategoryName(String subcategoryName) {
         this.subcategoryName = subcategoryName;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }

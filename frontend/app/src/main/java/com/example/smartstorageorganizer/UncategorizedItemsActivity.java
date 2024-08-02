@@ -1,7 +1,10 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +28,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -55,7 +59,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
     private LinearLayout bottomNavigationView;
-    List<String> selectedItemsList;
+    List<SuggestedCategoryModel> suggestedCategoriesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +140,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemRecyclerView.setHasFixedSize(true);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemModelList = new ArrayList<>();
-        selectedItemsList = new ArrayList<>();
+        suggestedCategoriesList = new ArrayList<>();
         recentAdapter = new RecentAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
     }
@@ -253,6 +257,36 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     public void suggestCategory(String selectedIds) {
         //call api to suggest
         Toast.makeText(UncategorizedItemsActivity.this, "Clicked:"+selectedIds, Toast.LENGTH_LONG).show();
+        Utils.RecommendMultipleCategories(selectedIds, this, new OperationCallback<List<SuggestedCategoryModel>>() {
+            @Override
+            public void onSuccess(List<SuggestedCategoryModel> result) {
+                suggestedCategoriesList.addAll(result);
+                ItemModel itemName = findItemById(result.get(0).getItemId());
+                showUnverifiedDialog();
+                Toast.makeText(UncategorizedItemsActivity.this, "success: " + result.get(0).getItemId(), Toast.LENGTH_LONG).show();
+                Log.i("View Suggested", itemName.getItemName());
+//                Log.i
+//                itemModelList.clear();
+//                itemModelList.addAll(result);
+//                if (!Objects.equals(currentSelectedOption, "Sort by")) {
+//                    setupSort(currentSelectedOption);
+//                } else {
+//                    recentAdapter.notifyDataSetChanged();
+//                }
+//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+//                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                updatePaginationButtons(result.size());
+//                shimmerFrameLayout.stopShimmer();
+//                shimmerFrameLayout.setVisibility(View.GONE);
+//                itemsLayout.setVisibility(View.VISIBLE);
+//                sortBySpinner.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(UncategorizedItemsActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -284,6 +318,43 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
             suggestCategory(selectedIds);
         });
     }
+
+    private ItemModel findItemById(String itemId) {
+        for (ItemModel item : itemModelList) {
+            if (item.getItemId().equalsIgnoreCase(itemId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private void showUnverifiedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.suggested_categories_popup, null);
+        builder.setView(dialogView);
+
+        LinearLayout parentLayout = dialogView.findViewById(R.id.parentLayout); // Assuming you have a LinearLayout in your XML
+        Button closeButton = dialogView.findViewById(R.id.closeButton);
+
+        for (SuggestedCategoryModel category : suggestedCategoriesList) {
+            TextView suggestedCategory = new TextView(this);
+            suggestedCategory.setTextSize(16);
+            ItemModel itemName = findItemById(category.getItemId());
+            suggestedCategory.setText(itemName.getItemName() + " (" + category.getCategoryName() + " - " + category.getSubcategoryName() + ")");
+            parentLayout.addView(suggestedCategory);
+        }
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle close button click
+            }
+        });
+
+        builder.show();
+    }
+
 
     public void updateBottomNavigationBar(boolean isVisible) {
         LinearLayout paginationLayout = findViewById(R.id.paginationLayout);

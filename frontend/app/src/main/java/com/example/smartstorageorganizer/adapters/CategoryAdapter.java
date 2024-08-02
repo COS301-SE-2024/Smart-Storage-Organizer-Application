@@ -58,7 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 holder.image.setImageResource(R.drawable.all_category);
             }
             else if(Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")){
-                holder.image.setImageResource(R.drawable.all_category);
+                holder.image.setImageResource(R.drawable.decision);
             }
             else {
                 Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
