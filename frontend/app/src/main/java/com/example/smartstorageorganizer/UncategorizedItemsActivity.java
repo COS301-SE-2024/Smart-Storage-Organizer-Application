@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -60,6 +61,8 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     private NestedScrollView itemsLayout;
     private LinearLayout bottomNavigationView;
     List<SuggestedCategoryModel> suggestedCategoriesList;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,11 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemsLayout = findViewById(R.id.newstedScrollview);
         TextView category = findViewById(R.id.category_text);
         category.setText(getIntent().getStringExtra("category"));
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Suggesting Categories...");
+        progressDialog.setCancelable(false);
+
     }
 
     private void setupBackButton() {
@@ -255,35 +263,24 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     }
 
     public void suggestCategory(String selectedIds) {
-        //call api to suggest
-        Toast.makeText(UncategorizedItemsActivity.this, "Clicked:"+selectedIds, Toast.LENGTH_LONG).show();
+        //Show the progress bar loader
+        progressDialog.show();
         Utils.RecommendMultipleCategories(selectedIds, this, new OperationCallback<List<SuggestedCategoryModel>>() {
             @Override
             public void onSuccess(List<SuggestedCategoryModel> result) {
+                //stop the progress bar loader
+                progressDialog.dismiss();
+                suggestedCategoriesList.clear();
                 suggestedCategoriesList.addAll(result);
                 ItemModel itemName = findItemById(result.get(0).getItemId());
                 showUnverifiedDialog();
-                Toast.makeText(UncategorizedItemsActivity.this, "success: " + result.get(0).getItemId(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(UncategorizedItemsActivity.this, "success: " + result.get(0).getItemId(), Toast.LENGTH_LONG).show();
                 Log.i("View Suggested", itemName.getItemName());
-//                Log.i
-//                itemModelList.clear();
-//                itemModelList.addAll(result);
-//                if (!Objects.equals(currentSelectedOption, "Sort by")) {
-//                    setupSort(currentSelectedOption);
-//                } else {
-//                    recentAdapter.notifyDataSetChanged();
-//                }
-//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
-//                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
-//                updatePaginationButtons(result.size());
-//                shimmerFrameLayout.stopShimmer();
-//                shimmerFrameLayout.setVisibility(View.GONE);
-//                itemsLayout.setVisibility(View.VISIBLE);
-//                sortBySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(String error) {
+                progressDialog.dismiss();
                 Toast.makeText(UncategorizedItemsActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_LONG).show();
             }
         });
@@ -354,7 +351,6 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
 
         builder.show();
     }
-
 
     public void updateBottomNavigationBar(boolean isVisible) {
         LinearLayout paginationLayout = findViewById(R.id.paginationLayout);

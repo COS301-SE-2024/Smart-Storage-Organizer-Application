@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class ViewItemActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
-    private BottomNavigationView bottomNavigationView;
+    private LinearLayout bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +100,6 @@ public class ViewItemActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        Menu menu = bottomNavigationView.getMenu();
-        menu.removeItem(R.id.navigation_categorize);
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
@@ -497,29 +496,31 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigationBar() {
-//        ImageView deleteButton = findViewById(R.id.bottom_nav_delete);
-//        ImageView colorButton = findViewById(R.id.bottom_nav_color);
-//        ImageView shareButton = findViewById(R.id.bottom_nav_share);
-//        TextView selectAllButton = findViewById(R.id.bottom_nav_select_all);
-//
-//        deleteButton.setOnClickListener(view -> {
-//            // Handle delete action
-//        });
-//
-//        colorButton.setOnClickListener(view -> {
-//            // Handle color assign action
-//        });
-//
-//        shareButton.setOnClickListener(view -> {
-//            // Handle share action
-//        });
-//
-//        selectAllButton.setOnClickListener(view -> {
-//            // Handle select all action
-//        });
+        LinearLayout deleteButton = findViewById(R.id.delete);
+        LinearLayout colorButton = findViewById(R.id.color);
+        LinearLayout shareButton = findViewById(R.id.share);
+        LinearLayout selectAllButton = findViewById(R.id.select_all);
+
+        deleteButton.setOnClickListener(view -> {
+            // Handle delete action
+        });
+
+        colorButton.setOnClickListener(view -> {
+            // Handle color assign action
+        });
+
+        shareButton.setOnClickListener(view -> {
+            // Handle share action
+        });
+
+        selectAllButton.setOnClickListener(view -> {
+            // Handle select all action
+        });
     }
 
     public void updateBottomNavigationBar(boolean isVisible) {
+        LinearLayout paginationLayout = findViewById(R.id.paginationLayout);
+        paginationLayout.setVisibility(isVisible ? View.GONE : View.VISIBLE);
         bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 }
