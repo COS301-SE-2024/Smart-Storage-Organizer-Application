@@ -26,6 +26,9 @@ import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
+import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationResponse;
+
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.MediaType;
@@ -33,16 +36,29 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class HomeActivity extends AppCompatActivity {
+public class
+HomeActivity extends AppCompatActivity {
     public TextView fullName;
     public ShapeableImageView profileImage;
     public AppBarConfiguration mAppBarConfiguration;
     public ActivityHomeBinding binding;
     public String currentName, currentSurname, currentPicture;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AuthorizationResponse resp = AuthorizationResponse.fromIntent(getIntent());
+        AuthorizationException ex = AuthorizationException.fromIntent(getIntent());
+        if (resp != null) {
+            Log.i("Keycloak Demo", "Authorization successful");
+        } else {
+            // authorization failed, check ex for more details
+            Log.i("Keycloak Demo", "Authorization failed");
+        }
+        //
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -31,7 +31,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        var redirect= mutableMapOf<String, Any>(
+            "appAuthRedirectScheme" to "com.example.smartstorageorganizer"
 
+        )
+        manifestPlaceholders+=redirect
 
         buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
         //buildConfigField( "String", "DefaultImage", defaultpicture)
@@ -110,6 +114,9 @@ android {
 
 
 dependencies {
+    //Auth App
+    implementation("net.openid:appauth:0.11.1")
+
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
 

@@ -14,7 +14,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +44,11 @@ import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
+import net.openid.appauth.AuthorizationRequest;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.ResponseTypeValues;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "AmplifyQuickstart";
@@ -62,9 +69,31 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initializeUI();
-        checkIfSignedIn();
-        configureInsets();
-        setOnClickListeners();
+
+        AuthorizationServiceConfiguration serviceConfig =
+                new AuthorizationServiceConfiguration(
+                        Uri.parse("http://localhost:8080/realms/SmartStorageuser/protocol/openid-connect/auth"), // authorization endpoint
+                        Uri.parse("http://localhost:8080/realms/SmartStorageuser/protocol/openid-connect/token"));
+
+        Uri redirectUri = Uri.parse("com.example.smartstorageorganizer:/LandingFromRedirect");
+
+        AuthorizationRequest.Builder authRequestBuilder =
+                new AuthorizationRequest.Builder(
+                        serviceConfig, // the authorization service configuration
+                        "SmartStorageApp", // the client ID, typically pre-registered and static
+                        ResponseTypeValues.CODE, // the response_type value: we want a code
+                        redirectUri);
+
+
+        AuthorizationService authService = new AuthorizationService(this);
+
+        authService.performAuthorizationRequest(
+                authRequestBuilder.build(),
+                PendingIntent.getActivity(this, 0, new Intent(this, HomeActivity.class), PendingIntent.FLAG_IMMUTABLE),
+                PendingIntent.getActivity(this, 0, new Intent(this, LandingActivity.class), PendingIntent.FLAG_IMMUTABLE));
+//        checkIfSignedIn();
+//        configureInsets();
+//        setOnClickListeners();
     }
 
     private void initializeUI() {
