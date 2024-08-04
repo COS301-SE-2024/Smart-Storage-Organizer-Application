@@ -18,9 +18,8 @@ jobs:
           with:
               java-version: '17.0.11'
               distribution: 'temurin'
-        - name: Change directory
-          run: cd frontend  
         - name: Build and Lint
+          working-directory: frontend
           run: |
               ./gradlew clean build lintDebug
         - name: Upload html report
