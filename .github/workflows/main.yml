@@ -2,9 +2,9 @@ name: GitHubActionPractice
 
 on:
   push:
-    branches: [ UserAuthenication ]
+    branches: [ feat/UserAuthenication  ]
   pull_request:
-    branches: [ UserAuthenication ]
+    branches: [ feat/UserAuthenication  ]
   workflow_dispatch:
   
 jobs:
