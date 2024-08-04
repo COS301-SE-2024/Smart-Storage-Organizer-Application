@@ -11,8 +11,8 @@ import android.text.Editable;
 @RunWith(MockitoJUnitRunner.class)
 
 public class AuthenticationUnitTest {
-    @Mock
-    private  LoginActivity loginObj;
+//    @Mock
+//    private  LoginActivity loginObj;
 
 //    @Test
 //    public void signUpTest()

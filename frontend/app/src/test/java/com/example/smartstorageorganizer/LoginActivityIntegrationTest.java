@@ -28,16 +28,16 @@ import java.util.concurrent.TimeUnit;
 @Config(sdk = Build.VERSION_CODES.P)
 
 public class LoginActivityIntegrationTest {
-    private LoginActivity loginActivity;
-    private ActivityController<LoginActivity> controller;
-    private LoginActivity spyLoginActivity;
-
-    @Before
-    public void setUp() {
-        controller = Robolectric.buildActivity(LoginActivity.class);
-        loginActivity = controller.create().visible().get();
-        spyLoginActivity = Mockito.spy(loginActivity);
-    }
+//    private LoginActivity loginActivity;
+//    private ActivityController<LoginActivity> controller;
+//    private LoginActivity spyLoginActivity;
+//
+//    @Before
+//    public void setUp() {
+//        controller = Robolectric.buildActivity(LoginActivity.class);
+//        loginActivity = controller.create().visible().get();
+//        spyLoginActivity = Mockito.spy(loginActivity);
+//    }
 
 
 //    @Test

@@ -21,16 +21,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class ResetPasswordActivityTest {
 
-    ResetPasswordActivity Page;
-    @Mock
-    ResetPasswordActivity MockedPage = mock(ResetPasswordActivity.class);
-    @Before
-    public void setUp()  {
-        Page = Robolectric.buildActivity(ResetPasswordActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
+//    ResetPasswordActivity Page;
+//    @Mock
+//    ResetPasswordActivity MockedPage = mock(ResetPasswordActivity.class);
+//    @Before
+//    public void setUp()  {
+//        Page = Robolectric.buildActivity(ResetPasswordActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
 
 //    @Test
 //    public void onCreate() {

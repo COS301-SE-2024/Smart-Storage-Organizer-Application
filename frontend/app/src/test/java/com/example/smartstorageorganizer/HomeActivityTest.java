@@ -21,17 +21,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class HomeActivityTest {
 
-    HomeActivity Page;
-    @Mock
-    HomeActivity MockedPage = mock(HomeActivity.class);
-
-    @Before
-    public void setup() {
-        Page = Robolectric.buildActivity(HomeActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
+//    HomeActivity Page;
+//    @Mock
+//    HomeActivity MockedPage = mock(HomeActivity.class);
+//
+//    @Before
+//    public void setup() {
+//        Page = Robolectric.buildActivity(HomeActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
 
 //    @Test
 //    public void GetDetailsShouldFalseForInValidSession()

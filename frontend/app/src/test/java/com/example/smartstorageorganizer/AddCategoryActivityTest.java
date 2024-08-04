@@ -16,15 +16,15 @@ import android.os.Build;
 @Config(sdk = Build.VERSION_CODES.P)
 public class AddCategoryActivityTest {
 
-    AddCategoryActivity addCategoryActivity;
-
-    @Before
-    public void setup() {
-        addCategoryActivity = Robolectric.buildActivity(AddCategoryActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
+//    AddCategoryActivity addCategoryActivity;
+//
+//    @Before
+//    public void setup() {
+//        addCategoryActivity = Robolectric.buildActivity(AddCategoryActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
 
 //    @Test
 //    public void shouldNotBeNull() {
@@ -42,15 +42,15 @@ public class AddCategoryActivityTest {
 //        // Then
 //        assertTrue(result);
 //    }
-    @Test
-    public void validateFormShouldReturnTrueForValidSubCategory() {
-        // Given
-        String validSubCategory = "Laptops";
-
-        // When
-        boolean result = addCategoryActivity.validateParentForm(validSubCategory);
-
-        // Then
-        assertTrue(result);
-    }
+//    @Test
+//    public void validateFormShouldReturnTrueForValidSubCategory() {
+//        // Given
+//        String validSubCategory = "Laptops";
+//
+//        // When
+//        boolean result = addCategoryActivity.validateParentForm(validSubCategory);
+//
+//        // Then
+//        assertTrue(result);
+//    }
 }

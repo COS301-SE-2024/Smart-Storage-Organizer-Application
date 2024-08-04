@@ -17,17 +17,17 @@ import org.robolectric.annotation.Config;
 @Config(sdk = Build.VERSION_CODES.P)
 public class ProfileManagementActivityTest {
 
-    ProfileManagementActivity Page;
-    @Mock
-    ProfileManagementActivity MockedPage = mock(ProfileManagementActivity.class);
-
-    @Before
-    public void setup() {
-        Page = Robolectric.buildActivity(ProfileManagementActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
+//    ProfileManagementActivity Page;
+//    @Mock
+//    ProfileManagementActivity MockedPage = mock(ProfileManagementActivity.class);
+//
+//    @Before
+//    public void setup() {
+//        Page = Robolectric.buildActivity(ProfileManagementActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
 
 //    @Test
 //    public void shouldNotBeNull() {

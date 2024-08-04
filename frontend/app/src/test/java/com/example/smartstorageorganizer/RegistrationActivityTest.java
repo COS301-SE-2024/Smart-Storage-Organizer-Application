@@ -16,17 +16,17 @@ import android.os.Build;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
 public class RegistrationActivityTest {
-    RegistrationActivity registrationActivity;
-
-    @Before
-    public void setup() {
-        registrationActivity = Robolectric.buildActivity(RegistrationActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
-
-//    @Test
+//    RegistrationActivity registrationActivity;
+//
+//    @Before
+//    public void setup() {
+//        registrationActivity = Robolectric.buildActivity(RegistrationActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
+//
+////    @Test
 //    public void shouldNotBeNull() {
 //        assertNotNull(registrationActivity);
 //    }
