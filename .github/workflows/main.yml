@@ -2,19 +2,26 @@ name: GitHubActionPractice
 
 on:
   push:
-    branches: [ UserAuthenication ]
+    branches: [ feat/UserAuthenication  ]
   pull_request:
-    branches: [ UserAuthenication ]
+    branches: [ feat/UserAuthenication  ]
   workflow_dispatch:
   
 jobs:
   lint:
-    runs-on: ubuntu-last
+    runs-on: ubuntu-latest
     steps:
         - name: Checkout the code
-          uses: actions/checkout@v2
-        - name: Run Lint
-          uses: ./gradlew lintDebug 
+          uses: actions/checkout@v3
+        - name: Set up JDK
+          uses: actions/setup-java@v3
+          with:
+              java-version: '17.0.11'
+              distribution: 'temurin'
+        - name: Build and Lint
+          working-directory: frontend
+          run: |
+              ./gradlew clean build lintDebug
         - name: Upload html report
           uses: actions/upload-artifact@v2
           with:
