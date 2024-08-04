@@ -73,6 +73,14 @@ public class ViewItemActivity extends AppCompatActivity {
         this.colorCodeAdapter = colorCodeAdapter;
     }
 
+    public ViewItemActivity() {
+        colorCodeRecyclerView=null;
+        colorCodeModelList=null;
+        colorCodeAdapter=null;
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

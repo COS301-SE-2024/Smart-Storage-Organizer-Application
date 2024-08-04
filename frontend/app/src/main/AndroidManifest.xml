@@ -47,7 +47,9 @@
             android:name=".LandingActivity"
             android:exported="true">
             <intent-filter>
-
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
@@ -122,16 +124,17 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false" >
 
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.example.smartstorageorganizer" android:host="" android:path="/LandingFromRedirect"
+                    tools:ignore="AppLinkUrlError" />
+            </intent-filter>
 
-        </intent-filter><data android:scheme="com.example.smartstorageorganizer" android:host="" android:path="/LandingFromRedirect"
-        tools:ignore="AppLinkUrlError" />
-
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">

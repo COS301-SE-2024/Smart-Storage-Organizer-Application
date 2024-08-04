@@ -65,7 +65,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         detailedLayout = findViewById(R.id.detailedLayout_one);
-                new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 shimmerFrameLayout.stopShimmer();
