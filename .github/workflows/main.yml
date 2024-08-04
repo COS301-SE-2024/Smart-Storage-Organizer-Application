@@ -13,11 +13,7 @@ jobs:
     steps:
         - name: Checkout the code
           uses: actions/checkout@v3
-        - name: Set up JDK
-          uses: actions/setup-java@v3
-          with:
-              java-version: '17.0.11'
-              distribution: 'temurin'
+        
         - name: Build and Lint
           working-directory: frontend
           run: |
