@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff687218-ca94-4d30-971d-86bd8d19d092" name="Changes" comment="Updated team bio with pictures">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/main.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/main.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +39,7 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "feat/UserAuthenication",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Siya/AndroidStudioProjects/Smart-Storage-Organizer-Application/frontend"
+    "last_opened_file_path": "C:/Users/Siya/AndroidStudioProjects/Smart-Storage-Organizer-Application"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
