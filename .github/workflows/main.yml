@@ -16,7 +16,8 @@ jobs:
         - name: Change directory
           run: cd frontend
         - name: Run Lint
-          uses: ./gradlew lintDebug 
+          run: ./gradlew lintDebug 
+    
         - name: Upload html report
           uses: actions/upload-artifact@v2
           with:
