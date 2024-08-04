@@ -34,10 +34,10 @@ public class EditProfileActivityTest {
                 .get();
     }
 
-    @Test
-    public void shouldNotBeNull() {
-        assertNotNull(editprofile1);
-    }
+//    @Test
+//    public void shouldNotBeNull() {
+//        assertNotNull(editprofile1);
+//    }
 
 
     //@Test

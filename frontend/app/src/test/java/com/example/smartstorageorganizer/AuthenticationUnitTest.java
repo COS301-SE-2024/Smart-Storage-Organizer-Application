@@ -14,31 +14,31 @@ public class AuthenticationUnitTest {
     @Mock
     private  LoginActivity loginObj;
 
-    @Test
-    public void signUpTest()
-    {
-
-    }
-    @Test
-    public void signInTest()
-    {
-
-    }
-    @Test
-    public void signOut()
-    {
-
-    }
-    @Test
-    public void validateForm()
-    {
-        Editable mockEditableEmail = mock(Editable.class);
-        Editable mockEditablePassword = mock(Editable.class);
-
-
-        when(mockEditableEmail.toString()).thenReturn("test@example.com");
-        when(mockEditablePassword.toString()).thenReturn("password123");
-
-    }
+//    @Test
+//    public void signUpTest()
+//    {
+//
+//    }
+//    @Test
+//    public void signInTest()
+//    {
+//
+//    }
+//    @Test
+//    public void signOut()
+//    {
+//
+//    }
+//    @Test
+//    public void validateForm()
+//    {
+//        Editable mockEditableEmail = mock(Editable.class);
+//        Editable mockEditablePassword = mock(Editable.class);
+//
+//
+//        when(mockEditableEmail.toString()).thenReturn("test@example.com");
+//        when(mockEditablePassword.toString()).thenReturn("password123");
+//
+//    }
 
 }

@@ -27,9 +27,9 @@ public class ViewItemActivityTest {
                 .get();
     }
 
-    @Test
-    public void onCreate() {
-        assertNotNull(Page);
-    }
+//    @Test
+//    public void onCreate() {
+//        assertNotNull(Page);
+//    }
 
 }

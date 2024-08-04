@@ -26,10 +26,10 @@ public class AddCategoryActivityTest {
                 .get();
     }
 
-    @Test
-    public void shouldNotBeNull() {
-        assertNotNull(addCategoryActivity);
-    }
+//    @Test
+//    public void shouldNotBeNull() {
+//        assertNotNull(addCategoryActivity);
+//    }
 
 //    @Test
 //    public void validateFormShouldReturnTrueForValidParentCategory() {

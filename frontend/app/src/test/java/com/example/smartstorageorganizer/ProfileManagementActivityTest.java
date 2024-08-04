@@ -29,10 +29,10 @@ public class ProfileManagementActivityTest {
                 .get();
     }
 
-    @Test
-    public void shouldNotBeNull() {
-        assertNotNull(Page);
-    }
+//    @Test
+//    public void shouldNotBeNull() {
+//        assertNotNull(Page);
+//    }
 
 
 

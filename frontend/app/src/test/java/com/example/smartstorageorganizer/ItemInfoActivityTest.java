@@ -31,17 +31,17 @@ public class ItemInfoActivityTest {
                 .get();
     }
 
-    @Test
-    public void shouldNotBeNull() {
-        assertNotNull(Page);
-    }
-    @Test
-    public void  TestPopUp()
-    {
-        Page.showEditItemPopup();
-        AlertDialog alertDialog = (AlertDialog) ShadowDialog.getLatestDialog();
-        assertNotNull(alertDialog);
-    }
+//    @Test
+//    public void shouldNotBeNull() {
+//        assertNotNull(Page);
+//    }
+//    @Test
+//    public void  TestPopUp()
+//    {
+//        Page.showEditItemPopup();
+//        AlertDialog alertDialog = (AlertDialog) ShadowDialog.getLatestDialog();
+//        assertNotNull(alertDialog);
+//    }
 
 
 

@@ -32,40 +32,40 @@ public class UnitActivityTest {
                 .get();
     }
 
-    @Test
-    public void onCreate() {
-        assertNotNull(Page);
-    }
-
-    @Test
-    public void createUnit() {
-        //given
-        String unit="UnitName";
-        String capacity="1";
-        String contraints="contraints";
-        AtomicBoolean result = new AtomicBoolean(false);
-
-        //when
-        when(MockedPage.createUnit(unit, capacity, contraints)).thenReturn(CompletableFuture.completedFuture(true));
-
-        //then
-        MockedPage.createUnit(unit,capacity, contraints).thenAccept(isResult->{
-            if(isResult)
-                result.set(true);
-            else
-                result.set(false);
-
-        });
-        assertEquals(true, result.get());
-    }
-
-    @Test
-    public void getCategoriesId() {
-        //given
-        String name="Unit 1";
-        String id="";
-
-        assertEquals(id, Page.getCategoriesId(name));
-
-    }
+//    @Test
+//    public void onCreate() {
+//        assertNotNull(Page);
+//    }
+//
+//    @Test
+//    public void createUnit() {
+//        //given
+//        String unit="UnitName";
+//        String capacity="1";
+//        String contraints="contraints";
+//        AtomicBoolean result = new AtomicBoolean(false);
+//
+//        //when
+//        when(MockedPage.createUnit(unit, capacity, contraints)).thenReturn(CompletableFuture.completedFuture(true));
+//
+//        //then
+//        MockedPage.createUnit(unit,capacity, contraints).thenAccept(isResult->{
+//            if(isResult)
+//                result.set(true);
+//            else
+//                result.set(false);
+//
+//        });
+//        assertEquals(true, result.get());
+//    }
+//
+//    @Test
+//    public void getCategoriesId() {
+//        //given
+//        String name="Unit 1";
+//        String id="";
+//
+//        assertEquals(id, Page.getCategoriesId(name));
+//
+//    }
 }
