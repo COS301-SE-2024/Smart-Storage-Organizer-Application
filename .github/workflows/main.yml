@@ -1,0 +1,24 @@
+name: GitHubActionPractice
+
+on:
+  push:
+    branches: [ UserAuthenication ]
+  pull_request:
+    branches: [ UserAuthenication ]
+  workflow_dispatch:
+  
+jobs:
+  lint:
+    runs-on: ubuntu-last
+    steps:
+        - name: Checkout the code
+          uses: actions/checkout@v2
+        - name: Run Lint
+          uses: ./gradlew lintDebug 
+        - name: Upload html report
+          uses: actions/upload-artifact@v2
+          with:
+            name: index.html
+            path: app/build/reports/lint-results-debug.html 
+    
+
