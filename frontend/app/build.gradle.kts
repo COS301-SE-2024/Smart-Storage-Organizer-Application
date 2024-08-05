@@ -189,6 +189,7 @@ dependencies {
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.amplifyframework:aws-pushnotifications:1.28.1")
     implementation ("com.google.firebase:firebase-messaging:23.0.0")
+    implementation("com.google.firebase:firebase-core:21.1.1")
 
 
 
@@ -218,3 +219,4 @@ dependencies {
 
 
 }
+

@@ -1,51 +1,44 @@
 package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.smartstorageorganizer.adapters.NotificationCategoryAdapter;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class NotificationsActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private NotificationCategoryAdapter adapter;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        // Set up the toolbar
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        TextView transactions = findViewById(R.id.transactions);
+        TextView messages = findViewById(R.id.messages);
+        TextView offers = findViewById(R.id.offers);
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Sample data
-        List<String> categories = Arrays.asList("Transactions", "Messages", "Offers for you");
-
-        // Set up adapter
-        adapter = new NotificationCategoryAdapter(categories, category -> {
-            // Handle item click
+        transactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NotificationsActivity.this, "Transactions clicked", Toast.LENGTH_SHORT).show();
+                // Handle transactions click
+            }
         });
-        recyclerView.setAdapter(adapter);
-    }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+        messages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NotificationsActivity.this, "Messages clicked", Toast.LENGTH_SHORT).show();
+                // Handle messages click
+            }
+        });
+
+        offers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(NotificationsActivity.this, "Offers for you clicked", Toast.LENGTH_SHORT).show();
+                // Handle offers click
+            }
+        });
     }
 }
