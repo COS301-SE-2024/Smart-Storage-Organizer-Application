@@ -18,12 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,14 +43,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
+public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
     private boolean selectAllFlag = true;
 
-    public ItemAdapter(Context context, List<ItemModel> itemModelList) {
+    public RecentAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
         this.itemModelList = itemModelList;
         new OkHttpClient();
@@ -55,11 +58,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+    public RecentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recent_added_layout, parent, false));
     }
 
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecentAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
         holder.name.setText(itemModelList.get(position).getItemName());
         holder.description.setText(itemModelList.get(position).getDescription());
@@ -69,7 +72,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener(view -> {
-
             if (selectedItems.isEmpty()) {
                 Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
                 intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
@@ -81,8 +83,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
                 intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
                 intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
-                intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
-                intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
 
                 context.startActivity(intent);
             } else {
@@ -93,15 +93,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(holder.getAdapterPosition());
             return true;
-
         });
 
         if (selectedItems.contains(position)) {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray));
+//            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray));
             holder.selectedOverlay.setVisibility(View.VISIBLE);
             holder.tickMark.setVisibility(View.VISIBLE);
         } else {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+//            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.selectedOverlay.setVisibility(View.GONE);
             holder.tickMark.setVisibility(View.GONE);
         }
@@ -124,8 +123,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             selectedItems.add(position);
         }
         notifyItemChanged(position);
-        if (context instanceof ViewItemActivity) {
-            ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+        if (context instanceof UncategorizedItemsActivity) {
+            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
         }
     }
 
@@ -133,17 +132,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         ImageView image;
         TextView name;
         TextView description;
-        ImageView itemImage;
+        ShapeableImageView itemImage;
         ImageView deleteIcon;
         View selectedOverlay;
         ImageView tickMark;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.item_image);
-            name = itemView.findViewById(R.id.item_name);
-            description = itemView.findViewById(R.id.item_description);
-            itemImage = itemView.findViewById(R.id.itemImage);
+            name = itemView.findViewById(R.id.name);
+            description = itemView.findViewById(R.id.description);
+            itemImage = itemView.findViewById(R.id.image);
             deleteIcon = itemView.findViewById(R.id.delete_icon);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
             tickMark = itemView.findViewById(R.id.tick_mark);
@@ -237,6 +235,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @SuppressLint("NotifyDataSetChanged")
     public void selectAllItems() {
+        // Add logic to select all items
         if(selectAllFlag){
             for (int i = 0; i < itemModelList.size(); i++) {
                 selectedItems.add(i);
@@ -248,6 +247,25 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
             selectAllFlag = true;
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // Update the adapter to refresh the UI
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

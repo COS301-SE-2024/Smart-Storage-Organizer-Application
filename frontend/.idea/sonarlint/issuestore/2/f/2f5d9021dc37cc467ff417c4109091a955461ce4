@@ -1,21 +1,21 @@
 
-V
-java:S1144õ"3Remove this unused private "navigateToHome" method.(µ¼»®ÿÿÿÿÿ8ãõ€·Š2
-Y
-java:S1874°"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8¨ö€·Š2
-Y
-java:S1874°"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8«ö€·Š2
-P
-java:S1874±"2Remove this use of "setMessage"; it is deprecated.(¯ıË8«ö€·Š2
-Y
-java:S1874Æ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8µö€·Š2
-Y
-java:S1874Æ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8·ö€·Š2
-P
-java:S1874Ç"2Remove this use of "setMessage"; it is deprecated.(¯ıË8¹ö€·Š2
-Y
-java:S1874Ş"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8¾ö€·Š2
-Y
-java:S1874Ş"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8¿ö€·Š2
-P
-java:S1874ß"2Remove this use of "setMessage"; it is deprecated.(‡ƒ”8¿ö€·Š2
+|
+java:S1144ú"3Remove this unused private "navigateToHome" method.(µ¼»®ÿÿÿÿÿ8Ñúı2J$6ee8346a-d8fb-4bc2-85bc-9a5b232ce851
+
+java:S1874µ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8«ûı2J$ba5d648b-c2e9-41b1-8aa1-a5c0055af0bc
+
+java:S1874µ"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8®ûı2J$fa4e1bad-5ef2-4136-bdce-38173c3df0ca
+v
+java:S1874¶"2Remove this use of "setMessage"; it is deprecated.(¯ıË8¯ûı2J$3559665c-396c-4c63-b554-6e95e1971f6e
+
+java:S1874Ë"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8´ûı2J$1e71d1c6-6fd7-40c9-89c9-651045bd3ac4
+
+java:S1874Ë"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8´ûı2J$54656466-4b06-4a9f-ae3a-6e66da5f02ef
+v
+java:S1874Ì"2Remove this use of "setMessage"; it is deprecated.(¯ıË8µûı2J$b0673207-5250-4920-912f-b1b9e33686f5
+
+java:S1874ã"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8»ûı2J$fe18ff26-c246-462e-bdd7-e9e6528c61c4
+
+java:S1874ã"6Remove this use of "ProgressDialog"; it is deprecated.(½¥Òöşÿÿÿÿ8¼ûı2J$84e1e6f1-ec93-44e6-8ffb-ba32e2ff4cc9
+v
+java:S1874ä"2Remove this use of "setMessage"; it is deprecated.(‡ƒ”8¼ûı2J$be749b2e-0ba0-41a0-bc41-94a4f122e434

@@ -21,6 +21,13 @@
         <item>A to Z</item>
         <item>Z to A</item>
     </string-array>
+
+    <string-array name="roles_array">
+        <item>Admin</item>
+        <item>Manager</item>
+        <item>normalUser</item>
+        <item>guestUser</item>
+    </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -94,10 +101,5 @@
     <string name="item_details_go_here">Item details go here.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_item">Add Item</string>
-    <string name="take_photo">Take Photo</string>
-    <string name="name">Name</string>
-    <string name="description">Description</string>
-    <string name="nextbtn">Next</string>
 
 </resources>

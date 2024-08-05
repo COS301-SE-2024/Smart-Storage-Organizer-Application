@@ -82,6 +82,12 @@ android {
         buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"");
         buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"");
 
+        buildConfigField("String", "RecommendMultipleEndPoint", "\"${localProperties["RecommendMultipleEndPoint"]}\"");
+        buildConfigField("String", "CreateCategoryAIEndPoint", "\"${localProperties["CreateCategoryAIEndPoint"]}\"");
+
+        buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"");
+
+
 
 
     }
@@ -118,10 +124,6 @@ dependencies {
 
 
     implementation("org.slf4j:slf4j-api:1.7.30")
-
-//    for facebook Shimmeer
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
-
 
 
 
