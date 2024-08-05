@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
@@ -45,41 +44,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.category_layout, parent, false));
+    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CategoryAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.category_layout, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
         holder.name.setText(categoryModelList.get(position).getCategoryName());
 
         if (!Objects.equals(categoryModelList.get(position).getImageUrl(), "empty")) {
-            if(Objects.equals(categoryModelList.get(position).getCategoryID(), "all")){
-                holder.image.setImageResource(R.drawable.all_category);
-            }
-            else if(Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")){
-                holder.image.setImageResource(R.drawable.decision);
-            }
-            else {
-                Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
-            }
+            Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
         }
 
         holder.itemView.setOnClickListener(view -> {
-            Intent intent = null;
-
-            if (!Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")){
-                intent = new Intent(view.getContext(), ViewItemActivity.class);
-            }
-            else {
-                intent = new Intent(view.getContext(), UncategorizedItemsActivity.class);
-            }
+            Intent intent = new Intent(view.getContext(), ViewItemActivity.class);
             intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
             intent.putExtra("color_code_id", "");
 
             context.startActivity(intent);
-
         });
 
         holder.itemView.setOnLongClickListener(view -> {

@@ -27,9 +27,6 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
-            android:name=".UncategorizedItemsActivity"
-            android:exported="false" />
-        <activity
             android:name=".UsersActivity"
             android:exported="false" />
         <activity
@@ -105,7 +102,7 @@
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar" />
+            android:theme="@style/Theme.SmartStorageOrganizer.NoActionBar"/>
         <activity
             android:name=".EmailVerificationActivity"
             android:exported="false" />
@@ -120,7 +117,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

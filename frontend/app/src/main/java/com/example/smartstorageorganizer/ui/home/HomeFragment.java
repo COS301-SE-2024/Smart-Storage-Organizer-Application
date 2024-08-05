@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -45,7 +44,6 @@ import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
-import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -82,7 +80,7 @@ public class HomeFragment extends Fragment {
     private List<ItemModel> itemModelList;
     private ArrayAdapter<String> adapter;
     private ArrayAdapter<String> subAdapter;
-    private RecentAdapter recentAdapter;
+    private ItemAdapter itemAdapter;
     private RecyclerView itemRecyclerView, category_RecyclerView;
     private String currentEmail, currentName;
     AlertDialog alertDialog;
@@ -123,7 +121,7 @@ public class HomeFragment extends Fragment {
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
 
-        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
+        StaggeredGridLayoutManager layoutManagerSkeleton = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
         SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
         recyclerViewRecent.setAdapter(skeletonAdapter);
@@ -137,14 +135,14 @@ public class HomeFragment extends Fragment {
         category_RecyclerView.setAdapter(categoryAdapter);
 
         itemRecyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(requireActivity());
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         itemRecyclerView.setLayoutManager(layoutManager);
 
         addItemButton.setOnClickListener(v -> showAddButtonPopup());
 
         itemModelList = new ArrayList<>();
-        recentAdapter = new RecentAdapter(requireActivity(), itemModelList);
-        itemRecyclerView.setAdapter(recentAdapter);
+        itemAdapter = new ItemAdapter(requireActivity(), itemModelList);
+        itemRecyclerView.setAdapter(itemAdapter);
 
         return root;
     }
@@ -155,7 +153,7 @@ public class HomeFragment extends Fragment {
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
                 itemModelList.addAll(result);
-                recentAdapter.notifyDataSetChanged();
+                itemAdapter.notifyDataSetChanged();
 
                 recentText.setVisibility(View.VISIBLE);
                 shimmerFrameLayoutCategory.stopShimmer();
@@ -502,10 +500,6 @@ public class HomeFragment extends Fragment {
                 }
                 else {
                     categoryModelList.clear();
-                    CategoryModel allCategory = new CategoryModel("All", "all", "all");
-                    CategoryModel uncategorizedCategory = new CategoryModel("Uncategorized", "uncategorized", "uncategorized");
-                    categoryModelList.add(allCategory);
-                    categoryModelList.add(uncategorizedCategory);
                     categoryModelList.addAll(result);
                     categoryAdapter.notifyDataSetChanged();
                     for (CategoryModel category : categoryModelList) {

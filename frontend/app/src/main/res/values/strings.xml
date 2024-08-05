@@ -21,13 +21,6 @@
         <item>A to Z</item>
         <item>Z to A</item>
     </string-array>
-
-    <string-array name="roles_array">
-        <item>Admin</item>
-        <item>Manager</item>
-        <item>normalUser</item>
-        <item>guestUser</item>
-    </string-array>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
