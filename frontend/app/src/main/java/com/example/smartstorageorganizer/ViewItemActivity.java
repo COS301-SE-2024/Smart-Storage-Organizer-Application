@@ -24,11 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
-import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -64,18 +62,9 @@ public class ViewItemActivity extends AppCompatActivity {
     private TextView pageNumber;
     private String currentSelectedOption;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private final RecyclerView colorCodeRecyclerView;
-    private final List<ColorCodeModel> colorCodeModelList;
-    private final ColorCodeAdapter colorCodeAdapter;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
     private LinearLayout bottomNavigationView;
-
-    public ViewItemActivity(RecyclerView colorCodeRecyclerView, List<ColorCodeModel> colorCodeModelList, ColorCodeAdapter colorCodeAdapter) {
-        this.colorCodeRecyclerView = colorCodeRecyclerView;
-        this.colorCodeModelList = colorCodeModelList;
-        this.colorCodeAdapter = colorCodeAdapter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
