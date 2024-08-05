@@ -1,8 +1,11 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,12 +30,14 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,6 +45,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ViewItemActivity extends AppCompatActivity {
     private static final int PAGE_SIZE = 6;
@@ -65,6 +78,7 @@ public class ViewItemActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
     private LinearLayout bottomNavigationView;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +86,21 @@ public class ViewItemActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_item);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Assigning Item(s) to Color Code...");
+        progressDialog.setCancelable(false);
+
         initializeViews();
         setupBackButton();
         setupRecyclerView();
         loadInitialData();
+        setupBottomNavigationBar();
         if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
             setupSpinnerListener();
         }
@@ -507,6 +532,10 @@ public class ViewItemActivity extends AppCompatActivity {
 
         colorButton.setOnClickListener(view -> {
             // Handle color assign action
+            String selectedIds = itemAdapter.getSelectedItemsIds();
+            progressDialog.setMessage("Fetching Color Codes...");
+            progressDialog.show();
+            assignItemToColor(selectedIds);
         });
 
         shareButton.setOnClickListener(view -> {
@@ -515,6 +544,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
         selectAllButton.setOnClickListener(view -> {
             // Handle select all action
+            itemAdapter.selectAllItems();
         });
     }
 
@@ -522,5 +552,86 @@ public class ViewItemActivity extends AppCompatActivity {
         LinearLayout paginationLayout = findViewById(R.id.paginationLayout);
         paginationLayout.setVisibility(isVisible ? View.GONE : View.VISIBLE);
         bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+    }
+
+    public void assignItemToColor(String itemId) {
+        // Fetch all available color codes
+        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
+                // Create an array of color names to display to the user
+                String[] colorNames = new String[colorCodeModelList.size()];
+                for (int i = 0; i < colorCodeModelList.size(); i++) {
+                    colorNames[i] = colorCodeModelList.get(i).getName();
+                }
+
+                // Show the color options to the user (e.g., in a dialog)
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewItemActivity.this);
+                progressDialog.dismiss();
+                builder.setTitle("Choose a color for the item");
+                builder.setItems(colorNames, (dialog, which) -> {
+                    // Get the selected color code
+                    ColorCodeModel selectedColor = colorCodeModelList.get(which);
+                    String colourId = selectedColor.getId();
+                    Log.d("Selected Color", "Color ID: " + colourId);
+                    Log.d("Selected Item", "Item ID: " + itemId);
+                    progressDialog.setMessage("Assigning Item(s) to Color Code...");
+                    progressDialog.show();
+
+                    // Assign the selected color to the item
+                    assignColorToItem(itemId, selectedColor);
+
+                    //assigned to color db
+                    AssignColour(colourId,itemId);
+                });
+                builder.show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the error (e.g., show a toast or log the error)
+                Toast.makeText(ViewItemActivity.this, "Failed to fetch colors: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void assignColorToItem(String itemId, ColorCodeModel colorCode) {
+        // Your logic to assign the colorCode to the item with the given itemId
+        // This might involve updating a database, sending a request to a server, etc.
+        Log.d("AssignColor", "Item ID: " + itemId + " assigned to color: " + colorCode.getName());
+    }
+
+    public void AssignColour(String colourid, String itemid) {
+        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                Log.e("AssignColour", "Request failed: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    progressDialog.dismiss();
+                    runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Color Code Assigned Successfully.", Toast.LENGTH_SHORT).show());
+                } else {
+                    progressDialog.dismiss();
+                    runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                }
+            }
+        });
     }
 }
