@@ -1,73 +1,73 @@
 
-·
-java:S4165í"nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ÕÍ‘Áÿÿÿÿÿ8Êİçü2J$b06d9245-5258-47ca-8941-6cde74491ab7
-´
-java:S4165ş"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜áùÿÿÿÿ8Éİçü2J$eb32d55e-eeef-40e4-94e8-178c663010f9
-
-java:S1192¾"FDefine a constant instead of duplicating this literal "email" 3 times.(ÄÇãøÿÿÿÿ8Ìİçü2J$d5833465-dee4-4f2a-a493-6cab6a47551f
-
-java:S1192Ê"MDefine a constant instead of duplicating this literal "MyAmplifyApp" 3 times.(Óî=8Ìİçü2J$9dfa9439-4971-4a9a-8042-4bb613197588
-¥	java:S116D"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ğ›×¾üÿÿÿÿ8Ñİçü2J$af893aac-623a-41a1-9d54-e0fb697be8a4
-š	java:S116G"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¦ÚÅÉüÿÿÿÿ8Ñİçü2J$cdd0adb7-76ae-4ad2-96b8-84e3a74c7c9c
-§	java:S116T"`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‘ğÎûÿÿÿÿ8Ñİçü2J$bd96ac55-9b81-437f-9f5c-fc2d89b953c6
+ï¿½
+java:S4165ï¿½"nRemove this useless assignment; "parentCategoryId" already holds the assigned value along all execution paths.(ï¿½Í‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b06d9245-5258-47ca-8941-6cde74491ab7
+ï¿½
+java:S4165ï¿½"kRemove this useless assignment; "subcategoryId" already holds the assigned value along all execution paths.(ä‹˜ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$eb32d55e-eeef-40e4-94e8-178c663010f9
+ï¿½
+java:S1192ï¿½"FDefine a constant instead of duplicating this literal "email" 3 times.(Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d5833465-dee4-4f2a-a493-6cab6a47551f
+ï¿½
+java:S1192ï¿½"MDefine a constant instead of duplicating this literal "MyAmplifyApp" 3 times.(ï¿½ï¿½=8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9dfa9439-4971-4a9a-8042-4bb613197588
+ï¿½	java:S116D"^Rename this field "PICK_IMAGE_MULTIPLE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½×¾ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$af893aac-623a-41a1-9d54-e0fb697be8a4
+ï¿½	java:S116G"SRename this field "ImageUri" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$cdd0adb7-76ae-4ad2-96b8-84e3a74c7c9c
+ï¿½	java:S116T"`Rename this field "category_RecyclerView" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$bd96ac55-9b81-437f-9f5c-fc2d89b953c6
 r
-java:S1659B"*Declare "colorSpinner" on a separate line.(®Õ”Ğÿÿÿÿÿ8Şİçü2J$84eb27ea-d4b2-459d-ba3a-58f7b57fd53b
+java:S1659B"*Declare "colorSpinner" on a separate line.(ï¿½Õ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$84eb27ea-d4b2-459d-ba3a-58f7b57fd53b
 {
-java:S1659F"8Declare "currentSelectedSubcategory" on a separate line.(¼¿‡È8Şİçü2J$7c8105fe-5cca-4b48-ae39-56a53ef69c6c
+java:S1659F"8Declare "currentSelectedSubcategory" on a separate line.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$7c8105fe-5cca-4b48-ae39-56a53ef69c6c
 s
-java:S1659J"0Declare "subcategorySpinner" on a separate line.(ÌÀŠÏ8Şİçü2J$d840af50-7672-4af4-bf41-a952faf51f54
+java:S1659J"0Declare "subcategorySpinner" on a separate line.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d840af50-7672-4af4-bf41-a952faf51f54
 {
-java:S1659T"3Declare "category_RecyclerView" on a separate line.(‘ğÎûÿÿÿÿ8Şİçü2J$16878258-d2c0-4af8-a46c-31d2978877c6
+java:S1659T"3Declare "category_RecyclerView" on a separate line.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$16878258-d2c0-4af8-a46c-31d2978877c6
 l
-java:S1659U")Declare "currentName" on a separate line.(óË”³8àİçü2J$48aadd2b-6cca-4ca0-836b-49998e125735
+java:S1659U")Declare "currentName" on a separate line.(ï¿½Ë”ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$48aadd2b-6cca-4ca0-836b-49998e125735
 n
-java:S1659Z"+Declare "subcategoryId" on a separate line.(Ë¬‚·8àİçü2J$4fd243a1-0d04-45f8-b038-a6d82758fbca
+java:S1659Z"+Declare "subcategoryId" on a separate line.(Ë¬ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$4fd243a1-0d04-45f8-b038-a6d82758fbca
 h
-java:S1659\"&Declare "itemName" on a separate line.(è·ÜP8àİçü2J$ac243efc-3d9e-4ba0-a922-ebeddbd06351
-¬
-java:S1450T"dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(‘ğÎûÿÿÿÿ8âİçü2J$117368c4-cbd7-442b-8cff-4a1c1a026741
-Ÿ
-java:S1450J"\Remove the "parentSpinner" field and declare it as a local variable in the relevant methods.(ÌÀŠÏ8ãİçü2J$c00677ac-5dc6-4bff-9ddf-97d6faafd2b5
-©
-java:S1450d"aRemove the "recyclerViewRecent" field and declare it as a local variable in the relevant methods.(Ù¦åÍıÿÿÿÿ8äİçü2J$d4d25be9-fab4-49e3-93c6-69ac5ab7ce14
+java:S1659\"&Declare "itemName" on a separate line.(ï¿½ï¿½P8ï¿½ï¿½ï¿½ï¿½ï¿½2J$ac243efc-3d9e-4ba0-a922-ebeddbd06351
+ï¿½
+java:S1450T"dRemove the "category_RecyclerView" field and declare it as a local variable in the relevant methods.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$117368c4-cbd7-442b-8cff-4a1c1a026741
+ï¿½
+java:S1450J"\Remove the "parentSpinner" field and declare it as a local variable in the relevant methods.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$c00677ac-5dc6-4bff-9ddf-97d6faafd2b5
+ï¿½
+java:S1450d"aRemove the "recyclerViewRecent" field and declare it as a local variable in the relevant methods.(Ù¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$d4d25be9-fab4-49e3-93c6-69ac5ab7ce14
 ~
-java:S1874e"6Remove this use of "ProgressDialog"; it is deprecated.(ïä‰„øÿÿÿÿ8ıİçü2J$b58e1daa-f0ce-49e2-b46d-84dbd046be6c
-Ä
-java:S1186è"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ô—½48µŞçü2J$020ba747-de2d-45f1-8f77-6bf40ab240ba
-Å
-java:S1186ò"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(íÑíÍ8µŞçü2J$0377ed51-f1f6-4cde-9be5-5a0a77a59d11
+java:S1874e"6Remove this use of "ProgressDialog"; it is deprecated.(ï¿½ä‰„ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$b58e1daa-f0ce-49e2-b46d-84dbd046be6c
+ï¿½
+java:S1186ï¿½"ï¿½Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ô—ï¿½48ï¿½ï¿½ï¿½ï¿½ï¿½2J$020ba747-de2d-45f1-8f77-6bf40ab240ba
+ï¿½
+java:S1186ï¿½"ï¿½Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$0377ed51-f1f6-4cde-9be5-5a0a77a59d11
 
-java:S1874“"6Remove this use of "ProgressDialog"; it is deprecated.(ªÙ»şÿÿÿÿ8ÃŞçü2J$e631a97e-d479-48f8-8b9d-72d40fa31eed
+java:S1874ï¿½"6Remove this use of "ProgressDialog"; it is deprecated.(ï¿½ï¿½Ù»ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$e631a97e-d479-48f8-8b9d-72d40fa31eed
 
-java:S1874“"6Remove this use of "ProgressDialog"; it is deprecated.(ªÙ»şÿÿÿÿ8ÅŞçü2J$868903bd-ed91-46e0-ab7f-a1f53ab304dc
+java:S1874ï¿½"6Remove this use of "ProgressDialog"; it is deprecated.(ï¿½ï¿½Ù»ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$868903bd-ed91-46e0-ab7f-a1f53ab304dc
 {
-java:S1874”"2Remove this use of "setMessage"; it is deprecated.(›ºÔ®şÿÿÿÿ8ÅŞçü2J$00bc210c-997d-4103-a6d5-1938aa9a8119
+java:S1874ï¿½"2Remove this use of "setMessage"; it is deprecated.(ï¿½ï¿½Ô®ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$00bc210c-997d-4103-a6d5-1938aa9a8119
 
-java:S1874š"6Remove this use of "ProgressDialog"; it is deprecated.(ó‡ãùÿÿÿÿÿ8ÇŞçü2J$49b4968e-3958-4b9b-bb67-ca54bc99da33
+java:S1874ï¿½"6Remove this use of "ProgressDialog"; it is deprecated.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$49b4968e-3958-4b9b-bb67-ca54bc99da33
 v
-java:S1874›"2Remove this use of "setMessage"; it is deprecated.(ÎÙ¯ì8ÈŞçü2J$9308aa8d-c825-46ef-b6c7-22977b493b91
+java:S1874ï¿½"2Remove this use of "setMessage"; it is deprecated.(ï¿½Ù¯ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$9308aa8d-c825-46ef-b6c7-22977b493b91
 
-java:S1874¨"6Remove this use of "ProgressDialog"; it is deprecated.(ØÏûªıÿÿÿÿ8ÍŞçü2J$1d457221-0725-4e98-998a-e82da43284ae
+java:S1874ï¿½"6Remove this use of "ProgressDialog"; it is deprecated.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$1d457221-0725-4e98-998a-e82da43284ae
 
-java:S1117µ";Rename "adapter" which hides the field declared at line 81.(ÚÔ”8ÕŞçü2J$1c492243-2725-4dbb-afd3-1aeda73d47cb
-Ê
-java:S1186Ã"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¹Æº×şÿÿÿÿ8×Şçü2J$ca5bd843-83c0-4045-949f-4d773036eb26
-ˆ
-java:S1117•"?Rename "alertDialog" which hides the field declared at line 86.(™§Üïøÿÿÿÿ8ñŞçü2J$52c20ef1-0423-4281-8ca6-c9d1e42d4a8e
+java:S1117ï¿½";Rename "adapter" which hides the field declared at line 81.(ï¿½Ôï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$1c492243-2725-4dbb-afd3-1aeda73d47cb
+ï¿½
+java:S1186ï¿½"ï¿½Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ï¿½Æºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$ca5bd843-83c0-4045-949f-4d773036eb26
+ï¿½
+java:S1117ï¿½"?Rename "alertDialog" which hides the field declared at line 86.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$52c20ef1-0423-4281-8ca6-c9d1e42d4a8e
 o
-java:S1602Ñ",Remove useless curly braces around statement(Í¸¿8ˆßçü2J$60c6cb06-b29a-44eb-b924-67ca0c0ba395
+java:S1602ï¿½",Remove useless curly braces around statement(Í¸ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$60c6cb06-b29a-44eb-b924-67ca0c0ba395
 o
-java:S1602Û",Remove useless curly braces around statement(Í¸¿8Šßçü2J$5342bb54-6ad8-4b6e-a45f-83e01c86ec21
-^	java:S125…"<This block of commented-out lines of code should be removed.(šæÜüùÿÿÿÿ8‹»èü2
-p	java:S100Œ"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¾‡¾÷şÿÿÿÿ8Œ»èü2
+java:S1602ï¿½",Remove useless curly braces around statement(Í¸ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$5342bb54-6ad8-4b6e-a45f-83e01c86ec21
+^	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
+p	java:S100ï¿½"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
 \
-java:S1874’">Remove this use of "startActivityForResult"; it is deprecated.(¡æÖé8»èü2
-^	java:S125‘"<This block of commented-out lines of code should be removed.(¯å‚şÿÿÿÿ8»èü2
-“
-java:S1874•"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ÉÎÍïıÿÿÿÿ8Ößçü2J$0057981a-1a25-4588-97ad-d1696dbbb54b
+java:S1874ï¿½">Remove this use of "startActivityForResult"; it is deprecated.(ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
+^	java:S125ï¿½"<This block of commented-out lines of code should be removed.(ï¿½å‚ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
+ï¿½
+java:S1874ï¿½"JDon't override a deprecated method or explicitly mark it as "@Deprecated".(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2J$0057981a-1a25-4588-97ad-d1696dbbb54b
 ]
-java:S1161•":Add the "@Override" annotation above this method signature(ÉÎÍïıÿÿÿÿ8‘»èü2
+java:S1161ï¿½":Add the "@Override" annotation above this method signature(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
 [
-java:S1874–"8Remove this use of "onActivityResult"; it is deprecated.(ß¬©úÿÿÿÿ8“»èü2
+java:S1874ï¿½"8Remove this use of "onActivityResult"; it is deprecated.(ï¿½ß¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
 J
-java:S1602Ë",Remove useless curly braces around statement(•Ü„8§»èü2
+java:S1602ï¿½",Remove useless curly braces around statement(ï¿½Üï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½2
