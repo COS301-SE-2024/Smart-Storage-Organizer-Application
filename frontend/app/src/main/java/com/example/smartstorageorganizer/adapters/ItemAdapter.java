@@ -245,9 +245,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
         else {
             selectedItems.clear();
-            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+            ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
             selectAllFlag = true;
         }
         notifyDataSetChanged();
+    }
+
+    public List<String> getSelectedItemsIdsArray() {
+        List<String> selectedIds = new ArrayList<>();
+        for (int position : selectedItems) {
+            selectedIds.add(itemModelList.get(position).getItemId());
+        }
+        return selectedIds;
+    }
+
+    public void unselect() {
+        selectedItems.clear();
+        ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+        selectAllFlag = true;
     }
 }

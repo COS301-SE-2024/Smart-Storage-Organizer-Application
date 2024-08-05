@@ -87,27 +87,27 @@ public class ItemDetailsActivity extends AppCompatActivity {
         });
 
         //Share button open EditItemActivity
-        share = findViewById(R.id.share);
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
-                intent.putExtra("item_name", itemName.getText().toString());
-                intent.putExtra("item_description", itemDescription.getText().toString());
-                intent.putExtra("location", itemUnit.getText().toString());
-                intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
-                intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
-                intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
-                intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
-                intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
-                intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
-                intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
-                intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
-
-                startActivity(intent);
-            }
-        });
+//        share = findViewById(R.id.share);
+//        share.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
+//                intent.putExtra("item_name", itemName.getText().toString());
+//                intent.putExtra("item_description", itemDescription.getText().toString());
+//                intent.putExtra("location", itemUnit.getText().toString());
+//                intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+//                intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+//                intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+//                intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
+//                intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+//                intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
+//                intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
+//                intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
+//
+//                startActivity(intent);
+//            }
+//        });
 
         // Initialize views for Unit accordion
 
@@ -161,6 +161,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ItemDetailsActivity.this, ItemInfoActivity.class);
+
                 intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
                 intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
                 intent.putExtra("location", getIntent().getStringExtra("location"));
@@ -170,6 +171,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
                 intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
                 intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+                intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+
                 startActivity(intent);
             }
         });

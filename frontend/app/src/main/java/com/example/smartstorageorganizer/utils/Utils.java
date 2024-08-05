@@ -1291,4 +1291,47 @@ public class Utils
             }
         });
     }
+
+    public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
+        int itemIdInt = Integer.parseInt(itemId);
+        String json = "{\"item_id\":\"" + itemIdInt + "\"}";
+        Log.d("Delete Item Payload", "JSON Payload: " + json);
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String API_URL = BuildConfig.DeleteItemEndPoint;
+        Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+    }
 }

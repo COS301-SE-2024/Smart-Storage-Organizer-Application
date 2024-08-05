@@ -111,6 +111,17 @@
                     android:text="Will changed to drop down for unit"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/categorySpinner"
+                android:layout_width="match_parent"
+                android:minHeight="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/spinner_background" />
+
             <Button android:id="@+id/save_button"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
@@ -133,6 +144,8 @@
                 app:layout_constraintTop_toTopOf="parent">
             </Button>
         </LinearLayout>
+
+
     </ScrollView>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
