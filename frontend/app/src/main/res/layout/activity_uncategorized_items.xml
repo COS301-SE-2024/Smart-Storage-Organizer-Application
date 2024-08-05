@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ViewItemActivity">
+    tools:context=".UncategorizedItemsActivity">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/loadingScreen"
@@ -212,6 +212,18 @@
             android:text="Next"/>
     </LinearLayout>
 
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navigation"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="gone"-->
+<!--        app:menu="@menu/bottom_navigation_menu"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        app:itemIconTint="@color/bottom_nav_item_color"-->
+<!--        app:itemTextColor="@color/bottom_nav_item_color"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
     <LinearLayout
         android:id="@+id/bottom_navigation"
@@ -280,6 +292,23 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/categorize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_category_24" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categorize" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/select_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -297,6 +326,7 @@
         </LinearLayout>
 
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
 import com.example.smartstorageorganizer.model.unitModel;
 
 import org.json.JSONArray;
@@ -1114,6 +1115,176 @@ public class Utils
                 } else {
                     activity.runOnUiThread(() -> {
                         Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void FetchUncategorizedItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
+    {
+        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+
+        List<ItemModel> itemModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.FetchUncategorizedEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "GET request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            ItemModel item = new ItemModel();
+                            item.setItemId(itemObject.getString("item_id"));
+                            item.setItemName(itemObject.getString("item_name"));
+                            item.setDescription(itemObject.getString("description"));
+                            item.setColourCoding(itemObject.getString("colourcoding"));
+                            item.setBarcode(itemObject.getString("barcode"));
+                            item.setQrcode(itemObject.getString("qrcode"));
+                            item.setQuantity(itemObject.getString("quanity"));
+                            item.setLocation(itemObject.getString("location"));
+                            item.setEmail(itemObject.getString("email"));
+                            item.setItemImage(itemObject.getString("item_image"));
+                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+                            itemModelList.add(item);
+                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void RecommendMultipleCategories(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
+    {
+        String json = "{\"id\":\""+id+"\"}";
+
+        List<SuggestedCategoryModel> categoryModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.RecommendMultipleEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "GET Suggested request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("response");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
+
+                        for (int i = 0; i < bodyArray.length(); i++) {
+                            JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                            String itemIdString = itemObject.getString("id");
+                            String categoryString = itemObject.getString("category");
+                            JSONObject categoryObject = new JSONObject(categoryString);
+                            String subcategoryString = itemObject.getString("subcategory");
+                            JSONObject subcategoryObject = new JSONObject(subcategoryString);
+
+                            SuggestedCategoryModel suggestedCategory = new SuggestedCategoryModel();
+
+                            suggestedCategory.setItemId(itemIdString);
+                            suggestedCategory.setCategoryId(categoryObject.getString("id"));
+                            suggestedCategory.setCategoryName(categoryObject.getString("categoryname"));
+                            suggestedCategory.setSubcategoryId(subcategoryObject.getString("id"));
+                            suggestedCategory.setSubcategoryName(subcategoryObject.getString("categoryname"));
+
+                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
+                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
+
+//                            ItemModel item = new ItemModel();
+//                            item.setItemId(itemObject.getString("item_id"));
+//                            item.setItemName(itemObject.getString("item_name"));
+//                            item.setDescription(itemObject.getString("description"));
+//                            item.setColourCoding(itemObject.getString("colourcoding"));
+//                            item.setBarcode(itemObject.getString("barcode"));
+//                            item.setQrcode(itemObject.getString("qrcode"));
+//                            item.setQuantity(itemObject.getString("quanity"));
+//                            item.setLocation(itemObject.getString("location"));
+//                            item.setEmail(itemObject.getString("email"));
+//                            item.setItemImage(itemObject.getString("item_image"));
+//                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+//                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+//                            itemModelList.add(item);
+                            categoryModelList.add(suggestedCategory);
+                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "GET Suggested request failed:" + response);
                         callback.onFailure("Response code:" + response.code());
                     });
                 }

@@ -202,7 +202,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    navigateToMainActivity(username);
+//                    navigateToMainActivity(username);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
                 }
             }
@@ -231,8 +231,11 @@ public class EmailVerificationActivity extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
+
 
     @Override
     protected void onDestroy() {
