@@ -69,6 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener(view -> {
+
             if (selectedItems.isEmpty()) {
                 Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
                 intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
@@ -80,6 +81,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
                 intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
                 intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
+                intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
+                intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
 
                 context.startActivity(intent);
             } else {
@@ -90,6 +93,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.itemView.setOnLongClickListener(view -> {
             toggleSelection(holder.getAdapterPosition());
             return true;
+
         });
 
         if (selectedItems.contains(position)) {
