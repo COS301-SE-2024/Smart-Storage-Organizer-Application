@@ -1,0 +1,20 @@
+
+�	java:S117�"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(���X8͂���2J$b01523c6-9727-402c-a8df-c98ecaeaf177
+�	java:S117�"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Բ��8͂���2J$a56411d0-5483-450e-b133-2a9acdb58137
+�
+java:S1192�"LDefine a constant instead of duplicating this literal "Delete Item" 5 times.(����8ւ���2J$4c9b71e9-b11e-489a-97cb-3a9dff03b1c7
+s
+java:S1874]"0Remove this use of "getColor"; it is deprecated.(����8�����2J$55c801d0-be19-4599-a600-adec0b693128
+r
+java:S1874a"0Remove this use of "getColor"; it is deprecated.(�ѤC8�����2J$3e1f9dab-c27b-470e-a26f-86215e1025ba
+o
+java:S1602g",Remove useless curly braces around statement(Ų��8�����2J$6ead3ce6-17ff-4143-921f-62066eb01f0d
+�
+java:S1155y">Use isEmpty() to check whether the collection is empty or not.(��8�����2J$05317a50-308f-41b7-a4b1-fe56e1602d7d
+t
+java:S1874�"+Remove this use of "yes"; it is deprecated.(���������8�����2J$1c5ec23e-2c66-49d8-9087-999fb53fb6fe
+u
+java:S1602�",Remove useless curly braces around statement(���������8�����2J$c14bfcc6-e935-4474-8bfe-3e9cd99f4847
+s
+java:S1874�"*Remove this use of "no"; it is deprecated.(�݆������8�����2J$236837dd-e515-4faa-aaef-0a969c01fa31
+

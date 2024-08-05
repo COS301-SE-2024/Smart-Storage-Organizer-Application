@@ -1,42 +1,31 @@
 package com.example.smartstorageorganizer.adapters;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.OnColorFetchListener;
-import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
-import com.example.smartstorageorganizer.ViewColorCodesActivity;
-import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
-import com.example.smartstorageorganizer.utils.OperationCallback;
-import com.example.smartstorageorganizer.utils.Utils;
-import com.facebook.shimmer.ShimmerFrameLayout;
+import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,67 +41,32 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
+public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder> {
 
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
 
-    public ItemAdapter(Context context, List<ItemModel> itemModelList) {
-
+    public RecentAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
         this.itemModelList = itemModelList;
-        this.colorCodeModelList = colorCodeModelList;
-        this.colorCodeAdapter = colorCodeAdapter;
-        this.shimmerFrameLayout = shimmerFrameLayout;
-        this.colorCodeRecyclerView = colorCodeRecyclerView;
         new OkHttpClient();
-    }
-
-    public void setColorCodeLoadListener(OnColorFetchListener listener) {
-        this.onColorFetchListener = listener;
-    }
-    // Setter methods
-    public void setShimmerFrameLayout(ShimmerFrameLayout shimmerFrameLayout) {
-        this.shimmerFrameLayout = shimmerFrameLayout;
-    }
-
-    public void setColorCodeRecyclerView(RecyclerView colorCodeRecyclerView) {
-        this.colorCodeRecyclerView = colorCodeRecyclerView;
-    }
-
-    public void setColorCodeModelList(List<ColorCodeModel> colorCodeModelList) {
-        this.colorCodeModelList = colorCodeModelList;
-    }
-
-    public void setColorCodeAdapter(ColorCodeAdapter colorCodeAdapter) {
-        this.colorCodeAdapter = colorCodeAdapter;
-    }
-
-//    Getters
-
-    public ItemAdapter(FragmentActivity context, List<ItemModel> itemModelList, Context context1, List<ItemModel> itemModelList1) {
-        this.context = context1;
-        this.itemModelList = itemModelList1;
     }
 
     @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
+    public RecentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recent_added_layout, parent, false));
     }
 
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecentAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
-        ItemModel item = itemModelList.get(position);
+        holder.name.setText(itemModelList.get(position).getItemName());
+        holder.description.setText(itemModelList.get(position).getDescription());
 
-        holder.name.setText(item.getItemName());
-        holder.description.setText(item.getDescription());
-
-        if (!Objects.equals(item.getItemImage(), "empty")) {
-            Glide.with(context).load(item.getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
+        if (!Objects.equals(itemModelList.get(position).getItemImage(), "empty")) {
+            Glide.with(context).load(itemModelList.get(position).getItemImage()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.itemImage);
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -135,82 +89,24 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         });
 
         holder.itemView.setOnLongClickListener(view -> {
-
             toggleSelection(holder.getAdapterPosition());
             return true;
         });
 
         if (selectedItems.contains(position)) {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray));
+//            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray));
             holder.selectedOverlay.setVisibility(View.VISIBLE);
             holder.tickMark.setVisibility(View.VISIBLE);
         } else {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+//            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.selectedOverlay.setVisibility(View.GONE);
             holder.tickMark.setVisibility(View.GONE);
         }
+
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
         });
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void selectAllItems() {
-        // Add logic to select all items
-        for (int i = 0; i < itemModelList.size(); i++) {
-            selectedItems.add(i);
-        }
-        notifyDataSetChanged(); // Update the adapter to refresh the UI
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void assignColorToSelectedItems() {
-        if (shimmerFrameLayout == null || colorCodeRecyclerView == null || colorCodeModelList == null || colorCodeAdapter == null) {
-            Log.e("1Error", "One of the UI components is not initialized.");
-            return;
-        }
-        shimmerFrameLayout.startShimmer();
-        shimmerFrameLayout.setVisibility(View.VISIBLE);
-        colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.fetchAllColour((Activity) context, new OperationCallback<List<ColorCodeModel>>() {
-            @Override
-            public void onSuccess(List<ColorCodeModel> result) {
-                if (result != null && !result.isEmpty())
-                {
-                    colorCodeModelList.clear();
-                    colorCodeModelList.addAll(result);
-                    colorCodeAdapter.notifyDataSetChanged();
-//                loadingScreen.setVisibility(View.GONE);
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
-                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
-                    Toast.makeText(context, "colorCode fetched successfully", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(context, "No colors found", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-//                loadingScreen.setVisibility(View.GONE);
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
-                Toast.makeText(context, "Failed to fetch colorCode: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void toggleSelection(int position) {
-        if (selectedItems.contains(position)) {
-            selectedItems.remove(Integer.valueOf(position));
-        } else {
-            selectedItems.add(position);
-        }
-        notifyItemChanged(position);
     }
 
     @Override
@@ -225,8 +121,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             selectedItems.add(position);
         }
         notifyItemChanged(position);
-        if (context instanceof ViewItemActivity) {
-            ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+        if (context instanceof UncategorizedItemsActivity) {
+            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
         }
     }
 
@@ -234,18 +130,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         ImageView image;
         TextView name;
         TextView description;
-        ImageView itemImage;
+        ShapeableImageView itemImage;
         ImageView deleteIcon;
         View selectedOverlay;
         ImageView tickMark;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.item_image);
-            name = itemView.findViewById(R.id.item_name);
-            description = itemView.findViewById(R.id.item_description);
-            itemImage = itemView.findViewById(R.id.itemImage);
+            name = itemView.findViewById(R.id.name);
+            description = itemView.findViewById(R.id.description);
+            itemImage = itemView.findViewById(R.id.image);
             deleteIcon = itemView.findViewById(R.id.delete_icon);
             selectedOverlay = itemView.findViewById(R.id.selected_overlay);
             tickMark = itemView.findViewById(R.id.tick_mark);
@@ -275,7 +169,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
-
 
     private void deleteItem(String itemId, int position) {
         try {
@@ -327,54 +220,33 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateColorCoding(String colorCode) {
-        for (Integer position : selectedItems) {
-            ItemModel item = itemModelList.get(position);
-            item.setColourCoding(colorCode); // Update the color coding in the model
-
-            // Optionally, update the server with the new color coding
-            updateItemColorCodingOnServer(item.getItemId(), colorCode);
+    public String getSelectedItemsIds() {
+        StringBuilder selectedIds = new StringBuilder();
+        for (int position : selectedItems) {
+            if (selectedIds.length() > 0) {
+                selectedIds.append(",");
+            }
+            selectedIds.append(itemModelList.get(position).getItemId());
         }
-        notifyDataSetChanged(); // Refresh the RecyclerView to reflect the changes
+        return selectedIds.toString();
     }
 
-    private void updateItemColorCodingOnServer(String itemId, String colorCode) {
-        try {
-            String json = "{\"item_id\":\"" + itemId + "\", \"color_code\":\"" + colorCode + "\"}";
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            String API_URL = BuildConfig.AddColourEndPoint;
-            RequestBody body = RequestBody.create(json, JSON);
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(body)
-                    .build();
-
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    // Handle request failure
-                    Log.e("Update Color Coding", "Error updating color coding", e);
-                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        // Handle successful response
-                        Log.d("Update Color Coding", "Color coding updated successfully");
-                    } else {
-                        // Handle failure response
-                        Log.e("Update Color Coding", "Failed to update color coding. Response code: " + response.code());
-                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to update color coding. Please try again.", Toast.LENGTH_SHORT).show());
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Log.e("Update Color Coding", "Exception occurred", e);
-        }
-    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

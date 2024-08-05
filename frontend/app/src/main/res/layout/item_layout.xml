@@ -76,6 +76,7 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <!-- Delete Icon -->
         <ImageView
             android:id="@+id/delete_icon"
@@ -86,5 +87,24 @@
             android:padding="0dp"
             android:src="@drawable/baseline_more_vert_24"
             android:contentDescription="@string/delete_icon_description"/>
+
+        <!-- Overlay for selected state -->
+        <View
+            android:id="@+id/selected_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:alpha="0.5"
+            android:visibility="gone" />
+
+        <!-- Tick mark for selected state -->
+        <ImageView
+            android:id="@+id/tick_mark"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/check"
+            android:visibility="gone" />
+
     </FrameLayout>
 </androidx.cardview.widget.CardView>
