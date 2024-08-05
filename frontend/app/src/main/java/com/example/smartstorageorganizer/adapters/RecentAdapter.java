@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 

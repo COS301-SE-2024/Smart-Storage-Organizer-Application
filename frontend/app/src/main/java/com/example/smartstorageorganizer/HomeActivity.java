@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -400,7 +401,6 @@ public class HomeActivity extends AppCompatActivity {
     public void FetchUncategorized(int HowMany, int PageNumber)
     {
         String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
-
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
