@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,10 +85,6 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        if (!isAdmin()) {
-            hideAdminMenuItems(navigationView.getMenu());
-        }
     }
 
     @Override
@@ -104,17 +99,6 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    private boolean isAdmin() {
-        // Implement your logic to check if the user is an admin
-        // For example, check shared preferences, a database, or an API
-        return true; // Replace with actual logic
-    }
-
-    private void hideAdminMenuItems(Menu menu) {
-        menu.findItem(R.id.nav_requests).setVisible(false);
-        menu.findItem(R.id.nav_users).setVisible(false);
     }
 
     public CompletableFuture<Boolean> getDetails() {
@@ -368,50 +352,24 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
     }
 
-    public void RecommendMultiple(String id)
+    public void AssignColour(String colourid, String itemid)
     {
-        String json = "{\"id\":\""+id+"\"}";
+
+        String json = "{\"colourid\":\""+colourid+"\", \"itemid\":\""+itemid+"\" }";
+
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.RecommendMultipleEndPoint;
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(body)
                 .build();
-    }
-    public void CreateCategoryAI(String parentcategory, String item_name, String description)
-    {
-        String json = "{\"parentcategory\":\""+parentcategory+"\", \"description\":\""+description+"\", \"item_name\":\""+item_name+"\" }";
 
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.CreateCategoryAIEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
     }
 
-    public void FetchUncategorized(int HowMany, int PageNumber)
-    {
-        String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchUncategorizedEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
 
 //    public void GenerateQrcode(int id)
 //    {

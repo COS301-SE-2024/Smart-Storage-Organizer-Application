@@ -3,13 +3,11 @@ package com.example.smartstorageorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +31,6 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,7 +66,6 @@ public class ViewItemActivity extends AppCompatActivity {
     private final ColorCodeAdapter colorCodeAdapter;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
-    private LinearLayout bottomNavigationView;
 
     public ViewItemActivity(RecyclerView colorCodeRecyclerView, List<ColorCodeModel> colorCodeModelList, ColorCodeAdapter colorCodeAdapter) {
         this.colorCodeRecyclerView = colorCodeRecyclerView;
@@ -110,7 +106,6 @@ public class ViewItemActivity extends AppCompatActivity {
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
@@ -504,34 +499,5 @@ public class ViewItemActivity extends AppCompatActivity {
                 break;
             default:
         }
-    }
-
-    private void setupBottomNavigationBar() {
-        LinearLayout deleteButton = findViewById(R.id.delete);
-        LinearLayout colorButton = findViewById(R.id.color);
-        LinearLayout shareButton = findViewById(R.id.share);
-        LinearLayout selectAllButton = findViewById(R.id.select_all);
-
-        deleteButton.setOnClickListener(view -> {
-            // Handle delete action
-        });
-
-        colorButton.setOnClickListener(view -> {
-            // Handle color assign action
-        });
-
-        shareButton.setOnClickListener(view -> {
-            // Handle share action
-        });
-
-        selectAllButton.setOnClickListener(view -> {
-            // Handle select all action
-        });
-    }
-
-    public void updateBottomNavigationBar(boolean isVisible) {
-        LinearLayout paginationLayout = findViewById(R.id.paginationLayout);
-        paginationLayout.setVisibility(isVisible ? View.GONE : View.VISIBLE);
-        bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
     }
 }
