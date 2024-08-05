@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,9 +26,12 @@ import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.MediaType;
@@ -40,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     public AppBarConfiguration mAppBarConfiguration;
     public ActivityHomeBinding binding;
     public String currentName, currentSurname, currentPicture;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         ConstraintLayout logout = binding.logoutButton;
         LottieAnimationView buttonLoader = binding.buttonLoader;
         TextView logoutButtonText = binding.logOutButtonText;
@@ -87,9 +93,11 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        if (!isAdmin()) {
-            hideAdminMenuItems(navigationView.getMenu());
-        }
+        getUserRole("ezemakau@gmail.com", "");
+
+//        if (!isAdmin()) {
+//            hideAdminMenuItems(navigationView.getMenu());
+//        }
     }
 
     @Override
@@ -115,6 +123,10 @@ public class HomeActivity extends AppCompatActivity {
     private void hideAdminMenuItems(Menu menu) {
         menu.findItem(R.id.nav_requests).setVisible(false);
         menu.findItem(R.id.nav_users).setVisible(false);
+    }
+    private void showAdminMenuItems(Menu menu) {
+        menu.findItem(R.id.nav_requests).setVisible(true);
+        menu.findItem(R.id.nav_users).setVisible(true);
     }
 
     public CompletableFuture<Boolean> getDetails() {
@@ -198,6 +210,28 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         return future;
+    }
+
+    private void getUserRole(String username, String authorization) {
+        hideAdminMenuItems(navigationView.getMenu());
+        UserUtils.getUserRole(username, authorization, this, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                if (Objects.equals(result, "Manager") || Objects.equals(result, "Admin")) {
+                    showAdminMenuItems(navigationView.getMenu());
+                }
+                else {
+                    hideAdminMenuItems(navigationView.getMenu());
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                progressDialog.dismiss();
+                hideAdminMenuItems(navigationView.getMenu());
+                Toast.makeText(HomeActivity.this, "Getting user role failed", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void DeleteCategory(int id, String email)

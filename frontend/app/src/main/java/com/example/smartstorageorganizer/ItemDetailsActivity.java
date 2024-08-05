@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -55,6 +56,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
 
+    @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +154,23 @@ public class ItemDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ItemDetailsActivity.this, ItemInfoActivity.class);
+                intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
+                intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
+                intent.putExtra("location", getIntent().getStringExtra("location"));
+                intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
+                intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+                intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+                intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
+                intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
+                intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+                startActivity(intent);
             }
         });
     }

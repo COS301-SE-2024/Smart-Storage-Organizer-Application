@@ -405,4 +405,72 @@ public class UserUtils {
     }
 
 
+    public static void getUserRole(String username, String authorizationToken, Activity activity, OperationCallback<String> callback) {
+        String json = "{"
+                + "\"header\": {"
+                + "\"Authorization\": \"" + authorizationToken + "\""
+                + "},"
+                + "\"body\": {"
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.getUserRoles;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.d("MyAmplifyApp", "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+
+                        JSONObject roleObject = new JSONObject(bodyString);
+                        String roleString = roleObject.getString("role");
+
+                        activity.runOnUiThread(() -> {
+                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                            callback.onSuccess(roleString);
+                        });
+                    }catch (JSONException e){
+                        activity.runOnUiThread(() -> {
+                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
 }
