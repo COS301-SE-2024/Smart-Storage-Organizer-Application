@@ -544,6 +544,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
         selectAllButton.setOnClickListener(view -> {
             // Handle select all action
+            itemAdapter.selectAllItems();
         });
     }
 

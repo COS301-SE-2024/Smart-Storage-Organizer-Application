@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -43,6 +45,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
+    private boolean selectAllFlag = true;
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -226,5 +229,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             selectedIds.append(itemModelList.get(position).getItemId());
         }
         return selectedIds.toString();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void selectAllItems() {
+        if(selectAllFlag){
+            for (int i = 0; i < itemModelList.size(); i++) {
+                selectedItems.add(i);
+            }
+            selectAllFlag = false;
+        }
+        else {
+            selectedItems.clear();
+            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+            selectAllFlag = true;
+        }
+        notifyDataSetChanged();
     }
 }

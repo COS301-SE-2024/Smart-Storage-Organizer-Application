@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -47,6 +48,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
+    private boolean selectAllFlag = true;
 
     public RecentAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -229,6 +231,23 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             selectedIds.append(itemModelList.get(position).getItemId());
         }
         return selectedIds.toString();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void selectAllItems() {
+        // Add logic to select all items
+        if(selectAllFlag){
+            for (int i = 0; i < itemModelList.size(); i++) {
+                selectedItems.add(i);
+            }
+            selectAllFlag = false;
+        }
+        else {
+            selectedItems.clear();
+            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+            selectAllFlag = true;
+        }
+        notifyDataSetChanged(); // Update the adapter to refresh the UI
     }
 
 
