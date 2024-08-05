@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -24,8 +26,8 @@ import com.example.OnColorFetchListener;
 import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
+import com.example.smartstorageorganizer.ItemInfoActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.ViewColorCodesActivity;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -59,6 +61,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
+    private String currentEmail;
+    private List<ColorCodeModel> colorCodeModelList;
+    private ColorCodeAdapter colorCodeAdapter;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView colorCodeRecyclerView;
+    private OnColorFetchListener onColorFetchListener;
+    private boolean isSelectionMode = false;
+
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
 
@@ -104,6 +114,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
     }
 
+    @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
         Log.i("Adapter", "Adapter function.");
         ItemModel item = itemModelList.get(position);
@@ -116,42 +127,62 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener(view -> {
-            if (selectedItems.isEmpty()) {
-                Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
-                intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
-                intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
-                intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
-                intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
-                intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
-                intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
-                intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
-                intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
-                intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
+            Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
+            intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
+            intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
+            intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
+            intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
+            intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
+            intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
+            intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
+            intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
+            intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
 
-                context.startActivity(intent);
-            } else {
-                toggleSelection(holder.getAdapterPosition());
-            }
+
+            context.startActivity(intent);
         });
 
-        holder.itemView.setOnLongClickListener(view -> {
+//        // Handle item long click to select
+//        holder.itemView.setOnLongClickListener(view -> {
+//            toggleSelection(holder.getAdapterPosition());
+//            return true;
+//        });
+//
+//        // Show/hide tick icon based on selection
+//        if (selectedItems.contains(position)) {
+//            holder.tickIcon.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.tickIcon.setVisibility(View.GONE);
+//        }
 
+
+//        updated onClick for selecting items
+        // Handle item long click to enter selection mode
+        holder.itemView.setOnLongClickListener(view -> {
+            isSelectionMode = true; // Enable selection mode
             toggleSelection(holder.getAdapterPosition());
             return true;
         });
 
+// Handle item click to toggle selection if in selection mode
+        holder.itemView.setOnClickListener(view -> {
+            if (isSelectionMode) {
+                toggleSelection(holder.getAdapterPosition());
+            }
+        });
+
+// Show/hide tick icon based on selection
         if (selectedItems.contains(position)) {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.gray));
-            holder.selectedOverlay.setVisibility(View.VISIBLE);
-            holder.tickMark.setVisibility(View.VISIBLE);
+            holder.tickIcon.setVisibility(View.VISIBLE);
         } else {
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-            holder.selectedOverlay.setVisibility(View.GONE);
-            holder.tickMark.setVisibility(View.GONE);
+            holder.tickIcon.setVisibility(View.GONE);
         }
+
+
         // Handle delete icon click
         holder.deleteIcon.setOnClickListener(view -> {
             showBottomSheetDialog(holder.getAdapterPosition(), itemModelList.get(holder.getAdapterPosition()).getItemId());
+            // Show a confirmation dialog or directly delete the item
         });
     }
 
@@ -218,27 +249,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return itemModelList.size();
     }
 
-    private void toggleSelection(int position) {
-        if (selectedItems.contains(position)) {
-            selectedItems.remove(position);
-        } else {
-            selectedItems.add(position);
-        }
-        notifyItemChanged(position);
-        if (context instanceof ViewItemActivity) {
-            ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
-        }
-    }
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
         TextView description;
         ImageView itemImage;
         ImageView deleteIcon;
-        View selectedOverlay;
-        ImageView tickMark;
-
+        ImageView tickIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -246,42 +263,53 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.item_description);
             itemImage = itemView.findViewById(R.id.itemImage);
-            deleteIcon = itemView.findViewById(R.id.delete_icon);
-            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
-            tickMark = itemView.findViewById(R.id.tick_mark);
+            deleteIcon = itemView.findViewById(R.id.delete_icon);  // Initialize delete icon
+            tickIcon = itemView.findViewById(R.id.tick_icon);
+
         }
     }
 
+//    Updated showBottomSheetDialog
+private void showBottomSheetDialog(int position, String itemId) {
+    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+    View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
 
-    private void showBottomSheetDialog(int position, String itemId) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
+    TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+    TextView selectAllItems = bottomSheetView.findViewById(R.id.select_all);
+    TextView assignColor = bottomSheetView.findViewById(R.id.assign_color);
 
-        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+    deleteItem.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    deleteItem(itemId, position);
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    });
 
-        deleteItem.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete Item")
-                    .setMessage("Are you sure you want to delete this item?")
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        deleteItem(itemId, position);
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        });
+    selectAllItems.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        selectAllItems(); // Implement your method to select all items
+    });
 
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
+    assignColor.setOnClickListener(view -> {
+        bottomSheetDialog.dismiss();
+        assignColorToSelectedItems(); // Implement your method to assign color to selected items
+    });
 
-
+    bottomSheetDialog.setContentView(bottomSheetView);
+    bottomSheetDialog.show();
+}
     private void deleteItem(String itemId, int position) {
         try {
+            // Convert itemId to integer
             int itemIdInt = Integer.parseInt(itemId);
             String json = "{\"item_id\":\"" + itemIdInt + "\"}";
-            Log.d("Delete Item Payload", "JSON Payload: " + json);
+            Log.d("Delete Item Payload", "JSON Payload: " + json);  // Log the JSON payload
             MediaType JSON = MediaType.get("application/json; charset=utf-8");
             String API_URL = BuildConfig.DeleteItemEndPoint;
             Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
@@ -295,6 +323,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    // Handle request failure
                     Log.e("Delete Item", "Error deleting item", e);
                     ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
                 }
@@ -302,7 +331,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        // Remove item from list and notify adapter
+
+                        // Parse the response body
                         String responseBody = response.body().string();
+
+                        // Log the successful response and its body
                         Log.d("Delete Item Response", "Response: " + response);
                         Log.d("Delete Item Response Body", "Response Body: " + responseBody);
 
@@ -311,17 +345,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                             notifyItemRemoved(position);
                             notifyItemRangeChanged(position, itemModelList.size());
                             Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+
                         });
                     } else {
+                        // Handle failure response
                         String errorBody = response.body().string();
                         Log.e("Delete Item", "Failed to delete item. Response code: " + response.code() + ", message: " + response.message());
                         Log.e("Delete Item", "Error body: " + errorBody);
 
                         ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
+
                     }
                 }
             });
         } catch (NumberFormatException e) {
+            // Handle the exception if itemId is not a valid integer
             Log.e("Delete Item", "Invalid itemId: " + itemId, e);
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
@@ -378,3 +416,5 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
 }
+
+
