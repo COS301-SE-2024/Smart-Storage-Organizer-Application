@@ -5,28 +5,32 @@ on:
     branches: [ feat/UserAuthenication  ]
   pull_request:
     branches: [ feat/UserAuthenication  ]
-  workflow_dispatch:
-  
+
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-        - name: Checkout the code
-          uses: actions/checkout@v3
-        - name: Set up JDK
-          uses: actions/setup-java@v3
-          with:
-              java-version: '17.0.11'
-              distribution: 'adopt'
-        
-        - name: Build and Lint
-          working-directory: frontend
-          run: |
-              ./gradlew clean build lintDebug
-        - name: Upload html report
-          uses: actions/upload-artifact@v2
-          with:
-            name: index.html
-            path: app/build/reports/lint-results-debug.html 
-    
+      - name: Checkout the code
+        uses: actions/checkout@v3
 
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+   
+      - name: Make gradlew executable
+        working-directory: frontend
+        run: chmod +x gradlew
+     
+
+          
+      - name: Build and Lint
+        working-directory: frontend
+        run: ./gradlew  clean build  lintDebug
+          
+      - name: Upload html report
+        uses: actions/upload-artifact@v3
+        with:
+          name: index.html
+          path: app/build/reports/lint-results-debug.html
