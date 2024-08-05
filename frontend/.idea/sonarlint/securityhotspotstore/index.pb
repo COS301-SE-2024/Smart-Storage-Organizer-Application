@@ -94,3 +94,9 @@ Happ/src/main/java/com/example/smartstorageorganizer/utils/UserUtils.java,8\0\8
 Papp/src/test/java/com/example/smartstorageorganizer/EditProfileActivityTest.java,3\3\3378155149634c4e9e34d872e6844f3e1edbba5c
 Ç
 Rapp/src/main/java/com/example/smartstorageorganizer/EmailVerificationActivity.java,4\1\4171c039aa7e2fe87b69241020ae05d60652eecb
+Å
+Qapp/src/main/java/com/example/smartstorageorganizer/FirebaseMessagingService.java,7\7\77c5dcf2aae55fdc8402be493b16e7b33ec15afe
+D
+google-services.json,f\7\f761570c4ae90a5577cea77748c77672342c8041
+I
+gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f

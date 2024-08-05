@@ -116,6 +116,7 @@ android {
 
 
 dependencies {
+    implementation(libs.firebase.messaging)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
@@ -210,7 +211,11 @@ dependencies {
 
     implementation("com.amplifyframework:aws-storage-s3:2.16.1")
 
+    implementation ("com.amazonaws:aws-android-sdk-mobile-client:2.25.+")   //aws client dependency
+
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
 
 
 

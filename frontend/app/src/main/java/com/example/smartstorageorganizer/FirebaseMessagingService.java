@@ -12,19 +12,18 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-//import com.google.firebase.messaging.FirebaseMessagingService;
-//import com.amazonaws.mobile.client.results.Tokens;
-//import com.google.firebase.messaging.RemoteMessage;
-//
-//import com.amazonaws.mobile.client.AWSMobileClient;
-//import com.amazonaws.mobile.client.Callback;
-//import com.amazonaws.mobile.client.results.SignInResult;
-//
-//import org.json.JSONObject;
-//
-//import java.io.OutputStream;
-//import java.net.HttpURLConnection;
-//import java.net.URL;
+import com.amazonaws.mobile.client.results.Tokens;
+import com.google.firebase.messaging.RemoteMessage;
+
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.client.Callback;
+import com.amazonaws.mobile.client.results.SignInResult;
+
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class FirebaseMessagingService extends Service {
     public FirebaseMessagingService() {
@@ -36,4 +35,6 @@ public class FirebaseMessagingService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     //Implementation
+
+
 }
