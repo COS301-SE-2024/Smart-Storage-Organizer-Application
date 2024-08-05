@@ -12,22 +12,13 @@
         android:padding="16dp"
         android:text="Delete"
         android:textSize="18sp" />
-    <TextView
-        android:id="@+id/select_all"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select All"
-        android:padding="16dp"
-        android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/assign_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Assign Color"
-        android:padding="16dp"
-        android:textSize="18sp" />
-
-
+<!--    <TextView-->
+<!--        android:id="@+id/delete_category"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="16dp"-->
+<!--        android:text="Delete Category"-->
+<!--        android:textSize="18sp" />-->
 
 </LinearLayout>

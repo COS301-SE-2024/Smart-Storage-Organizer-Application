@@ -13,13 +13,3 @@ D
 app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
-O
-amplify/team-provider-info.json,2\a\2a936681202283da3416fae7099b0d9b111fceb3
-S
-#amplify/backend/backend-config.json,9\4\947ed310829b54f4451f87fc5f31ae441d4abb2a
-}
-Mapp/src/main/java/com/example/smartstorageorganizer/AddColorCodeActivity.java,5\9\597b389a56edd6a4f666f820daf54c1e5b4f207e
-u
-Eapp/src/main/java/com/example/smartstorageorganizer/HomeActivity.java,0\f\0f98ac73880ecb0de940270421958cd96b00adfc
-t
-Dapp/src/main/java/com/example/smartstorageorganizer/utils/Utils.java,a\f\afbc0607d6b6e614428b9a1fa3bef3bf2a7e11fc
