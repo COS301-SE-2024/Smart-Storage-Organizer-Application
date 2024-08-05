@@ -28,22 +28,22 @@ import android.os.Build;
 @Config(sdk = Build.VERSION_CODES.P)
 public class LoginActivityTest {
 
-//    LoginActivity loginActivity;
-//    @Mock
-//    LoginActivity lg = mock(LoginActivity.class);
+   LoginActivity loginActivity;
+   @Mock
+   LoginActivity lg = mock(LoginActivity.class);
 //
-//    @Before
-//    public void setup() {
-//        loginActivity = spy(Robolectric.buildActivity(LoginActivity.class)
-//                .create()
-//                .resume()
-//                .get());
-//    }
+   @Before
+   public void setup() {
+       loginActivity = spy(Robolectric.buildActivity(LoginActivity.class)
+               .create()
+               .resume()
+               .get());
+   }
 
-//    @Test
-//    public void shouldNotBeNull() {
-//        assertNotNull(loginActivity);
-//    }
+   @Test
+   public void shouldNotBeNull() {
+       assertNotNull(loginActivity);
+   }
 //
 //    @Test
 //    public void validateFormShouldReturnTrueForValidEmailAndPassword() {

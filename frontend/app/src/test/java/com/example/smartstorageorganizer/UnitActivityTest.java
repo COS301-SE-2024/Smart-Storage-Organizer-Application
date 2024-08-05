@@ -21,21 +21,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class UnitActivityTest {
 
-//    UnitActivity Page;
-//    @Mock
-//    UnitActivity MockedPage = mock(UnitActivity.class);
-//    @Before
-//    public void setUp()  {
-//        Page = Robolectric.buildActivity(UnitActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//    }
+   UnitActivity Page;
+   @Mock
+   UnitActivity MockedPage = mock(UnitActivity.class);
+   @Before
+   public void setUp()  {
+       Page = Robolectric.buildActivity(UnitActivity.class)
+               .create()
+               .resume()
+               .get();
+   }
 
-//    @Test
-//    public void onCreate() {
-//        assertNotNull(Page);
-//    }
+   @Test
+   public void onCreate() {
+       assertNotNull(Page);
+   }
 //
 //    @Test
 //    public void createUnit() {

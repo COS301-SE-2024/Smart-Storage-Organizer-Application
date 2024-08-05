@@ -16,20 +16,20 @@ import org.robolectric.annotation.Config;
 @Config(sdk = Build.VERSION_CODES.P)
 public class ViewItemActivityTest {
 
-//    ViewItemActivity Page;
-//    @Mock
-//    ViewItemActivity MockedPage = mock(ViewItemActivity.class);
-//    @Before
-//    public void setUp()  {
-//        Page = Robolectric.buildActivity(ViewItemActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//    }
+   ViewItemActivity Page;
+   @Mock
+   ViewItemActivity MockedPage = mock(ViewItemActivity.class);
+   @Before
+   public void setUp()  {
+       Page = Robolectric.buildActivity(ViewItemActivity.class)
+               .create()
+               .resume()
+               .get();
+   }
 
-//    @Test
-//    public void onCreate() {
-//        assertNotNull(Page);
-//    }
+   @Test
+   public void onCreate() {
+       assertNotNull(Page);
+   }
 
 }

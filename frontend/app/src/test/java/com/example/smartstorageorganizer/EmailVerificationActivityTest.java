@@ -24,26 +24,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class EmailVerificationActivityTest {
 
-//    EmailVerificationActivity Page;
-//    @Mock
-//    EmailVerificationActivity MockedPage = mock(EmailVerificationActivity.class);
+   EmailVerificationActivity Page;
+   @Mock
+   EmailVerificationActivity MockedPage = mock(EmailVerificationActivity.class);
 //
-//    private CountDownTimer mockCountDownTimer;
+    private CountDownTimer mockCountDownTimer;
 //
-//    @Before
-//    public void setup() {
-//        Page = Robolectric.buildActivity(EmailVerificationActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//
-//        mockCountDownTimer = mock(CountDownTimer.class);
-//    }
+   @Before
+   public void setup() {
+       Page = Robolectric.buildActivity(EmailVerificationActivity.class)
+               .create()
+               .resume()
+               .get();
 
-//    @Test
-//    public void shouldNotBeNull() {
-//        assertNotNull(Page);
-//    }
+       mockCountDownTimer = mock(CountDownTimer.class);
+   }
+
+   @Test
+   public void shouldNotBeNull() {
+       assertNotNull(Page);
+    }
 //
 //   @Test
 //   public void validateFormShouldReturnTrueWhenALLInputsAreGiven()

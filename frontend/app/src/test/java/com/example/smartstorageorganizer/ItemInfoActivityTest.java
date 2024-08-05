@@ -19,22 +19,22 @@ import org.robolectric.shadows.ShadowDialog;
 @Config(sdk = Build.VERSION_CODES.P)
 public class ItemInfoActivityTest {
 
-//    ItemInfoActivity Page;
-//    @Mock
-//    HomeActivity MockedPage = mock(HomeActivity.class);
-//
-//    @Before
-//    public void setup() {
-//        Page = Robolectric.buildActivity(ItemInfoActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//    }
+   ItemInfoActivity Page;
+   @Mock
+   HomeActivity MockedPage = mock(HomeActivity.class);
 
-//    @Test
-//    public void shouldNotBeNull() {
-//        assertNotNull(Page);
-//    }
+   @Before
+   public void setup() {
+       Page = Robolectric.buildActivity(ItemInfoActivity.class)
+               .create()
+               .resume()
+               .get();
+   }
+
+   @Test
+   public void shouldNotBeNull() {
+       assertNotNull(Page);
+    }
 //    @Test
 //    public void  TestPopUp()
 //    {

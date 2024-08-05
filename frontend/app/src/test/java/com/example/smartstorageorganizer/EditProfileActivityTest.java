@@ -22,22 +22,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class EditProfileActivityTest {
 
-//    EditProfileActivity editprofile1;
-//    @Mock
-//    EditProfileActivity editprofile = mock(EditProfileActivity.class);
-//
-//    @Before
-//    public void setup() {
-//        editprofile1 = Robolectric.buildActivity(EditProfileActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//    }
+   EditProfileActivity editprofile1;
+   @Mock
+   EditProfileActivity editprofile = mock(EditProfileActivity.class);
 
-//    @Test
-//    public void shouldNotBeNull() {
-//        assertNotNull(editprofile1);
-//    }
+   @Before
+   public void setup() {
+       editprofile1 = Robolectric.buildActivity(EditProfileActivity.class)
+               .create()
+               .resume()
+               .get();
+   }
+
+   @Test
+   public void shouldNotBeNull() {
+       assertNotNull(editprofile1);
+   }
 
 
     //@Test
