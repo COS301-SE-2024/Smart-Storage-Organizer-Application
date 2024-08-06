@@ -19,6 +19,9 @@ android {
         }
     }
 
+
+
+
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
     android.buildFeatures.buildConfig =true
@@ -111,6 +114,8 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    
 
 }
 
