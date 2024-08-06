@@ -321,7 +321,7 @@
                                     android:background="@color/colorPrimary">
 
                                     <TextView
-                                        android:id="@+id/tvDescriptionCategory"
+                                        android:id="@+id/Category"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
@@ -350,7 +350,7 @@
                                         android:id="@+id/itemCategory"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@id/tvDescriptionCategory"
+                                        android:layout_below="@id/Category"
                                         android:background="@android:color/white"
                                         android:padding="16dp"
                                         android:text="Details about Category."
@@ -376,7 +376,7 @@
                                     android:background="@color/colorPrimary">
 
                                     <TextView
-                                        android:id="@+id/tvDescriptionColorCode"
+                                        android:id="@+id/ColorCode"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
@@ -405,7 +405,7 @@
                                         android:id="@+id/itemColorCode"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@id/tvDescriptionColorCode"
+                                        android:layout_below="@id/ColorCode"
                                         android:background="@android:color/white"
                                         android:padding="16dp"
                                         android:text="Details about Color Code."

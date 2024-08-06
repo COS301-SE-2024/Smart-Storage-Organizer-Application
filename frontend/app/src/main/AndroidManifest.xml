@@ -126,7 +126,6 @@
             android:name=".MainActivity"
             android:exported="false" >
         </activity>
-            android:exported="false"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
