@@ -19,6 +19,9 @@ android {
         }
     }
 
+
+
+
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
     android.buildFeatures.buildConfig =true
@@ -113,10 +116,13 @@ android {
         viewBinding = true
     }
 
+    
+
 }
 
 
 dependencies {
+    implementation(libs.firebase.database)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
 
@@ -134,6 +140,9 @@ dependencies {
     // Example for using ZXing
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("com.google.zxing:core:3.3.3")
+
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+    implementation("com.google.firebase:firebase-core:21.1.1")
 
 
 
