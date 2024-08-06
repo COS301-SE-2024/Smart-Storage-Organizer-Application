@@ -17,10 +17,17 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private List<ItemModel> searchResults;
+    private OnItemClickListener onItemClickListener;
 
-    public SearchAdapter(List<ItemModel> searchResults) {
-        this.searchResults = searchResults;
+    public interface OnItemClickListener {
+        void onItemClick(ItemModel item);
     }
+
+    public SearchAdapter(List<ItemModel> searchResults, OnItemClickListener onItemClickListener) {
+        this.searchResults = searchResults;
+        this.onItemClickListener = onItemClickListener;
+    }
+
 
     @NonNull
     @Override
