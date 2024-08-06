@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<ItemModel> searchResults;
-    private SearchView searchView;
+    private EditText searchView;
     private ImageButton searchButton;
     private RecyclerView searchResultsRecyclerView;
 
@@ -65,10 +66,11 @@ public class SearchActivity extends AppCompatActivity {
         searchResultsRecyclerView.setAdapter(adapter);
 //
         searchButton.setOnClickListener(v -> {
-            String query = searchView.getQuery().toString();
+            String query = searchView.getText().toString();
             if (!query.isEmpty()) {
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                 SearchForItem(query, "*", "*");
+                searchResults.clear();
 //                searchResults.add(new ItemModel());
 //                adapter.notifyDataSetChanged();
 //                SearchForItem(query, "", ""); // Adjust parameters as needed
@@ -77,24 +79,25 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Handle the search query submission
-                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-//                searchResults.add(new SearchResult("Title", "Description"));
-                adapter.notifyDataSetChanged();
-                SearchForItem(query, "9", "*"); // Adjust parameters as needed
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // Handle text change event
-                return false;
-            }
-        });
+//        searchView.setOnClickListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                // Handle the search query submission
+//                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+////                searchResults.add(new SearchResult("Title", "Description"));
+//                searchResults.clear();
+//                adapter.notifyDataSetChanged();
+//                SearchForItem(query, "9", "*"); // Adjust parameters as needed
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                // Handle text change event
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -110,6 +113,7 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // Handle the search query submission
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+                searchResults.clear();
                 SearchForItem(query, "", ""); // Adjust parameters as needed
                 return false;
             }
