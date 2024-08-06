@@ -55,6 +55,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private CardView cardViewDescription, cardViewUnit, cardViewCategory, cardViewColorCode;
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
+    private String parentCategory, subcategory;
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -148,7 +149,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
                 intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
                 intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+                intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
                 intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+                intent.putExtra("parentCategoryName", parentCategory);
+                intent.putExtra("subCategoryName", subcategory);
 
                 startActivity(intent);
             }
@@ -249,6 +253,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
         cardViewColorCode.setAlpha(v);
         cardViewColorCode.animate().translationX(0).alpha(1).setDuration(700).setStartDelay(300).start();
 
+        getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "");
+
+        itemCategory.setText(parentCategory+" - "+subcategory);
 
         if (!Objects.equals(getIntent().getStringExtra("item_name"), "")) {
             Glide.with(this)
@@ -263,7 +270,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemUnit.setText(getIntent().getStringExtra("location"));
             itemColorCode.setText(getIntent().getStringExtra("color_code"));
             qrCodeUrl = getIntent().getStringExtra("item_qrcode");
-            itemCategory.setText(getIntent().getStringExtra("parentcategory_id")+" - "+getIntent().getStringExtra("subcategory_id"));
+//            itemCategory.setText(getIntent().getStringExtra("parentcategory_id")+" - "+getIntent().getStringExtra("subcategory_id"));
             //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
             //itemQuantity.setText(String.valueOf(currentQuantity));
         }
@@ -406,5 +413,42 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     public void onLoadCleared(@Nullable Drawable placeholder) {
                     }
                 });
+    }
+
+    private void getParentCategoryName(String categoryId, String authorization) {
+//        hideAdminMenuItems(navigationView.getMenu());
+        Utils.getCategory(categoryId, authorization, this, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                parentCategory = result;
+                getSubCategoryName(getIntent().getStringExtra("subcategory_id"), "");
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                progressDialog.dismiss();
+//                hideAdminMenuItems(navigationView.getMenu());
+                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getSubCategoryName(String categoryId, String authorization) {
+//        hideAdminMenuItems(navigationView.getMenu());
+        Utils.getCategory(categoryId, authorization, this, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                subcategory = result;
+                itemCategory.setText(parentCategory+ " - "+subcategory);
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                progressDialog.dismiss();
+//                hideAdminMenuItems(navigationView.getMenu());
+                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
