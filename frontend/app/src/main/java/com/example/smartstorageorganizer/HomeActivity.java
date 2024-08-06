@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer;
 
+import static androidx.media.session.MediaButtonReceiver.handleIntent;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -30,6 +32,8 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -95,9 +99,36 @@ public class HomeActivity extends AppCompatActivity {
 
         getUserRole("ezemakau@gmail.com", "");
 
+//        FirebaseApp.initializeApp(this);
+//
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(task -> {
+//                    if (!task.isSuccessful()) {
+//                        Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
+//                        return;
+//                    }
+//
+//                    String token = task.getResult();
+//                    Log.d("HomeActivity", "FCM Registration Token: " + token);
+//                });
+
 //        if (!isAdmin()) {
 //            hideAdminMenuItems(navigationView.getMenu());
 //        }
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent != null && "nav_notifications".equals(intent.getStringExtra("navigateTo"))) {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+            navController.navigate(R.id.nav_notifications);
+        }
     }
 
     @Override

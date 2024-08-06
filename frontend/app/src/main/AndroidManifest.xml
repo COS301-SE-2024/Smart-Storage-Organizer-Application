@@ -124,9 +124,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" >
-        </activity>
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -141,6 +139,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="true"
+            tools:ignore="WrongManifestParent">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
