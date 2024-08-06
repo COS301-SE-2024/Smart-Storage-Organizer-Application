@@ -89,6 +89,7 @@ android {
         buildConfigField("String", "CreateCategoryAIEndPoint", "\"${localProperties["CreateCategoryAIEndPoint"]}\"");
 
         buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"");
+        buildConfigField("String", "getCategoryName", "\"${localProperties["getCategoryName"]}\"");
 
 
 

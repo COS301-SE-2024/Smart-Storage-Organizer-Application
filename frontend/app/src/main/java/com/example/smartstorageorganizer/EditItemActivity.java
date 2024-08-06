@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -61,7 +64,9 @@ public class EditItemActivity extends AppCompatActivity {
     private TextInputEditText ItemDescription;
     private TextInputEditText ItemQuantity;
     private Spinner categorySpinner;
+    private Spinner subcategorySpinner;
     private List<CategoryModel> categoryModelList = new ArrayList<>();
+    private List<CategoryModel> subcategoryModelList = new ArrayList<>();
 
     private Button Save;
 
@@ -78,6 +83,11 @@ public class EditItemActivity extends AppCompatActivity {
     private Drawable currentDraw;
     private String ImageUrl="";
     private File ImageFile;
+    private boolean isFirstTime = true;
+    private boolean isFirstTimeParentApi = true;
+    private boolean isFirstTimeSubApi = true;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +108,35 @@ public class EditItemActivity extends AppCompatActivity {
         ItemName = findViewById(R.id.name);
         ItemDescription = findViewById(R.id.description);
         ItemQuantity = findViewById(R.id.quantity);
+        categorySpinner = findViewById(R.id.categorySpinner);
+        subcategorySpinner = findViewById(R.id.subcategorySpinner);
         Save=findViewById(R.id.save_button);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Updating details...");
+        progressDialog.setCancelable(false);
+
+        fetchCategories(0);
+        fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+
+//        private void setupSpinnerListener() {
+            categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    if (isFirstTime) {
+                        isFirstTime = false;
+                        return;
+                    }
+                    int categoryId = getCategoryId(parentView.getItemAtPosition(position).toString(), "parent");
+                    fetchCategories(categoryId);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    //Handle when nothing is not selected.
+                }
+            });
+//        }
     }
 
     public void GetDetail()
@@ -199,6 +237,25 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void showUpdateSuccessMessage() {
         Toast.makeText(EditItemActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+        int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+        int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+
+        Intent intent = new Intent(EditItemActivity.this, ItemDetailsActivity.class);
+        intent.putExtra("item_name", Objects.requireNonNull(ItemName.getText()).toString().trim());
+        intent.putExtra("item_description", Objects.requireNonNull(ItemDescription.getText()).toString().trim());
+        intent.putExtra("location", getIntent().getStringExtra("location"));
+        intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
+        intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+        //Change this one
+        intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+        intent.putExtra("subcategory_id", String.valueOf(selectedSubCategory));
+        intent.putExtra("parentcategory_id", String.valueOf(selectedParentCategory));
+        intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+        intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
+        intent.putExtra("quantity", Objects.requireNonNull(ItemQuantity.getText()).toString().trim());
+
+        startActivity(intent);
+        finish();
     }
 
 
@@ -282,23 +339,22 @@ public class EditItemActivity extends AppCompatActivity {
             String itemName= Objects.requireNonNull(ItemName.getText()).toString().trim();
             String description=Objects.requireNonNull(ItemDescription.getText()).toString().trim();
             String quantity= Objects.requireNonNull(ItemQuantity.getText()).toString().trim();
-            String barcode=getIntent().getStringExtra("barcode");
-            String qrcode=getIntent().getStringExtra("qrcode");
+            String barcode=getIntent().getStringExtra("item_barcode");
+            String qrcode=getIntent().getStringExtra("item_qrcode");
             String location=getIntent().getStringExtra("location");
             String itemid=getIntent().getStringExtra("item_id");
-            String colourcoding=getIntent().getStringExtra("colour_code");
-            String parentcategory=getIntent().getStringExtra("parentcategory_id");
-            String subcategory=getIntent().getStringExtra("subcategory_id");
+            String colourcoding=getIntent().getStringExtra("color_code");
+
+            int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+            int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
 
-
-
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             Log.i("2Before Post didnt open", " whats the error");
             currentItemName=itemName;
             currentItemDescription=description;
             currentQuantity=quantity;
-            showUpdateSuccessMessage();
+//            showUpdateSuccessMessage();
         }
         else {
             uploadProfilePicture(ImageFile);
@@ -309,8 +365,26 @@ public class EditItemActivity extends AppCompatActivity {
 
     }
 
-    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
+    private int getCategoryId(String categoryName, String type){
+        if(Objects.equals(type, "parent")){
+            for(CategoryModel category: categoryModelList) {
+                if(Objects.equals(category.getCategoryName(), categoryName)){
+                    return Integer.parseInt(category.getCategoryID());
+                }
+            }
+        }
+        else {
+            for(CategoryModel category: subcategoryModelList) {
+                if(Objects.equals(category.getCategoryName(), categoryName)){
+                    return Integer.parseInt(category.getCategoryID());
+                }
+            }
+        }
+        return 0;
+    }
 
+    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
+        progressDialog.show();
 
         String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -328,6 +402,7 @@ public class EditItemActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                progressDialog.dismiss();
             }
 
             @Override
@@ -336,9 +411,11 @@ public class EditItemActivity extends AppCompatActivity {
                     final String responseData = response.body().string();
                     runOnUiThread(() -> {
                         Log.i("Request Method", "POST request succeeded: " + responseData);
+                        showUpdateSuccessMessage();
                     });
                 } else {
                     runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                    progressDialog.dismiss();
                 }
             }
         });
@@ -394,5 +471,61 @@ public class EditItemActivity extends AppCompatActivity {
         return url;
     }
 
+    private void fetchCategories(int categoryId) {
+        String email = getIntent().getStringExtra("ezemakau@gmail.com");
+        Utils.fetchParentCategories(categoryId, email, this, new OperationCallback<List<CategoryModel>>() {
+            @Override
+            public void onSuccess(List<CategoryModel> result) {
+                if(categoryId == 0) {
+                    categoryModelList.clear();
+                    categoryModelList = result;
+                    setupSpinnerAdapter();
+                }
+                else {
+                    subcategoryModelList.clear();
+                    subcategoryModelList = result;
+                    setupSubcategorySpinnerAdapter();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                showToast("Failed to fetch categories: " + error);
+            }
+        });
+    }
+
+    private void setupSpinnerAdapter() {
+        List<String> parentCategories = new ArrayList<>();
+        parentCategories.add(getIntent().getStringExtra("parentCategoryName"));
+        for (CategoryModel category : categoryModelList) {
+            if(!Objects.equals(category.getCategoryName(), getIntent().getStringExtra("parentCategoryName"))){
+                parentCategories.add(category.getCategoryName());
+            }
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+    }
+    private void setupSubcategorySpinnerAdapter() {
+        List<String> subCategories = new ArrayList<>();
+        if(isFirstTimeSubApi){
+            subCategories.add(getIntent().getStringExtra("subCategoryName"));
+        }
+        for (CategoryModel category : subcategoryModelList) {
+            if(isFirstTimeSubApi){
+                if(!Objects.equals(category.getCategoryName(), getIntent().getStringExtra("subCategoryName"))){
+                    subCategories.add(category.getCategoryName());
+                }
+            }
+            else {
+                subCategories.add(category.getCategoryName());
+            }
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subcategorySpinner.setAdapter(adapter);
+        isFirstTimeSubApi = false;
+    }
 
 }
