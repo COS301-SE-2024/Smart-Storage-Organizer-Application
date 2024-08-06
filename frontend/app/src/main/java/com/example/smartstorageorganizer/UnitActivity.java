@@ -77,10 +77,16 @@ public class UnitActivity extends AppCompatActivity {
 
 
                         Log.i("ConstraintsName", cb.getText().toString());
-                        constraints.append(getCategoriesId(cb.getText().toString()));
-                        if (j < checkboxContainer.getChildCount() - 1) {
-                            constraints.append(",");
+
+                        if (constraints.toString().isEmpty()) {
+
+                            constraints.append(getCategoriesId(cb.getText().toString()));
+
+                        }else {
+                            constraints.append(","+getCategoriesId(cb.getText().toString()));
+
                         }
+
 
 
                     }
@@ -247,10 +253,10 @@ public class UnitActivity extends AppCompatActivity {
 
     public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"type\":\"AddUnit\",\"Unit_QR\":\"1\" }";
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\" }";
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String apiUrl = BuildConfig.AddUnitEndPoint;
+        String apiUrl = BuildConfig.AddUnitEndpoint;
         RequestBody body = RequestBody.create(json, jsonObject);
         Log.i("hell", "createUnit: " + json);
         Request request = new Request.Builder()

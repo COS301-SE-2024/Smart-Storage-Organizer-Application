@@ -31,8 +31,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-
+        buildConfigField("String","GetUnitConstraints","\"${localProperties["GetUnitConstraints"]}\"")
+        buildConfigField("String","AddUnitEndpoint","\"${localProperties["AddUnitEndpoint"]}\"")
         buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
         //buildConfigField( "String", "DefaultImage", defaultpicture)
         buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");

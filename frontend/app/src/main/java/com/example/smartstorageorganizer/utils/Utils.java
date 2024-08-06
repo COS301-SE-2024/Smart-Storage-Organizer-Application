@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+import aws.smithy.kotlin.runtime.content.Document;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -1196,6 +1197,13 @@ public class Utils
                 }
             }
         });
+    }
+    public CompletableFuture<ArrayList<unitModel>> getAllUnitsForCategory(int categoryId) {
+        CompletableFuture<ArrayList<unitModel>> future = new CompletableFuture<>();
+        String json = "{\"category_id\":\""+categoryId+"\"}";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String API_URL = BuildConfig.;
+        return null;
     }
 
     public static void RecommendMultipleCategories(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
