@@ -9,7 +9,7 @@ on:
 
 jobs:
   lint:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
@@ -19,12 +19,20 @@ jobs:
         with:
           java-version: '17.0.11'
           distribution: 'adopt'
-   
+
+      - name: Update package list
+        run: sudo apt-get update
+
+      - name: Set DosToLinx
+        run: sudo apt install dos2unix
+
       - name: Make gradlew executable
         working-directory: frontend
         run: chmod +x gradlew
      
-
+      - name: Convert line endings
+        working-directory: frontend
+        run: dos2unix gradlew
           
       - name: Build and Lint
         working-directory: frontend
