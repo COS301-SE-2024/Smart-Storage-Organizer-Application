@@ -34,7 +34,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:divider="@android:color/transparent"
+        android:showDividers="middle">
 
         <Button
             android:id="@+id/button_transactions"
@@ -42,9 +45,9 @@
             android:layout_height="wrap_content"
             android:text="Transactions"
             android:textColor="#0582CA"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/button_custom"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp"
+            android:padding="16dp"/>
 
         <Button
             android:id="@+id/button_messages"
@@ -52,21 +55,17 @@
             android:layout_height="wrap_content"
             android:text="Messages"
             android:textColor="#0582CA"
-            android:layout_below="@id/button_transactions"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/button_custom"
-            android:layout_marginTop="20dp"/>
+            android:padding="16dp"/>
 
         <Button
             android:id="@+id/button_offers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="Offers for you"
             android:textColor="#0582CA"
-            android:layout_below="@id/button_messages"
-            android:layout_centerHorizontal="true"
             android:background="@drawable/button_custom"
-            android:layout_marginTop="20dp"/>
+            android:padding="16dp"/>
     </LinearLayout>
 
 </LinearLayout>
