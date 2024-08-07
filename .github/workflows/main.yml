@@ -26,20 +26,24 @@ jobs:
       - name: Set DosToLinx
         run: sudo apt install dos2unix
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
       - name: Make gradlew executable
         working-directory: frontend
-        run: chmod +x gradlew
-     
+        run: chmod +x ./gradlew
+
       - name: Convert line endings
         working-directory: frontend
         run: dos2unix gradlew
-          
-      - name: Build and Lint
+
+      - name: Set up local.properties
         working-directory: frontend
-        run: ./gradlew  clean build  lintDebug
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      
           
-      - name: Upload html report
-        uses: actions/upload-artifact@v3
-        with:
-          name: index.html
-          path: app/build/reports/lint-results-debug.html
+      - name: Run Build
+        working-directory: frontend         
+        run: ./gradlew build
+
+      
