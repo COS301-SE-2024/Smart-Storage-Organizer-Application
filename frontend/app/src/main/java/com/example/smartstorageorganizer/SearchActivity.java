@@ -257,6 +257,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.O
                             searchResults.add(item);
 //                            adapter.notifyDataSetChanged();
                         }
+                        runOnUiThread(() -> adapter.notifyDataSetChanged());
 
                     }catch (JSONException e) {
                         throw new RuntimeException(e);
