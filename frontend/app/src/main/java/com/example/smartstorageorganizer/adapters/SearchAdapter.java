@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
@@ -17,15 +20,17 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private List<ItemModel> searchResults;
+    private Context context;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(ItemModel item);
     }
 
-    public SearchAdapter(List<ItemModel> searchResults, OnItemClickListener onItemClickListener) {
+    public SearchAdapter(List<ItemModel> searchResults, Context context) {
         this.searchResults = searchResults;
-        this.onItemClickListener = onItemClickListener;
+        this.context = context;
+//        this.onItemClickListener = onItemClickListener;
     }
 
 
@@ -41,7 +46,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         ItemModel searchResult = searchResults.get(position);
         holder.titleTextView.setText(searchResult.getItemName());
         holder.descriptionTextView.setText(searchResult.getDescription());
-        holder.bind(searchResult, onItemClickListener);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ItemDetailsActivity.class);
+            intent.putExtra("item_id", searchResult.getItemId());
+            intent.putExtra("item_name", searchResult.getItemName());
+            intent.putExtra("item_description", searchResult.getDescription());
+            intent.putExtra("location", searchResult.getLocation());
+            intent.putExtra("color_code", searchResult.getColourCoding());
+            intent.putExtra("item_qrcode", searchResult.getQrcode());
+            intent.putExtra("item_image", searchResult.getItemImage());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -64,10 +80,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             descriptionTextView = view.findViewById(R.id.description);
         }
 
-        public void bind(final ItemModel item, final OnItemClickListener listener) {
-            titleTextView.setText(item.getItemName());
-            descriptionTextView.setText(item.getDescription());
-            itemView.setOnClickListener(v -> listener.onItemClick(item));
-        }
+//        public void bind(final ItemModel item, final OnItemClickListener listener) {
+//            titleTextView.setText(item.getItemName());
+//            descriptionTextView.setText(item.getDescription());
+//            itemView.setOnClickListener(v -> listener.onItemClick(item));
+//        }
     }
 }

@@ -41,7 +41,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity implements SearchAdapter.OnItemClickListener {
+public class SearchActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<ItemModel> searchResults;
@@ -143,42 +143,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.O
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemClick(ItemModel item) {
-        showItemPopup(item);
-    }
 
-    private void showItemPopup(ItemModel item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.edit_item_popup, null);
-        builder.setView(dialogView);
-
-        EditText itemName = dialogView.findViewById(R.id.item_name);
-        EditText itemDescription = dialogView.findViewById(R.id.item_description);
-        EditText itemLocation = dialogView.findViewById(R.id.item_location);
-        EditText itemColorCode = dialogView.findViewById(R.id.item_color_code);
-        Button buttonNext = dialogView.findViewById(R.id.button_edit_item);
-
-        itemName.setText(item.getItemName());
-        itemDescription.setText(item.getDescription());
-        itemLocation.setText(item.getLocation());
-        itemColorCode.setText(item.getColourCoding());
-
-        AlertDialog alertDialog = builder.create();
-
-        buttonNext.setOnClickListener(v -> {
-            String name = itemName.getText().toString().trim();
-            String description = itemDescription.getText().toString().trim();
-            String location = itemLocation.getText().toString().trim();
-            String colorCode = itemColorCode.getText().toString().trim();
-
-            postEditItem(name, description, colorCode, "asdffd", "00111100", Integer.parseInt(item.getQuantity()), location, Integer.parseInt(item.getItemId()));
-            alertDialog.dismiss();
-        });
-
-        alertDialog.show();
-    }
 
     public CompletableFuture<List<SearchResult>> SearchForItem(String target, String parentcategoryid, String subcategoryid) {
         CompletableFuture<List<SearchResult>> future = new CompletableFuture<>();
@@ -272,55 +237,6 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.O
         return future;
     }
 
-    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, int itemId) {
-        String json = "{\"item_name\":\"" + itemname + "\", \"description\":\"" + description + "\", \"colourcoding\":\"" + colourcoding + "\", \"barcode\":\"" + barcode + "\", \"qrcode\":\"" + qrcode + "\", \"quanity\":" + quantity + ", \"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.EditItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(SearchActivity.this, "Failed to edit item", Toast.LENGTH_SHORT).show());
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(SearchActivity.this, "Item updated successfully", Toast.LENGTH_SHORT).show();
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(SearchActivity.this, "Failed to update item: " + response.code(), Toast.LENGTH_SHORT).show();
-                    });
-                }
-            }
-        });
-    }
 
 
-//    private List<SearchResult> parseSearchResults(String responseData) {
-//        List<SearchResult> results = new ArrayList<>();
-//        try {
-//            JSONArray jsonArray = new JSONArray(responseData);
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                String title = jsonObject.optString("title", "No Title");
-//                String description = jsonObject.optString("description", "No Description");
-//                results.add(new SearchResult(title, description));
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return results;
-//    }
 }

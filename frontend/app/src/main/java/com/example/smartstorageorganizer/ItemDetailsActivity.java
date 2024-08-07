@@ -55,6 +55,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
         ImageView backButton = findViewById(R.id.back_button);
         ImageView qrCodeButton = findViewById(R.id.qr_code_button);
 
+        backButton.setOnClickListener(v -> finish());
+
         initViews();
         setupWindowInsets();
 
