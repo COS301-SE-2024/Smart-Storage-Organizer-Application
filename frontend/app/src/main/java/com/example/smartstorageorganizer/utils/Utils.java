@@ -1327,19 +1327,20 @@ public class Utils
 
   
 
-     public static String AllocateUnitToItem(ArrayList<unitModel> units){
-        int  id=-1;
-        String name="";
-        int capacity=-1;
-        for(unitModel unit:units){
-            if(unit.getFreeCapacity()>capacity){
-                id=Integer.parseInt(unit.getId());
-                capacity=unit.getFreeCapacity();
-                name=unit.getUnitName();
-            }
-        }
+     public static String AllocateUnitToItem(ArrayList<unitModel> units) {
+         int id = -1;
+         String name = "";
+         int capacity = -1;
+         for (unitModel unit : units) {
+             if (unit.getFreeCapacity() > capacity) {
+                 id = Integer.parseInt(unit.getId());
+                 capacity = unit.getFreeCapacity();
+                 name = unit.getUnitName();
+             }
+         }
 
-        return name;
+         return name;
+     }
   
     public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
         int itemIdInt = Integer.parseInt(itemId);

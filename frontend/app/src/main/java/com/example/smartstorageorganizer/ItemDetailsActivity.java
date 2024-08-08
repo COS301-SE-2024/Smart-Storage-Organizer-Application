@@ -247,6 +247,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemCategory = findViewById(R.id.itemCategory);
         arrowCategory = findViewById(R.id.arrowCategory);
 
+        getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "");
+
+        itemCategory.setText(parentCategory+" - "+subcategory);
+
         cardViewCategory.setTranslationX(800);
         cardViewCategory.setAlpha(v);
         cardViewCategory.animate().translationX(0).alpha(1).setDuration(600).setStartDelay(300).start();
@@ -259,9 +263,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         cardViewColorCode.setAlpha(v);
         cardViewColorCode.animate().translationX(0).alpha(1).setDuration(700).setStartDelay(300).start();
 
-        getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "");
 
-        itemCategory.setText(parentCategory+" - "+subcategory);
 
         if (!Objects.equals(getIntent().getStringExtra("item_name"), "")) {
             Glide.with(this)
