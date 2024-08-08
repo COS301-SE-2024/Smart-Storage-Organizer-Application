@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.model.CategoryModel;
 
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -77,10 +79,16 @@ public class UnitActivity extends AppCompatActivity {
 
 
                         Log.i("ConstraintsName", cb.getText().toString());
-                        constraints.append(getCategoriesId(cb.getText().toString()));
-                        if (j < checkboxContainer.getChildCount() - 1) {
-                            constraints.append(",");
+
+                        if (constraints.toString().isEmpty()) {
+
+                            constraints.append(getCategoriesId(cb.getText().toString()));
+
+                        }else {
+                            constraints.append(","+getCategoriesId(cb.getText().toString()));
+
                         }
+
 
 
                     }
@@ -105,10 +113,21 @@ public class UnitActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         });
-                    }
-                });
-
-            });
+                   }
+              });
+//                Utils.getAllUnitsForCategory(2).thenAccept(unitModels -> {
+//                    if (unitModels.isEmpty()) {
+//                        Log.i("Unit", "No units found");
+//                    }
+//                    for (int i = 0; i < unitModels.size(); i++) {
+//                        Log.i("Unit", unitModels.get(i).getUnitName());
+//                    }
+//                }).exceptionally(throwable -> {
+//                    Log.e("Unit", "Error fetching units", throwable);
+//                    return null;
+//                });
+//
+          });
 
             // Create checkboxes dynamically and add them to the LinearLayout
 
@@ -247,10 +266,10 @@ public class UnitActivity extends AppCompatActivity {
 
     public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"type\":\"AddUnit\",\"Unit_QR\":\"1\" }";
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\" }";
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String apiUrl = BuildConfig.AddUnitEndPoint;
+        String apiUrl = BuildConfig.AddUnitEndpoint;
         RequestBody body = RequestBody.create(json, jsonObject);
         Log.i("hell", "createUnit: " + json);
         Request request = new Request.Builder()

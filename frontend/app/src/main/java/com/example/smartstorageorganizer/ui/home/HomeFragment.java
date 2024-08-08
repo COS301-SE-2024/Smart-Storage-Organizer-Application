@@ -50,6 +50,7 @@ import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -442,22 +443,30 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
-        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail, requireActivity(), new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
-                progressDialogAddingItem.hide();
-                Intent intent = new Intent(requireActivity(), HomeActivity.class);
-                startActivity(intent);
-                requireActivity().finish();
-            }
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
+            units.addAll(unitModels);
+            Log.i("progress", units.toString());
+            String allocated=Utils.AllocateUnitToItem(units);
+            Log.i("progress", "Allocated: "+allocated);
+            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, requireActivity(), new OperationCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean result) {
+                    Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
+                    progressDialogAddingItem.hide();
+                    Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                }
 
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
-                progressDialogAddingItem.hide();
-            }
+                @Override
+                public void onFailure(String error) {
+                    Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
+                    progressDialogAddingItem.hide();
+                }
+            });
         });
+
     }
 
     private String findCategoryByName(String categoryName, String type) {
