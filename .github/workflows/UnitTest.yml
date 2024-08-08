@@ -1,14 +1,14 @@
 
-name: GitHubActionPractice
+name: Tests
 
 on:
   push:
-    branches: [ development, main ]
+    branches: [ feat/UserAuthenication ]
   pull_request:
-    branches: [ development, main  ]
+    branches: [ feat/UserAuthenication  ]
 
 jobs:
-  lint:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -40,10 +40,17 @@ jobs:
       - name: Set up local.properties
         working-directory: frontend
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      
           
       - name: Run Build
         working-directory: frontend         
-        run: ./gradlew build
+        run: ./gradlew test
+
+      - name: Upload index file
+        
+        uses: actions/upload-artifact@v2         
+        with: 
+            name: index.html
+            path: frontend/app/build/reports/tests/testDebugUnitTest/index.html
+     
 
       
