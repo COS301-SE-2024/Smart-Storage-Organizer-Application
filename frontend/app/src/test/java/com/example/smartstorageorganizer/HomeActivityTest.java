@@ -28,11 +28,11 @@ public class HomeActivityTest {
 
     @Before
     public void setup() {
-//        Page = Robolectric.buildActivity(HomeActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-        Page=null;
+        Page = Robolectric.buildActivity(HomeActivity.class)
+                .create()
+                .resume()
+                .get();
+        //Page=null;
     }
 
     @Test
