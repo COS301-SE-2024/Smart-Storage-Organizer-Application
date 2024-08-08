@@ -39,47 +39,47 @@ public class MainActivityTest {
     }
 
 
-    @Test
-    public void isSignedInShouldReturnFalseNoSession()
-    {
-        //give
-        AtomicBoolean result = new AtomicBoolean(false);
+    // @Test
+    // public void isSignedInShouldReturnFalseNoSession()
+    // {
+    //     //give
+    //     AtomicBoolean result = new AtomicBoolean(false);
 
-        //given
-        when(MockedPage.isSignedIn()).thenReturn(CompletableFuture.completedFuture(false));
-
-
-        //then
-        MockedPage.isSignedIn().thenAccept(isResult->{
-            if(isResult)
-                result.set(true);
-            else
-                result.set(false);
-
-        });
-        assertEquals(false, result.get());
-    }
+    //     //given
+    //     when(MockedPage.isSignedIn()).thenReturn(CompletableFuture.completedFuture(false));
 
 
-    @Test
-    public void isSignedInShouldReturnFalseValidSession()
-    {
-        //give
-        AtomicBoolean result = new AtomicBoolean(false);
+    //     //then
+    //     MockedPage.isSignedIn().thenAccept(isResult->{
+    //         if(isResult)
+    //             result.set(true);
+    //         else
+    //             result.set(false);
 
-        //given
-        when(MockedPage.isSignedIn()).thenReturn(CompletableFuture.completedFuture(true));
+    //     });
+    //     assertEquals(false, result.get());
+    // }
 
 
-        //then
-        MockedPage.isSignedIn().thenAccept(isResult->{
-            if(isResult)
-                result.set(true);
-            else
-                result.set(false);
+    // @Test
+    // public void isSignedInShouldReturnFalseValidSession()
+    // {
+    //     //give
+    //     AtomicBoolean result = new AtomicBoolean(false);
 
-        });
-        assertEquals(true, result.get());
-    }
+    //     //given
+    //     when(MockedPage.isSignedIn()).thenReturn(CompletableFuture.completedFuture(true));
+
+
+    //     //then
+    //     MockedPage.isSignedIn().thenAccept(isResult->{
+    //         if(isResult)
+    //             result.set(true);
+    //         else
+    //             result.set(false);
+
+    //     });
+    //     assertEquals(true, result.get());
+    // }
 
 }

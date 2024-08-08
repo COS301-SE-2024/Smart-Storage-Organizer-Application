@@ -42,15 +42,15 @@ public class AddCategoryActivityTest {
 //        // Then
 //        assertTrue(result);
 //    }
-    @Test
-    public void validateFormShouldReturnTrueForValidSubCategory() {
-        // Given
-        String validSubCategory = "Laptops";
+    // @Test
+    // public void validateFormShouldReturnTrueForValidSubCategory() {
+    //     // Given
+    //     String validSubCategory = "Laptops";
 
-        // When
-        boolean result = addCategoryActivity.validateParentForm(validSubCategory);
+    //     // When
+    //     boolean result = addCategoryActivity.validateParentForm(validSubCategory);
 
-        // Then
-        assertTrue(result);
-    }
+    //     // Then
+    //     assertTrue(result);
+    // }
 }

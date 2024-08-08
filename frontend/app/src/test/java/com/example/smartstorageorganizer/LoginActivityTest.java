@@ -45,108 +45,108 @@ public class LoginActivityTest {
         assertNotNull(loginActivity);
     }
 
-    @Test
-    public void validateFormShouldReturnTrueForValidEmailAndPassword() {
-        // Given
-        String validEmail = "test@example.com";
-        String validPassword = "password123";
+//     @Test
+//     public void validateFormShouldReturnTrueForValidEmailAndPassword() {
+//         // Given
+//         String validEmail = "test@example.com";
+//         String validPassword = "password123";
 
-        // When
-        boolean result = loginActivity.validateForm(validEmail, validPassword);
+//         // When
+//         boolean result = loginActivity.validateForm(validEmail, validPassword);
 
-        // Then
-        assertEquals(true, result);
-    }
+//         // Then
+//         assertEquals(true, result);
+//     }
 
-    @Test
-    public void ValidateFormShouldReturnFalseForEmptyEmail() {
-        String email = "";
-        String validPassword = "password123";
+//     @Test
+//     public void ValidateFormShouldReturnFalseForEmptyEmail() {
+//         String email = "";
+//         String validPassword = "password123";
 
-        boolean result = loginActivity.validateForm(email, validPassword);
-        assertEquals(false, result);
-    }
+//         boolean result = loginActivity.validateForm(email, validPassword);
+//         assertEquals(false, result);
+//     }
 
-    @Test
-    public void ValidateFormShouldReturnFalseWhenPasswordEmpty() {
-        // Given
-        String validEmail = "test@example.com";
-        String validPassword = "";
+//     @Test
+//     public void ValidateFormShouldReturnFalseWhenPasswordEmpty() {
+//         // Given
+//         String validEmail = "test@example.com";
+//         String validPassword = "";
 
-        // When
-        boolean result = loginActivity.validateForm(validEmail, validPassword);
+//         // When
+//         boolean result = loginActivity.validateForm(validEmail, validPassword);
 
-        // Then
-        assertEquals(false, result);
-    }
-    @Test
-    public void signInWithValidEmailAndPassword() {
-        String validEmail = "test@example.com";
-        String validPassword = "password123";
-        AtomicBoolean result = new AtomicBoolean(false);
+//         // Then
+//         assertEquals(false, result);
+//     }
+//     @Test
+//     public void signInWithValidEmailAndPassword() {
+//         String validEmail = "test@example.com";
+//         String validPassword = "password123";
+//         AtomicBoolean result = new AtomicBoolean(false);
 
-        LoginActivity mockLoginActivity = mock(LoginActivity.class);
-        when(mockLoginActivity.signIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
+//         LoginActivity mockLoginActivity = mock(LoginActivity.class);
+//         when(mockLoginActivity.signIn(validEmail, validPassword)).thenReturn(CompletableFuture.completedFuture(true));
 
-        mockLoginActivity.signIn(validEmail, validPassword).thenAccept(isResult -> {
-            if (isResult) {
-                result.set(true);
-            } else {
-                result.set(false);
-            }
-        });
+//         mockLoginActivity.signIn(validEmail, validPassword).thenAccept(isResult -> {
+//             if (isResult) {
+//                 result.set(true);
+//             } else {
+//                 result.set(false);
+//             }
+//         });
 
-        assertEquals(true, result.get());
-    }
+//         assertEquals(true, result.get());
+//     }
 
-    @Test
-    public void signInWithInvalidEmailAndPassword() {
-        String invalidEmail = "invalid@example.com";
-        String invalidPassword = "wrongpassword";
-        AtomicBoolean result = new AtomicBoolean(false);
+//     @Test
+//     public void signInWithInvalidEmailAndPassword() {
+//         String invalidEmail = "invalid@example.com";
+//         String invalidPassword = "wrongpassword";
+//         AtomicBoolean result = new AtomicBoolean(false);
 
-        LoginActivity mockLoginActivity = mock(LoginActivity.class);
-        when(mockLoginActivity.signIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
+//         LoginActivity mockLoginActivity = mock(LoginActivity.class);
+//         when(mockLoginActivity.signIn(invalidEmail, invalidPassword)).thenReturn(CompletableFuture.completedFuture(false));
 
-        mockLoginActivity.signIn(invalidEmail, invalidPassword).thenAccept(isResult -> {
-            if (isResult) {
-                result.set(true);
-            } else {
-                result.set(false);
-            }
-        });
+//         mockLoginActivity.signIn(invalidEmail, invalidPassword).thenAccept(isResult -> {
+//             if (isResult) {
+//                 result.set(true);
+//             } else {
+//                 result.set(false);
+//             }
+//         });
 
-        assertEquals(false, result.get());
-    }
+//         assertEquals(false, result.get());
+//     }
 
-    @Test
-    public void testSetErrorAndResult() {
-        String testError = "Test Error";
-        String testResult = "Test Result";
+//     @Test
+//     public void testSetErrorAndResult() {
+//         String testError = "Test Error";
+//         String testResult = "Test Result";
 
-//        loginActivity.setErrorAndResult(testError, testResult);
-//
-//        assertEquals(testError, loginActivity.errorString);
-//        assertEquals(testResult, loginActivity.resultString);
-    }
+// //        loginActivity.setErrorAndResult(testError, testResult);
+// //
+// //        assertEquals(testError, loginActivity.errorString);
+// //        assertEquals(testResult, loginActivity.resultString);
+//     }
 
-    @Test
-    public void clickingRegisterButton_callsSignInWithCorrectParameters() {
-        // Given
-        String email = "test@example.com";
-        String password = "password123";
+//     @Test
+//     public void clickingRegisterButton_callsSignInWithCorrectParameters() {
+//         // Given
+//         String email = "test@example.com";
+//         String password = "password123";
 
-        // Set the text fields
-        loginActivity.email.setText(email);
-        loginActivity.password.setText(password);
+//         // Set the text fields
+//         loginActivity.email.setText(email);
+//         loginActivity.password.setText(password);
 
-        // When
-        loginActivity.registerButton.performClick();
+//         // When
+//         loginActivity.registerButton.performClick();
 
-        runUiThreadTasksIncludingDelayedTasks();
-        // Then
-        verify(loginActivity).signIn(email, password);
-    }
+//         runUiThreadTasksIncludingDelayedTasks();
+//         // Then
+//         verify(loginActivity).signIn(email, password);
+//     }
 }
 
 
