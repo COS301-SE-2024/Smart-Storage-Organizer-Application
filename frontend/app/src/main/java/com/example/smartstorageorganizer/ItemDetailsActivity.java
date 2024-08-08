@@ -63,6 +63,11 @@ public class ItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_item_details);
+
+        ImageView backButton = findViewById(R.id.backButton);
+
+
+        backButton.setOnClickListener(v -> finish());
         initViews();
         setupWindowInsets();
 
@@ -127,6 +132,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         });
 
         qrCode.setOnClickListener(v -> showQRCodeDialog());
+        backButton.setOnClickListener(v -> onBackPressed());
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override

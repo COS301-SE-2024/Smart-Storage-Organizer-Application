@@ -90,6 +90,7 @@ android {
 
         buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"");
         buildConfigField("String", "getCategoryName", "\"${localProperties["getCategoryName"]}\"");
+        buildConfigField("String", "SearchEndPoint", "\"${localProperties["SearchEndPoint"]}\"");
 
 
 

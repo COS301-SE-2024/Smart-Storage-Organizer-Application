@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     public ActivityHomeBinding binding;
     public String currentName, currentSurname, currentPicture;
     NavigationView navigationView;
+    ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +138,15 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
+
+        MenuItem searchItem = menu.findItem(R.id.searchButton);
+        searchItem.setOnMenuItemClickListener(item -> {
+            // Start the SearchActivity
+            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+            startActivity(intent);
+            return true;
+        });
         return true;
     }
 
