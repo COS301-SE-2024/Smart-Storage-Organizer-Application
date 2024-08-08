@@ -5,7 +5,7 @@ on:
   push:
     branches: [ workflows]
   pull_request:
-    branches: [ workflows  ]
+    branches: [ workflows ]
 
 jobs:
   buildapp:

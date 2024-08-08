@@ -3,9 +3,9 @@ name: Unit_tests
 
 on:
     push:
-      branches: [ workflows ]
+      branches: [workflows ]
     pull_request:
-      branches: [workflows  ]
+      branches: [workflows ]
 
 jobs:
   run_tests:
