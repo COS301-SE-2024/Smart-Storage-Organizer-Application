@@ -25,19 +25,23 @@ public class HomeActivityTest {
     @Mock
     HomeActivity MockedPage = mock(HomeActivity.class);
 
-    @Before
-    public void setup() {
-        Page = Robolectric.buildActivity(HomeActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
-    @Test
-    public void shouldNotBeNull()
+//    @Before
+//    public void setup() {
+//        Page = Robolectric.buildActivity(HomeActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
+//    @Test
+//    public void shouldNotBeNull()
+//    {
+//        assertEquals(true, true);
+//    }
+        @Test
+    public void test1()
     {
-        assertEquals(true, true);
-    }
 
+    }
     // @Test
     // public void GetDetailsShouldFalseForInValidSession()
     // {

@@ -41,7 +41,7 @@ jobs:
         working-directory: frontend
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           
-      - name: Run Build
+      - name: Run Tests
         working-directory: frontend         
         run: ./gradlew test
 

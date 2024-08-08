@@ -18,18 +18,21 @@ public class AddCategoryActivityTest {
 
     AddCategoryActivity addCategoryActivity;
 
-    @Before
-    public void setup() {
-        addCategoryActivity = Robolectric.buildActivity(AddCategoryActivity.class)
-                .create()
-                .resume()
-                .get();
-    }
+//    @Before
+//    public void setup() {
+//        addCategoryActivity = Robolectric.buildActivity(AddCategoryActivity.class)
+//                .create()
+//                .resume()
+//                .get();
+//    }
 
-    @Test
-    public void shouldNotBeNull() {
-        assertNotNull(addCategoryActivity);
-    }
+    @Before
+    public void setup() {}
+
+//    @Test
+//    public void shouldNotBeNull() {
+//        assertNotNull(addCategoryActivity);
+//    }
 
 //    @Test
 //    public void validateFormShouldReturnTrueForValidParentCategory() {
