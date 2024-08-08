@@ -980,14 +980,14 @@ public class Utils
         });
     }
 
-    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail, Activity activity, OperationCallback<Boolean> callback) {
+    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, Activity activity, OperationCallback<Boolean> callback) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
         String barcode = "default";
         String qrcode = "default";
         int quantity = 1;
-        String location = "default";
+
         String email = userEmail;
         String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\", \"category\":\""+3+"\", \"sub_category\":\""+5+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -1198,12 +1198,53 @@ public class Utils
             }
         });
     }
-    public CompletableFuture<ArrayList<unitModel>> getAllUnitsForCategory(int categoryId) {
+    static public CompletableFuture<ArrayList<unitModel>> getAllUnitsForCategory(int categoryId) {
         CompletableFuture<ArrayList<unitModel>> future = new CompletableFuture<>();
         String json = "{\"category_id\":\""+categoryId+"\"}";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        String API_URL = BuildConfig.;
-        return null;
+        String API_URL = BuildConfig.GetUnitConstraints;
+        OkHttpClient client=new OkHttpClient();
+
+        Request request=new Request.Builder()
+                .url(API_URL)
+                .post(RequestBody.create(json,JSON))
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                future.completeExceptionally(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    try {
+                        final String responseData = response.body().string();
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+                        JSONArray bodyArray = new JSONArray(bodyString);
+                        ArrayList<unitModel> unitList=new ArrayList<>();
+                        for(int i=0;i<bodyArray.length();i++){
+                            JSONObject unitObject=bodyArray.getJSONObject(i);
+                            String unitName=unitObject.getString("name");
+                            String unitId=unitObject.getString("id");
+                            int capacity=Integer.parseInt(unitObject.getString("capacity"));
+                            int currentCapacity=Integer.parseInt(unitObject.getString("capacity_used"));
+                            unitModel unit=new unitModel(unitName,unitId,capacity,currentCapacity);
+                            unitList.add(unit);
+                        }
+                        future.complete(unitList);
+                    }
+                    catch (Exception e){
+                        future.completeExceptionally(e);
+                    }
+                }
+                else{
+                    future.completeExceptionally(new Exception("Error in fetching data"));
+                }
+            }
+        });
+        return future;
     }
 
     public static void RecommendMultipleCategories(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
@@ -1298,5 +1339,20 @@ public class Utils
                 }
             }
         });
+    }
+
+     public static String AllocateUnitToItem(ArrayList<unitModel> units){
+        int  id=-1;
+        String name="";
+        int capacity=-1;
+        for(unitModel unit:units){
+            if(unit.getFreeCapacity()>capacity){
+                id=Integer.parseInt(unit.getId());
+                capacity=unit.getFreeCapacity();
+                name=unit.getUnitName();
+            }
+        }
+
+        return name;
     }
 }

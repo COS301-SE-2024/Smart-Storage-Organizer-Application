@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.model.CategoryModel;
 
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -111,10 +113,21 @@ public class UnitActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         });
-                    }
-                });
-
-            });
+                   }
+              });
+//                Utils.getAllUnitsForCategory(2).thenAccept(unitModels -> {
+//                    if (unitModels.isEmpty()) {
+//                        Log.i("Unit", "No units found");
+//                    }
+//                    for (int i = 0; i < unitModels.size(); i++) {
+//                        Log.i("Unit", unitModels.get(i).getUnitName());
+//                    }
+//                }).exceptionally(throwable -> {
+//                    Log.e("Unit", "Error fetching units", throwable);
+//                    return null;
+//                });
+//
+          });
 
             // Create checkboxes dynamically and add them to the LinearLayout
 
