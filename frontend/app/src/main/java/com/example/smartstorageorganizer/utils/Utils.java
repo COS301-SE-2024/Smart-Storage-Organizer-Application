@@ -1305,22 +1305,6 @@ public class Utils
                             activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
                             activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
 
-//                            ItemModel item = new ItemModel();
-//                            item.setItemId(itemObject.getString("item_id"));
-//                            item.setItemName(itemObject.getString("item_name"));
-//                            item.setDescription(itemObject.getString("description"));
-//                            item.setColourCoding(itemObject.getString("colourcoding"));
-//                            item.setBarcode(itemObject.getString("barcode"));
-//                            item.setQrcode(itemObject.getString("qrcode"));
-//                            item.setQuantity(itemObject.getString("quanity"));
-//                            item.setLocation(itemObject.getString("location"));
-//                            item.setEmail(itemObject.getString("email"));
-//                            item.setItemImage(itemObject.getString("item_image"));
-//                            item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-//                            item.setSubCategoryId(itemObject.getString("subcategoryid"));
-//                            item.setCreatedAt(itemObject.getString("created_at"));
-
-//                            itemModelList.add(item);
                             categoryModelList.add(suggestedCategory);
                         }
 
@@ -1341,6 +1325,8 @@ public class Utils
         });
     }
 
+  
+
      public static String AllocateUnitToItem(ArrayList<unitModel> units){
         int  id=-1;
         String name="";
@@ -1354,5 +1340,116 @@ public class Utils
         }
 
         return name;
+  
+    public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
+        int itemIdInt = Integer.parseInt(itemId);
+        String json = "{\"item_id\":\"" + itemIdInt + "\"}";
+        Log.d("Delete Item Payload", "JSON Payload: " + json);
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        String API_URL = BuildConfig.DeleteItemEndPoint;
+        Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> {
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+    }
+
+    public static void getCategory(String categoryId, String authorizationToken, Activity activity, OperationCallback<String> callback) {
+        String json = "{"
+                + "\"header\": {"
+                + "\"Authorization\": \"" + authorizationToken + "\""
+                + "},"
+                + "\"body\": {"
+                + "\"categoryId\": \"" + categoryId + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.getCategoryName;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.d("MyAmplifyApp", "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("body");
+
+                        JSONObject roleObject = new JSONObject(bodyString);
+                        String categoryString = roleObject.getString("categoryName");
+
+                        activity.runOnUiThread(() -> {
+                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                            callback.onSuccess(categoryString);
+                        });
+                    }catch (JSONException e){
+                        activity.runOnUiThread(() -> {
+                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
+                    });
+                }
+            }
+        });
+
     }
 }

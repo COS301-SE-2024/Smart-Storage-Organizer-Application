@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -36,6 +38,7 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -79,6 +82,8 @@ public class ViewItemActivity extends AppCompatActivity {
     private NestedScrollView itemsLayout;
     private LinearLayout bottomNavigationView;
     ProgressDialog progressDialog;
+    private int count;
+    private int size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -528,6 +533,26 @@ public class ViewItemActivity extends AppCompatActivity {
 
         deleteButton.setOnClickListener(view -> {
             // Handle delete action
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        progressDialog.setMessage("Deleting item(s)...");
+                        progressDialog.show();
+                        count = 0;
+                        List<String> selectedItemIds = itemAdapter.getSelectedItemsIdsArray();
+                        size = selectedItemIds.size();
+                        for(String itemId: selectedItemIds){
+                            deleteItem(itemId);
+                        }
+//                        for(String itemId: selectedItemIds){
+//                            deleteItem(itemId);
+//                        }
+//                        progressDialog.dismiss();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         });
 
         colorButton.setOnClickListener(view -> {
@@ -633,5 +658,68 @@ public class ViewItemActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void deleteItem(String itemId) {
+        Utils.deleteItem(itemId, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    ++count;
+                    if(count == size){
+                        progressDialog.dismiss();
+                        itemAdapter.unselect();
+                        loadInitialData();
+//                        Intent intent = new Intent(ViewItemActivity.this, ViewItemActivity.class);
+//                        intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
+//                        intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
+//                        intent.putExtra("location", getIntent().getStringExtra("location"));
+//                        intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
+//                        intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+//                        intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+//                        intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
+//                        intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
+//                        intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+//                        intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+//                        startActivity(intent);
+//                        finish();
+                    }
+//                    Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
+//                    navigateToHome();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+//                showToast("Failed to add category: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+//                addCategoryLayout.setVisibility(View.VISIBLE);
+//                addButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void showBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dialog_item, null);
+
+        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+
+        deleteItem.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 }
