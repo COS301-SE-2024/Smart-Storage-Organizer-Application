@@ -26,8 +26,10 @@ public class AddCategoryActivityTest {
 //                .get();
 //    }
 
-    @Before
-    public void setup() {}
+    @Test
+    public void setup() {
+
+    }
 
 //    @Test
 //    public void shouldNotBeNull() {
