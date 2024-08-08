@@ -22,82 +22,82 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Config(sdk = Build.VERSION_CODES.P)
 public class EditProfileActivityTest {
 
-//    EditProfileActivity editprofile1;
-//    @Mock
-//    EditProfileActivity editprofile = mock(EditProfileActivity.class);
-//
-//    @Before
-//    public void setup() {
-//        editprofile1 = Robolectric.buildActivity(EditProfileActivity.class)
-//                .create()
-//                .resume()
-//                .get();
-//    }
-//
-//    @Test
-//    public void shouldNotBeNull() {
-//        assertNotNull(editprofile1);
-//    }
-//
-//
-//    @Test
-//    public void GetObjectUrlShouldReturnTrueForAnyKey()
-//    {
-//        //Given
-//        String key="12345";
-//        String result;
-//
-//        //When
-//        when(editprofile.getObjectUrl(key)).thenReturn(key);
-//
-//        //Then
-//        assertEquals(key, editprofile.getObjectUrl(key));
-//    }
-//
-//    @Test
-//    public void UploadProfilePictureShouldReturnTrueForValidFiles()
-//    {
-//        //Given
-//        File image= new File("image");
-//        AtomicBoolean result = new AtomicBoolean(false);
-//
-//        //When
-//        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(true));
-//
-//        //given
-//        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
-//            if(isResult)
-//                result.set(true);
-//            else
-//                result.set(false);
-//
-//        });
-//
-//        assertEquals(true, result.get());
-//
-//    }
-//
-//    @Test
-//    public void UploadProfilePictureShouldReturnTrueForInValidFiles()
-//    {
-//        //Given
-//        File image= new File("invalidimage");
-//        AtomicBoolean result = new AtomicBoolean(false);
-//
-//        //When
-//        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(false));
-//
-//        //given
-//        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
-//            if(isResult)
-//                result.set(true);
-//            else
-//                result.set(false);
-//
-//        });
-//
-//        assertEquals(true, result.get());
-//
-//    }
-//
+    EditProfileActivity editprofile1;
+    @Mock
+    EditProfileActivity editprofile = mock(EditProfileActivity.class);
+
+    @Before
+    public void setup() {
+        editprofile1 = Robolectric.buildActivity(EditProfileActivity.class)
+                .create()
+                .resume()
+                .get();
+    }
+
+    @Test
+    public void shouldNotBeNull() {
+        assertNotNull(editprofile1);
+    }
+
+
+    @Test
+    public void GetObjectUrlShouldReturnTrueForAnyKey()
+    {
+        //Given
+        String key="12345";
+        String result;
+
+        //When
+        when(editprofile.getObjectUrl(key)).thenReturn(key);
+
+        //Then
+        assertEquals(key, editprofile.getObjectUrl(key));
+    }
+
+    @Test
+    public void UploadProfilePictureShouldReturnTrueForValidFiles()
+    {
+        //Given
+        File image= new File("image");
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        //When
+        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(true));
+
+        //given
+        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
+            if(isResult)
+                result.set(true);
+            else
+                result.set(false);
+
+        });
+
+        assertEquals(true, result.get());
+
+    }
+
+    @Test
+    public void UploadProfilePictureShouldReturnTrueForInValidFiles()
+    {
+        //Given
+        File image= new File("invalidimage");
+        AtomicBoolean result = new AtomicBoolean(false);
+
+        //When
+        when(editprofile.uploadProfilePicture(image)).thenReturn(CompletableFuture.completedFuture(false));
+
+        //given
+        editprofile.uploadProfilePicture(image).thenAccept(isResult->{
+            if(isResult)
+                result.set(true);
+            else
+                result.set(false);
+
+        });
+
+        assertEquals(true, result.get());
+
+    }
+
 }
