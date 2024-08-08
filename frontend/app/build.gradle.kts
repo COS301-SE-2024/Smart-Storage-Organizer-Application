@@ -31,6 +31,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String","changeCategory","\"${localProperties["changeCategory"]}\"")
+        buildConfigField("String","getParentCategory","\"${localProperties["getParentCategory"]}\"")
+        buildConfigField("String","getCategoryName","\"${localProperties["getCategoryName"]}\"")
         buildConfigField("String","GetUnitConstraints","\"${localProperties["GetUnitConstraints"]}\"")
         buildConfigField("String","AddUnitEndpoint","\"${localProperties["AddUnitEndpoint"]}\"")
         buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
