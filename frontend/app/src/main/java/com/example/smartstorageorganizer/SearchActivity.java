@@ -1,34 +1,42 @@
 package com.example.smartstorageorganizer;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SearchAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
-import com.example.smartstorageorganizer.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,44 +50,63 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private List<ItemModel> searchResults;
     private EditText searchView;
     private ImageButton searchButton;
     private RecyclerView searchResultsRecyclerView;
 
-    private SearchAdapter adapter;
+    private RecentAdapter adapter;
+    private String currentSelectedOption;
+    private Spinner sortBySpinner;
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_search);
-
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
         searchView = findViewById(R.id.searchView);
-        searchButton = findViewById(R.id.searchButton);
         searchResultsRecyclerView = findViewById(R.id.search_results_recycler_view);
+        sortBySpinner = findViewById(R.id.sort_by_filter);
 
+        setupSortByListener();
         // Set up the RecyclerView (adapter, layout manager, etc.)
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
 
-        adapter = new SearchAdapter(searchResults, this);
+        adapter = new RecentAdapter(this, searchResults);
         searchResultsRecyclerView.setAdapter(adapter);
-//
-        searchButton.setOnClickListener(v -> {
-            String query = searchView.getText().toString();
-            if (!query.isEmpty()) {
-                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-                SearchForItem(query, "*", "*");
-                searchResults.clear();
-//                searchResults.add(new ItemModel());
-//                adapter.notifyDataSetChanged();
-//                SearchForItem(query, "", ""); // Adjust parameters as needed
-            } else {
-                Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+
+        findViewById(R.id.scanButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchActivity.this, CodeScannerActivity.class);
+                startActivity(intent);
             }
+        });
+
+        searchView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getRawX() >= (searchView.getRight() - searchView.getCompoundDrawables()[2].getBounds().width())) {
+                    String query = searchView.getText().toString();
+                    if (!query.isEmpty()) {
+                        Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+                        SearchForItem(query, "*", "*");
+                        searchResults.clear();
+                    } else {
+                        Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+            }
+            return false;
         });
 
 //        searchView.setOnClickListener(new SearchView.OnQueryTextListener() {
@@ -222,7 +249,10 @@ public class SearchActivity extends AppCompatActivity {
                             searchResults.add(item);
 //                            adapter.notifyDataSetChanged();
                         }
-                        runOnUiThread(() -> adapter.notifyDataSetChanged());
+                        runOnUiThread(() -> {
+                            adapter.notifyDataSetChanged();
+                            sortBySpinner.setVisibility(View.VISIBLE);
+                        });
 
                     }catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -237,6 +267,73 @@ public class SearchActivity extends AppCompatActivity {
         return future;
     }
 
+    private void setupSortByListener(){
+        String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        currentSelectedOption = "Sort by";
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(SearchActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(adapter);
 
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                currentSelectedOption = parentView.getItemAtPosition(position).toString();
+
+                if (currentSelectedOption.equals("Sort by")) {
+                    return;
+                }
+
+                switch (currentSelectedOption) {
+                    case "A to Z":
+                        sortItemModelsAscending(searchResults);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case "Z to A":
+                        sortItemModelsDescending(searchResults);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case "Newest to Oldest":
+                        sortItemModelsByNewest(searchResults);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case "Oldest to Newest":
+                        sortItemModelsByOldest(searchResults);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+                }
+
+                Toast.makeText(SearchActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something here if nothing is selected
+            }
+        });
+    }
+
+    public static void sortItemModelsAscending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o1.getItemName().compareToIgnoreCase(o2.getItemName()));
+    }
+
+    public static void sortItemModelsDescending(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> o2.getItemName().compareToIgnoreCase(o1.getItemName()));
+    }
+    public static void sortItemModelsByNewest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date2.compareTo(date1);
+        });
+    }
+
+    public static void sortItemModelsByOldest(List<ItemModel> itemModels) {
+        itemModels.sort((o1, o2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(o1.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            LocalDateTime date2 = LocalDateTime.parse(o2.getCreatedAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSXXX"));
+            return date1.compareTo(date2);
+        });
+    }
 
 }
