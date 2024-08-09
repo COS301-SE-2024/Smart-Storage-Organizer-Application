@@ -74,8 +74,8 @@ public class FirebaseMessagingService extends Service {
     }
 
     private void updateUserTokenOnServer(String idToken, String accessToken, String refreshToken, String fcmToken) {
-        // Define the URL of your backend endpoint
-        String backendUrl = "https://yourbackendserver.com/user/updateTokens";
+        //backend endpoint
+        String backendUrl = "https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/";
 
         // Create a JSON object to hold the request data
         JSONObject requestBody = new JSONObject();
