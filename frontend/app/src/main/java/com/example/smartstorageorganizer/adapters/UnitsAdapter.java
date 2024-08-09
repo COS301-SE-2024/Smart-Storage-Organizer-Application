@@ -46,6 +46,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
         boolean isExpanded = unit.isExpanded();
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
         holder.cardViewDescription.setOnClickListener(v -> {
