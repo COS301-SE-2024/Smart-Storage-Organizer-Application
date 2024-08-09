@@ -60,9 +60,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.FetchCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -114,6 +115,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void addCategory(int parentCategory, String categoryName, String email, String url, Activity activity, OperationCallback<Boolean> callback) {
@@ -124,9 +129,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.AddCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -156,6 +162,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void filterByCategory(int parentCategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
@@ -168,9 +178,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.CategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -232,6 +243,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
@@ -245,9 +260,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.SubCategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -310,6 +326,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
     public static CompletableFuture<Boolean> getAllUnits (String categoriesId)  {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
@@ -327,9 +347,10 @@ public class Utils
 
 
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get(type));
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(BuildConfig.AddUnitEndPoint)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -373,6 +394,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
         return future;
     }
     public unitModel getUnitAvailable(List<unitModel> unitList){
@@ -395,9 +420,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.DeleteCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -427,6 +453,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void modifyCategoryName(int id, String newCategoryName, Activity activity, OperationCallback<Boolean> callback)
@@ -437,9 +467,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.ModifyCategoryName;
         RequestBody body = RequestBody.create(json, JSON);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -469,6 +500,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void categoryToUncategorized(int id, Activity activity, OperationCallback<Boolean> callback)
@@ -479,9 +514,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.CategoryToUncategorized;
         RequestBody body = RequestBody.create(json, JSON);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -511,6 +547,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void fetchAllItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
@@ -523,9 +563,10 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.FetchAllEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
-
+        TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
+                .header("Authorization","Bearer"+results)
                 .post(body)
                 .build();
 
@@ -587,6 +628,10 @@ public class Utils
                 }
             }
         });
+    }).exceptionally(ex -> {
+    Log.e("TokenError", "Failed to get user token", ex);
+    return null;
+});
     }
 
     public static void addColourGroup(String colourcode, String title, String description, String email, Activity activity, OperationCallback<Boolean> callback)
