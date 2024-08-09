@@ -1,5 +1,5 @@
 # Smart Storage Organization
-[![codecov](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/branch/main/graph/badge.svg?token=DEFDH7DDQO)](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application)
+[![codecov](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/branch/fix-errors/graph/badge.svg?token=DEFDH7DDQO)](https://codecov.io/github.com/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![main](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/actions/workflows/AndroidBuild.yml/badge.svg?branch=main)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
