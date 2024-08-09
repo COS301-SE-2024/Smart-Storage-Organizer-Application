@@ -129,7 +129,7 @@ public class AddColorCodeActivity extends AppCompatActivity {
         colorPickerDialogue.show();
     }
 
-    private String convertIntToHexColor(int color) {
+    String convertIntToHexColor(int color) {
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
