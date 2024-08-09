@@ -62,5 +62,17 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/capacityUsed"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:paddingTop="0dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

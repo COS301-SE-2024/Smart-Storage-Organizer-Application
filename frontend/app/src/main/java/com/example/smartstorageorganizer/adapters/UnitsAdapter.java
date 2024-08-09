@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,16 @@ import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.unitModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 
 import java.util.List;
 
@@ -43,11 +48,17 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.capacity.setText(unit.getCapacityAsString());
         holder.capacityUsed.setText(unit.getCapacityUsedAsString());
 
-
         boolean isExpanded = unit.isExpanded();
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.categories.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
+
+        if (isExpanded && !unit.hasCategories()) {
+            loadCategoriesOfUnits(unit.getId(), holder, unit);
+        } else if (unit.hasCategories()) {
+            holder.categories.setText(String.join(", ", unit.getCategories()));
+        }
 
         holder.cardViewDescription.setOnClickListener(v -> {
             unit.setExpanded(!unit.isExpanded());
@@ -55,13 +66,14 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         });
     }
 
+
     @Override
     public int getItemCount() {
         return unitList.size();
     }
 
     public static class UnitViewHolder extends RecyclerView.ViewHolder {
-        TextView unitName, capacity, capacityUsed;
+        TextView unitName, capacity, capacityUsed, categories;
         ImageView arrow;
         CardView cardViewDescription;
 
@@ -70,8 +82,25 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             unitName = itemView.findViewById(R.id.unitName);
             capacity = itemView.findViewById(R.id.capacity);
             capacityUsed = itemView.findViewById(R.id.capacityUsed);
+            categories = itemView.findViewById(R.id.categories);
             arrow = itemView.findViewById(R.id.arrow);
             cardViewDescription = itemView.findViewById(R.id.cardViewDescription);
         }
     }
+
+    private void loadCategoriesOfUnits(String unit_id, UnitViewHolder holder, unitModel unit) {
+        Utils.FetchCategoriesOfUnits(unit_id, (Activity) context, new OperationCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> result) {
+                unit.setCategories(result);
+                holder.categories.setText(String.join(", ", result));
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

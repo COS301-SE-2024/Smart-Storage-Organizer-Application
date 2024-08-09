@@ -75,4 +75,20 @@ public class ViewUnitsActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void loadCategoriesOfUnits(String unit_id) {
+        Utils.FetchCategoriesOfUnits(unit_id, this, new OperationCallback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> result) {
+//                unitList.clear();
+//                unitList.addAll(result);
+//                unitsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(ViewUnitsActivity.this, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
