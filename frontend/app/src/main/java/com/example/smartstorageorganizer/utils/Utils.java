@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
@@ -20,6 +22,7 @@ import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.model.unitModel;
 
 import org.json.JSONArray;
@@ -1204,45 +1207,47 @@ public class Utils
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String API_URL = BuildConfig.GetUnitConstraints;
         OkHttpClient client=new OkHttpClient();
+        TokenManager.getToken().thenAccept(results-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(RequestBody.create(json, JSON))
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    future.completeExceptionally(e);
+                }
 
-        Request request=new Request.Builder()
-                .url(API_URL)
-                .post(RequestBody.create(json,JSON))
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                future.completeExceptionally(e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if(response.isSuccessful()){
-                    try {
-                        final String responseData = response.body().string();
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-                        JSONArray bodyArray = new JSONArray(bodyString);
-                        ArrayList<unitModel> unitList=new ArrayList<>();
-                        for(int i=0;i<bodyArray.length();i++){
-                            JSONObject unitObject=bodyArray.getJSONObject(i);
-                            String unitName=unitObject.getString("name");
-                            String unitId=unitObject.getString("id");
-                            int capacity=Integer.parseInt(unitObject.getString("capacity"));
-                            int currentCapacity=Integer.parseInt(unitObject.getString("capacity_used"));
-                            unitModel unit=new unitModel(unitName,unitId,capacity,currentCapacity);
-                            unitList.add(unit);
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        try {
+                            final String responseData = response.body().string();
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+                            ArrayList<unitModel> unitList = new ArrayList<>();
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject unitObject = bodyArray.getJSONObject(i);
+                                String unitName = unitObject.getString("name");
+                                String unitId = unitObject.getString("id");
+                                int capacity = Integer.parseInt(unitObject.getString("capacity"));
+                                int currentCapacity = Integer.parseInt(unitObject.getString("capacity_used"));
+                                unitModel unit = new unitModel(unitName, unitId, capacity, currentCapacity);
+                                unitList.add(unit);
+                            }
+                            future.complete(unitList);
+                        } catch (Exception e) {
+                            future.completeExceptionally(e);
                         }
-                        future.complete(unitList);
-                    }
-                    catch (Exception e){
-                        future.completeExceptionally(e);
+                    } else {
+                        future.completeExceptionally(new Exception("Error in fetching data"));
                     }
                 }
-                else{
-                    future.completeExceptionally(new Exception("Error in fetching data"));
-                }
-            }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
         return future;
     }
@@ -1257,89 +1262,95 @@ public class Utils
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.RecommendMultipleEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
+        TokenManager.getToken().thenAccept(results-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .header("Authorization", "Bearer" + results)
+                    .post(body)
+                    .build();
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.e(message, "GET Suggested request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e(message, responseData));
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("response");
-                        JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
-
-                        for (int i = 0; i < bodyArray.length(); i++) {
-                            JSONObject itemObject = bodyArray.getJSONObject(i);
-
-                            String itemIdString = itemObject.getString("id");
-                            String categoryString = itemObject.getString("category");
-                            JSONObject categoryObject = new JSONObject(categoryString);
-                            String subcategoryString = itemObject.getString("subcategory");
-                            JSONObject subcategoryObject = new JSONObject(subcategoryString);
-
-                            SuggestedCategoryModel suggestedCategory = new SuggestedCategoryModel();
-
-                            suggestedCategory.setItemId(itemIdString);
-                            suggestedCategory.setCategoryId(categoryObject.getString("id"));
-                            suggestedCategory.setCategoryName(categoryObject.getString("categoryname"));
-                            suggestedCategory.setSubcategoryId(subcategoryObject.getString("id"));
-                            suggestedCategory.setSubcategoryName(subcategoryObject.getString("categoryname"));
-
-                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
-                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
-
-                            categoryModelList.add(suggestedCategory);
-                        }
-
-                        activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
-                    } catch (JSONException e) {
-                        activity.runOnUiThread(() -> {
-                            Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
-                            callback.onFailure(e.getMessage());
-                        });
-                    }
-                } else {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET Suggested request failed:" + response);
-                        callback.onFailure("Response code:" + response.code());
+                        Log.e(message, "GET Suggested request failed", e);
+                        callback.onFailure(e.getMessage());
                     });
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("response");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
+
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                String itemIdString = itemObject.getString("id");
+                                String categoryString = itemObject.getString("category");
+                                JSONObject categoryObject = new JSONObject(categoryString);
+                                String subcategoryString = itemObject.getString("subcategory");
+                                JSONObject subcategoryObject = new JSONObject(subcategoryString);
+
+                                SuggestedCategoryModel suggestedCategory = new SuggestedCategoryModel();
+
+                                suggestedCategory.setItemId(itemIdString);
+                                suggestedCategory.setCategoryId(categoryObject.getString("id"));
+                                suggestedCategory.setCategoryName(categoryObject.getString("categoryname"));
+                                suggestedCategory.setSubcategoryId(subcategoryObject.getString("id"));
+                                suggestedCategory.setSubcategoryName(subcategoryObject.getString("categoryname"));
+
+                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
+                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
+
+                                categoryModelList.add(suggestedCategory);
+                            }
+
+                            activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
+                        } catch (JSONException e) {
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "GET Suggested request failed:" + response);
+                            callback.onFailure("Response code:" + response.code());
+                        });
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
   
 
-     public static String AllocateUnitToItem(ArrayList<unitModel> units){
-        int  id=-1;
-        String name="";
-        int capacity=-1;
-        for(unitModel unit:units){
-            if(unit.getFreeCapacity()>capacity){
-                id=Integer.parseInt(unit.getId());
-                capacity=unit.getFreeCapacity();
-                name=unit.getUnitName();
-            }
-        }
+     public static String AllocateUnitToItem(ArrayList<unitModel> units) {
+         int id = -1;
+         String name = "";
+         int capacity = -1;
+         for (unitModel unit : units) {
+             if (unit.getFreeCapacity() > capacity) {
+                 id = Integer.parseInt(unit.getId());
+                 capacity = unit.getFreeCapacity();
+                 name = unit.getUnitName();
+             }
+         }
 
-        return name;
+         return name;
+     }
   
     public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
         int itemIdInt = Integer.parseInt(itemId);
@@ -1349,38 +1360,44 @@ public class Utils
         String API_URL = BuildConfig.DeleteItemEndPoint;
         Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
         RequestBody body = RequestBody.create(json, JSON);
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(result-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .header("Authorization", "Bearer" + result)
+                    .post(body)
+                    .build();
 
-        OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.e(message, "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.i(message, "POST request succeeded: " + responseData);
-                        callback.onSuccess(true);
-                    });
-                } else {
-                    activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
+                        Log.e(message, "POST request failed", e);
+                        callback.onFailure(e.getMessage());
                     });
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
@@ -1402,54 +1419,81 @@ public class Utils
 
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+       TokenManager.getToken().thenAccept(result->{
+                   Request request = new Request.Builder()
+                           .url(API_URL)
+                           .header("Authorization","Bearer"+result)
+                           .post(body)
+                           .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp", "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
+                   client.newCall(request).enqueue(new Callback() {
+                       @Override
+                       public void onFailure(Call call, IOException e) {
+                           e.printStackTrace();
+                           activity.runOnUiThread(() -> {
+                               Log.d("MyAmplifyApp", "POST request failed", e);
+                               callback.onFailure(e.getMessage());
+                           });
+                       }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+                       @Override
+                       public void onResponse(Call call, Response response) throws IOException {
+                           if (response.isSuccessful()) {
+                               final String responseData = response.body().string();
+                               activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
+                               try {
+                                   JSONObject jsonObject = new JSONObject(responseData);
+                                   String bodyString = jsonObject.getString("body");
 
-                        JSONObject roleObject = new JSONObject(bodyString);
-                        String categoryString = roleObject.getString("categoryName");
+                                   JSONObject roleObject = new JSONObject(bodyString);
+                                   String categoryString = roleObject.getString("categoryName");
 
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+                                   activity.runOnUiThread(() -> {
+                                       Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+                                       Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
 
-                            callback.onSuccess(categoryString);
-                        });
-                    }catch (JSONException e){
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
-                            callback.onFailure(e.getMessage());
-                        });
-                    }
-                } else {
-                    activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
-                    });
-                }
-            }
-        });
+                                       callback.onSuccess(categoryString);
+                                   });
+                               }catch (JSONException e){
+                                   activity.runOnUiThread(() -> {
+                                       Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                       callback.onFailure(e.getMessage());
+                                   });
+                               }
+                           } else {
+                               activity.runOnUiThread(() -> {
+                                   Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                                   callback.onFailure("Response code" + response.code());
+                               });
+                           }
+                       }
+                   });
+
+       }
+       ).exceptionally(ex -> {
+           Log.e("TokenError", "Failed to get user token", ex);
+           return null;
+       });
 
     }
+    public static CompletableFuture<String> getUserToken(){
+            CompletableFuture<String> future=new CompletableFuture<String>();
+             Amplify.Auth.fetchAuthSession(
+                result -> {
+
+                    AWSCognitoAuthSession cognitoAuthSession = (AWSCognitoAuthSession) result;
+                    Log.i("Token0", cognitoAuthSession.getAccessToken());
+                    future.complete(cognitoAuthSession.getAccessToken());
+                },
+                error -> {
+                    Log.e("AuthError", "Error in fetching token", error);
+                    future.completeExceptionally(new Exception("Error in fetching token"));
+
+                }
+             );
+            return future;
+         }
+
+
 }
