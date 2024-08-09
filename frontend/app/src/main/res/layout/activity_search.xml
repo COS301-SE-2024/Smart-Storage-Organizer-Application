@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="24 results retrieved for Lenovo"
+                    android:text="2 results retrieved for Lenovo"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:textStyle="bold"
