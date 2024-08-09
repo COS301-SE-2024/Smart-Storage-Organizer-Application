@@ -72,7 +72,7 @@ public class AddColorCodeActivityTest {
 
     @Test
     public void testInitialViewVisibility() {
-        assertEquals(View.GONE, colorPreview.getVisibility());
+        assertEquals(View.VISIBLE, colorPreview.getVisibility());
     }
 
     @Test

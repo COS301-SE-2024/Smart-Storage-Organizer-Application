@@ -58,7 +58,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ViewItemActivity extends AppCompatActivity {
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 10;
     private int currentPage = 1;
     private TextView notFoundText;
     private ImageView backButton;

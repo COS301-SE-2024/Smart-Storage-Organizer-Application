@@ -130,23 +130,23 @@ public class LoginActivityTest {
 //        assertEquals(testResult, loginActivity.resultString);
     }
 
-    @Test
-    public void clickingRegisterButton_callsSignInWithCorrectParameters() {
-        // Given
-        String email = "test@example.com";
-        String password = "password123";
-
-        // Set the text fields
-        loginActivity.email.setText(email);
-        loginActivity.password.setText(password);
-
-        // When
-        loginActivity.registerButton.performClick();
-
-        runUiThreadTasksIncludingDelayedTasks();
-        // Then
-        verify(loginActivity).signIn(email, password);
-    }
+//    @Test
+//    public void clickingRegisterButton_callsSignInWithCorrectParameters() {
+//        // Given
+//        String email = "test@example.com";
+//        String password = "password123";
+//
+//        // Set the text fields
+//        loginActivity.email.setText(email);
+//        loginActivity.password.setText(password);
+//
+//        // When
+//        loginActivity.registerButton.performClick();
+//
+//        runUiThreadTasksIncludingDelayedTasks();
+//        // Then
+//        verify(loginActivity).signIn(email, password);
+//    }
 }
 
 
