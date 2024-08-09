@@ -145,6 +145,10 @@ dependencies {
 //    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
     implementation ("com.amplifyframework:aws-auth-cognito:latest-version")
 
+//    For google firebase
+    implementation ("com.google.firebase:firebase-messaging:23.1.0")
+
+
 
 
     testImplementation ("org.robolectric:robolectric:4.6.1")
