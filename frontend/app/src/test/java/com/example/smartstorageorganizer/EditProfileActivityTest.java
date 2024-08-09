@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EditProfileActivityTest {
 
     EditProfileActivity editprofile1;
-    @Mock
-    EditProfileActivity editprofile = mock(EditProfileActivity.class);
+//    @Mock
+//    EditProfileActivity editprofile = mock(EditProfileActivity.class);
 
     @Before
     public void setup() {

@@ -1,14 +1,14 @@
 
-name: AndroidBuild
+name: Unit_tests
 
 on:
-  push:
-    branches: [ fix-errors ]
-  pull_request:
-    branches: [ fix-errors ]
+    push:
+      branches: [fix-errors ]
+    pull_request:
+      branches: [fix-errors ]
 
 jobs:
-  buildapp:
+  run_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
@@ -40,10 +40,17 @@ jobs:
       - name: Set up local.properties
         working-directory: frontend
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      
           
-      - name: Run Build
+      - name: Run Tests
         working-directory: frontend         
-        run: ./gradlew build
+        run: ./gradlew test
+
+      - name: Upload index file
+        
+        uses: actions/upload-artifact@v2         
+        with: 
+            name: index.html
+            path: frontend/app/build/reports/tests/testDebugUnitTest/index.html
+     
 
       
