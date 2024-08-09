@@ -36,5 +36,120 @@ public class FirebaseMessagingService extends Service {
     }
     //Implementation
 
+//    Handles the Incoming msgs from FCM
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        // Handle FCM messages here.
+        if (remoteMessage.getNotification() != null) {
+//            Display the notification msg if it exists
+            sendNotification(remoteMessage.getNotification().getBody());
+        }
+    }
 
+//    Handles the newly generated fcmToken
+    public void onNewToken(String token) {
+//        super.onNewToken(token);
+        // Send the new token to your server
+        sendRegistrationToServer(token);
+    }
+
+    // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken)
+    private void sendRegistrationToServer(String fcmToken) {
+        // Get the user's authentication tokens
+        AWSMobileClient.getInstance().getTokens(new Callback<Tokens>() {
+            @Override
+            public void onResult(Tokens tokens) {
+                String idToken = tokens.getIdToken().getTokenString();
+                String accessToken = tokens.getAccessToken().getTokenString();
+                String refreshToken = tokens.getRefreshToken().getTokenString();
+
+                // Use these tokens and the FCM token as needed, e.g., send them to your server
+                updateUserTokenOnServer(idToken, accessToken, refreshToken, fcmToken);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("AWSMobileClient", "Failed to get user tokens.", e);
+            }
+        });
+    }
+
+    private void updateUserTokenOnServer(String idToken, String accessToken, String refreshToken, String fcmToken) {
+        // Define the URL of your backend endpoint
+        String backendUrl = "https://yourbackendserver.com/user/updateTokens";
+
+        // Create a JSON object to hold the request data
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("idToken", idToken);
+            requestBody.put("accessToken", accessToken);
+            requestBody.put("refreshToken", refreshToken);
+            requestBody.put("fcmToken", fcmToken);
+        } catch (Exception e) {
+            Log.e("updateUserTokens", "Failed to create JSON request body.", e);
+            return;
+        }
+
+        // Send the request in a new thread to avoid blocking the main thread
+        new Thread(() -> {
+            try {
+                // Create and configure the HttpURLConnection
+                URL url = new URL(backendUrl);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setDoOutput(true);
+
+                // Write the JSON data to the output stream
+                try(OutputStream os = urlConnection.getOutputStream()) {
+                    byte[] input = requestBody.toString().getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+
+                // Get the response code to determine success or failure
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Success
+                    Log.d("updateUserTokens", "Tokens updated successfully.");
+                } else {
+                    // Error response
+                    Log.e("updateUserTokens", "Failed to update tokens: " + responseCode);
+                }
+
+            } catch (Exception e) {
+                // Handle any exceptions that occur during the request
+                Log.e("updateUserTokens", "Failed to update tokens.", e);
+            }
+        }).start();
+    }
+
+
+    private void sendNotification(String messageBody) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+
+        String channelId = "default_channel_id";
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.outline_notifications_24)
+                        .setContentTitle("New Message")
+                        .setContentText(messageBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human-readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(0, notificationBuilder.build());
+    }
 }
