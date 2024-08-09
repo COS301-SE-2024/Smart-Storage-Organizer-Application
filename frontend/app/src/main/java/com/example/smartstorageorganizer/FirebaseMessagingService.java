@@ -46,11 +46,11 @@ public class FirebaseMessagingService extends Service {
     }
 
 //    Handles the newly generated fcmToken
-    public void onNewToken(String token) {
+//    public void onNewToken(String token) {
 //        super.onNewToken(token);
-        // Send the new token to your server
-        sendRegistrationToServer(token);
-    }
+//        // Send the new token to your server
+//        sendRegistrationToServer(token);
+//    }
 
     // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken)
     private void sendRegistrationToServer(String fcmToken) {
