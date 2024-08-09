@@ -1,0 +1,62 @@
+
+name: Unit_tests
+
+on:
+    push:
+      branches: [fix-errors ]
+    pull_request:
+      branches: [fix-errors ]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17.0.11'
+          distribution: 'adopt'
+
+      - name: Update package list
+        run: sudo apt-get update
+
+      - name: Set DosToLinx
+        run: sudo apt install dos2unix
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Make gradlew executable
+        working-directory: frontend
+        run: chmod +x ./gradlew
+
+      - name: Convert line endings
+        working-directory: frontend
+        run: dos2unix gradlew
+
+      - name: Set up local.properties
+        working-directory: frontend
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          
+      - name: Run Tests
+        working-directory: frontend         
+        run: ./gradlew test
+
+      - name: Upload index file
+        
+        uses: actions/upload-artifact@v2         
+        with: 
+            name: index.html
+            path: frontend/app/build/reports/tests/testDebugUnitTest/index.html
+
+      - name: Upload coverage reports to Codecov
+
+        uses: codecov/codecov-action@v4.0.1
+        with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+     
+
+      
