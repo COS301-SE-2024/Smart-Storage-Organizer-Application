@@ -56,8 +56,7 @@ public class Utils
     private Utils() {}
 
     public static void fetchParentCategories(int categoryId, String email, Activity activity, OperationCallback<List<CategoryModel>> callback) {
-        String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
-        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", email));
+        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
 
         List<CategoryModel> categoryModelList = new ArrayList<>();
 
@@ -186,7 +185,6 @@ public class Utils
         String apiUrl = BuildConfig.CategoryFilterEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
         TokenManager.getToken().thenAccept(results->{
-            activity.runOnUiThread(() -> Log.e(message, "Inside Filter: "+results));
 
             Request request = new Request.Builder()
                     .url(apiUrl)
@@ -194,7 +192,6 @@ public class Utils
                     .post(body)
                     .build();
 
-            activity.runOnUiThread(() -> Log.e(message, "Empty"));
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -208,44 +205,37 @@ public class Utils
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    activity.runOnUiThread(() -> Log.e("View Response Results Body Array", "up"));
 
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", "Crushing"));
 
                             JSONObject jsonObject = new JSONObject(responseData);
-//                            String bodyString = jsonObject.getString("body");
-//                            JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", "Empty"));
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
 
-//                            for (int i = 0; i < bodyArray.length(); i++) {
-//                                JSONObject itemObject = bodyArray.getJSONObject(i);
-//
-//                                ItemModel item = new ItemModel();
-//                                item.setItemId(itemObject.getString("item_id"));
-//                                item.setItemName(itemObject.getString("item_name"));
-//                                item.setDescription(itemObject.getString("description"));
-//                                item.setColourCoding(itemObject.getString("colourcoding"));
-//                                item.setBarcode(itemObject.getString("barcode"));
-//                                item.setQrcode(itemObject.getString("qrcode"));
-//                                item.setQuantity(itemObject.getString("quanity"));
-//                                item.setLocation(itemObject.getString("location"));
-//                                item.setEmail(itemObject.getString("email"));
-//                                item.setItemImage(itemObject.getString("item_image"));
-//                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-//                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
-////                            item.setCreatedAt(itemObject.getString("created_at"));
-//
-//                                itemModelList.add(item);
-//                                activity.runOnUiThread(() -> Log.e("View Response Results Body Array", item.getItemName() ));
-//
-//                            }
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject itemObject = bodyArray.getJSONObject(i);
 
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", itemModelList.get(0).getItemName() ));
+                                ItemModel item = new ItemModel();
+                                item.setItemId(itemObject.getString("item_id"));
+                                item.setItemName(itemObject.getString("item_name"));
+                                item.setDescription(itemObject.getString("description"));
+                                item.setColourCoding(itemObject.getString("colourcoding"));
+                                item.setBarcode(itemObject.getString("barcode"));
+                                item.setQrcode(itemObject.getString("qrcode"));
+                                item.setQuantity(itemObject.getString("quanity"));
+                                item.setLocation(itemObject.getString("location"));
+                                item.setEmail(itemObject.getString("email"));
+                                item.setItemImage(itemObject.getString("item_image"));
+                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
+//                            item.setCreatedAt(itemObject.getString("created_at"));
+
+                                itemModelList.add(item);
+                            }
 
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
