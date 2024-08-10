@@ -14,7 +14,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.amplifyframework.core.Amplify;
+import  com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+import com.amplifyframework.auth.result.AuthSessionResult;
+import com.amplifyframework.auth.options.AuthFetchSessionOptions;
+
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
@@ -63,7 +67,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -132,7 +136,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -181,7 +185,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -263,7 +267,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -350,7 +354,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(BuildConfig.AddUnitEndPoint)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -423,7 +427,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -470,7 +474,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -517,7 +521,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -566,7 +570,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -647,7 +651,7 @@ public class Utils
         Request request = new Request.Builder()
                 .url(API_URL)
                 .post(body)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -760,7 +764,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -808,7 +812,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -888,7 +892,7 @@ public class Utils
         TokenManager.getToken().thenAccept(results->{
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -975,7 +979,7 @@ public class Utils
 TokenManager.getToken().thenAccept(results-> {
         Request request = new Request.Builder()
                 .url(API_URL)
-                .header("Authorization","Bearer"+results)
+                .addHeader("Authorization", results)
                 .post(body)
                 .build();
 
@@ -1081,7 +1085,7 @@ TokenManager.getToken().thenAccept(results-> {
             Request request = new Request.Builder()
                     .url(API_URL)
                     .post(body)
-                    .header("Authorization","Bearer"+results)
+                    .addHeader("Authorization", results)
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -1131,7 +1135,7 @@ TokenManager.getToken().thenAccept(results-> {
         TokenManager.getToken().thenAccept(results-> {
             Request request = new Request.Builder()
                     .url(API_URL)
-                    .header("Authorization", "Bearer" + results)
+                    .addHeader("Authorization", results)
                     .post(body)
                     .build();
 
@@ -1214,7 +1218,7 @@ TokenManager.getToken().thenAccept(results-> {
             Request request = new Request.Builder()
                     .url(API_URL)
                     .post(body)
-                    .header("Authorization", "Bearer" + results)
+                    .addHeader("Authorization", results)
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -1289,7 +1293,7 @@ TokenManager.getToken().thenAccept(results-> {
         TokenManager.getToken().thenAccept(results-> {
             Request request = new Request.Builder()
                     .url(API_URL)
-                    .header("Authorization","Bearer"+results)
+                    .addHeader("Authorization", results)
                     .post(RequestBody.create(json, JSON))
                     .build();
             client.newCall(request).enqueue(new Callback() {
@@ -1345,7 +1349,7 @@ TokenManager.getToken().thenAccept(results-> {
         TokenManager.getToken().thenAccept(results-> {
             Request request = new Request.Builder()
                     .url(API_URL)
-                    .header("Authorization", "Bearer" + results)
+                    .addHeader("Authorization", results)
                     .post(body)
                     .build();
 
@@ -1443,7 +1447,7 @@ TokenManager.getToken().thenAccept(results-> {
         TokenManager.getToken().thenAccept(result-> {
             Request request = new Request.Builder()
                     .url(API_URL)
-                    .header("Authorization", "Bearer" + result)
+                    .addHeader("Authorization", result)
                     .post(body)
                     .build();
 
@@ -1502,7 +1506,7 @@ TokenManager.getToken().thenAccept(results-> {
        TokenManager.getToken().thenAccept(result->{
                    Request request = new Request.Builder()
                            .url(API_URL)
-                           .header("Authorization","Bearer"+result)
+                           .addHeader("Authorization", result)
                            .post(body)
                            .build();
 
@@ -1560,17 +1564,18 @@ TokenManager.getToken().thenAccept(results-> {
     public static CompletableFuture<String> getUserToken(){
             CompletableFuture<String> future=new CompletableFuture<String>();
              Amplify.Auth.fetchAuthSession(
-                result -> {
-
-                    AWSCognitoAuthSession cognitoAuthSession = (AWSCognitoAuthSession) result;
-                    Log.i("Token0", cognitoAuthSession.getAccessToken());
-                    future.complete(cognitoAuthSession.getAccessToken());
-                },
-                error -> {
-                    Log.e("AuthError", "Error in fetching token", error);
-                    future.completeExceptionally(new Exception("Error in fetching token"));
-
-                }
+                     result -> {
+                         AWSCognitoAuthSession cognitoAuthSession=(AWSCognitoAuthSession) result;
+                         if (result.isSignedIn()) {
+                             String idToken=cognitoAuthSession.getUserPoolTokensResult().getValue().getIdToken();
+                             Log.i("Hello",idToken);
+                             future.complete(idToken);
+                             future.completeExceptionally(new Exception("User not signed in"));
+                         }
+                     },
+                     error -> {
+                         future.completeExceptionally(new Exception("Failed to fetch user session"));
+                     }
              );
             return future;
          }

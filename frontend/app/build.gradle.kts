@@ -156,7 +156,7 @@ dependencies {
 
     implementation ("com.amplifyframework:core:1.28.4")
 //    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
-    implementation ("com.amplifyframework:aws-auth-cognito:latest-version")
+    implementation ("com.amplifyframework:aws-auth-cognito:2.21.0")
 
 
 

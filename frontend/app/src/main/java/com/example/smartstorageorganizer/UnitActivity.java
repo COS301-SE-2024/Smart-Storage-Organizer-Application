@@ -142,7 +142,7 @@ public class UnitActivity extends AppCompatActivity {
             TokenManager.getToken().thenAccept(results->{
                 Request request = new Request.Builder()
                         .url(apiUrl)
-                        .header("Authorization","Bearer"+results)
+                        .header("Authorization","Bearer "+results)
                         .post(body)
                         .build();
 
@@ -269,11 +269,11 @@ public class UnitActivity extends AppCompatActivity {
         String apiUrl = BuildConfig.AddUnitEndpoint;
         RequestBody body = RequestBody.create(json, jsonObject);
         Log.i("hell", "createUnit: " + json);
-        Utils.getUserToken().thenAccept(token-> {
+        TokenManager.getToken().thenAccept(token-> {
             Log.i("token",token);
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    .header("Authorization", "Bearer"+token)
+                    .addHeader("Authorization",  token)
                     .post(body)
                     .build();
             Log.i("Unit Request", request.toString());
