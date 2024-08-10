@@ -3,9 +3,9 @@ name: Unit_tests
 
 on:
     push:
-      branches: [fix-errors ]
+      branches: [development, main ]
     pull_request:
-      branches: [fix-errors ]
+      branches: [development, main ]
 
 jobs:
   run_tests:
