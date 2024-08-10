@@ -65,7 +65,6 @@ public class Utils
         String apiUrl = BuildConfig.FetchCategoryEndPoint;
         RequestBody body = RequestBody.create(json, mediaType);
         TokenManager.getToken().thenAccept(results->{
-            activity.runOnUiThread(() -> Log.e("MyAmplifyApp", "Inside "+results));
             Request request = new Request.Builder()
                     .url(apiUrl)
                     .addHeader("Authorization", results)
