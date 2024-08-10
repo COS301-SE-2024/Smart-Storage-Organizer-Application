@@ -292,23 +292,23 @@ public class ViewItemActivity extends AppCompatActivity {
         Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
-                itemModelList.clear();
-                itemModelList.addAll(result);
-                if(!Objects.equals(currentSelectedOption, "Sort by")){
-                    setupSort(currentSelectedOption);
-                }
-                else {
-                    itemAdapter.notifyDataSetChanged();
-                }
-//                loadingScreen.setVisibility(View.GONE);
-                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+//                itemModelList.clear();
+//                itemModelList.addAll(result);
+//                if(!Objects.equals(currentSelectedOption, "Sort by")){
+//                    setupSort(currentSelectedOption);
+//                }
+//                else {
+//                    itemAdapter.notifyDataSetChanged();
+//                }
+////                loadingScreen.setVisibility(View.GONE);
+//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
                 Toast.makeText(ViewItemActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
-                updatePaginationButtons(result.size());
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
-                itemsLayout.setVisibility(View.VISIBLE);
-                sortBySpinner.setVisibility(View.VISIBLE);
-                mySpinner.setVisibility(View.VISIBLE);
+//                updatePaginationButtons(result.size());
+//                shimmerFrameLayout.stopShimmer();
+//                shimmerFrameLayout.setVisibility(View.GONE);
+//                itemsLayout.setVisibility(View.VISIBLE);
+//                sortBySpinner.setVisibility(View.VISIBLE);
+//                mySpinner.setVisibility(View.VISIBLE);
             }
 
             @Override

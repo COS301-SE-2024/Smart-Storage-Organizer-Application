@@ -18,6 +18,7 @@ public class TokenManager {
         if(token == null) {
             Utils.getUserToken().thenAccept(token->{
                 setToken(token);
+                future.complete(token);
             }).exceptionally(e->{
                 e.printStackTrace();
                Log.i("Token","Failed to get the token");
