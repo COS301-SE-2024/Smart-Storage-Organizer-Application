@@ -94,6 +94,8 @@ android {
         buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"");
         buildConfigField("String", "getCategoryName", "\"${localProperties["getCategoryName"]}\"");
         buildConfigField("String", "SearchEndPoint", "\"${localProperties["SearchEndPoint"]}\"");
+        buildConfigField("String", "GetAllUnits", "\"${localProperties["GetAllUnits"]}\"");
+        buildConfigField("String", "GetCategoriesOfUnits", "\"${localProperties["GetCategoriesOfUnits"]}\"");
 
 
 

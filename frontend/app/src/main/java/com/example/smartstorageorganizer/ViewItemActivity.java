@@ -58,7 +58,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ViewItemActivity extends AppCompatActivity {
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 10;
     private int currentPage = 1;
     private TextView notFoundText;
     private ImageView backButton;
@@ -670,22 +670,7 @@ public class ViewItemActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         itemAdapter.unselect();
                         loadInitialData();
-//                        Intent intent = new Intent(ViewItemActivity.this, ViewItemActivity.class);
-//                        intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
-//                        intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
-//                        intent.putExtra("location", getIntent().getStringExtra("location"));
-//                        intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
-//                        intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
-//                        intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
-//                        intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
-//                        intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
-//                        intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
-//                        intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
-//                        startActivity(intent);
-//                        finish();
                     }
-//                    Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
-//                    navigateToHome();
                 }
             }
 

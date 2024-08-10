@@ -214,7 +214,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
     }
 
-    private void showRequestSentDialog() {
+    void showRequestSentDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.request_popup, null);
