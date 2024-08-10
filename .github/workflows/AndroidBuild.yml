@@ -3,9 +3,9 @@ name: AndroidBuild
 
 on:
   push:
-    branches: [ fix-errors ]
+    branches: [ development, main ]
   pull_request:
-    branches: [ fix-errors ]
+    branches: [ development, main ]
 
 jobs:
   buildapp:
