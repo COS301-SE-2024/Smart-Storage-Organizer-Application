@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                 navigateToHome();
             } else {
                 Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-                Log.i(TAG, "User is not signed in.");
+//                Log.i(TAG, "User is not signed in.");
             }
         });
     }
@@ -327,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
                         String passwordInput = password.getText().toString().trim();
                         signIn(emailInput, passwordInput);
                     }
-                    Toast.makeText(LoginActivity.this, "check user verification successful: "+ result, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(LoginActivity.this, "check user verification successful: "+ result, Toast.LENGTH_LONG).show();
                 }
             }
 

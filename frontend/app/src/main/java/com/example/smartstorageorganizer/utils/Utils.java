@@ -3,7 +3,7 @@ package com.example.smartstorageorganizer.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.util.Log;
+//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,7 +76,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e("Category Request Method", "GET request failed", e);
+//                        Log.e("Category Request Method", "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -85,12 +85,12 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e("Category Response Results", responseData));
+//                        activity.runOnUiThread(() -> Log.e("Category Response Results", responseData));
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -107,20 +107,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "GET request failed: " + response);
+//                                Log.e(message, "GET request failed: " + response);
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed: " + response);
+//                            Log.e(message, "GET request failed: " + response);
                             callback.onFailure("Response code: " + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -145,7 +145,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -155,19 +155,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -197,7 +197,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed One", e);
+//                        Log.e(message, "GET request failed One", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -207,7 +207,7 @@ public class Utils
 
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
 
@@ -239,20 +239,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -280,7 +280,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -289,14 +289,14 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             String numPagesString = jsonObject.getString("totalpages");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -322,20 +322,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -365,7 +365,7 @@ public class Utils
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     future.completeExceptionally(e);
-                    Log.i("Error","Error in fetching data");
+//                    Log.i("Error","Error in fetching data");
 
                 }
 
@@ -391,19 +391,19 @@ public class Utils
                         }
                         catch (Exception e){
                             future.completeExceptionally(e);
-                            Log.i("Error: ","Error in parsing json");
+//                            Log.i("Error: ","Error in parsing json");
                         }
 
                     }
                     else{
 
-                        Log.i("Error","Error in fetching data");
+//                        Log.i("Error","Error in fetching data");
                         future.complete(false);
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
         return future;
@@ -422,7 +422,7 @@ public class Utils
     public static void deleteCategory(int id, String email, Activity activity, OperationCallback<Boolean> callback)
     {
         String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
-        Log.d("Delete Item Payload Cc", "JSON Payload: " + json);  // Log the JSON payload
+//        Log.d("Delete Item Payload Cc", "JSON Payload: " + json);  // Log the JSON payload
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -440,7 +440,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -450,19 +450,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -487,7 +487,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -497,19 +497,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -534,7 +534,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -544,19 +544,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -583,7 +583,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -592,13 +592,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -624,20 +624,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -663,7 +663,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -673,19 +673,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -711,7 +711,7 @@ public class Utils
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 activity.runOnUiThread(() -> {
-                    Log.e(message, "GET request failed", e);
+//                    Log.e(message, "GET request failed", e);
                     callback.onFailure(e.getMessage());
                 });
             }
@@ -720,13 +720,13 @@ public class Utils
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e(message, responseData));
+//                    activity.runOnUiThread(() -> Log.e(message, responseData));
 
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
                         String bodyString = jsonObject.getString("body");
                         JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                         for (int i = 0; i < bodyArray.length(); i++) {
                             JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -743,13 +743,13 @@ public class Utils
                         activity.runOnUiThread(() -> callback.onSuccess(colorCodeModelList));
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "JSON parsing error: " + e.getMessage());
+//                            Log.e(message, "JSON parsing error: " + e.getMessage());
                             callback.onFailure(e.getMessage());
                         });
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed:" + response);
+//                        Log.e(message, "GET request failed:" + response);
                         callback.onFailure("Response code:" + response.code());
                     });
                 }
@@ -777,7 +777,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -787,19 +787,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -825,7 +825,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -834,13 +834,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -866,20 +866,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -905,7 +905,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -914,13 +914,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -946,20 +946,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1004,7 +1004,7 @@ public class Utils
                     if (response.isSuccessful()) {
                         // response body converted to string
                         final String responseData = response.body().string();
-                        Log.i("1Response Data", responseData);
+//                        Log.i("1Response Data", responseData);
                         activity.runOnUiThread(() ->
                         {
                             try {
@@ -1034,7 +1034,7 @@ public class Utils
 
                             } catch (JSONException e) {
                                 activity.runOnUiThread(() -> {
-                                    Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                    Log.e(message, "JSON parsing error: " + e.getMessage());
                                     callback.onFailure(e.getMessage());
                                 });
                             }
@@ -1047,7 +1047,7 @@ public class Utils
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1097,7 +1097,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1107,12 +1107,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -1120,7 +1120,7 @@ public class Utils
             });
 
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1148,7 +1148,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1157,13 +1157,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1189,20 +1189,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1230,7 +1230,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1239,13 +1239,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1271,20 +1271,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1334,7 +1334,7 @@ public class Utils
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
         return future;
@@ -1362,7 +1362,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET Suggested request failed", e);
+//                        Log.e(message, "GET Suggested request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1371,13 +1371,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("response");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1396,8 +1396,8 @@ public class Utils
                                 suggestedCategory.setSubcategoryId(subcategoryObject.getString("id"));
                                 suggestedCategory.setSubcategoryName(subcategoryObject.getString("categoryname"));
 
-                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
-                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
+//                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", categoryString.toString()));
+//                                activity.runOnUiThread(() -> Log.e("View Suggested Response Results Body Array", subcategoryString.toString()));
 
                                 categoryModelList.add(suggestedCategory);
                             }
@@ -1405,20 +1405,20 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON Suggested parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET Suggested request failed:" + response);
+//                            Log.e(message, "GET Suggested request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1443,10 +1443,10 @@ public class Utils
     public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
         int itemIdInt = Integer.parseInt(itemId);
         String json = "{\"item_id\":\"" + itemIdInt + "\"}";
-        Log.d("Delete Item Payload", "JSON Payload: " + json);
+//        Log.d("Delete Item Payload", "JSON Payload: " + json);
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String API_URL = BuildConfig.DeleteItemEndPoint;
-        Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
+//        Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
         RequestBody body = RequestBody.create(json, JSON);
         TokenManager.getToken().thenAccept(result-> {
             Request request = new Request.Builder()
@@ -1462,7 +1462,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+//                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1472,19 +1472,19 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
+//                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+//                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
             });
         }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1519,7 +1519,7 @@ public class Utils
                         public void onFailure(Call call, IOException e) {
                             e.printStackTrace();
                             activity.runOnUiThread(() -> {
-                                Log.d("MyAmplifyApp", "POST request failed", e);
+//                                Log.d("MyAmplifyApp", "POST request failed", e);
                                 callback.onFailure(e.getMessage());
                             });
                         }
@@ -1528,7 +1528,7 @@ public class Utils
                         public void onResponse(Call call, Response response) throws IOException {
                             if (response.isSuccessful()) {
                                 final String responseData = response.body().string();
-                                activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+//                                activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
 
                                 try {
                                     JSONObject jsonObject = new JSONObject(responseData);
@@ -1538,20 +1538,20 @@ public class Utils
                                     String categoryString = roleObject.getString("categoryName");
 
                                     activity.runOnUiThread(() -> {
-                                        Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                                        Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+//                                        Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                                        Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
 
                                         callback.onSuccess(categoryString);
                                     });
                                 }catch (JSONException e){
                                     activity.runOnUiThread(() -> {
-                                        Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+//                                        Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
                                         callback.onFailure(e.getMessage());
                                     });
                                 }
                             } else {
                                 activity.runOnUiThread(() -> {
-                                    Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+//                                    Log.d("MyAmplifyApp", "POST request failed: " + response.code());
                                     callback.onFailure("Response code" + response.code());
                                 });
                             }
@@ -1560,7 +1560,7 @@ public class Utils
 
                 }
         ).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
 
@@ -1590,7 +1590,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1599,13 +1599,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1623,13 +1623,13 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(categoriesList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
@@ -1637,7 +1637,7 @@ public class Utils
             });
 
                 }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1666,7 +1666,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
+//                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1675,13 +1675,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
+//                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1699,13 +1699,13 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
+//                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
+//                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
@@ -1713,7 +1713,7 @@ public class Utils
             });
 
                 }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
@@ -1725,7 +1725,7 @@ public class Utils
                     AWSCognitoAuthSession cognitoAuthSession=(AWSCognitoAuthSession) result;
                     if (result.isSignedIn()) {
                         String idToken=cognitoAuthSession.getUserPoolTokensResult().getValue().getIdToken();
-                        Log.i("Hello",idToken);
+//                        Log.i("Hello",idToken);
                         future.complete(idToken);
                         future.completeExceptionally(new Exception("User not signed in"));
                     }
