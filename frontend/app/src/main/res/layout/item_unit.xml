@@ -74,5 +74,27 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/categories"
+            android:background="@android:color/white"
+            >
+
+            <ImageView
+                android:id="@+id/viewItemsButton"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/baseline_arrow_forward_24"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                android:background="@android:color/white"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
