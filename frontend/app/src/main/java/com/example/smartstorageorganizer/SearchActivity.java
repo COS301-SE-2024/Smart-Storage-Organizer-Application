@@ -29,6 +29,7 @@ import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SearchAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
+import com.example.smartstorageorganizer.model.TokenManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -181,87 +182,94 @@ public class SearchActivity extends AppCompatActivity {
         String API_URL = BuildConfig.SearchEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(results-> {
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                future.completeExceptionally(e);
-            }
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    future.completeExceptionally(e);
+                }
 
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String responseData = response.body().string();
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseData = response.body().string();
 //                    List<Ite> searchResults = parseSearchResults(responseData);
-                    Log.i("Search Result", responseData);
+                        Log.i("Search Result", responseData);
 //                    future.complete(searchResults);
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-                        JSONArray bodyArray = new JSONArray(bodyString);
-                        runOnUiThread(() -> Log.e("Search Results Body Array", bodyArray.toString()));
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+                            runOnUiThread(() -> Log.e("Search Results Body Array", bodyArray.toString()));
 
-                        for (int i = 0; i < bodyArray.length(); i++) {
-                            JSONObject itemObject = bodyArray.getJSONObject(i);
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject itemObject = bodyArray.getJSONObject(i);
 
-                            JSONObject itemObj = new JSONObject(itemObject.getString("_source"));
+                                JSONObject itemObj = new JSONObject(itemObject.getString("_source"));
 
 
-                            runOnUiThread(() -> {
-                                try {
-                                    Log.i("Search Results convert", itemObj.getString("item_id"));
-                                    Log.i("Search Results convert", itemObj.getString("item_name"));
-                                    Log.i("Search Results convert", itemObj.getString("description"));
-                                    Log.i("Search Results convert", itemObj.getString("colourcoding"));
-                                    Log.i("Search Results convert", itemObj.getString("barcode"));
-                                    Log.i("Search Results convert", itemObj.getString("qrcode"));
-                                    Log.i("Search Results convert", itemObj.getString("quanity"));
-                                    Log.i("Search Results convert", itemObj.getString("email"));
-                                    Log.i("Search Results convert", itemObj.getString("item_image"));
-                                    Log.i("Search Results convert", itemObj.getString("subcategoryid"));
-                                    Log.i("Search Results convert", itemObj.getString("parentcategoryid"));
+                                runOnUiThread(() -> {
+                                    try {
+                                        Log.i("Search Results convert", itemObj.getString("item_id"));
+                                        Log.i("Search Results convert", itemObj.getString("item_name"));
+                                        Log.i("Search Results convert", itemObj.getString("description"));
+                                        Log.i("Search Results convert", itemObj.getString("colourcoding"));
+                                        Log.i("Search Results convert", itemObj.getString("barcode"));
+                                        Log.i("Search Results convert", itemObj.getString("qrcode"));
+                                        Log.i("Search Results convert", itemObj.getString("quanity"));
+                                        Log.i("Search Results convert", itemObj.getString("email"));
+                                        Log.i("Search Results convert", itemObj.getString("item_image"));
+                                        Log.i("Search Results convert", itemObj.getString("subcategoryid"));
+                                        Log.i("Search Results convert", itemObj.getString("parentcategoryid"));
 //                                    Log.e("Search Results Body Array", itemObject.getString("_source") );
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
 
-                            ItemModel item = new ItemModel();
-                            item.setItemId(itemObj.getString("item_id"));
-                            item.setItemName(itemObj.getString("item_name"));
-                            item.setDescription(itemObj.getString("description"));
-                            item.setColourCoding(itemObj.getString("colourcoding"));
-                            item.setBarcode(itemObj.getString("barcode"));
-                            item.setQrcode(itemObj.getString("qrcode"));
-                            item.setQuantity(itemObj.getString("quanity"));
-                            item.setLocation(itemObj.getString("location"));
-                            item.setEmail(itemObj.getString("email"));
-                            item.setItemImage(itemObj.getString("item_image"));
-                            item.setParentCategoryId(itemObj.getString("parentcategoryid"));
-                            item.setSubCategoryId(itemObj.getString("subcategoryid"));
+                                ItemModel item = new ItemModel();
+                                item.setItemId(itemObj.getString("item_id"));
+                                item.setItemName(itemObj.getString("item_name"));
+                                item.setDescription(itemObj.getString("description"));
+                                item.setColourCoding(itemObj.getString("colourcoding"));
+                                item.setBarcode(itemObj.getString("barcode"));
+                                item.setQrcode(itemObj.getString("qrcode"));
+                                item.setQuantity(itemObj.getString("quanity"));
+                                item.setLocation(itemObj.getString("location"));
+                                item.setEmail(itemObj.getString("email"));
+                                item.setItemImage(itemObj.getString("item_image"));
+                                item.setParentCategoryId(itemObj.getString("parentcategoryid"));
+                                item.setSubCategoryId(itemObj.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
-                            searchResults.add(item);
+                                searchResults.add(item);
 //                            adapter.notifyDataSetChanged();
+                            }
+                            runOnUiThread(() -> {
+                                adapter.notifyDataSetChanged();
+                                sortBySpinner.setVisibility(View.VISIBLE);
+                            });
+
+                        }catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
-                        runOnUiThread(() -> {
-                            adapter.notifyDataSetChanged();
-                            sortBySpinner.setVisibility(View.VISIBLE);
-                        });
 
-                    }catch (JSONException e) {
-                        throw new RuntimeException(e);
+                    } else {
+                        future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                     }
-
-                } else {
-                    future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                 }
-            }
+            });
+
+                }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
 
         return future;

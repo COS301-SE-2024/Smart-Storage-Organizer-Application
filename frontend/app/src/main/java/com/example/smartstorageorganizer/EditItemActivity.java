@@ -31,6 +31,7 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
@@ -392,32 +393,40 @@ public class EditItemActivity extends AppCompatActivity {
         String API_URL = BuildConfig.EditItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(results-> {
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-                progressDialog.dismiss();
-            }
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        Log.i("Request Method", "POST request succeeded: " + responseData);
-                        showUpdateSuccessMessage();
-                    });
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
                     progressDialog.dismiss();
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            Log.i("Request Method", "POST request succeeded: " + responseData);
+                            showUpdateSuccessMessage();
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        progressDialog.dismiss();
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
