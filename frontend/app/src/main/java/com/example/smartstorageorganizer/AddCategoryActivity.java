@@ -45,31 +45,31 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class AddCategoryActivity extends AppCompatActivity {
-    private static final int GALLERY_CODE = 1;
-    private static final String EMAIL_KEY = "email";
-    private static final String IMAGE_TYPE = "image/*";
-    private static final String IMAGE_CACHE_NAME = "image.jpeg";
-    private static final String IMAGE_CONTENT_TYPE = "image/png";
-    private static final String IMAGE_PATH_FORMAT = "public/Category/%s.png";
-    private static final String STORAGE_URL_FORMAT = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Category/%s.png";
+    public static final int GALLERY_CODE = 1;
+    public static final String EMAIL_KEY = "email";
+    public static final String IMAGE_TYPE = "image/*";
+    public static final String IMAGE_CACHE_NAME = "image.jpeg";
+    public static final String IMAGE_CONTENT_TYPE = "image/png";
+    public static final String IMAGE_PATH_FORMAT = "public/Category/%s.png";
+    public static final String STORAGE_URL_FORMAT = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Category/%s.png";
 
-    private File imageFile;
-    private RadioGroup radioGroup;
-    private RadioButton selectedRadioButton;
-    private TextInputLayout subcategoryInput;
-    private TextInputLayout parentCategoryInput;
-    private ImageView parentCategoryImage;
-    private ConstraintLayout uploadButton;
-    private TextView spinnerHeaderText;
-    private String currentSelectedParent;
-    private LinearLayout addCategoryLayout;
-    private ConstraintLayout addButton;
-    private TextInputEditText parentCategoryEditText;
-    private TextInputEditText subCategoryEditText;
-    private LottieAnimationView loadingScreen;
-    private List<CategoryModel> categoryModelList = new ArrayList<>();
-    private Spinner categorySpinner;
-    private String currentEmail;
+    public File imageFile;
+    public RadioGroup radioGroup;
+    public RadioButton selectedRadioButton;
+    public TextInputLayout subcategoryInput;
+    public TextInputLayout parentCategoryInput;
+    public ImageView parentCategoryImage;
+    public ConstraintLayout uploadButton;
+    public TextView spinnerHeaderText;
+    public String currentSelectedParent;
+    public LinearLayout addCategoryLayout;
+    public ConstraintLayout addButton;
+    public TextInputEditText parentCategoryEditText;
+    public TextInputEditText subCategoryEditText;
+    public LottieAnimationView loadingScreen;
+    public List<CategoryModel> categoryModelList = new ArrayList<>();
+    public Spinner categorySpinner;
+    public String currentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         setupSpinnerListener();
     }
 
-    private void initViews() {
+    public void initViews() {
         categorySpinner = findViewById(R.id.mySpinner);
         radioGroup = findViewById(R.id.radioGroup);
         subcategoryInput = findViewById(R.id.subcategoryInput);
@@ -101,7 +101,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         loadingScreen = findViewById(R.id.loadingScreen);
     }
 
-    private void setupWindowInsets() {
+    public void setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -109,7 +109,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToHome() {
+    public void navigateToHome() {
         Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -144,7 +144,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         return future;
     }
 
-    private void fetchParentCategories() {
+    public void fetchParentCategories() {
         String email = getIntent().getStringExtra(EMAIL_KEY);
         Utils.fetchParentCategories(0, email, this, new OperationCallback<List<CategoryModel>>() {
             @Override
@@ -160,7 +160,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSpinnerAdapter() {
+    public void setupSpinnerAdapter() {
         List<String> parentCategories = new ArrayList<>();
         for (CategoryModel category : categoryModelList) {
             parentCategories.add(category.getCategoryName());
@@ -170,15 +170,15 @@ public class AddCategoryActivity extends AppCompatActivity {
         categorySpinner.setAdapter(adapter);
     }
 
-    private void setupUploadButton() {
+    public void setupUploadButton() {
         uploadButton.setOnClickListener(v -> openGallery());
     }
 
-    private void setupAddButton() {
+    public void setupAddButton() {
         addButton.setOnClickListener(v -> handleAddButtonClick());
     }
 
-    private void handleAddButtonClick() {
+    public void handleAddButtonClick() {
         loadingScreen.setVisibility(View.VISIBLE);
         addCategoryLayout.setVisibility(View.GONE);
         addButton.setVisibility(View.GONE);
@@ -192,26 +192,26 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isParentCategorySelected() {
+    public boolean isParentCategorySelected() {
         return selectedRadioButton.getText().toString().equals("Parent Category");
     }
 
-    private boolean isSubCategorySelected() {
+    public boolean isSubCategorySelected() {
         return selectedRadioButton.getText().toString().equals("Sub Category");
     }
 
-    private void handleParentCategory() {
+    public void handleParentCategory() {
         String parentCategoryText = parentCategoryEditText.getText().toString().trim();
         if (validateParentForm(parentCategoryText)) {
             uploadParentCategoryImage(imageFile);
         }
     }
 
-    private void setupRadioGroup() {
+    public void setupRadioGroup() {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> handleRadioGroupSelection(checkedId));
     }
 
-    private void handleRadioGroupSelection(int checkedId) {
+    public void handleRadioGroupSelection(int checkedId) {
         selectedRadioButton = findViewById(checkedId);
         if (isSubCategorySelected()) {
             showSubCategoryFields();
@@ -220,7 +220,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private void showSubCategoryFields() {
+    public void showSubCategoryFields() {
         categorySpinner.setVisibility(View.VISIBLE);
         spinnerHeaderText.setVisibility(View.VISIBLE);
         subcategoryInput.setVisibility(View.VISIBLE);
@@ -229,7 +229,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         uploadButton.setVisibility(View.GONE);
     }
 
-    private void showParentCategoryFields() {
+    public void showParentCategoryFields() {
         categorySpinner.setVisibility(View.GONE);
         spinnerHeaderText.setVisibility(View.GONE);
         subcategoryInput.setVisibility(View.GONE);
@@ -238,7 +238,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         uploadButton.setVisibility(View.VISIBLE);
     }
 
-    private void setupSpinnerListener() {
+    public void setupSpinnerListener() {
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             private boolean isFirstTime = true;
 
@@ -258,7 +258,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void openGallery() {
+    public void openGallery() {
         Intent galleryIntent = new Intent();
         galleryIntent.setType(IMAGE_TYPE);
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -274,7 +274,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private void handleImageSelection(Intent data) {
+    public void handleImageSelection(Intent data) {
         if (data.getData() != null) {
             handleSingleImage(data.getData());
         } else if (data.getClipData() != null) {
@@ -282,12 +282,12 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private void handleSingleImage(Uri uri) {
+    public void handleSingleImage(Uri uri) {
         parentCategoryImage.setImageURI(uri);
         saveImageToFile(((BitmapDrawable) parentCategoryImage.getDrawable()).getBitmap());
     }
 
-    private void saveImageToFile(Bitmap bitmap) {
+    public void saveImageToFile(Bitmap bitmap) {
         imageFile = new File(getCacheDir(), IMAGE_CACHE_NAME);
         try (FileOutputStream fos = new FileOutputStream(imageFile)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -296,7 +296,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         }
     }
 
-    private CategoryModel findCategoryByName(String categoryName) {
+    public CategoryModel findCategoryByName(String categoryName) {
         for (CategoryModel category : categoryModelList) {
             if (category.getCategoryName().equalsIgnoreCase(categoryName)) {
                 return category;
@@ -314,7 +314,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean validateSubCategoryForm() {
+    public boolean validateSubCategoryForm() {
         String subCategoryText = subCategoryEditText.getText().toString().trim();
         if (TextUtils.isEmpty(subCategoryText)) {
             subCategoryEditText.setError("Sub Category is required.");
@@ -324,7 +324,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         return true;
     }
 
-    private void uploadParentCategoryImage(File parentCategoryImage) {
+    public void uploadParentCategoryImage(File parentCategoryImage) {
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
                 .contentType(IMAGE_CONTENT_TYPE)
                 .build();
@@ -340,12 +340,12 @@ public class AddCategoryActivity extends AppCompatActivity {
         );
     }
 
-    private void handleImageUploadSuccess(String key) {
+    public void handleImageUploadSuccess(String key) {
         String url = String.format(STORAGE_URL_FORMAT, key);
         addNewCategory(0, parentCategoryEditText.getText().toString(), url);
     }
 
-    private void addNewCategory(int parentCategory, String categoryName, String url) {
+    public void addNewCategory(int parentCategory, String categoryName, String url) {
         Utils.addCategory(parentCategory, categoryName, currentEmail, url, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
@@ -365,7 +365,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void showToast(String message) {
+    public void showToast(String message) {
         Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

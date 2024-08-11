@@ -27,12 +27,12 @@ import java.util.concurrent.CompletableFuture;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AddColorCodeActivity extends AppCompatActivity {
-    private View mColorPreview;
+    public View mColorPreview;
 
-    private int mDefaultColor;
-    private TextInputEditText titleEditText;
-    private TextInputEditText descriptionEditText;
-    private String currentEmail;
+    public int mDefaultColor;
+    public TextInputEditText titleEditText;
+    public TextInputEditText descriptionEditText;
+    public String currentEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class AddColorCodeActivity extends AppCompatActivity {
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
-    private void addNewColorCode(String colorCode, String title, String description) {
+    public void addNewColorCode(String colorCode, String title, String description) {
         Utils.addColourGroup(colorCode, title, description, currentEmail, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
@@ -150,11 +150,11 @@ public class AddColorCodeActivity extends AppCompatActivity {
         });
     }
 
-    private void showToast(String message) {
+    public void showToast(String message) {
         Toast.makeText(AddColorCodeActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void navigateToHome() {
+    public void navigateToHome() {
         Intent intent = new Intent(AddColorCodeActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();

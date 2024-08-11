@@ -20,8 +20,7 @@ import org.robolectric.shadows.ShadowDialog;
 public class ItemInfoActivityTest {
 
     ItemInfoActivity Page;
-    @Mock
-    HomeActivity MockedPage = mock(HomeActivity.class);
+
 
     @Before
     public void setup() {
