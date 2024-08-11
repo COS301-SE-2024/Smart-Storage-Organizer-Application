@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -52,6 +55,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.categories.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.viewItemsButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
         if (isExpanded && !unit.hasCategories()) {
@@ -64,6 +68,12 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             unit.setExpanded(!unit.isExpanded());
             notifyItemChanged(position);
         });
+
+        holder.viewItemsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ViewUnitItemsActivity.class);
+            intent.putExtra("unit_name", unitList.get(holder.getAdapterPosition()).getUnitName());
+            context.startActivity(intent);
+        });
     }
 
 
@@ -74,7 +84,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
     public static class UnitViewHolder extends RecyclerView.ViewHolder {
         TextView unitName, capacity, capacityUsed, categories;
-        ImageView arrow;
+        ImageView arrow, viewItemsButton;
         CardView cardViewDescription;
 
         public UnitViewHolder(@NonNull View itemView) {
@@ -84,6 +94,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             capacityUsed = itemView.findViewById(R.id.capacityUsed);
             categories = itemView.findViewById(R.id.categories);
             arrow = itemView.findViewById(R.id.arrow);
+            viewItemsButton = itemView.findViewById(R.id.viewItemsButton);
             cardViewDescription = itemView.findViewById(R.id.cardViewDescription);
         }
     }

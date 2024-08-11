@@ -34,6 +34,7 @@ import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -199,7 +200,8 @@ public class ViewItemActivity extends AppCompatActivity {
                     }
                 } else {
                     loadItemsByCategory(Integer.parseInt(categoryID));
-                    fetchAndSetupCategories();            }
+                    fetchAndSetupCategories();
+                }
             }
         }
         else {
@@ -289,7 +291,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -634,29 +636,37 @@ public class ViewItemActivity extends AppCompatActivity {
         String API_URL = BuildConfig.AddItemToColourEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(results-> {
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
-                Log.e("AssignColour", "Request failed: " + e.getMessage());
-            }
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    progressDialog.dismiss();
-                    runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Color Code Assigned Successfully.", Toast.LENGTH_SHORT).show());
-                } else {
-                    progressDialog.dismiss();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                    Log.e("AssignColour", "Request failed: " + e.getMessage());
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        progressDialog.dismiss();
+                        runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Color Code Assigned Successfully.", Toast.LENGTH_SHORT).show());
+                    } else {
+                        progressDialog.dismiss();
+                        runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 

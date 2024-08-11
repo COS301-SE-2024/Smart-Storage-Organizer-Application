@@ -100,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        getUserRole("ezemakau@gmail.com", "");
+        getUserRole(getIntent().getStringExtra("email"), "");
 
 //        FirebaseApp.initializeApp(this);
 //
@@ -260,7 +260,7 @@ public class HomeActivity extends AppCompatActivity {
         UserUtils.getUserRole(username, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if (Objects.equals(result, "Manager") || Objects.equals(result, "Admin")) {
+                if (Objects.equals(result, "Manager")) {
                     showAdminMenuItems(navigationView.getMenu());
                 }
                 else {

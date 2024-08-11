@@ -133,10 +133,12 @@ public class AddCategoryActivity extends AppCompatActivity {
 
 
                     }
-                    Log.i("progress","User attributes fetched successfully");
+//                    Log.i("progress","User attributes fetched successfully");
                     future.complete(true);
                 },
-                error -> {Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false); }
+                error -> {
+//                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);  future.complete(false);
+                }
 
         );
         return future;

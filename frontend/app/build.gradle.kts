@@ -96,6 +96,8 @@ android {
         buildConfigField("String", "SearchEndPoint", "\"${localProperties["SearchEndPoint"]}\"");
         buildConfigField("String", "GetAllUnits", "\"${localProperties["GetAllUnits"]}\"");
         buildConfigField("String", "GetCategoriesOfUnits", "\"${localProperties["GetCategoriesOfUnits"]}\"");
+        buildConfigField("String", "GetItemsUnderUnit", "\"${localProperties["GetItemsUnderUnit"]}\"");
+
 
 
 
