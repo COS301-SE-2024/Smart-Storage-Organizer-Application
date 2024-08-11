@@ -46,7 +46,11 @@ import java.util.Objects;
 
 public class ItemDetailsActivity extends AppCompatActivity {
     float v = 0;
-    private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
+    TextView itemName;
+    TextView itemDescription;
+    TextView itemUnit;
+    private TextView itemCategory;
+    TextView itemColorCode;
     private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
     private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
     private ImageView itemImage, qrCode;
