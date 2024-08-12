@@ -67,16 +67,20 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 |<img src="./Docs/Team-Biographies/Victordp.jpg" width="150"> <br><b>Victor Zhou</b><br><br> | <li>Designer <li>DevOps<li>Service Engineer |[![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/Xerof47Vel/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/victor-zhou-343004302/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Victor_Zhou.md) |
 |<img src="./Docs/Team-Biographies/Ezedp.jpg" width="150">  <br><b>Ezekiel Makau</b><br>| <li>UI Engineer<li>Integration Engineer<li>Testing Engineer| [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/Segadimane-Makau/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/ezekiel-makau-397aa92b7/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Ezekiel_Makau.md) |
 | <img src="./Docs/Team-Biographies/Tshegodp.jpg" width="150"> <br> <b>Tshegofatso Mapheto</b><br>| <li>UI Engineer <li> Data Engineer<li>DevOps| [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/TshegofatsoMapheto/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/tshegofatso-mapheto-167678189/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Tshegofatso_Mapheto.md) |
-|<img src="./Docs/Team-Biographies/Mosadp.jpg" width="150"> <br><b>Mosa Letswalo</b><br> | <li>Architecture<li>UI Engineer<li>UI Engineer                 | [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/tomosaHub/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/mosa-letswalo/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Mosa_Letswalo.md) |
+|<img src="./Docs/Team-Biographies/Mosadp.jpg" width="150"> <br><b>Mosa Letswalo</b><br> | <li>Architecture<li>UI Engineer<li>Integration Engineer                 | [![GitHub](https://img.shields.io/badge/GitHub-Profile-green?style=flat-square&logo=github)](https://github.com/tomosaHub/) <br> [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat-square&logo=linkedin)](http://www.linkedin.com/in/mosa-letswalo/) <br> [![About Me](https://img.shields.io/badge/About-Me-orange?style=flat-square)](./Docs/Team-Biographies/Mosa_Letswalo.md) |
 
 
 ## Documentation
 - [Software System Requirements version 1.0](https://drive.google.com/file/d/1uwDNIdp_jhJlOSvbrRa6xovKHfMinYG2/view?usp=sharing/)
 - [Software System Requirements version 2.0](https://drive.google.com/file/d/11MeE3BuLXW-xYbIvGt1glTcDh0X2ZSJd/view?usp=sharing/)
+- [Software System Requirements version 3.0](https://www.overleaf.com/read/cqzjccyhtwpd#096a0b/).
 - [Coding Standards](https://drive.google.com/file/d/1EAAzcRx2sW9YHFUU5M2FNNSPxxFSiY5M/view?usp=sharing/)
 - [User Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/)
+- [User Manual 2.0](https://drive.google.com/file/d/1R63Bir_I_1ecYIsaaXmQzgY_suTjRW-w/view?usp=sharing/)
+- [Technical Installation Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/).
 
 ## Video Presentation
  - [Video Demo version 1.0](https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link/)
- - [Video Demo version 2.0](https://drive.google.com/file/d/1AEc3MrZKrq1AfwJUcGkbMed6eWlABkgF/view?usp=sharing)
+ - [Video Demo version 2.0](https://drive.google.com/file/d/1AEc3MrZKrq1AfwJUcGkbMed6eWlABkgF/view?usp=sharing/)
+ - [Video Demo version 2.0](https://drive.google.com/file/d/1wk54G1FpbJ-mzMT-4-3QBDK0vSY5aiuw/view?usp=sharing/)
 
