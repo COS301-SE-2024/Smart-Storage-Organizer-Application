@@ -1,11 +1,11 @@
 
-name: Unit_tests
+name: ALL_TESTS
 
 on:
     push:
-      branches: [development, main ]
+      branches: [development, main,feat/tests_revised ]
     pull_request:
-      branches: [development, main ]
+      branches: [development, main, feat/tests_revised ]
 
 jobs:
   run_tests:

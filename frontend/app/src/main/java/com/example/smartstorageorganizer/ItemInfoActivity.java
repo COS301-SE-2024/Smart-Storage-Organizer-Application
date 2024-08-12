@@ -29,16 +29,16 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ItemInfoActivity extends AppCompatActivity {
-    private TextView itemName;
-    private TextView itemDescription;
-    private TextView itemLocation;
-    private TextView itemQuantity;
-    private AppCompatButton editItemButton;
-    private static final String REQ = "Request Method";
-    private Button increaseQuantityButton, decreaseQuantityButton;
-    private int currentQuantity;
-    private int itemId;
-    private ImageView backButton;
+    public TextView itemName;
+    public TextView itemDescription;
+    public TextView itemLocation;
+    public TextView itemQuantity;
+    public AppCompatButton editItemButton;
+    public static final String REQ = "Request Method";
+    public Button increaseQuantityButton, decreaseQuantityButton;
+    public int currentQuantity;
+    public int itemId;
+    public ImageView backButton;
 
 
     @Override
@@ -55,7 +55,17 @@ public class ItemInfoActivity extends AppCompatActivity {
 
 
         itemName.setText(getIntent().getStringExtra("item_name"));
-        itemId = Integer.parseInt(getIntent().getStringExtra("item_id"));
+        String id="0";
+        if(getIntent().getStringExtra("item_id")==null)
+        {
+            id="0";
+        }
+        else
+        {
+            id=getIntent().getStringExtra("item_id");
+        }
+        assert id != null;
+        itemId = Integer.parseInt(id);
         itemDescription.setText(getIntent().getStringExtra("item_description"));
         itemLocation.setText(getIntent().getStringExtra("location"));
         //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
@@ -119,7 +129,7 @@ public class ItemInfoActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, int itemId) {
+    public void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, int itemId) {
         String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quantity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -156,7 +166,7 @@ public class ItemInfoActivity extends AppCompatActivity {
     }
 
 
-//    private void changeQuantity(int id, String sign) {
+//    public void changeQuantity(int id, String sign) {
 //        OkHttpClient client = new OkHttpClient();
 //        String API_URL = BuildConfig.ChangeQuantityEndPoint;
 //

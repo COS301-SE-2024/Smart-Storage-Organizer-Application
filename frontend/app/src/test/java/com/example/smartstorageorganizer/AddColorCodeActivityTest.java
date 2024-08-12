@@ -103,6 +103,19 @@ public class AddColorCodeActivityTest {
         assertEquals("#FFFFFF", activity.convertIntToHexColor(0xFFFFFF));
         assertEquals("#000000", activity.convertIntToHexColor(0x000000));
     }
+    @Test
+    public void testShowToast() {
+
+        String testMessage = "Test Toast Message";
+
+
+        activity.showToast(testMessage);
+
+
+        assertEquals(testMessage, ShadowToast.getTextOfLatestToast());
+    }
+
+
 
 
 //    @Test

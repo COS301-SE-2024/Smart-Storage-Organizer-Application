@@ -21,16 +21,16 @@ import android.Manifest;
 
 public class ManualActivity extends AppCompatActivity {
 
-    private ImageView pdfImageView;
-    private PdfRenderer pdfRenderer;
-    private PdfRenderer.Page currentPage;
-    private ParcelFileDescriptor parcelFileDescriptor;
-    private int currentPageIndex = 0;
-    private Button prevButton;
-    private Button nextButton;
-    private Button downloadButton;
-    private static final int REQUEST_WRITE_STORAGE = 112;
-    private static final String USER_MANUAL = "user_manual.pdf";
+    public ImageView pdfImageView;
+    public PdfRenderer pdfRenderer;
+    public PdfRenderer.Page currentPage;
+    public ParcelFileDescriptor parcelFileDescriptor;
+    public int currentPageIndex = 0;
+    public Button prevButton;
+    public Button nextButton;
+    public Button downloadButton;
+    public static final int REQUEST_WRITE_STORAGE = 112;
+    public static final String USER_MANUAL = "user_manual.pdf";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,27 +50,27 @@ public class ManualActivity extends AppCompatActivity {
         }
     }
 
-    private void initViews() {
+    public void initViews() {
         pdfImageView = findViewById(R.id.pdfImageView);
         prevButton = findViewById(R.id.prevButton);
         nextButton = findViewById(R.id.nextButton);
         downloadButton = findViewById(R.id.downloadButton);
     }
 
-    private void setupDownloadButton() {
+    public void setupDownloadButton() {
         downloadButton.setOnClickListener(v -> checkPermissionsAndDownload());
     }
 
-    private void setupNextButton() {
+    public void setupNextButton() {
         nextButton.setOnClickListener(v -> showPage(currentPageIndex + 1));
     }
-    private void setupPrevButton() {
+    public void setupPrevButton() {
         prevButton.setOnClickListener(v -> showPage(currentPageIndex - 1));
     }
 
 
 
-    private void openRenderer() throws IOException {
+    public void openRenderer() throws IOException {
         // Copy the PDF file from assets to a file in the app's cache directory
         File file = new File(getCacheDir(), USER_MANUAL);
         try (InputStream asset = getAssets().open(USER_MANUAL);
@@ -86,7 +86,7 @@ public class ManualActivity extends AppCompatActivity {
         pdfRenderer = new PdfRenderer(parcelFileDescriptor);
     }
 
-    private void showPage(int index) {
+    public void showPage(int index) {
         if (pdfRenderer.getPageCount() <= index || index < 0) return;
 
         // Close the current page before opening another one.
@@ -110,7 +110,7 @@ public class ManualActivity extends AppCompatActivity {
         nextButton.setEnabled(currentPageIndex < pdfRenderer.getPageCount() - 1);
     }
 
-    private void checkPermissionsAndDownload() {
+    public void checkPermissionsAndDownload() {
         // Check if the write permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -138,7 +138,7 @@ public class ManualActivity extends AppCompatActivity {
         }
     }
 
-    private void downloadPdf() {
+    public void downloadPdf() {
         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File destinationFile = new File(downloadDir, USER_MANUAL);
 

@@ -44,16 +44,16 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "AmplifyQuickstart";
-    private TextView signUpLink;
-    private TextView loginButtonText;
-    private ImageView loginButtonIcon;
+    public static final String TAG = "AmplifyQuickstart";
+    public TextView signUpLink;
+    public TextView loginButtonText;
+    public ImageView loginButtonIcon;
     TextInputEditText email;
     TextInputEditText password;
-    private LottieAnimationView buttonLoader;
-    private TextView resetPasswordLink;
+    public LottieAnimationView buttonLoader;
+    public TextView resetPasswordLink;
     RelativeLayout registerButton;
-    private static final String API_REQUEST = "API Request";
+    public static final String API_REQUEST = "API Request";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         setOnClickListeners();
     }
 
-    private void initializeUI() {
+    public void initializeUI() {
         signUpLink = findViewById(R.id.signUpLink);
         registerButton = findViewById(R.id.buttonLogin);
         email = findViewById(R.id.inputLoginEmail);
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         resetPasswordLink = findViewById(R.id.resetPasswordLink);
     }
 
-    private void checkIfSignedIn() {
+    public void checkIfSignedIn() {
         isSignedIn().thenAccept(isSignedIn -> {
             if (Boolean.TRUE.equals(isSignedIn)) {
                 navigateToHome();
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void configureInsets() {
+    public void configureInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -97,13 +97,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void setOnClickListeners() {
+    public void setOnClickListeners() {
         registerButton.setOnClickListener(v -> attemptLogin());
         signUpLink.setOnClickListener(v -> navigateToRegistration());
         resetPasswordLink.setOnClickListener(v -> navigateToResetPassword());
     }
 
-    private CompletableFuture<Boolean> isSignedIn() {
+    public CompletableFuture<Boolean> isSignedIn() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.fetchAuthSession(
                 result -> future.complete(result.isSignedIn()),
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         return future;
     }
 
-    private void attemptLogin() {
+    public void attemptLogin() {
         String emailInput = email.getText().toString().trim();
         String passwordInput = password.getText().toString().trim();
         if (validateForm(emailInput, passwordInput)) {
@@ -125,14 +125,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showLoading() {
+    public void showLoading() {
         buttonLoader.setVisibility(View.VISIBLE);
         buttonLoader.playAnimation();
         loginButtonText.setVisibility(View.GONE);
         loginButtonIcon.setVisibility(View.GONE);
     }
 
-    private void hideLoading() {
+    public void hideLoading() {
         buttonLoader.setVisibility(View.GONE);
         buttonLoader.cancelAnimation();
         loginButtonText.setVisibility(View.VISIBLE);
@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         return future;
     }
 
-    private void fetchUserSession(String email) {
+    public void fetchUserSession(String email) {
         Amplify.Auth.fetchAuthSession(
                 session -> {
                     AWSCognitoAuthSession cognitoSession = (AWSCognitoAuthSession) session;
@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void fetchUserAttributes() {
+    public void fetchUserAttributes() {
         Amplify.Auth.fetchUserAttributes(
                 attributes -> {
                     for (AuthUserAttribute attribute : attributes) {
@@ -206,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void makeApiRequest(String token) {
+    public void makeApiRequest(String token) {
         String url = "https://0ul0kovff1.execute-api.eu-north-1.amazonaws.com/depolyment/ss-result/ViewProfile";
         OkHttpClient client = new OkHttpClient();
 
@@ -232,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void logResponseError(Response response) {
+    public void logResponseError(Response response) {
         try {
             Log.e(API_REQUEST, "Failure: " + response.code() + " " + response.message() + " " + response.body().string());
         } catch (IOException e) {
@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void logResponseSuccess(Response response) {
+    public void logResponseSuccess(Response response) {
         try {
             Log.i(API_REQUEST, "Success: " + response.body().string());
         } catch (IOException e) {
@@ -248,14 +248,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleSignInFailure(String message) {
+    public void handleSignInFailure(String message) {
         runOnUiThread(() -> {
             hideLoading();
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         });
     }
 
-    private void handleSignInError(Throwable error, String email, CompletableFuture<Boolean> future) {
+    public void handleSignInError(Throwable error, String email, CompletableFuture<Boolean> future) {
         Log.e(TAG, error.toString());
         String errorMessage = error.toString().toLowerCase(Locale.ROOT);
 
@@ -267,7 +267,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleUserNotConfirmed(String email, CompletableFuture<Boolean> future) {
+    public void handleUserNotConfirmed(String email, CompletableFuture<Boolean> future) {
         runOnUiThread(() -> {
             Toast.makeText(this, "User is not verified. Please verify your account.", Toast.LENGTH_LONG).show();
             resendSignUpCode(email);
@@ -276,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void resendSignUpCode(String email) {
+    public void resendSignUpCode(String email) {
         Amplify.Auth.resendSignUpCode(
                 email,
                 result -> Log.i(TAG, "ResendSignUp succeeded:"),
@@ -284,36 +284,36 @@ public class LoginActivity extends AppCompatActivity {
         );
     }
 
-    private void navigateToHome() {
+    public void navigateToHome() {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void navigateToHome(String email) {
+    public void navigateToHome(String email) {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
     }
 
-    private void navigateToRegistration() {
+    public void navigateToRegistration() {
         Intent intent = new Intent(LoginActivity.this, SearchOrganizationActivity.class);
         startActivity(intent);
     }
 
-    private void navigateToResetPassword() {
+    public void navigateToResetPassword() {
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 
-    private void navigateToEmailVerification(String email) {
+    public void navigateToEmailVerification(String email) {
         Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
     }
 
-    private void checkUserVerificationStatus(String username, String authorization) {
+    public void checkUserVerificationStatus(String username, String authorization) {
         UserUtils.checkUserVerificationStatus(username, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -339,7 +339,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void showUnverifiedDialog() {
+    public void showUnverifiedDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.unverified_popup, null);

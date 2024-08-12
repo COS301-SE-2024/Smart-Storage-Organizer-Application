@@ -23,6 +23,9 @@ import static org.robolectric.Shadows.shadowOf;
 import static org.robolectric.shadows.ShadowLooper.runUiThreadTasksIncludingDelayedTasks;
 
 import android.os.Build;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.P)
@@ -128,6 +131,14 @@ public class LoginActivityTest {
 //
 //        assertEquals(testError, loginActivity.errorString);
 //        assertEquals(testResult, loginActivity.resultString);
+    }
+    @Test
+    public void testUiElements() {
+        TextView signUpLink = loginActivity.findViewById(R.id.signUpLink);
+        RelativeLayout registerButton = loginActivity.findViewById(R.id.buttonLogin);
+
+        assertNotNull(signUpLink);
+        assertNotNull(registerButton);
     }
 
 //    @Test
