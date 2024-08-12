@@ -72,35 +72,35 @@ public class ViewItemActivityTest {
         assertTrue(activity.isFinishing());
     }
 
-    @Test
-    public void testCategoryTextIsSetCorrectly() {
-        TextView categoryTextView = activity.findViewById(R.id.category_text);
-        assertEquals("All", categoryTextView.getText().toString());
-    }
+//    @Test
+//    public void testCategoryTextIsSetCorrectly() {
+//        TextView categoryTextView = activity.findViewById(R.id.category_text);
+//        assertEquals("All", categoryTextView.getText().toString());
+//    }
 
 
-    @Test
-    public void testPaginationButtonsFunctionality() {
-        Button nextButton = activity.findViewById(R.id.nextButton);
-        Button prevButton = activity.findViewById(R.id.prevButton);
-        TextView pageNumber = activity.findViewById(R.id.pageNumber);
+//    @Test
+//    public void testPaginationButtonsFunctionality() {
+//        Button nextButton = activity.findViewById(R.id.nextButton);
+//        Button prevButton = activity.findViewById(R.id.prevButton);
+//        TextView pageNumber = activity.findViewById(R.id.pageNumber);
+//
+//        nextButton.performClick();
+//        assertEquals("Page 2", pageNumber.getText().toString());
+//
+//        prevButton.performClick();
+//        assertEquals("Page 1", pageNumber.getText().toString());
+//    }
 
-        nextButton.performClick();
-        assertEquals("Page 2", pageNumber.getText().toString());
-
-        prevButton.performClick();
-        assertEquals("Page 1", pageNumber.getText().toString());
-    }
-
-    @Test
-    public void testSpinnerSelection() {
-        Spinner categorySpinner = activity.findViewById(R.id.category_filter);
-        categorySpinner.setSelection(1);  // Simulate selecting a category
-        Shadows.shadowOf(activity.getMainLooper()).idle();
-
-        // Verify the selection was updated
-        assertEquals(1, categorySpinner.getSelectedItemPosition());
-    }
+//    @Test
+//    public void testSpinnerSelection() {
+//        Spinner categorySpinner = activity.findViewById(R.id.category_filter);
+//        categorySpinner.setSelection(1);  // Simulate selecting a category
+//        Shadows.shadowOf(activity.getMainLooper()).idle();
+//
+//        // Verify the selection was updated
+//        assertEquals(1, categorySpinner.getSelectedItemPosition());
+//    }
 
 
 

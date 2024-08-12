@@ -52,24 +52,24 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UncategorizedItemsActivity extends AppCompatActivity {
-    private static final int PAGE_SIZE = 10;
-    private int currentPage = 1;
-    private TextView notFoundText;
-    private ImageView backButton;
-    private Spinner sortBySpinner;
-    private List<ItemModel> itemModelList;
-    private RecentAdapter recentAdapter;
-    private LottieAnimationView loadingScreen;
-    private boolean firstTime = true;
-    private RecyclerView itemRecyclerView;
-    private Button prevButton;
-    private Button nextButton;
-    private TextView pageNumber;
-    private String currentSelectedOption;
-    private ShimmerFrameLayout shimmerFrameLayout;
-    private RecyclerView recyclerView;
-    private NestedScrollView itemsLayout;
-    private LinearLayout bottomNavigationView;
+    public static final int PAGE_SIZE = 10;
+    public int currentPage = 1;
+    public TextView notFoundText;
+    public ImageView backButton;
+    public Spinner sortBySpinner;
+    public List<ItemModel> itemModelList;
+    public RecentAdapter recentAdapter;
+    public LottieAnimationView loadingScreen;
+    public boolean firstTime = true;
+    public RecyclerView itemRecyclerView;
+    public Button prevButton;
+    public Button nextButton;
+    public TextView pageNumber;
+    public String currentSelectedOption;
+    public ShimmerFrameLayout shimmerFrameLayout;
+    public RecyclerView recyclerView;
+    public NestedScrollView itemsLayout;
+    public LinearLayout bottomNavigationView;
     List<SuggestedCategoryModel> suggestedCategoriesList;
     ProgressDialog progressDialog;
 
@@ -101,7 +101,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         recyclerView.setAdapter(skeletonAdapter);
     }
 
-    private void initializeViews() {
+    public void initializeViews() {
         sortBySpinner = findViewById(R.id.sort_by_filter);
         itemRecyclerView = findViewById(R.id.view_all_rec);
         loadingScreen = findViewById(R.id.loadingScreen);
@@ -123,11 +123,11 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
 
     }
 
-    private void setupBackButton() {
+    public void setupBackButton() {
         backButton.setOnClickListener(v -> finish());
     }
 
-    private void setupPaginationButtons() {
+    public void setupPaginationButtons() {
         prevButton.setOnClickListener(v -> {
             if (currentPage > 1) {
                 itemModelList.clear();
@@ -149,12 +149,12 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    private void updatePaginationButtons(int resultSize) {
+    public void updatePaginationButtons(int resultSize) {
         prevButton.setEnabled(currentPage > 1);
         nextButton.setEnabled(resultSize == PAGE_SIZE);
     }
 
-    private void setupRecyclerView() {
+    public void setupRecyclerView() {
         itemRecyclerView.setHasFixedSize(true);
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemModelList = new ArrayList<>();
@@ -163,11 +163,11 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemRecyclerView.setAdapter(recentAdapter);
     }
 
-    private void loadInitialData() {
+    public void loadInitialData() {
         loadUncategorizedItems();
     }
 
-    private void loadUncategorizedItems() {
+    public void loadUncategorizedItems() {
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         itemsLayout.setVisibility(View.GONE);
@@ -199,7 +199,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSortByListener() {
+    public void setupSortByListener() {
         String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
         currentSelectedOption = "Sort by";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(UncategorizedItemsActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
@@ -226,7 +226,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSort(String sortType) {
+    public void setupSort(String sortType) {
         switch (sortType) {
             case "A to Z":
                 sortItemModelsAscending(itemModelList);
@@ -297,7 +297,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
 
     }
 
-    private void setupBottomNavigationBar() {
+    public void setupBottomNavigationBar() {
         LinearLayout deleteButton = findViewById(R.id.delete);
         LinearLayout colorButton = findViewById(R.id.color);
         LinearLayout shareButton = findViewById(R.id.share);
@@ -331,7 +331,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    private ItemModel findItemById(String itemId) {
+    public ItemModel findItemById(String itemId) {
         for (ItemModel item : itemModelList) {
             if (item.getItemId().equalsIgnoreCase(itemId)) {
                 return item;
@@ -340,7 +340,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         return null;
     }
 
-    private void showUnverifiedDialog() {
+    public void showUnverifiedDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.suggested_categories_popup, null);
@@ -414,7 +414,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         });
     }
 
-    private void assignColorToItem(String itemId, ColorCodeModel colorCode) {
+    public void assignColorToItem(String itemId, ColorCodeModel colorCode) {
         // Your logic to assign the colorCode to the item with the given itemId
         // This might involve updating a database, sending a request to a server, etc.
         Log.d("AssignColor", "Item ID: " + itemId + " assigned to color: " + colorCode.getName());

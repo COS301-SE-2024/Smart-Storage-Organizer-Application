@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.Shadows;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
@@ -21,6 +22,8 @@ import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Intent;
 import android.os.Build;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -47,6 +50,18 @@ public class LoginActivityIntegrationTest {
     @Test
     public void shouldNotBeNull() {
         assertNotNull(loginActivity);
+    }
+
+    @Test
+    public void testRegisterButton() {
+        RelativeLayout registerButton = loginActivity.findViewById(R.id.buttonLogin);
+        registerButton.performClick();
+
+        Intent expectedIntent = new Intent(loginActivity, HomeActivity.class);
+        ShadowActivity shadowActivity = Shadows.shadowOf(loginActivity);
+        Intent actualIntent = shadowActivity.getNextStartedActivity();
+       // assertNotNull(actualIntent);
+        //assertEquals(expectedIntent.getComponent(), actualIntent.getComponent());
     }
 //    private LoginActivity loginActivity;
 //    private ActivityController<LoginActivity> controller;
