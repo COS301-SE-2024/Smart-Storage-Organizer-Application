@@ -77,7 +77,7 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 - [Coding Standards](https://drive.google.com/file/d/1EAAzcRx2sW9YHFUU5M2FNNSPxxFSiY5M/view?usp=sharing/)
 - [User Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/)
 - [User Manual 2.0](https://drive.google.com/file/d/1R63Bir_I_1ecYIsaaXmQzgY_suTjRW-w/view?usp=sharing/)
-- [Technical Installation Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/).
+- [Technical Installation Manual](https://drive.google.com/file/d/1woRUDwXTugFNgcr-kGCzLs28_rjkvmrC/view?usp=sharing/).
 
 ## Video Presentation
  - [Video Demo version 1.0](https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link/)
