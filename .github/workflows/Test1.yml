@@ -1,5 +1,5 @@
 
-name: Unit_tests
+name: ALL_TESTS
 
 on:
     push:
