@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.CodeScannerActivity;
 import com.example.smartstorageorganizer.DesignActivity;
+import com.example.smartstorageorganizer.DevelopersActivity;
 import com.example.smartstorageorganizer.HelpActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.ManualActivity;
@@ -43,7 +44,7 @@ public class SettingsFragment extends Fragment {
         });
 
         color.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DesignActivity.class);
+            Intent intent = new Intent(getActivity(), DevelopersActivity.class);
             startActivity(intent);
         });
 

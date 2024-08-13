@@ -46,16 +46,12 @@ import java.util.Objects;
 
 public class ItemDetailsActivity extends AppCompatActivity {
     float v = 0;
-    TextView itemName;
-    TextView itemDescription;
-    TextView itemUnit;
-    private TextView itemCategory;
-    TextView itemColorCode;
+    private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
     private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
     private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
-    private ImageView itemImage, qrCode;
+    private ImageView itemImage, qrCode, barcode;
     private int itemId;
-    private String qrCodeUrl;
+    private String qrCodeUrl, barcodeUrl;
     private CardView cardViewDescription, cardViewUnit, cardViewCategory, cardViewColorCode;
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
@@ -77,7 +73,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         detailedLayout = findViewById(R.id.detailedLayout_one);
-                new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 shimmerFrameLayout.stopShimmer();
@@ -135,7 +131,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
             isColorCodeExpanded = !isColorCodeExpanded;
         });
 
-        qrCode.setOnClickListener(v -> showQRCodeDialog());
+        qrCode.setOnClickListener(v -> showQRCodeDialog("qrcode"));
+        barcode.setOnClickListener(v -> showQRCodeDialog("barcode"));
         backButton.setOnClickListener(v -> onBackPressed());
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -230,6 +227,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemName = findViewById(R.id.itemName);
         itemImage = findViewById(R.id.itemImage);
         qrCode = findViewById(R.id.qrCode);
+        barcode = findViewById(R.id.barcode);
 
         cardViewDescription = findViewById(R.id.cardViewDescription);
         itemDescription = findViewById(R.id.itemDescription);
@@ -282,6 +280,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemUnit.setText(getIntent().getStringExtra("location"));
             itemColorCode.setText(getIntent().getStringExtra("color_code"));
             qrCodeUrl = getIntent().getStringExtra("item_qrcode");
+            barcodeUrl = getIntent().getStringExtra("item_barcode");
 //            itemCategory.setText(getIntent().getStringExtra("parentcategory_id")+" - "+getIntent().getStringExtra("subcategory_id"));
             //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
             //itemQuantity.setText(String.valueOf(currentQuantity));
@@ -316,6 +315,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 itemUnit.setText(result.get(0).getLocation());
                 itemColorCode.setText(result.get(0).getColourCoding());
                 qrCodeUrl = result.get(0).getQrcode();
+                barcodeUrl = result.get(0).getBarcode();
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 detailedLayout.setVisibility(View.VISIBLE);
@@ -331,7 +331,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void showQRCodeDialog() {
+    private void showQRCodeDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View qrView = getLayoutInflater().inflate(R.layout.dialog_qr_code, null);
         builder.setView(qrView);
@@ -342,18 +342,49 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 //        String qrCodeUrl = getIntent().getStringExtra("item_qrcode");
 
-        Glide.with(this)
-                .load(qrCodeUrl)
-                .placeholder(R.drawable.no_image)
-                .error(R.drawable.no_image)
-                .into(qrCodeImage);
+        if(Objects.equals(type, "qrcode")){
+            Glide.with(this)
+                    .load(qrCodeUrl)
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
+                    .into(qrCodeImage);
+        }
+        else {
+            Glide.with(this)
+                    .load(barcodeUrl)
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
+                    .into(qrCodeImage);
+        }
 
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        shareButton.setOnClickListener(v -> shareImage(qrCodeUrl));
-        downloadButton.setOnClickListener(v -> downloadImage(qrCodeUrl));
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Objects.equals(type, "qrcode")){
+                    shareImage(qrCodeUrl);
+                }
+                else {
+                    shareImage(barcodeUrl);
+                }
+            }
+        });
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Objects.equals(type, "qrcode")){
+                    downloadImage(qrCodeUrl);
+                }
+                else {
+                    downloadImage(barcodeUrl);
+                }
+            }
+        });
+//        shareButton.setOnClickListener(v -> shareImage(qrCodeUrl));
+//        downloadButton.setOnClickListener(v -> downloadImage(qrCodeUrl));
     }
 
     private void shareImage(String imageUrl) {
