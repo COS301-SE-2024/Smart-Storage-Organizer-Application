@@ -14,8 +14,7 @@
         android:layout_height="60dp"
         android:paddingTop="3dp"
         android:paddingStart="8dp"
-        android:paddingEnd="12dp"
-        android:background="@drawable/bgthree">
+        android:paddingEnd="12dp">
         <TextView
             android:id="@+id/text_notifications"
             android:layout_width="wrap_content"
@@ -25,6 +24,7 @@
             android:text="Notifications"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="#0582CA"
             android:layout_gravity="center_horizontal" />
     </RelativeLayout>
 
@@ -43,6 +43,7 @@
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
+        android:drawableTint="#0582CA"
         android:layout_marginTop="50dp"/>
 
     <Button
@@ -58,6 +59,7 @@
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
+        android:drawableTint="#0582CA"
         android:text="Messages" />
 
     <Button
@@ -73,6 +75,7 @@
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
+        android:drawableTint="#0582CA"
         android:text="Offers for you" />
 
     <TextView
