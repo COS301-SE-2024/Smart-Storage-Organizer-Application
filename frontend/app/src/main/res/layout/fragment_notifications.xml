@@ -4,32 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
     tools:context=".ui.notifications.NotificationsFragment">
+
+    <TextView
+        android:id="@+id/text_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="Notifications"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/button_transactions"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Transactions"
-        android:layout_centerHorizontal="true"
+        android:textColor="#0582CA"
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:drawableEnd="@android:drawable/ic_menu_more"
+        android:drawablePadding="8dp"
+        android:gravity="start|center_horizontal"
         android:layout_marginTop="50dp"/>
 
     <Button
         android:id="@+id/button_messages"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button_transactions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="73dp"
+        android:textColor="#0582CA"
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:drawableEnd="@android:drawable/ic_menu_more"
+        android:drawablePadding="8dp"
+        android:gravity="start|center_horizontal"
         android:text="Messages" />
 
     <Button
         android:id="@+id/button_offers"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button_messages"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
+        android:textColor="#0582CA"
+        android:background="?attr/selectableItemBackground"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:drawableEnd="@android:drawable/ic_menu_more"
+        android:drawablePadding="8dp"
+        android:gravity="start|center_horizontal"
         android:text="Offers for you" />
 
     <TextView
