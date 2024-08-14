@@ -1,8 +1,10 @@
 package com.example.smartstorageorganizer;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -40,6 +44,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -55,11 +60,28 @@ public class SearchActivity extends AppCompatActivity {
     private List<ItemModel> searchResults;
     private EditText searchView;
     private ImageButton searchButton;
+    private ImageButton voiceSearchButton;
     private RecyclerView searchResultsRecyclerView;
 
     private RecentAdapter adapter;
     private String currentSelectedOption;
     private Spinner sortBySpinner;
+
+    private final ActivityResultLauncher<Intent> voiceRecognitionLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (matches != null && !matches.isEmpty()) {
+                        String recognizedText = matches.get(0);
+                        searchView.setText(recognizedText);
+                        // Optionally, trigger the search here automatically
+                        SearchForItem(recognizedText, "*", "*");
+                        searchResults.clear();
+                    }
+                }
+            }
+    );
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -76,6 +98,9 @@ public class SearchActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
         searchResultsRecyclerView = findViewById(R.id.search_results_recycler_view);
         sortBySpinner = findViewById(R.id.sort_by_filter);
+
+        voiceSearchButton = findViewById(R.id.voiceSearchButton);
+
 
         setupSortByListener();
         // Set up the RecyclerView (adapter, layout manager, etc.)
@@ -109,27 +134,22 @@ public class SearchActivity extends AppCompatActivity {
             }
             return false;
         });
-
-//        searchView.setOnClickListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                // Handle the search query submission
-//                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-////                searchResults.add(new SearchResult("Title", "Description"));
-//                searchResults.clear();
-//                adapter.notifyDataSetChanged();
-//                SearchForItem(query, "9", "*"); // Adjust parameters as needed
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // Handle text change event
-//                return false;
-//            }
-//        });
+        voiceSearchButton.setOnClickListener(v -> startVoiceRecognition());
     }
+
+    private void startVoiceRecognition() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your search query");
+
+        try {
+            voiceRecognitionLauncher.launch(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Your device does not support voice input", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,6 +178,7 @@ public class SearchActivity extends AppCompatActivity {
 
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
