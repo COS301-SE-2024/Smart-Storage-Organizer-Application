@@ -43,9 +43,14 @@
             android:id="@+id/button_transactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Transactions"
+            android:background="?attr/selectableItemBackground"
             android:textColor="#0582CA"
-            android:background="@drawable/button_custom"
+            android:textSize="16sp"
+            android:drawableEnd="@android:drawable/ic_menu_more"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:layout_marginTop="50dp"
             android:padding="16dp"/>
 
@@ -55,7 +60,11 @@
             android:layout_height="wrap_content"
             android:text="Messages"
             android:textColor="#0582CA"
-            android:background="@drawable/button_custom"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="16sp"
+            android:drawableEnd="@android:drawable/ic_menu_more"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:padding="16dp"/>
 
         <Button
@@ -63,8 +72,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Offers for you"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="16sp"
+            android:drawableEnd="@android:drawable/ic_menu_more"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:textColor="#0582CA"
-            android:background="@drawable/button_custom"
             android:padding="16dp"/>
     </LinearLayout>
 
