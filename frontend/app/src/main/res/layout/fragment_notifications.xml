@@ -8,16 +8,27 @@
     android:orientation="vertical"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <TextView
-        android:id="@+id/text_notifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:text="Notifications"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal" />
+    <RelativeLayout
+        android:id="@+id/searchTop"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingTop="3dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/bgthree">
+        <TextView
+            android:id="@+id/text_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="Notifications"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal" />
+    </RelativeLayout>
+
+
 
     <Button
         android:id="@+id/button_transactions"
@@ -28,6 +39,7 @@
         android:background="?attr/selectableItemBackground"
         android:padding="16dp"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
@@ -42,6 +54,7 @@
         android:background="?attr/selectableItemBackground"
         android:padding="16dp"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
@@ -56,6 +69,7 @@
         android:background="?attr/selectableItemBackground"
         android:padding="16dp"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:drawableEnd="@android:drawable/ic_menu_more"
         android:drawablePadding="8dp"
         android:gravity="start|center_horizontal"
