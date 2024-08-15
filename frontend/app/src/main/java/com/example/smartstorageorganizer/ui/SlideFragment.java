@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.smartstorageorganizer.GetStartedActivity;
 import com.example.smartstorageorganizer.LandingActivity;
 import com.example.smartstorageorganizer.R;
 
@@ -55,7 +56,7 @@ public class SlideFragment extends Fragment {
                 getStartedButton.setOnClickListener(v -> {
                     // Navigate to the main part of the app
                     // For example:
-                     startActivity(new Intent(getActivity(), LandingActivity.class));
+                     startActivity(new Intent(getActivity(), GetStartedActivity.class));
                      requireActivity().finish();
                 });
             }

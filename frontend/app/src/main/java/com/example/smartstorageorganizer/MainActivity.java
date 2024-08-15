@@ -105,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToHome() {
-        Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+        Intent intent = new Intent(MainActivity.this, GetStartedActivity.class);
         startActivity(intent);
-        finish();  // Close the onboarding activity
+        finish();
     }
 
     private void resetOnboarding() {
