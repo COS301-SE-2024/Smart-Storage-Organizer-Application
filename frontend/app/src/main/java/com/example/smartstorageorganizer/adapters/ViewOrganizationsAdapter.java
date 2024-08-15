@@ -27,10 +27,10 @@ public class ViewOrganizationsAdapter extends FragmentStateAdapter {
         Fragment fragment;
         switch (position) {
             case 0:
-                fragment = new PendingFragment();
+                fragment = new ApprovedOrganizationsFragment();
                 break;
             case 1:
-                fragment = new ApprovedOrganizationsFragment();
+                fragment = new PendingFragment();
                 break;
             default:
                 fragment = new PendingFragment();

@@ -44,10 +44,10 @@ public class DevelopersActivity extends AppCompatActivity {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position) {
                     case 0:
-                        tab.setText("Requests");
+                        tab.setText("Active");
                         break;
                     case 1:
-                        tab.setText("All");
+                        tab.setText("Deactivated");
                         break;
                 }
             }

@@ -100,7 +100,7 @@ public class HomeFragment extends Fragment {
     private ShimmerFrameLayout shimmerFrameLayoutCategory;
     private ShimmerFrameLayout shimmerFrameLayoutRecent;
     private TextView recentText;
-    private RecyclerView recyclerViewRecent;
+//    private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
 
     @Override
@@ -119,15 +119,15 @@ public class HomeFragment extends Fragment {
         category_RecyclerView = root.findViewById(R.id.category_rec);
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
-        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
+//        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
 
-        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
-        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
-        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
-        recyclerViewRecent.setAdapter(skeletonAdapter);
+//        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
+//        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
+//        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
+//        recyclerViewRecent.setAdapter(skeletonAdapter);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
