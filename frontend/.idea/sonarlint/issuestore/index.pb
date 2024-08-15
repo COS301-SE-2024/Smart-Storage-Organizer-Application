@@ -104,3 +104,7 @@ Eapp/src/main/java/com/example/smartstorageorganizer/MainActivity.java,7\8\78ad
 Qapp/src/main/java/com/example/smartstorageorganizer/FirebaseMessagingService.java,7\7\77c5dcf2aae55fdc8402be493b16e7b33ec15afe
 D
 google-services.json,f\7\f761570c4ae90a5577cea77748c77672342c8041
+…
+Uapp/src/main/java/com/example/smartstorageorganizer/FirebaseMessagingServiceTest.java,3\d\3dc8bce5e2107995ecf0baade525d158264ab226
+H
+app/google-services.json,f\d\fd8d34b142d02ec743a8efefefd2c097961666e9

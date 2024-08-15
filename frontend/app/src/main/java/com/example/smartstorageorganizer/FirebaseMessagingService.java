@@ -39,18 +39,22 @@ public class FirebaseMessagingService extends Service {
     //    Handles the Incoming msgs from FCM
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // Handle FCM messages here.
+        Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());
         if (remoteMessage.getNotification() != null) {
 //            Display the notification msg if it exists
             sendNotification(remoteMessage.getNotification().getBody());
         }
     }
 
+
+
 //    Handles the newly generated fcmToken (i.e if the token is refreshed)
-//    public void onNewToken(String token) {
+    public void onNewToken(String token) {
+        Log.d("FCMService", "New token: " + token);
 //        super.onNewToken(token);
-//        // Send the new token to your server
-//        sendRegistrationToServer(token);
-//    }
+        // Send the new token to your server
+        sendRegistrationToServer(token);
+    }
 
     // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken) and..
     //    ...handles sending the FCM token to backend server
