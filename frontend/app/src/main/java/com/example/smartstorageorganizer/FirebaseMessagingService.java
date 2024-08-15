@@ -36,7 +36,7 @@ public class FirebaseMessagingService extends Service {
     }
     //Implementation
 
-//    Handles the Incoming msgs from FCM
+    //    Handles the Incoming msgs from FCM
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // Handle FCM messages here.
         if (remoteMessage.getNotification() != null) {
@@ -45,14 +45,15 @@ public class FirebaseMessagingService extends Service {
         }
     }
 
-//    Handles the newly generated fcmToken
+//    Handles the newly generated fcmToken (i.e if the token is refreshed)
 //    public void onNewToken(String token) {
 //        super.onNewToken(token);
 //        // Send the new token to your server
 //        sendRegistrationToServer(token);
 //    }
 
-    // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken)
+    // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken) and..
+    //    ...handles sending the FCM token to backend server
     private void sendRegistrationToServer(String fcmToken) {
         // Get the user's authentication tokens
         AWSMobileClient.getInstance().getTokens(new Callback<Tokens>() {
