@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment {
     private TextView recentText;
 //    private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
+    private LinearLayout noInternet;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -119,6 +120,7 @@ public class HomeFragment extends Fragment {
         category_RecyclerView = root.findViewById(R.id.category_rec);
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
+        noInternet = root.findViewById(R.id.noInternet);
 //        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
@@ -176,6 +178,7 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutRecent.startShimmer();
                 shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
                 itemRecyclerView.setVisibility(View.GONE);
+                noInternet.setVisibility(View.VISIBLE);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -209,7 +212,21 @@ public class HomeFragment extends Fragment {
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error -> {
+                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    requireActivity().runOnUiThread(() -> {
+                        recentText.setVisibility(View.GONE);
+                        shimmerFrameLayoutCategory.startShimmer();
+                        shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                        shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                        shimmerFrameLayoutName.setVisibility(View.GONE);
+                        itemRecyclerView.setVisibility(View.GONE);
+                        noInternet.setVisibility(View.VISIBLE);
+
+                        // If you want to return false in case of an error
+                        future.complete(false);
+                    });
+                }
 
         );
         return future;

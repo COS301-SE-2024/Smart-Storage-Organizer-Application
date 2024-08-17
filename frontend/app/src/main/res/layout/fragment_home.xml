@@ -142,6 +142,7 @@
         android:id="@+id/noInternet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:paddingLeft="22dp"
         android:paddingRight="22dp"
         app:layout_constraintStart_toStartOf="parent"
