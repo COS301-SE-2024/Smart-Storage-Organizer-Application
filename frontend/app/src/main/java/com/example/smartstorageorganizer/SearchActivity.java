@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -40,6 +42,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -60,6 +63,7 @@ public class SearchActivity extends AppCompatActivity {
     private RecentAdapter adapter;
     private String currentSelectedOption;
     private Spinner sortBySpinner;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -93,42 +97,98 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        searchView.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getRawX() >= (searchView.getRight() - searchView.getCompoundDrawables()[2].getBounds().width())) {
-                    String query = searchView.getText().toString();
-                    if (!query.isEmpty()) {
-                        Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-                        SearchForItem(query, "*", "*");
-                        searchResults.clear();
-                    } else {
-                        Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+        searchView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int leftDrawableWidth = searchView.getCompoundDrawables()[0] != null ?
+                            searchView.getCompoundDrawables()[0].getBounds().width() : 0;
+
+                    int rightDrawableWidth = searchView.getCompoundDrawables()[2] != null ?
+                            searchView.getCompoundDrawables()[2].getBounds().width() : 0;
+
+                    if (event.getX() <= (searchView.getPaddingLeft() + leftDrawableWidth)) {
+                        // Mic icon touched
+                        startVoiceInput();
+                        return true;
+                    } else if (event.getX() >= (searchView.getWidth() - searchView.getPaddingRight() - rightDrawableWidth)) {
+                        // Search icon touched
+                        String query = searchView.getText().toString();
+                        if (!query.isEmpty()) {
+                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+                            SearchForItem(query, "*", "*");
+                            searchResults.clear();
+                        } else {
+                            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
                     }
-                    return true;
                 }
+                return false;
             }
-            return false;
         });
 
-//        searchView.setOnClickListener(new SearchView.OnQueryTextListener() {
+
+//        searchView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                // Handle the search query submission
-//                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-////                searchResults.add(new SearchResult("Title", "Description"));
-//                searchResults.clear();
-//                adapter.notifyDataSetChanged();
-//                SearchForItem(query, "9", "*"); // Adjust parameters as needed
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    if (event.getRawX() <= (searchView.getLeft() + searchView.getCompoundDrawables()[0].getBounds().width())) {
+//                        startVoiceInput();
+//                        return true;
+//                    }
 //
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // Handle text change event
+//                    else if (event.getRawX() >= (searchView.getRight() - searchView.getCompoundDrawables()[2].getBounds().width())) {
+//                        String query = searchView.getText().toString();
+//                        if (!query.isEmpty()) {
+//                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+//                            SearchForItem(query, "*", "*");
+//                            searchResults.clear();
+//                        } else {
+//                            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+//                        }
+//                        return true;
+//                    }
+//                }
 //                return false;
 //            }
 //        });
+    }
+
+    private void startVoiceInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
+
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            Toast.makeText(this, "Your device doesn't support Speech Input", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (result != null && !result.isEmpty()) {
+                String spokenText = result.get(0);
+                handleVoiceInput(spokenText);
+            }
+        }
+    }
+
+    private void handleVoiceInput(String spokenText) {
+        if (!spokenText.isEmpty()) {
+            Toast.makeText(SearchActivity.this, "Search query: " + spokenText, Toast.LENGTH_SHORT).show();
+            SearchForItem(spokenText, "*", "*");
+            searchResults.clear();
+        } else {
+            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -145,7 +205,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Handle the search query submission
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                 searchResults.clear();
-                SearchForItem(query, "", ""); // Adjust parameters as needed
+                SearchForItem(query, "", "");
                 return false;
             }
 
