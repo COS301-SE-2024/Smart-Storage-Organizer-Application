@@ -25,15 +25,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class FirebaseMessagingService extends Service {
-    public FirebaseMessagingService() {
-    }
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+
     //Implementation
 
     //    Handles the Incoming msgs from FCM
@@ -51,15 +45,18 @@ public class FirebaseMessagingService extends Service {
 //    Handles the newly generated fcmToken (i.e if the token is refreshed)
     public void onNewToken(String token) {
         Log.d("FCMService", "New token: " + token);
-//        super.onNewToken(token);
+        super.onNewToken(token);
         // Send the new token to your server
         sendRegistrationToServer(token);
     }
+
 
     // Receives the AWS Mobile Client token (IdToken, AccessToken, and RefreshToken) and..
     //    ...handles sending the FCM token to backend server
     private void sendRegistrationToServer(String fcmToken) {
         // Get the user's authentication tokens
+
+        Log.d("FCMService", "New token: " + fcmToken);
         AWSMobileClient.getInstance().getTokens(new Callback<Tokens>() {
             @Override
             public void onResult(Tokens tokens) {
@@ -79,8 +76,8 @@ public class FirebaseMessagingService extends Service {
     }
 
     private void updateUserTokenOnServer(String idToken, String accessToken, String refreshToken, String fcmToken) {
-        //backend endpoint
-        String backendUrl = "https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/";
+        // FCM endpoint
+        String fcmUrl = "https://fcm.googleapis.com/fcm/send";
 
         // Create a JSON object to hold the request data
         JSONObject requestBody = new JSONObject();
@@ -98,15 +95,16 @@ public class FirebaseMessagingService extends Service {
         new Thread(() -> {
             try {
                 // Create and configure the HttpURLConnection
-                URL url = new URL(backendUrl);
+                URL url = new URL(fcmUrl);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
                 urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestProperty("Authorization", "key=AIzaSyD2TVReqHyOuFRjYM4h2hB305fURro6ozE"); // Replace YOUR_SERVER_KEY with your actual server key
                 urlConnection.setDoOutput(true);
 
                 // Write the JSON data to the output stream
-                try(OutputStream os = urlConnection.getOutputStream()) {
+                try (OutputStream os = urlConnection.getOutputStream()) {
                     byte[] input = requestBody.toString().getBytes("utf-8");
                     os.write(input, 0, input.length);
                 }
