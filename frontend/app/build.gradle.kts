@@ -137,6 +137,11 @@ dependencies {
     implementation ("com.github.yukuku:ambilwarna:2.0.1");
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
+    implementation ("androidx.compose.ui:ui-android:1.6.8") {
+        exclude("androidx.compose.ui",  "ui-desktop")
+    }
+
+
 
     implementation("org.slf4j:slf4j-api:1.7.30")
 
@@ -221,6 +226,8 @@ dependencies {
 
     // Amplify API plugin for REST
     implementation("com.amplifyframework:aws-api:1.35.4")
+
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.22.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 

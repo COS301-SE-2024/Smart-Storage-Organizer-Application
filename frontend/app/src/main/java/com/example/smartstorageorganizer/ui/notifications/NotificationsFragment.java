@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.NotificationAdapter;
+import com.example.smartstorageorganizer.model.AppNotification;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,13 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private NotificationAdapter adapter;
-    private List<String> notifications;
+    private List<AppNotification> notifications;
     private NotificationsViewModel notificationsViewModel;
 
     @Nullable
@@ -52,7 +55,7 @@ public class NotificationsFragment extends Fragment {
         buttonMessages.setOnClickListener(v -> fetchNotifications("messages"));
         buttonOffers.setOnClickListener(v -> fetchNotifications("offers"));
 
-        notifications = new ArrayList<>();
+        notifications = new ArrayList<AppNotification>();
         adapter = new NotificationAdapter(notifications);
         recyclerView.setAdapter(adapter);
 
@@ -67,11 +70,13 @@ public class NotificationsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 notifications.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String notification = snapshot.getValue(String.class);
+                    AppNotification notification = snapshot.getValue(AppNotification.class);
                     if (notification != null) {
                         notifications.add(notification);
                     }
                 }
+                // Sort notifications by date (most recent first)
+                Collections.sort(notifications, Comparator.comparing(AppNotification::getDate).reversed());
                 adapter.notifyDataSetChanged();
             }
 
