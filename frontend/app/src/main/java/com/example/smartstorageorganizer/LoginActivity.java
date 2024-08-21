@@ -41,6 +41,7 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     public TextView resetPasswordLink;
     RelativeLayout registerButton;
     public static final String API_REQUEST = "API Request";
-
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,10 @@ public class LoginActivity extends AppCompatActivity {
         checkIfSignedIn();
         configureInsets();
         setOnClickListeners();
+
+
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     public void initializeUI() {
@@ -120,8 +125,9 @@ public class LoginActivity extends AppCompatActivity {
         String passwordInput = password.getText().toString().trim();
         if (validateForm(emailInput, passwordInput)) {
             showLoading();
-            checkUserVerificationStatus(emailInput, "");
+          //  checkUserVerificationStatus(emailInput, "");
 //            signIn(emailInput, passwordInput);
+            signIn(emailInput, passwordInput);
         }
     }
 
@@ -165,6 +171,20 @@ public class LoginActivity extends AppCompatActivity {
 
     CompletableFuture<Boolean> signIn(String email, String password) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
+        mAuth.signInWithEmailAndPassword(email,password)
+                        .addOnCompleteListener(this,task ->{
+                            hideLoading();
+                            if(task.isSuccessful()){
+                                Log.d(TAG, "signInWithEmail:success");
+                                Toast.makeText(LoginActivity.this, "Authentication successful.",
+                                        Toast.LENGTH_SHORT).show();
+                                navigateToHome(email);
+                                future.complete(true);
+                            }
+                            else {
+                                Log.w()
+                            }
+                        })
         Amplify.Auth.signIn(
                 email,
                 password,
