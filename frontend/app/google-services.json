@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704229897231",
+    "project_id": "fcmpushnotification-98f2e",
+    "storage_bucket": "fcmpushnotification-98f2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704229897231:android:5b23ea068a071f03ce5f7a",
+        "android_client_info": {
+          "package_name": "com.example.smartstorageorganizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSsWu58E1KH4jP0lIrIBOlxUSaHRVnQO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
