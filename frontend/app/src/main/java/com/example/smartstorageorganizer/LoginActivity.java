@@ -7,10 +7,8 @@ import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import android.app.AlertDialog;
@@ -39,9 +37,9 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
-import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     RelativeLayout registerButton;
     public static final String API_REQUEST = "API Request";
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,14 +109,21 @@ public class LoginActivity extends AppCompatActivity {
 
     public CompletableFuture<Boolean> isSignedIn() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Amplify.Auth.fetchAuthSession(
-                result -> future.complete(result.isSignedIn()),
-                error -> {
-                    Log.e(TAG, error.toString());
-                    future.completeExceptionally(error);
-                }
-        );
-        return future;
+
+        if(mAuth!=null){
+            future.complete(true);
+        }
+        else{
+            future.complete(false);
+        }
+//        Amplify.Auth.fetchAuthSession(
+//                result -> future.complete(result.isSignedIn()),
+//                error -> {
+//                    Log.e(TAG, error.toString());
+//                    future.completeExceptionally(error);
+//                }
+//        );
+       return future;
     }
 
     public void attemptLogin() {
@@ -176,29 +182,34 @@ public class LoginActivity extends AppCompatActivity {
                             hideLoading();
                             if(task.isSuccessful()){
                                 Log.d(TAG, "signInWithEmail:success");
+                                currentUser= mAuth.getCurrentUser();
+
                                 Toast.makeText(LoginActivity.this, "Authentication successful.",
                                         Toast.LENGTH_SHORT).show();
                                 navigateToHome(email);
                                 future.complete(true);
+
                             }
                             else {
-                                Log.w()
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            future.complete(false);
                             }
-                        })
-        Amplify.Auth.signIn(
-                email,
-                password,
-                result -> {
-                    if (result.isSignedIn()) {
-                        fetchUserSession(email);
-                        future.complete(true);
-                    } else {
-                        handleSignInFailure("Sign in not complete.");
-                        future.complete(false);
-                    }
-                },
-                error -> handleSignInError(error, email, future)
-        );
+                        });
+//        Amplify.Auth.signIn(
+//                email,
+//                password,
+//                result -> {
+//                    if (result.isSignedIn()) {
+//                        fetchUserSession(email);
+//                        future.complete(true);
+//                    } else {
+//                        handleSignInFailure("Sign in not complete.");
+//                        future.complete(false);
+//                    }
+//                },
+//                error -> handleSignInError(error, email, future)
+//        );
         return future;
     }
 
