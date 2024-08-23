@@ -184,6 +184,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
     implementation ("com.airbnb.android:lottie:6.4.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
+    implementation ("com.caverock:androidsvg:1.4")
 
     // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")

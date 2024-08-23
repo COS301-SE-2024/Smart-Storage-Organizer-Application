@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -340,18 +342,26 @@ public class ItemDetailsActivity extends AppCompatActivity {
         Button shareButton = qrView.findViewById(R.id.share_button);
         Button downloadButton = qrView.findViewById(R.id.download_button);
 
-//        String qrCodeUrl = getIntent().getStringExtra("item_qrcode");
+        String imageUrl;
+        if (Objects.equals(type, "qrcode")) {
+            imageUrl = qrCodeUrl;
+        } else {
+            imageUrl = barcodeUrl;
+        }
 
-        if(Objects.equals(type, "qrcode")){
-            Glide.with(this)
-                    .load(qrCodeUrl)
+        if (imageUrl.endsWith(".svg")) {
+            // Use Glide to load SVG
+            GlideApp.with(this)
+                    .as(PictureDrawable.class)
+                    .load(imageUrl)
                     .placeholder(R.drawable.no_image)
                     .error(R.drawable.no_image)
+//                    .listener((RequestListener<PictureDrawable>) new SvgSoftwareLayerSetter(qrCodeImage))
                     .into(qrCodeImage);
-        }
-        else {
+        } else {
+            // Fallback for non-SVG images
             Glide.with(this)
-                    .load(barcodeUrl)
+                    .load(imageUrl)
                     .placeholder(R.drawable.no_image)
                     .error(R.drawable.no_image)
                     .into(qrCodeImage);
@@ -361,31 +371,23 @@ public class ItemDetailsActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Objects.equals(type, "qrcode")){
-                    shareImage(qrCodeUrl);
-                }
-                else {
-                    shareImage(barcodeUrl);
-                }
+        shareButton.setOnClickListener(v -> {
+            if (Objects.equals(type, "qrcode")) {
+                shareImage(qrCodeUrl);
+            } else {
+                shareImage(barcodeUrl);
             }
         });
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Objects.equals(type, "qrcode")){
-                    downloadImage(qrCodeUrl);
-                }
-                else {
-                    downloadImage(barcodeUrl);
-                }
+
+        downloadButton.setOnClickListener(v -> {
+            if (Objects.equals(type, "qrcode")) {
+                downloadImage(qrCodeUrl);
+            } else {
+                downloadImage(barcodeUrl);
             }
         });
-//        shareButton.setOnClickListener(v -> shareImage(qrCodeUrl));
-//        downloadButton.setOnClickListener(v -> downloadImage(qrCodeUrl));
     }
+
 
     private void shareImage(String imageUrl) {
         Glide.with(this)
