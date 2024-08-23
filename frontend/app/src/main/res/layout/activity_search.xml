@@ -8,6 +8,43 @@
     android:background="@color/background"
     tools:context=".SearchActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchLoader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_rawRes="@raw/searching"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/notFound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Results not found"
+            android:textColor="@color/colorSecondary"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,9 +74,11 @@
                     android:layout_marginTop="32dp"
                     android:background="@drawable/search_bar_background"
                     android:drawableEnd="@drawable/baseline_search_24"
+                    android:drawableStart="@drawable/baseline_mic_24"
                     android:drawablePadding="8dp"
                     android:hint="Search items"
                     android:textColorHint="@color/gray"
+                    android:textColor="@color/colorSecondary"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:padding="12dp"
@@ -49,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="2 results retrieved for Lenovo"
+                    android:text="Search for items"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:textStyle="bold"

@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,17 +15,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SearchAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -40,6 +45,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -60,6 +66,9 @@ public class SearchActivity extends AppCompatActivity {
     private RecentAdapter adapter;
     private String currentSelectedOption;
     private Spinner sortBySpinner;
+    private ConstraintLayout loader;
+    private ConstraintLayout resultsNotFound;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -73,6 +82,9 @@ public class SearchActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+        loader = findViewById(R.id.searchLoader);
+        resultsNotFound = findViewById(R.id.notFound);
+
         searchView = findViewById(R.id.searchView);
         searchResultsRecyclerView = findViewById(R.id.search_results_recycler_view);
         sortBySpinner = findViewById(R.id.sort_by_filter);
@@ -93,42 +105,73 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        searchView.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (event.getRawX() >= (searchView.getRight() - searchView.getCompoundDrawables()[2].getBounds().width())) {
-                    String query = searchView.getText().toString();
-                    if (!query.isEmpty()) {
-                        Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-                        SearchForItem(query, "*", "*");
-                        searchResults.clear();
-                    } else {
-                        Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
-                    }
-                    return true;
-                }
-            }
-            return false;
-        });
+        searchView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int leftDrawableWidth = searchView.getCompoundDrawables()[0] != null ?
+                            searchView.getCompoundDrawables()[0].getBounds().width() : 0;
 
-//        searchView.setOnClickListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                // Handle the search query submission
-//                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-////                searchResults.add(new SearchResult("Title", "Description"));
-//                searchResults.clear();
-//                adapter.notifyDataSetChanged();
-//                SearchForItem(query, "9", "*"); // Adjust parameters as needed
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // Handle text change event
-//                return false;
-//            }
-//        });
+                    int rightDrawableWidth = searchView.getCompoundDrawables()[2] != null ?
+                            searchView.getCompoundDrawables()[2].getBounds().width() : 0;
+
+                    if (event.getX() <= (searchView.getPaddingLeft() + leftDrawableWidth)) {
+                        // Mic icon touched
+                        startVoiceInput();
+                        return true;
+                    } else if (event.getX() >= (searchView.getWidth() - searchView.getPaddingRight() - rightDrawableWidth)) {
+                        // Search icon touched
+                        String query = searchView.getText().toString();
+                        if (!query.isEmpty()) {
+                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+                            SearchForItem(query, "*", "*");
+                            searchResults.clear();
+                        } else {
+                            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void startVoiceInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
+
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            Toast.makeText(this, "Your device doesn't support Speech Input", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (result != null && !result.isEmpty()) {
+                String spokenText = result.get(0);
+                handleVoiceInput(spokenText);
+            }
+        }
+    }
+
+    private void handleVoiceInput(String spokenText) {
+        if (!spokenText.isEmpty()) {
+            loader.setVisibility(View.VISIBLE);
+            Toast.makeText(SearchActivity.this, "Search query: " + spokenText, Toast.LENGTH_SHORT).show();
+            SearchForItem(spokenText, "*", "*");
+            searchResults.clear();
+        } else {
+            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -145,7 +188,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Handle the search query submission
                 Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                 searchResults.clear();
-                SearchForItem(query, "", ""); // Adjust parameters as needed
+                SearchForItem(query, "", "");
                 return false;
             }
 
@@ -175,6 +218,10 @@ public class SearchActivity extends AppCompatActivity {
 
     public CompletableFuture<List<SearchResult>> SearchForItem(String target, String parentcategoryid, String subcategoryid) {
         CompletableFuture<List<SearchResult>> future = new CompletableFuture<>();
+        resultsNotFound.setVisibility(View.GONE);
+        loader.setVisibility(View.VISIBLE);
+        searchResults.clear();
+        adapter.notifyDataSetChanged();
 
         String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -200,9 +247,6 @@ public class SearchActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String responseData = response.body().string();
-//                    List<Ite> searchResults = parseSearchResults(responseData);
-                        Log.i("Search Result", responseData);
-//                    future.complete(searchResults);
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
@@ -213,26 +257,6 @@ public class SearchActivity extends AppCompatActivity {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
 
                                 JSONObject itemObj = new JSONObject(itemObject.getString("_source"));
-
-
-                                runOnUiThread(() -> {
-                                    try {
-                                        Log.i("Search Results convert", itemObj.getString("item_id"));
-                                        Log.i("Search Results convert", itemObj.getString("item_name"));
-                                        Log.i("Search Results convert", itemObj.getString("description"));
-                                        Log.i("Search Results convert", itemObj.getString("colourcoding"));
-                                        Log.i("Search Results convert", itemObj.getString("barcode"));
-                                        Log.i("Search Results convert", itemObj.getString("qrcode"));
-                                        Log.i("Search Results convert", itemObj.getString("quanity"));
-                                        Log.i("Search Results convert", itemObj.getString("email"));
-                                        Log.i("Search Results convert", itemObj.getString("item_image"));
-                                        Log.i("Search Results convert", itemObj.getString("subcategoryid"));
-                                        Log.i("Search Results convert", itemObj.getString("parentcategoryid"));
-//                                    Log.e("Search Results Body Array", itemObject.getString("_source") );
-                                    } catch (JSONException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                });
 
                                 ItemModel item = new ItemModel();
                                 item.setItemId(itemObj.getString("item_id"));
@@ -250,24 +274,32 @@ public class SearchActivity extends AppCompatActivity {
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                                 searchResults.add(item);
-//                            adapter.notifyDataSetChanged();
                             }
                             runOnUiThread(() -> {
                                 adapter.notifyDataSetChanged();
-                                sortBySpinner.setVisibility(View.VISIBLE);
+//                                sortBySpinner.setVisibility(View.VISIBLE);
+                                loader.setVisibility(View.GONE);
+                                if(searchResults.isEmpty()){
+                                    resultsNotFound.setVisibility(View.VISIBLE);
+                                }
                             });
 
                         }catch (JSONException e) {
+                            if(searchResults.isEmpty()){
+                                resultsNotFound.setVisibility(View.VISIBLE);
+                            }
                             throw new RuntimeException(e);
                         }
 
                     } else {
+                        loader.setVisibility(View.GONE);
                         future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                     }
                 }
             });
 
                 }).exceptionally(ex -> {
+            loader.setVisibility(View.GONE);
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });

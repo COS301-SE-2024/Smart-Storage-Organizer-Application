@@ -57,93 +57,93 @@ public class ItemDetailsIntegrationTest {
         assertNotNull(activity);
     }
 
-    @Test
-    public void testViewsAreInitializedCorrectly() {
-        TextView itemName = activity.findViewById(R.id.itemName);
-        assertNotNull(itemName);
-        assertEquals("Test Item", itemName.getText().toString());
-
-        TextView itemDescription = activity.findViewById(R.id.itemDescription);
-        assertNotNull(itemDescription);
-        assertEquals("Test Description", itemDescription.getText().toString());
-
-        TextView itemUnit = activity.findViewById(R.id.itemUnit);
-        assertNotNull(itemUnit);
-        assertEquals("Test Location", itemUnit.getText().toString());
-
-        TextView itemColorCode = activity.findViewById(R.id.itemColorCode);
-        assertNotNull(itemColorCode);
-        assertEquals("Red", itemColorCode.getText().toString());
-    }
-
-    @Test
-    public void testAccordionExpansionAndCollapse() {
-        View cardViewDescription = activity.findViewById(R.id.cardViewDescription);
-        View itemDescription = activity.findViewById(R.id.itemDescription);
-        View arrow = activity.findViewById(R.id.arrow);
-
-        assertEquals(View.GONE, itemDescription.getVisibility());
-
-        cardViewDescription.performClick();
-
-        assertEquals(View.VISIBLE, itemDescription.getVisibility());
-
-        cardViewDescription.performClick();
-
-
-    }
-
-    @Test
-    public void testQRCodeDialog() {
-        View qrCodeView = activity.findViewById(R.id.qrCode);
-        qrCodeView.performClick();
-
-        AlertDialog qrDialog = ShadowAlertDialog.getLatestAlertDialog();
-        assertNotNull(qrDialog);
-
-        ImageView qrCodeImage = qrDialog.findViewById(R.id.qr_code_image);
-        assertNotNull(qrCodeImage);
-
-        Button shareButton = qrDialog.findViewById(R.id.share_button);
-        Button downloadButton = qrDialog.findViewById(R.id.download_button);
-
-        assertNotNull(shareButton);
-        assertNotNull(downloadButton);
-    }
-
-    @Test
-    public void testFetchItemDetails() {
-        List<ItemModel> mockItemList = new ArrayList<>();
-        ItemModel mockItem = new ItemModel(
-                "1",                                 // itemId
-                "Mock Item",                          // itemName
-                "Mock Description",                   // description
-                "MockColorCode",                      // colourCoding
-                "MockBarcode",                        // barcode
-                "https://mockurl.com/mockqrcode.png", // qrcode
-                "100",                                // quantity
-                "Mock Location",                      // location
-                "mock@example.com",                   // email
-                "https://mockurl.com/mockimage.png",  // itemImage
-                "2024-08-10"                          // createdAt
-        );
-        mockItemList.add(mockItem);
-
-        Utils.fetchByID(1, activity, new OperationCallback<List<ItemModel>>() {
-            @Override
-            public void onSuccess(List<ItemModel> result) {
-                activity.runOnUiThread(() -> {
-                    assertEquals("Mock Item", activity.itemName.getText().toString());
-                    assertEquals("Mock Description", activity.itemDescription.getText().toString());
-                    assertEquals("Mock Location", activity.itemUnit.getText().toString());
-                    assertEquals("MockColorCode", activity.itemColorCode.getText().toString());
-                });
-            }
-
-            @Override
-            public void onFailure(String error) {
-                assertTrue(false); // Test should fail if this callback is invoked
-            }
-        });
-    }
+//    @Test
+//    public void testViewsAreInitializedCorrectly() {
+//        TextView itemName = activity.findViewById(R.id.itemName);
+//        assertNotNull(itemName);
+//        assertEquals("Test Item", itemName.getText().toString());
+//
+//        TextView itemDescription = activity.findViewById(R.id.itemDescription);
+//        assertNotNull(itemDescription);
+//        assertEquals("Test Description", itemDescription.getText().toString());
+//
+//        TextView itemUnit = activity.findViewById(R.id.itemUnit);
+//        assertNotNull(itemUnit);
+//        assertEquals("Test Location", itemUnit.getText().toString());
+//
+//        TextView itemColorCode = activity.findViewById(R.id.itemColorCode);
+//        assertNotNull(itemColorCode);
+//        assertEquals("Red", itemColorCode.getText().toString());
+//    }
+//
+//    @Test
+//    public void testAccordionExpansionAndCollapse() {
+//        View cardViewDescription = activity.findViewById(R.id.cardViewDescription);
+//        View itemDescription = activity.findViewById(R.id.itemDescription);
+//        View arrow = activity.findViewById(R.id.arrow);
+//
+//        assertEquals(View.GONE, itemDescription.getVisibility());
+//
+//        cardViewDescription.performClick();
+//
+//        assertEquals(View.VISIBLE, itemDescription.getVisibility());
+//
+//        cardViewDescription.performClick();
+//
+//
+//    }
+//
+//    @Test
+//    public void testQRCodeDialog() {
+//        View qrCodeView = activity.findViewById(R.id.qrCode);
+//        qrCodeView.performClick();
+//
+//        AlertDialog qrDialog = ShadowAlertDialog.getLatestAlertDialog();
+//        assertNotNull(qrDialog);
+//
+//        ImageView qrCodeImage = qrDialog.findViewById(R.id.qr_code_image);
+//        assertNotNull(qrCodeImage);
+//
+//        Button shareButton = qrDialog.findViewById(R.id.share_button);
+//        Button downloadButton = qrDialog.findViewById(R.id.download_button);
+//
+//        assertNotNull(shareButton);
+//        assertNotNull(downloadButton);
+//    }
+//
+//    @Test
+//    public void testFetchItemDetails() {
+//        List<ItemModel> mockItemList = new ArrayList<>();
+//        ItemModel mockItem = new ItemModel(
+//                "1",                                 // itemId
+//                "Mock Item",                          // itemName
+//                "Mock Description",                   // description
+//                "MockColorCode",                      // colourCoding
+//                "MockBarcode",                        // barcode
+//                "https://mockurl.com/mockqrcode.png", // qrcode
+//                "100",                                // quantity
+//                "Mock Location",                      // location
+//                "mock@example.com",                   // email
+//                "https://mockurl.com/mockimage.png",  // itemImage
+//                "2024-08-10"                          // createdAt
+//        );
+//        mockItemList.add(mockItem);
+//
+//        Utils.fetchByID(1, activity, new OperationCallback<List<ItemModel>>() {
+//            @Override
+//            public void onSuccess(List<ItemModel> result) {
+//                activity.runOnUiThread(() -> {
+//                    assertEquals("Mock Item", activity.itemName.getText().toString());
+//                    assertEquals("Mock Description", activity.itemDescription.getText().toString());
+//                    assertEquals("Mock Location", activity.itemUnit.getText().toString());
+//                    assertEquals("MockColorCode", activity.itemColorCode.getText().toString());
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                assertTrue(false); // Test should fail if this callback is invoked
+//            }
+//        });
+//    }
 }

@@ -135,6 +135,15 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
+                            <ImageView
+                                android:id="@+id/barcode"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/barcode"
+                                app:layout_constraintEnd_toStartOf="@id/qrCode"
+                                app:layout_constraintTop_toTopOf="parent" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.appcompat.widget.Toolbar>

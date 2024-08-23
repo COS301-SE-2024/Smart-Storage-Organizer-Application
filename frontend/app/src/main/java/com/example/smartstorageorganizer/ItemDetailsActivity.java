@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -46,16 +48,12 @@ import java.util.Objects;
 
 public class ItemDetailsActivity extends AppCompatActivity {
     float v = 0;
-    TextView itemName;
-    TextView itemDescription;
-    TextView itemUnit;
-    private TextView itemCategory;
-    TextView itemColorCode;
+    private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
     private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
     private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
-    private ImageView itemImage, qrCode;
+    private ImageView itemImage, qrCode, barcode;
     private int itemId;
-    private String qrCodeUrl;
+    private String qrCodeUrl, barcodeUrl;
     private CardView cardViewDescription, cardViewUnit, cardViewCategory, cardViewColorCode;
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
@@ -77,7 +75,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         detailedLayout = findViewById(R.id.detailedLayout_one);
-                new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 shimmerFrameLayout.stopShimmer();
@@ -135,7 +133,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
             isColorCodeExpanded = !isColorCodeExpanded;
         });
 
-        qrCode.setOnClickListener(v -> showQRCodeDialog());
+        qrCode.setOnClickListener(v -> showQRCodeDialog("qrcode"));
+        barcode.setOnClickListener(v -> showQRCodeDialog("barcode"));
         backButton.setOnClickListener(v -> onBackPressed());
 
         findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
@@ -230,6 +229,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemName = findViewById(R.id.itemName);
         itemImage = findViewById(R.id.itemImage);
         qrCode = findViewById(R.id.qrCode);
+        barcode = findViewById(R.id.barcode);
 
         cardViewDescription = findViewById(R.id.cardViewDescription);
         itemDescription = findViewById(R.id.itemDescription);
@@ -282,6 +282,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             itemUnit.setText(getIntent().getStringExtra("location"));
             itemColorCode.setText(getIntent().getStringExtra("color_code"));
             qrCodeUrl = getIntent().getStringExtra("item_qrcode");
+            barcodeUrl = getIntent().getStringExtra("item_barcode");
 //            itemCategory.setText(getIntent().getStringExtra("parentcategory_id")+" - "+getIntent().getStringExtra("subcategory_id"));
             //currentQuantity = Integer.parseInt(getIntent().getStringExtra("quantity"));
             //itemQuantity.setText(String.valueOf(currentQuantity));
@@ -316,6 +317,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 itemUnit.setText(result.get(0).getLocation());
                 itemColorCode.setText(result.get(0).getColourCoding());
                 qrCodeUrl = result.get(0).getQrcode();
+                barcodeUrl = result.get(0).getBarcode();
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 detailedLayout.setVisibility(View.VISIBLE);
@@ -331,7 +333,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void showQRCodeDialog() {
+    private void showQRCodeDialog(String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View qrView = getLayoutInflater().inflate(R.layout.dialog_qr_code, null);
         builder.setView(qrView);
@@ -340,21 +342,52 @@ public class ItemDetailsActivity extends AppCompatActivity {
         Button shareButton = qrView.findViewById(R.id.share_button);
         Button downloadButton = qrView.findViewById(R.id.download_button);
 
-//        String qrCodeUrl = getIntent().getStringExtra("item_qrcode");
+        String imageUrl;
+        if (Objects.equals(type, "qrcode")) {
+            imageUrl = qrCodeUrl;
+        } else {
+            imageUrl = barcodeUrl;
+        }
 
-        Glide.with(this)
-                .load(qrCodeUrl)
-                .placeholder(R.drawable.no_image)
-                .error(R.drawable.no_image)
-                .into(qrCodeImage);
+        if (imageUrl.endsWith(".svg")) {
+            // Use Glide to load SVG
+            GlideApp.with(this)
+                    .as(PictureDrawable.class)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
+//                    .listener((RequestListener<PictureDrawable>) new SvgSoftwareLayerSetter(qrCodeImage))
+                    .into(qrCodeImage);
+        } else {
+            // Fallback for non-SVG images
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.no_image)
+                    .error(R.drawable.no_image)
+                    .into(qrCodeImage);
+        }
 
         builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        shareButton.setOnClickListener(v -> shareImage(qrCodeUrl));
-        downloadButton.setOnClickListener(v -> downloadImage(qrCodeUrl));
+        shareButton.setOnClickListener(v -> {
+            if (Objects.equals(type, "qrcode")) {
+                shareImage(qrCodeUrl);
+            } else {
+                shareImage(barcodeUrl);
+            }
+        });
+
+        downloadButton.setOnClickListener(v -> {
+            if (Objects.equals(type, "qrcode")) {
+                downloadImage(qrCodeUrl);
+            } else {
+                downloadImage(barcodeUrl);
+            }
+        });
     }
+
 
     private void shareImage(String imageUrl) {
         Glide.with(this)
