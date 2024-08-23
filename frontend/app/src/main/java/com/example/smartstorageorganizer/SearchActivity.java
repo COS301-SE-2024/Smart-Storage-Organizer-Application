@@ -15,18 +15,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SearchAdapter;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -63,6 +66,8 @@ public class SearchActivity extends AppCompatActivity {
     private RecentAdapter adapter;
     private String currentSelectedOption;
     private Spinner sortBySpinner;
+    private ConstraintLayout loader;
+    private ConstraintLayout resultsNotFound;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
 
@@ -77,6 +82,9 @@ public class SearchActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+        loader = findViewById(R.id.searchLoader);
+        resultsNotFound = findViewById(R.id.notFound);
+
         searchView = findViewById(R.id.searchView);
         searchResultsRecyclerView = findViewById(R.id.search_results_recycler_view);
         sortBySpinner = findViewById(R.id.sort_by_filter);
@@ -127,32 +135,6 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-//        searchView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    if (event.getRawX() <= (searchView.getLeft() + searchView.getCompoundDrawables()[0].getBounds().width())) {
-//                        startVoiceInput();
-//                        return true;
-//                    }
-//
-//                    else if (event.getRawX() >= (searchView.getRight() - searchView.getCompoundDrawables()[2].getBounds().width())) {
-//                        String query = searchView.getText().toString();
-//                        if (!query.isEmpty()) {
-//                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
-//                            SearchForItem(query, "*", "*");
-//                            searchResults.clear();
-//                        } else {
-//                            Toast.makeText(SearchActivity.this, "Please enter a search query", Toast.LENGTH_SHORT).show();
-//                        }
-//                        return true;
-//                    }
-//                }
-//                return false;
-//            }
-//        });
     }
 
     private void startVoiceInput() {
@@ -183,6 +165,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void handleVoiceInput(String spokenText) {
         if (!spokenText.isEmpty()) {
+            loader.setVisibility(View.VISIBLE);
             Toast.makeText(SearchActivity.this, "Search query: " + spokenText, Toast.LENGTH_SHORT).show();
             SearchForItem(spokenText, "*", "*");
             searchResults.clear();
@@ -235,6 +218,10 @@ public class SearchActivity extends AppCompatActivity {
 
     public CompletableFuture<List<SearchResult>> SearchForItem(String target, String parentcategoryid, String subcategoryid) {
         CompletableFuture<List<SearchResult>> future = new CompletableFuture<>();
+        resultsNotFound.setVisibility(View.GONE);
+        loader.setVisibility(View.VISIBLE);
+        searchResults.clear();
+        adapter.notifyDataSetChanged();
 
         String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -260,9 +247,6 @@ public class SearchActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
                         String responseData = response.body().string();
-//                    List<Ite> searchResults = parseSearchResults(responseData);
-                        Log.i("Search Result", responseData);
-//                    future.complete(searchResults);
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
@@ -273,26 +257,6 @@ public class SearchActivity extends AppCompatActivity {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
 
                                 JSONObject itemObj = new JSONObject(itemObject.getString("_source"));
-
-
-                                runOnUiThread(() -> {
-                                    try {
-                                        Log.i("Search Results convert", itemObj.getString("item_id"));
-                                        Log.i("Search Results convert", itemObj.getString("item_name"));
-                                        Log.i("Search Results convert", itemObj.getString("description"));
-                                        Log.i("Search Results convert", itemObj.getString("colourcoding"));
-                                        Log.i("Search Results convert", itemObj.getString("barcode"));
-                                        Log.i("Search Results convert", itemObj.getString("qrcode"));
-                                        Log.i("Search Results convert", itemObj.getString("quanity"));
-                                        Log.i("Search Results convert", itemObj.getString("email"));
-                                        Log.i("Search Results convert", itemObj.getString("item_image"));
-                                        Log.i("Search Results convert", itemObj.getString("subcategoryid"));
-                                        Log.i("Search Results convert", itemObj.getString("parentcategoryid"));
-//                                    Log.e("Search Results Body Array", itemObject.getString("_source") );
-                                    } catch (JSONException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                });
 
                                 ItemModel item = new ItemModel();
                                 item.setItemId(itemObj.getString("item_id"));
@@ -310,24 +274,32 @@ public class SearchActivity extends AppCompatActivity {
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                                 searchResults.add(item);
-//                            adapter.notifyDataSetChanged();
                             }
                             runOnUiThread(() -> {
                                 adapter.notifyDataSetChanged();
-                                sortBySpinner.setVisibility(View.VISIBLE);
+//                                sortBySpinner.setVisibility(View.VISIBLE);
+                                loader.setVisibility(View.GONE);
+                                if(searchResults.isEmpty()){
+                                    resultsNotFound.setVisibility(View.VISIBLE);
+                                }
                             });
 
                         }catch (JSONException e) {
+                            if(searchResults.isEmpty()){
+                                resultsNotFound.setVisibility(View.VISIBLE);
+                            }
                             throw new RuntimeException(e);
                         }
 
                     } else {
+                        loader.setVisibility(View.GONE);
                         future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                     }
                 }
             });
 
                 }).exceptionally(ex -> {
+            loader.setVisibility(View.GONE);
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
