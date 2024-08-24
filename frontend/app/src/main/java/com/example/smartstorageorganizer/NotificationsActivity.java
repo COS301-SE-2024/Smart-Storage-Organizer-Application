@@ -61,17 +61,17 @@ public class NotificationsActivity extends AppCompatActivity{
         recyclerView = findViewById(R.id.recycler_view_messages);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Button buttonTransactions = findViewById(R.id.button_transactions);
-        Button buttonMessages = findViewById(R.id.button_messages);
-        Button buttonOffers = findViewById(R.id.button_offers);
+//        Button buttonTransactions = findViewById(R.id.button_transactions);
+//        Button buttonMessages = findViewById(R.id.button_messages);
+//        Button buttonOffers = findViewById(R.id.button_offers);
 
-        notifications = new ArrayList<AppNotification>();
+        notifications = new ArrayList<>();
         adapter = new NotificationAdapter(notifications);
         recyclerView.setAdapter(adapter);
 
-        buttonTransactions.setOnClickListener(v -> fetchNotifications("transactions"));
-        buttonMessages.setOnClickListener(v -> fetchNotifications("messages"));
-        buttonOffers.setOnClickListener(v -> fetchNotifications("offers"));
+//        buttonTransactions.setOnClickListener(v -> fetchNotifications("transactions"));
+//        buttonMessages.setOnClickListener(v -> fetchNotifications("messages"));
+//        buttonOffers.setOnClickListener(v -> fetchNotifications("offers"));
 
         // Fetch all notifications on startup
         fetchNotifications("all");

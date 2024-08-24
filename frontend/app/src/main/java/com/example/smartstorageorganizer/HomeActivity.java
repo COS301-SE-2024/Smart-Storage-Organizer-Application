@@ -19,6 +19,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,6 +33,7 @@ import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
+import com.example.smartstorageorganizer.ui.notifications.NotificationsFragment;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -52,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     public ActivityHomeBinding binding;
     public String currentName, currentSurname, currentPicture;
     NavigationView navigationView;
+    private FragmentManager fragmentManager;
     ImageButton searchButton;
 
     @Override
@@ -60,6 +65,8 @@ public class HomeActivity extends AppCompatActivity {
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        fragmentManager = getSupportFragmentManager();
 
         setSupportActionBar(binding.appBarHome.toolbar);
 
@@ -100,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
         getUserRole(getIntent().getStringExtra("email"), "");
 
 //        FirebaseApp.initializeApp(this);
@@ -118,8 +126,26 @@ public class HomeActivity extends AppCompatActivity {
 //        if (!isAdmin()) {
 //            hideAdminMenuItems(navigationView.getMenu());
 //        }
+//        findViewById(R.id.nav_notifications).setOnClickListener(v -> {
+//            // Start NotificationsActivity when the notifications button is clicked
+//            Intent intent = new Intent(HomeActivity.this, NotificationsFragment.class);
+//            startActivity(intent);
+//        });
+//        findViewById(R.id.nav_notifications).setOnClickListener(v -> {
+//            // Load the NotificationsFragment when the notifications button is clicked
+//            loadFragment(new NotificationsFragment());
+//        });
+
         handleIntent(getIntent());
     }
+
+//    private void triggerMessageReceived() {
+//        // Create an instance of MyFirebaseMessagingService
+//        MyFirebaseMessagingService messagingService = new MyFirebaseMessagingService();
+//
+//        // Simulate a message received
+//        messagingService.simulateMessageReceived("Test Title", "This is a simulated notification message.");
+//    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -132,6 +158,13 @@ public class HomeActivity extends AppCompatActivity {
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
             navController.navigate(R.id.nav_notifications);
         }
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override

@@ -15,6 +15,7 @@ legacySupportV4 = "1.0.0"
 supportAnnotations = "28.0.0"
 firebaseDatabase = "21.0.0"
 uiDesktop = "1.6.8"
+firebaseMessaging = "24.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -32,6 +33,8 @@ legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", ver
 support-annotations = { group = "com.android.support", name = "support-annotations", version.ref = "supportAnnotations" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "uiDesktop" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

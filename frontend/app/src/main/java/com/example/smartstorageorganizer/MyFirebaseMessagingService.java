@@ -1,5 +1,8 @@
 package com.example.smartstorageorganizer;
 
+import static android.app.Notification.EXTRA_TITLE;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,8 +15,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import com.amazonaws.mobile.client.results.Tokens;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -26,31 +31,82 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MyFirebaseMessagingService extends Service {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    public static final String ACTION_NEW_NOTIFICATION = "com.example.smartstorageorganizer.NEW_NOTIFICATION";
+    private Intent intent;
+    private int flags;
+    private int startId;
+
     public MyFirebaseMessagingService() {
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+//    @Override
+//    public IBinder onBind(Intent intent) {
+//        // TODO: Return the communication channel to the service.
+//        throw new UnsupportedOperationException("Not yet implemented");
+//    }
     //Implementation
 
     //    Handles the Incoming msgs from FCM
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // Handle FCM messages here.
+        super.onMessageReceived(remoteMessage);
         Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());
         if (remoteMessage.getNotification() != null) {
 //            Display the notification msg if it exists
+//            incrementNotificationCount();
+//            sendNotification(remoteMessage.getNotification().getBody());
+//            sendMessageToActivity(remoteMessage.getNotification().getBody());
+//            String title = remoteMessage.getNotification().getTitle();
+            String message = remoteMessage.getNotification().getBody();
+            processNotification(message);
             incrementNotificationCount();
-            sendNotification(remoteMessage.getNotification().getBody());
-            sendMessageToActivity(remoteMessage.getNotification().getBody());
 
+            sendNotification(message);
+            sendBroadcastToFragment(message);
 
+//            handleNotification(remoteMessage.getNotification().getTitle(),
+//                    remoteMessage.getNotification().getBody());
 
         }
     }
+
+    private void sendBroadcastToFragment(String message) {
+        Intent broadcastIntent = new Intent(ACTION_NEW_NOTIFICATION);
+        broadcastIntent.putExtra("message", message);
+        sendBroadcast(broadcastIntent);
+    }
+
+    public void processNotification(String message) {
+        // Logic to handle the notification (similar to the original onMessageReceived)
+        // You can pass data to NotificationsFragment or other components if needed.
+
+        // For example, send notification to activity or update UI component
+        sendMessageToActivity(message);
+        sendNotification(message);
+    }
+
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        this.intent = intent;
+//        this.flags = flags;
+//        this.startId = startId;
+//        if (intent != null && intent.hasExtra(EXTRA_TITLE) && intent.hasExtra(EXTRA_MESSAGE)) {
+//            String title = intent.getStringExtra(EXTRA_TITLE);
+//            String message = intent.getStringExtra(EXTRA_MESSAGE);
+//            handleNotification(title, message);
+//        }
+//        return START_NOT_STICKY;
+//    }
+//
+//    public void simulateMessageReceived(String title, String messageBody) {
+//        handleNotification(title, messageBody);
+//    }
+//
+//    // Extracted method to handle notification logic
+//    private void handleNotification(String title, String messageBody) {
+//        sendNotification(title, messageBody);
+//    }
 
     private void sendMessageToActivity(String message) {
         Intent intent = new Intent(this, NotificationsActivity.class);
@@ -63,6 +119,10 @@ public class MyFirebaseMessagingService extends Service {
         SharedPreferences sharedPreferences = getSharedPreferences("notification_prefs", MODE_PRIVATE);
         int count = sharedPreferences.getInt("notification_count", 0);
         sharedPreferences.edit().putInt("notification_count", count + 1).apply();
+    }
+
+    public void simulateMessageReceived(String title, String message) {
+        processNotification(message);
     }
 
 
@@ -99,7 +159,7 @@ public class MyFirebaseMessagingService extends Service {
 
     private void updateUserTokenOnServer(String idToken, String accessToken, String refreshToken, String fcmToken) {
         //backend endpoint
-        String backendUrl = "";
+        String backendUrl = "https://fcm.googleapis.com/fcm/send";
 
         // Create a JSON object to hold the request data
         JSONObject requestBody = new JSONObject();
@@ -151,6 +211,8 @@ public class MyFirebaseMessagingService extends Service {
     private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("notificationBody", messageBody);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         String channelId = "default_channel_id";

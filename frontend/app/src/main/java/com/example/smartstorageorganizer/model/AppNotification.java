@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer.model;
 import java.util.Date;
 
 public class AppNotification {
+    private String title;
     private String content;
     private Date date;
     private boolean isRead;
@@ -15,6 +16,14 @@ public class AppNotification {
         this.content = content;
         this.date = date;
         this.isRead = isRead;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

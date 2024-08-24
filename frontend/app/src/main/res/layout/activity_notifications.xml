@@ -7,92 +7,65 @@
     android:padding="16dp"
     tools:context=".NotificationsActivity">
 
+    <RelativeLayout
+        android:id="@+id/searchTop"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:paddingTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/bgthree">
+
     <TextView
         android:id="@+id/text_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:text="Notifications"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/textView_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:text="Message will appear here"
         android:textSize="18sp"
+        android:textColor="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:padding="16dp" />
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="50dp">
+        android:paddingTop="5dp">
 
-        <TextView
-            android:id="@+id/button_transactions"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_messages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Transactions"
-            android:textColor="#0582CA"
-            android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
-            android:textSize="16sp"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:onClick="onTransactionsClick"/>
+            android:layout_marginTop="16dp" />
 
-        <TextView
-            android:id="@+id/button_messages"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Messages"
-            android:textColor="#0582CA"
-            android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
-            android:textSize="16sp"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:onClick="onMessagesClick"/>
 
-        <TextView
-            android:id="@+id/button_offers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Offers for you"
-            android:textColor="#0582CA"
-            android:background="?attr/selectableItemBackground"
-            android:padding="16dp"
-            android:textSize="16sp"
-            android:drawableEnd="@android:drawable/ic_menu_more"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:onClick="onOffersClick"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/text_unread_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Unread: 0"
-        android:textSize="16sp"
-        android:textColor="#FF0000"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_messages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+<!--    <TextView-->
+<!--        android:id="@+id/text_unread_count"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Unread: 0"-->
+<!--        android:textSize="16sp"-->
+<!--        android:textColor="#FF0000"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:layout_marginTop="8dp" />-->
 
 </LinearLayout>

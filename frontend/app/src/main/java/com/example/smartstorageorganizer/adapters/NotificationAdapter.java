@@ -20,7 +20,6 @@ import java.util.Locale;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     private final List<AppNotification> notifications;
-    private Context context;
 
 
     public NotificationAdapter(List<AppNotification> notifications) {
