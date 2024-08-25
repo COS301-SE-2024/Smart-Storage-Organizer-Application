@@ -697,7 +697,6 @@ public class Utils
 //        String json = "{}";
         String json = "{\"organizationid\":\""+Integer.parseInt(organizationId)+"\" }";
 
-
         List<ColorCodeModel> colorCodeModelList = new ArrayList<>();
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");

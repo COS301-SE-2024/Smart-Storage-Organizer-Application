@@ -170,11 +170,11 @@ public class RegistrationActivity extends AppCompatActivity {
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
                         Log.i("MyAmplifyApp", "Sign-up successful: " + result.toString());
-                        moveToVerificationActivity(emailText);
+                        moveToVerificationActivity(emailText, passwordText);
                     },
                     error -> {
                         Log.e("MyAmplifyApp", "Sign-up failed", error);
-                        handleSignUpFailure(emailText, error);
+                        handleSignUpFailure(emailText, passwordText, error);
                     }
             );
         } catch (Exception e) {
@@ -183,21 +183,22 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private void moveToVerificationActivity(String email) {
+    private void moveToVerificationActivity(String email, String password) {
         runOnUiThread(() -> {
             Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
             intent.putExtra("email", email);
+            intent.putExtra("password", password);
             intent.putExtra("organization_id", "1");
             startActivity(intent);
             finish();
         });
     }
 
-    private void handleSignUpFailure(String email, Exception error) {
+    private void handleSignUpFailure(String email, String password, Exception error) {
         runOnUiThread(() -> {
             if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
                 Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show();
-                moveToVerificationActivity(email);
+                moveToVerificationActivity(email, password);
             } else {
                 resetSignUpButton();
                 Toast.makeText(this, "Sign Up failed, please try again later.", Toast.LENGTH_LONG).show();

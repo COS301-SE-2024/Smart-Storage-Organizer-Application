@@ -29,43 +29,38 @@ public class OrganizationUtils {
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.CreateOrganization;
         RequestBody body = RequestBody.create(json, mediaType);
-        TokenManager.getToken().thenAccept(results->{
-            Log.i(message, "POST request succeeded: Inside");
-            Request request = new Request.Builder()
-                    .url(apiUrl)
-                    .addHeader("Authorization", results)
-                    .post(body)
-                    .build();
 
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e(message, "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
-                        callback.onFailure(e.getMessage());
+                        Log.i(message, "POST request succeeded: " + responseData);
+                        callback.onSuccess(true);
+                    });
+                } else {
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed: " + response.code());
+                        callback.onFailure("Response code" + response.code());
                     });
                 }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
-                            callback.onSuccess(true);
-                        });
-                    } else {
-                        activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
-                            callback.onFailure("Response code" + response.code());
-                        });
-                    }
-                }
-            });
-        }).exceptionally(ex -> {
-//            Log.e("TokenError", "Failed to get user token", ex);
-            return null;
+            }
         });
+
     }
 }

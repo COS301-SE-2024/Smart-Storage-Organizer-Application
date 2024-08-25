@@ -22,14 +22,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class EmailVerificationActivity extends AppCompatActivity {
-
+    public static final String TAG = "AmplifyQuickstart";
     // UI Elements
     EditText inputCode1;
     EditText inputCode2;
@@ -110,6 +113,44 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 + inputCode6.getText().toString().trim();
     }
 
+    CompletableFuture<Boolean> signIn(String email, String password) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Amplify.Auth.signIn(
+                email,
+                password,
+                result -> {
+                    if (result.isSignedIn()) {
+                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+                        future.complete(true);
+                    } else {
+                        handleSignInFailure("Sign in not complete.");
+                        future.complete(false);
+                    }
+                },
+                error -> handleSignInError(error, email, future)
+        );
+        return future;
+    }
+
+    public void handleSignInFailure(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    public void handleSignInError(Throwable error, String email, CompletableFuture<Boolean> future) {
+        Log.e(TAG, error.toString());
+        String errorMessage = error.toString().toLowerCase(Locale.ROOT);
+
+        if (errorMessage.contains("user is not confirmed")) {
+            Toast.makeText(this, "Failed to confirm email address. Please try again.", Toast.LENGTH_LONG).show();
+//            handleUserNotConfirmed(email, future);
+        } else {
+            handleSignInFailure("Failed to confirm email address. Please try again.");
+            future.complete(false);
+        }
+    }
+
     CompletableFuture<Boolean> confirmSignUp(String email, String code) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.confirmSignUp(
@@ -120,7 +161,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     future.complete(true);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+                        signIn(email, getIntent().getStringExtra("password"));
+//                        showRequestSentDialog();
                     });
                 },
                 error -> {
@@ -130,13 +172,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 }
         );
         return future;
-    }
-
-    private void navigateToMainActivity(String email) {
-        Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
-        intent.putExtra(EMAIL, email);
-        startActivity(intent);
-        finish();
     }
 
     private void resendOtp() {
@@ -203,6 +238,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 if (Boolean.TRUE.equals(result)) {
 //                    navigateToMainActivity(username);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+                    signOut();
                     showRequestSentDialog();
                 }
             }
@@ -212,6 +248,19 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 Toast.makeText(EmailVerificationActivity.this, "user verification failed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+                        showRequestSentDialog();
+//                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
     }
 
     void showRequestSentDialog() {
