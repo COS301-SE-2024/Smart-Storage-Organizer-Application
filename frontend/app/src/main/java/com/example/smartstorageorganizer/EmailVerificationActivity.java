@@ -121,7 +121,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
                         setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
-                        showRequestSentDialog();
                     });
                 },
                 error -> {
@@ -204,6 +203,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 if (Boolean.TRUE.equals(result)) {
 //                    navigateToMainActivity(username);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+                    showRequestSentDialog();
                 }
             }
 
@@ -225,7 +225,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EmailVerificationActivity.this, LandingActivity.class);
+                Intent intent = new Intent(EmailVerificationActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

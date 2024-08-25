@@ -217,7 +217,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchAllItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -291,7 +291,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -322,7 +322,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void fetchAndSetupCategories() {
-        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;
@@ -443,7 +443,7 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner.setVisibility(View.GONE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
-        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();

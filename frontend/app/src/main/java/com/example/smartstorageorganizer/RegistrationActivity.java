@@ -156,7 +156,7 @@ public class RegistrationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "Makro"));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "1"));
 
         try {
             buttonLoader.setVisibility(View.VISIBLE);
@@ -187,6 +187,7 @@ public class RegistrationActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             Intent intent = new Intent(RegistrationActivity.this, EmailVerificationActivity.class);
             intent.putExtra("email", email);
+            intent.putExtra("organization_id", "1");
             startActivity(intent);
             finish();
         });

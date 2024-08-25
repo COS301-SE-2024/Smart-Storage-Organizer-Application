@@ -146,7 +146,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void fetchParentCategories() {
         String email = getIntent().getStringExtra(EMAIL_KEY);
-        Utils.fetchParentCategories(0, email, this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(0, email,"", this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;

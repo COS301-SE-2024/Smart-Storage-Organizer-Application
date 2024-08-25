@@ -55,8 +55,10 @@ public class Utils
 
     private Utils() {}
 
-    public static void fetchParentCategories(int categoryId, String email, Activity activity, OperationCallback<List<CategoryModel>> callback) {
-        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
+    public static void fetchParentCategories(int categoryId, String email, String organizationID, Activity activity, OperationCallback<List<CategoryModel>> callback) {
+//        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
+        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) +"\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
+
 
         List<CategoryModel> categoryModelList = new ArrayList<>();
 
@@ -172,9 +174,9 @@ public class Utils
         });
     }
 
-    public static void filterByCategory(int parentCategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+    public static void filterByCategory(int parentCategory, int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
 //        String json = "{\"parentcategory\":\"" + parentCategory + "\" }";
-        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\""+ Integer.parseInt(organizationID)+"\" }";
         String message = "View Response Results";
 
         List<ItemModel> itemModelList = new ArrayList<>();
@@ -257,9 +259,9 @@ public class Utils
         });
     }
 
-    public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+    public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
 //        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\" }";
-        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID) +"\" }";
 
         String message = "View Request Method";
 
@@ -561,9 +563,9 @@ public class Utils
         });
     }
 
-    public static void fetchAllItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void fetchAllItems(int howMany, int pageNumber,String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID)+"\"}";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -884,8 +886,10 @@ public class Utils
         });
     }
 
-    public static void fetchRecentItems(String email, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"email\":\"" + email + "\" }";
+    public static void fetchRecentItems(String email, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
+//        String json = "{\"email\":\"" + email + "\" }";
+        String json = "{\"email\":\""+ email +"\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
+
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -1207,9 +1211,9 @@ public class Utils
         });
     }
 
-    public static void FetchUncategorizedItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void FetchUncategorizedItems(int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID) + "\" }";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 

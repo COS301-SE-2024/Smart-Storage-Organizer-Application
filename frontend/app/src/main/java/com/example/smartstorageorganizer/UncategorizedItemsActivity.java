@@ -173,7 +173,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
 
-        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
