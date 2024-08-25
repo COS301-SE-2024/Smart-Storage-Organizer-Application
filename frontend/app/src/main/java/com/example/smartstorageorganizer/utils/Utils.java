@@ -692,9 +692,11 @@ public class Utils
         });
     }
 
-    public static void fetchAllColour(Activity activity, OperationCallback<List<ColorCodeModel>> callback)
+    public static void fetchAllColour(String organizationId, Activity activity, OperationCallback<List<ColorCodeModel>> callback)
     {
-        String json = "{}";
+//        String json = "{}";
+        String json = "{\"organizationid\":\""+Integer.parseInt(organizationId)+"\" }";
+
 
         List<ColorCodeModel> colorCodeModelList = new ArrayList<>();
 

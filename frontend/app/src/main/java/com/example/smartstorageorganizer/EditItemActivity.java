@@ -482,7 +482,7 @@ public class EditItemActivity extends AppCompatActivity {
 
     private void fetchCategories(int categoryId) {
         String email = getIntent().getStringExtra("ezemakau@gmail.com");
-        Utils.fetchParentCategories(categoryId, email,"", this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(categoryId, email, getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId == 0) {

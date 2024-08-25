@@ -46,6 +46,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
     private boolean selectAllFlag = true;
+    private String organizationID;
+
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -83,6 +85,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
                 intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
                 intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
+                intent.putExtra("organization_id", organizationID);
 
                 context.startActivity(intent);
             } else {
@@ -263,5 +266,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         selectedItems.clear();
         ((ViewItemActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
         selectAllFlag = true;
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationID = organizationId;
     }
 }

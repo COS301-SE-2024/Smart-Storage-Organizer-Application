@@ -375,7 +375,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
 
     public void assignItemToColor(String itemId) {
         // Fetch all available color codes
-        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+        Utils.fetchAllColour(getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
                 // Create an array of color names to display to the user

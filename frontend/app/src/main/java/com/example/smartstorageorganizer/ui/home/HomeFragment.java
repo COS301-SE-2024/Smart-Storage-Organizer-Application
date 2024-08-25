@@ -230,6 +230,7 @@ public class HomeFragment extends Fragment {
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
                         categoryAdapter.setOrganizationId(organizationID);
+                        recentAdapter.setOrganizationId(organizationID);
                         loadRecentItems(currentEmail, organizationID);
                         shimmerFrameLayoutName.startShimmer();
                         shimmerFrameLayoutName.setVisibility(View.GONE);
