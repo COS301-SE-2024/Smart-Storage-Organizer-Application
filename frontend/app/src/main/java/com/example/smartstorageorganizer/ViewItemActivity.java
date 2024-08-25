@@ -182,6 +182,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemModelList = new ArrayList<>();
         itemAdapter = new ItemAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
+        itemAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
 
     private void loadInitialData() {

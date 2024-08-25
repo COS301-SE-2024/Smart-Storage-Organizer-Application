@@ -161,6 +161,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         suggestedCategoriesList = new ArrayList<>();
         recentAdapter = new RecentAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
+        recentAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
 
     public void loadInitialData() {
