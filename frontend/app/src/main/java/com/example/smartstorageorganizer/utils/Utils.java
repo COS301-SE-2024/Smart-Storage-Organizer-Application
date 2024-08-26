@@ -969,7 +969,7 @@ public class Utils
         });
     }
 
-    public static void fetchCategorySuggestions(String name, String description, String email, Activity activity, OperationCallback<List<CategoryModel>> callback) {
+    public static void fetchCategorySuggestions(String name, String description, String email,String organizationId, Activity activity, OperationCallback<List<CategoryModel>> callback) {
         // API endpoint that can return category suggestions based on the item
         String API_URL = BuildConfig.RecommendCategoryEndPoint;
         OkHttpClient client = new OkHttpClient();
@@ -979,6 +979,7 @@ public class Utils
             jsonObject.put("itemname", name);
             jsonObject.put("itemdescription", description);
             jsonObject.put("useremail", email);
+            jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -1057,7 +1058,7 @@ public class Utils
         });
     }
 
-    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, Activity activity, OperationCallback<Boolean> callback) {
+    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
@@ -1066,7 +1067,6 @@ public class Utils
         int quantity = 1;
 
         String email = userEmail;
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\", \"category\":\""+3+"\", \"sub_category\":\""+5+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.AddItemEndPoint;
@@ -1084,6 +1084,7 @@ public class Utils
             jsonObject.put("quanity", quantity);
             jsonObject.put("location", location);
             jsonObject.put("email", email);
+            jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();
             return;

@@ -1,6 +1,8 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -29,6 +31,7 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class EmailVerificationActivity extends AppCompatActivity {
@@ -120,7 +123,12 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 password,
                 result -> {
                     if (result.isSignedIn()) {
-                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+                        if(Objects.equals(getIntent().getStringExtra("type"), "registration")){
+                            setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+                        }
+                        else {
+                            setUserToVerified(getIntent().getStringExtra(EMAIL), "");
+                        }
                         future.complete(true);
                     } else {
                         handleSignInFailure("Sign in not complete.");
@@ -143,7 +151,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         String errorMessage = error.toString().toLowerCase(Locale.ROOT);
 
         if (errorMessage.contains("user is not confirmed")) {
-            Toast.makeText(this, "Failed to confirm email address. Please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed: "+error, Toast.LENGTH_LONG).show();
 //            handleUserNotConfirmed(email, future);
         } else {
             handleSignInFailure("Failed to confirm email address. Please try again.");
@@ -161,7 +169,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     future.complete(true);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        signIn(email, getIntent().getStringExtra("password"));
+                        checkIfSignedIn(email, getIntent().getStringExtra("password"));
 //                        showRequestSentDialog();
                     });
                 },
@@ -238,7 +246,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 if (Boolean.TRUE.equals(result)) {
 //                    navigateToMainActivity(username);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
-                    signOut();
+//                    signOut();
                     showRequestSentDialog();
                 }
             }
@@ -250,11 +258,69 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
     }
 
-    public void signOut() {
+    private void setUserToVerified(String username, String authorization) {
+        UserUtils.setUserToVerified(username, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                setUserRole(username, "Manager", "");
+                Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "User approval failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setUserRole(String username, String role, String authorization) {
+        UserUtils.setUserRole(username, role, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    showRequestSentDialog();
+                    Toast.makeText(EmailVerificationActivity.this, "User role set successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "Setting user role failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void checkIfSignedIn(String email, String password) {
+        isSignedIn().thenAccept(isSignedIn -> {
+            if (Boolean.TRUE.equals(isSignedIn)) {
+                signOut(email, password);
+            } else {
+                signIn(email, password);
+//                Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
+//                Log.i(TAG, "User is not signed in.");
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean> isSignedIn() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Amplify.Auth.fetchAuthSession(
+                result -> future.complete(result.isSignedIn()),
+                error -> {
+                    Log.e(TAG, error.toString());
+                    future.completeExceptionally(error);
+                }
+        );
+        return future;
+    }
+
+    public void signOut(String email, String password) {
         Amplify.Auth.signOut(
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
-                        showRequestSentDialog();
+                        signIn(email, password);
+//                        showRequestSentDialog();
 //                        handleSuccessfulSignOut();
                     } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
 //                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());

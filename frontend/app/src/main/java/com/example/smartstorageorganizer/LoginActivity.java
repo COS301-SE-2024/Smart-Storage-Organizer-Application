@@ -36,6 +36,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
@@ -62,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initializeUI();
-        checkIfSignedIn();
+//        checkIfSignedIn();
+        signOut();
         configureInsets();
         setOnClickListeners();
     }
@@ -76,6 +78,19 @@ public class LoginActivity extends AppCompatActivity {
         loginButtonIcon = findViewById(R.id.login_button_icon);
         loginButtonText = findViewById(R.id.login_button_text);
         resetPasswordLink = findViewById(R.id.resetPasswordLink);
+    }
+
+    public void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+//                        showRequestSentDialog()
+//                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
     }
 
     public void checkIfSignedIn() {

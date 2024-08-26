@@ -167,7 +167,8 @@ public class AddOrganizationActivity extends AppCompatActivity {
                     AuthSignUpOptions.builder().userAttributes(attributes).build(),
                     result -> {
                         Log.i("MyAmplifyApp", "Sign-up successful: " + result.toString());
-                        addNewOrganization(organizationText, emailText, passwordText);
+//                        addNewOrganization(organizationText, emailText, passwordText);
+                        moveToVerificationActivity(emailText, passwordText);
                     },
                     error -> {
                         Log.e("MyAmplifyApp", "Sign-up failed", error);
@@ -185,7 +186,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
             Intent intent = new Intent(AddOrganizationActivity.this, EmailVerificationActivity.class);
             intent.putExtra("email", email);
             intent.putExtra("password", password);
-            intent.putExtra("organization_id", "1");
+            intent.putExtra("type", "organization");
             startActivity(intent);
             finish();
         });

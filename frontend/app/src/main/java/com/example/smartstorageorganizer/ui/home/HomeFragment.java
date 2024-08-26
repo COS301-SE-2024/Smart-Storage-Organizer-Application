@@ -356,7 +356,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
-        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, requireActivity(), new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, organizationID, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 suggestedCategory.clear();
@@ -508,7 +508,7 @@ public class HomeFragment extends Fragment {
             Log.i("progress", units.toString());
             String allocated=Utils.AllocateUnitToItem(units);
             Log.i("progress", "Allocated: "+allocated);
-            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, requireActivity(), new OperationCallback<Boolean>() {
+            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, organizationID,requireActivity(), new OperationCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean result) {
                     Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
