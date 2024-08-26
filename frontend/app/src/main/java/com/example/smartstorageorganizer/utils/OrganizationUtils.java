@@ -28,12 +28,13 @@ public class OrganizationUtils {
     private static String type = "application/json; charset=utf-8";
     private OrganizationUtils() {}
 
-    public static void addOrganization(String organizationName,String ownerEmail, Activity activity, OperationCallback<Boolean> callback) {
+    public static void addOrganization(String organizationName, String ownerEmail, Activity activity, OperationCallback<OrganizationModel> callback) {
         String json = "{\"name\":\"" + organizationName + "\", \"owner\":\"" + ownerEmail + "\"}";
 
-        String message = "Add Category";
+        OrganizationModel organization = new OrganizationModel();
+        String message = "Add Organization";
         Log.i(message, "POST request succeeded: Outside");
-        MediaType mediaType = MediaType.get(type);
+        MediaType mediaType = MediaType.get(type); // Ensure 'type' is defined properly, e.g., "application/json"
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.CreateOrganization;
         RequestBody body = RequestBody.create(json, mediaType);
@@ -48,7 +49,6 @@ public class OrganizationUtils {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 activity.runOnUiThread(() -> {
-                    Log.e(message, "POST request failed", e);
                     callback.onFailure(e.getMessage());
                 });
             }
@@ -57,20 +57,37 @@ public class OrganizationUtils {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> {
-                        Log.i(message, "POST request succeeded: " + responseData);
-                        callback.onSuccess(true);
-                    });
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String organizationString = jsonObject.getString("organization");
+
+                        // Parse the stringified organization JSON
+                        JSONObject organizationJson = new JSONObject(organizationString);
+
+                        // Extract the values
+                        String orgName = organizationJson.getString("name");
+                        String orgId = organizationJson.getString("id");
+
+                        // Set values to the OrganizationModel
+                        organization.setOrganizationName(orgName);
+                        organization.setOrganizationId(orgId);
+
+                        activity.runOnUiThread(() -> callback.onSuccess(organization));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
+                        callback.onFailure("Response code: " + response.code());
                     });
                 }
             }
         });
-
     }
+
 
     public static void fetchOrganizationDetails(String organizationId, Activity activity, OperationCallback<OrganizationModel> callback)
     {

@@ -229,7 +229,6 @@ public class HomeActivity extends AppCompatActivity {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
-                //move to a different page
                 future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -237,8 +236,6 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 });
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                // Sign Out completed with some errors. User is signed out of the device.
-                //move to the different page
                 future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);

@@ -359,11 +359,9 @@ public class UserUtils {
 
     public static void setUserRole(String username, String role, String authorizationToken, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{"
-                + "\"header\": {"
-                + "\"Authorization\": \"" + authorizationToken + "\""
-                + "},"
                 + "\"body\": {"
-                + "\"username\": \"" + username + "\""
+                + "\"username\": \"" + username + "\","
+                + "\"role\": \"" + role + "\""
                 + "}"
                 + "}";
 

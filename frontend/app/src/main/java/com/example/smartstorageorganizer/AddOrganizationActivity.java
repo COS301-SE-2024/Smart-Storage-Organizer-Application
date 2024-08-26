@@ -21,6 +21,7 @@ import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.model.OrganizationModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.OrganizationUtils;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -64,7 +65,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
             String phone = phoneNumberEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             if (validateForm(organizationName, name, surname, email, phone, password)) {
-                performSignUp();
+                addNewOrganization(organizationName, email, password);
             }
         });
 
@@ -140,7 +141,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
         return true;
     }
 
-    private void performSignUp() {
+    private void performSignUp(String organizationId) {
         String organizationText = organizationEditText.getText().toString().trim();
         String nameText = nameEditText.getText().toString().trim();
         String surnameText = surnameEditText.getText().toString().trim();
@@ -153,7 +154,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.familyName(), surnameText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), phoneText));
         attributes.add(new AuthUserAttribute(AuthUserAttributeKey.picture(), BuildConfig.DefaultImage));
-        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), "1"));
+        attributes.add(new AuthUserAttribute(AuthUserAttributeKey.address(), organizationId));
 
         try {
             buttonLoader.setVisibility(View.VISIBLE);
@@ -186,6 +187,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
             Intent intent = new Intent(AddOrganizationActivity.this, EmailVerificationActivity.class);
             intent.putExtra("email", email);
             intent.putExtra("password", password);
+            intent.putExtra("organization", organizationEditText.getText().toString().trim());
             intent.putExtra("type", "organization");
             startActivity(intent);
             finish();
@@ -219,13 +221,12 @@ public class AddOrganizationActivity extends AppCompatActivity {
     }
 
     public void addNewOrganization(String organizationName, String ownerEmail, String password) {
-        OrganizationUtils.addOrganization(organizationName, ownerEmail, this, new OperationCallback<Boolean>() {
+        OrganizationUtils.addOrganization(organizationName, ownerEmail, this, new OperationCallback<OrganizationModel>() {
             @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(AddOrganizationActivity.this, "Organization Added Successfully.", Toast.LENGTH_LONG).show();
-                    moveToVerificationActivity(ownerEmail, password);
-                }
+            public void onSuccess(OrganizationModel result) {
+                performSignUp(result.getOrganizationId());
+                Toast.makeText(AddOrganizationActivity.this, "Organization Added Successfully."+ result.getOrganizationId(), Toast.LENGTH_LONG).show();
+                moveToVerificationActivity(ownerEmail, password);
             }
 
             @Override

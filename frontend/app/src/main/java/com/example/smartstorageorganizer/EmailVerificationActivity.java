@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -24,12 +26,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.model.OrganizationModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.OrganizationUtils;
 import com.example.smartstorageorganizer.utils.UserUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -58,6 +66,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_email_verification);
 
         initializeUI();
+        signOut();
         setupOTPInputs();
         startCountdown();
         configureInsets();
@@ -88,6 +97,18 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
 
         resendOtpTextView.setOnClickListener(v -> resendOtp());
+    }
+
+    public void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+//                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
     }
 
     private void configureInsets() {
@@ -127,7 +148,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                             setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
                         }
                         else {
-                            setUserToVerified(getIntent().getStringExtra(EMAIL), "");
+                            setUserRole(getIntent().getStringExtra(EMAIL), "Manager", "");
+//                            setUserToVerified(getIntent().getStringExtra(EMAIL), "");
                         }
                         future.complete(true);
                     } else {
@@ -169,8 +191,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     future.complete(true);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
+//                        new Handler().postDelayed(() -> {
                         checkIfSignedIn(email, getIntent().getStringExtra("password"));
-//                        showRequestSentDialog();
+//                        }, 2000);
+
                     });
                 },
                 error -> {
@@ -262,7 +286,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
         UserUtils.setUserToVerified(username, authorization, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                setUserRole(username, "Manager", "");
+//                fetchOrganizationDetails();
+                showRequestSentDialog();
                 Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
 
             }
@@ -279,7 +304,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    showRequestSentDialog();
+                    setUserToVerified(username, authorization);
                     Toast.makeText(EmailVerificationActivity.this, "User role set successfully", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -294,11 +319,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
     public void checkIfSignedIn(String email, String password) {
         isSignedIn().thenAccept(isSignedIn -> {
             if (Boolean.TRUE.equals(isSignedIn)) {
-                signOut(email, password);
+                SignOut(email, password);
             } else {
+                // User is not signed in, just proceed to sign them in
                 signIn(email, password);
-//                Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-//                Log.i(TAG, "User is not signed in.");
             }
         });
     }
@@ -315,18 +339,29 @@ public class EmailVerificationActivity extends AppCompatActivity {
         return future;
     }
 
-    public void signOut(String email, String password) {
-        Amplify.Auth.signOut(
-                signOutResult -> {
-                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
-                        signIn(email, password);
-//                        showRequestSentDialog();
-//                        handleSuccessfulSignOut();
-                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
-//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
-                    }
-                }
-        );
+    public CompletableFuture<Boolean> SignOut(String username, String password)
+    {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+        Amplify.Auth.signOut(signOutResult -> {
+            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                runOnUiThread(() -> {
+                signIn(username, password);
+                });
+                future.complete(true);
+
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
+                runOnUiThread(() -> {
+                    signIn(username, password);
+                });
+                future.complete(true);
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
+                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
+                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
+                future.complete(false);
+            }
+        });
+        return future;
     }
 
     void showRequestSentDialog() {
@@ -349,6 +384,42 @@ public class EmailVerificationActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCancelable(false);
         alertDialog.show();
+    }
+
+    private void fetchOrganizationDetails() {
+        OrganizationUtils.fetchOrganizationsDetails(this, new OperationCallback<List<OrganizationModel>>() {
+            @Override
+            public void onSuccess(List<OrganizationModel> result) {
+                List<String> organizationNames = new ArrayList<>();
+                for (OrganizationModel organization : result) {
+//                    if(Objects.equals(organization.getOrganizationName(), getIntent().getStringExtra("organization"))){
+//                        upDateDetails(organization.getOrganizationId()).thenAccept(updateDetails -> {
+                            showRequestSentDialog();
+//                        });
+//                    }
+                }
+
+                Toast.makeText(EmailVerificationActivity.this, "Organizations fetched successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "Failed to fetch organizations: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean>  upDateDetails(String organizationId){
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.updateUserAttribute(
+                new AuthUserAttribute(AuthUserAttributeKey.address(), organizationId),
+                result -> Log.i("AuthDemo", "Updated address"),
+                error -> Log.e("AuthDemo", "Update failed", error)
+        );
+        future.complete(true);
+
+        return future;
     }
 
 
