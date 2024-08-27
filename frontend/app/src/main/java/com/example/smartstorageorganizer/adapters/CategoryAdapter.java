@@ -37,6 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private List<CategoryModel> categoryModelList;
+    private String organizationID;
 
     public CategoryAdapter(Context context, List<CategoryModel> categoryModelList) {
         this.context = context;
@@ -58,7 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 holder.image.setImageResource(R.drawable.all_category);
             }
             else if(Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")){
-                holder.image.setImageResource(R.drawable.all_category);
+                holder.image.setImageResource(R.drawable.decision);
             }
             else {
                 Glide.with(context).load(categoryModelList.get(position).getImageUrl()).placeholder(R.drawable.no_image).error(R.drawable.no_image).into(holder.image);
@@ -77,6 +78,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
             intent.putExtra("color_code_id", "");
+            intent.putExtra("organization_id", organizationID);
 
             context.startActivity(intent);
 
@@ -262,5 +264,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private void navigateToHome() {
         Intent intent = new Intent(context, ViewItemActivity.class);
         context.startActivity(intent);
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationID = organizationId;
     }
 }

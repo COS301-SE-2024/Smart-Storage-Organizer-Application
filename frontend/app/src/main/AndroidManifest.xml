@@ -7,6 +7,9 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -14,6 +17,7 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 <!--    FCM permissions-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -33,6 +37,24 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".GetStartedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddOrganizationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DevelopersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewUnitItemsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewUnitsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".UncategorizedItemsActivity"
             android:exported="false" />
         <activity
@@ -46,13 +68,8 @@
             android:exported="false" />
         <activity
             android:name=".LandingActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
+        <activity android:name=".SearchActivity" />
         <activity
             android:name=".ValidateUserActivity"
             android:exported="false" />
@@ -126,7 +143,13 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".MyFirebaseMessagingService"
@@ -143,7 +166,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="com.example.smartstorageorganizer.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

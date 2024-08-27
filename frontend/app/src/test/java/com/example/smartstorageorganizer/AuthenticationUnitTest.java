@@ -11,8 +11,8 @@ import android.text.Editable;
 @RunWith(MockitoJUnitRunner.class)
 
 public class AuthenticationUnitTest {
-    @Mock
-    private  LoginActivity loginObj;
+//    @Mock
+//    private  LoginActivity loginObj;
 
     @Test
     public void signUpTest()
@@ -29,16 +29,16 @@ public class AuthenticationUnitTest {
     {
 
     }
-    @Test
-    public void validateForm()
-    {
-        Editable mockEditableEmail = mock(Editable.class);
-        Editable mockEditablePassword = mock(Editable.class);
-
-
-        when(mockEditableEmail.toString()).thenReturn("test@example.com");
-        when(mockEditablePassword.toString()).thenReturn("password123");
-
-    }
+//    @Test
+//    public void validateForm()
+//    {
+//        Editable mockEditableEmail = mock(Editable.class);
+//        Editable mockEditablePassword = mock(Editable.class);
+//
+//
+//        when(mockEditableEmail.toString()).thenReturn("test@example.com");
+//        when(mockEditablePassword.toString()).thenReturn("password123");
+//
+//    }
 
 }

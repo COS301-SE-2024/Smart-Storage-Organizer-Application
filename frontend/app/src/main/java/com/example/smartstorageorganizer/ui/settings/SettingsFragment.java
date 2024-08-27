@@ -11,17 +11,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.smartstorageorganizer.AddColorCodeActivity;
-import com.example.smartstorageorganizer.CodeScannerActivity;
 import com.example.smartstorageorganizer.DesignActivity;
-import com.example.smartstorageorganizer.HelpActivity;
-import com.example.smartstorageorganizer.ItemDetailsActivity;
-import com.example.smartstorageorganizer.ManualActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.ViewColorCodesActivity;
 import com.example.smartstorageorganizer.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {

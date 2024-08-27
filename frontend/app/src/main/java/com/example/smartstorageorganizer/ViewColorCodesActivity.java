@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
@@ -28,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class ViewColorCodesActivity extends AppCompatActivity {
     private RecyclerView colorCodeRecyclerView;
@@ -37,6 +41,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
     private LottieAnimationView loadingScreen;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
+    private String organizationID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,8 @@ public class ViewColorCodesActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
         loadingScreen = findViewById(R.id.loadingScreen);
         colorCodeRecyclerView = findViewById(R.id.color_code_rec);
@@ -94,15 +101,49 @@ public class ViewColorCodesActivity extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show());
 
-        loadAllColorCodes();
+//        loadAllColorCodes();
     }
 
-    private void loadAllColorCodes() {
+    private CompletableFuture<Boolean> getDetails()
+    {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.fetchUserAttributes(
+                attributes -> {
+
+                    for (AuthUserAttribute attribute : attributes) {
+                        switch (attribute.getKey().getKeyString()) {
+                            case "address":
+                                organizationID = attribute.getValue();
+                                break;
+                            default:
+                        }
+                    }
+                    Log.i("progress","User attributes fetched successfully");
+                    runOnUiThread(() -> {
+                        loadAllColorCodes(organizationID);
+                    });
+                    future.complete(true);
+                },
+                error -> {
+                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    runOnUiThread(() -> {
+
+                        // If you want to return false in case of an error
+                        future.complete(false);
+                    });
+                }
+
+        );
+        return future;
+    }
+
+    private void loadAllColorCodes(String organizationId) {
 //        loadingScreen.setVisibility(View.VISIBLE);
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+        Utils.fetchAllColour(organizationId, this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> result) {
                 colorCodeModelList.clear();

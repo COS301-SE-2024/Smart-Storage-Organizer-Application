@@ -92,13 +92,13 @@
                 android:theme="@style/Theme.SmartStorageOrganizer">
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:contentScrim="@color/background"
-                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                    app:expandedTitleTextAppearance="@style/Theme.SmartStorageOrganizer"
                     app:collapsedTitleTextAppearance="@style/Theme.SmartStorageOrganizer"
-                    android:id="@+id/collapsing_toolbar">
+                    app:contentScrim="@color/background"
+                    app:expandedTitleTextAppearance="@style/Theme.SmartStorageOrganizer"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
                     <ImageView
                         android:id="@+id/itemImage"
@@ -112,15 +112,15 @@
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/actionBarToolbar"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="0dp"
                         android:layout_height="?attr/actionBarSize"
+                        android:layout_marginTop="0dp"
                         app:layout_collapseMode="pin">
 
                         <ImageView
                             android:id="@+id/backButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_arrow_back_ios_24"/>
+                            android:src="@drawable/baseline_arrow_back_ios_24" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -133,7 +133,16 @@
                                 android:layout_marginEnd="16dp"
                                 android:src="@drawable/baseline_qr_code_24"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"/>
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/barcode"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/barcode"
+                                app:layout_constraintEnd_toStartOf="@id/qrCode"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -148,6 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background"
+                android:visibility="visible"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
                 <LinearLayout
@@ -174,7 +184,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:id="@+id/share"
+                            android:id="@+id/edit"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
@@ -214,8 +224,8 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
-                                        android:layout_toStartOf="@+id/arrow"
                                         android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/arrow"
                                         android:layout_toLeftOf="@+id/arrow"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
@@ -241,9 +251,9 @@
                                         android:layout_height="wrap_content"
                                         android:layout_below="@id/tvDescription"
                                         android:background="@android:color/white"
-                                        android:textColor="@color/black"
                                         android:padding="16dp"
                                         android:text="Tweened animation calculates animation information such as size, rotation, start point, and endpoint. These animations are slower and less flexible. An example of View animation can be used if we want to expand a specific layout in that place we can use View Animation. The example of View Animation can be seen in Expandable RecyclerView."
+                                        android:textColor="@color/black"
                                         android:textSize="14sp"
                                         android:visibility="gone" />
                                 </RelativeLayout>
@@ -269,8 +279,8 @@
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
-                                        android:layout_toStartOf="@+id/arrowUnit"
                                         android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/arrowUnit"
                                         android:layout_toLeftOf="@+id/arrowUnit"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
@@ -296,9 +306,9 @@
                                         android:layout_height="wrap_content"
                                         android:layout_below="@id/tvDescriptionUnit"
                                         android:background="@android:color/white"
-                                        android:textColor="@color/black"
                                         android:padding="16dp"
                                         android:text="Details about Unit."
+                                        android:textColor="@color/black"
                                         android:textSize="14sp"
                                         android:visibility="gone" />
                                 </RelativeLayout>
@@ -320,12 +330,12 @@
                                     android:background="@color/colorPrimary">
 
                                     <TextView
-                                        android:id="@+id/tvDescriptionCategory"
+                                        android:id="@+id/Category"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
-                                        android:layout_toStartOf="@+id/arrowCategory"
                                         android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/arrowCategory"
                                         android:layout_toLeftOf="@+id/arrowCategory"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
@@ -349,11 +359,11 @@
                                         android:id="@+id/itemCategory"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@id/tvDescriptionCategory"
+                                        android:layout_below="@id/Category"
                                         android:background="@android:color/white"
-                                        android:textColor="@color/black"
                                         android:padding="16dp"
                                         android:text="Details about Category."
+                                        android:textColor="@color/black"
                                         android:textSize="14sp"
                                         android:visibility="gone" />
                                 </RelativeLayout>
@@ -375,12 +385,12 @@
                                     android:background="@color/colorPrimary">
 
                                     <TextView
-                                        android:id="@+id/tvDescriptionColorCode"
+                                        android:id="@+id/ColorCode"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentStart="true"
-                                        android:layout_toStartOf="@+id/arrowColorCode"
                                         android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/arrowColorCode"
                                         android:layout_toLeftOf="@+id/arrowColorCode"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
@@ -404,11 +414,11 @@
                                         android:id="@+id/itemColorCode"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@id/tvDescriptionColorCode"
+                                        android:layout_below="@id/ColorCode"
                                         android:background="@android:color/white"
-                                        android:textColor="@color/black"
                                         android:padding="16dp"
                                         android:text="Details about Color Code."
+                                        android:textColor="@color/black"
                                         android:textSize="14sp"
                                         android:visibility="gone" />
                                 </RelativeLayout>

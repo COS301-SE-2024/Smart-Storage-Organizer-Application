@@ -19,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.model.CategoryModel;
 
+import com.example.smartstorageorganizer.model.TokenManager;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -77,10 +80,16 @@ public class UnitActivity extends AppCompatActivity {
 
 
                         Log.i("ConstraintsName", cb.getText().toString());
-                        constraints.append(getCategoriesId(cb.getText().toString()));
-                        if (j < checkboxContainer.getChildCount() - 1) {
-                            constraints.append(",");
+
+                        if (constraints.toString().isEmpty()) {
+
+                            constraints.append(getCategoriesId(cb.getText().toString()));
+
+                        }else {
+                            constraints.append(","+getCategoriesId(cb.getText().toString()));
+
                         }
+
 
 
                     }
@@ -105,10 +114,10 @@ public class UnitActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         });
-                    }
-                });
+                   }
+              });
 
-            });
+          });
 
             // Create checkboxes dynamically and add them to the LinearLayout
 
@@ -130,115 +139,122 @@ public class UnitActivity extends AppCompatActivity {
             String apiUrl = BuildConfig.FetchCategoryEndPoint;
             RequestBody body = RequestBody.create(json, jsonObject);
 
-            Request request = new Request.Builder()
-                    .url(apiUrl)
-                    .post(body)
-                    .build();
+            TokenManager.getToken().thenAccept(results->{
+                Request request = new Request.Builder()
+                        .url(apiUrl)
+                        .header("Authorization","Bearer"+results)
+                        .post(body)
+                        .build();
 
 
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Log.e("Category Request Method", "GET request failed", e));
-                }
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() -> Log.e("Category Request Method", "GET request failed", e));
+                    }
 
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        runOnUiThread(() -> {
-                            runOnUiThread(() -> Log.e("Category Response Results", responseData));
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            final String responseData = response.body().string();
+                            runOnUiThread(() -> {
+                                runOnUiThread(() -> Log.e("Category Response Results", responseData));
 
-                            try {
-                                JSONObject jsonObject = new JSONObject(responseData);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(responseData);
 
-                                String bodyString = jsonObject.getString("body");
-                                JSONArray bodyArray = new JSONArray(bodyString);
-
-
-                                runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
-                                parentCategories.add("");
-                                for (int i = 0; i < bodyArray.length(); i++) {
-                                    JSONObject itemObject = bodyArray.getJSONObject(i);
-
-                                    CategoryModel parentCategory = new CategoryModel();
-                                    parentCategory.setCategoryID(itemObject.getString("id"));
-                                    parentCategory.setCategoryName(itemObject.getString("categoryname"));
-                                    parentCategory.setImageUrl(itemObject.getString("icon"));
-
-                                    categoryModelList.add(parentCategory);
+                                    String bodyString = jsonObject.getString("body");
+                                    JSONArray bodyArray = new JSONArray(bodyString);
 
 
-                                    Log.i("Category Image Url", itemObject.getString("icon"));
-                                    parentCategories.add(itemObject.getString("categoryname"));
+                                    runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
+                                    parentCategories.add("");
+                                    for (int i = 0; i < bodyArray.length(); i++) {
+                                        JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                        CategoryModel parentCategory = new CategoryModel();
+                                        parentCategory.setCategoryID(itemObject.getString("id"));
+                                        parentCategory.setCategoryName(itemObject.getString("categoryname"));
+                                        parentCategory.setImageUrl(itemObject.getString("icon"));
+
+                                        categoryModelList.add(parentCategory);
 
 
-                                }
-                                runOnUiThread(() -> {
-                                    if (!categoryModelList.isEmpty()) {
-                                        CheckBox checkBox = new CheckBox(UnitActivity.this);
-                                        checkBox.setText("Select All");
-                                        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                                            if (!isChecked) {
-                                                CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
-                                                cb.setChecked(false);
-                                            } else {
-                                                for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
-                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
-                                                    cb.setChecked(true);
-                                                }
-                                            }
+                                        Log.i("Category Image Url", itemObject.getString("icon"));
+                                        parentCategories.add(itemObject.getString("categoryname"));
 
-                                        });
-                                        checkboxContainer.addView(checkBox);
-                                        CheckBox unselect = new CheckBox(UnitActivity.this);
-                                        unselect.setText("Unselect All");
-                                        unselect.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                                            if (!isChecked) {
-                                                CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
-                                                cb.setChecked(true);
-                                            } else {
-                                                for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
-                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
-                                                    cb.setChecked(false);
-                                                }
-                                            }
 
-                                        });
-                                        checkboxContainer.addView(unselect);
                                     }
-                                    for (CategoryModel category : categoryModelList) {
-                                        CheckBox checkBox = new CheckBox(UnitActivity.this);
-                                        checkBox.setText(category.getCategoryName());
-                                        checkBox.setOnCheckedChangeListener(
-                                                (buttonView, isChecked) -> {
-                                                    if (!isChecked) {
-                                                        CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
-                                                        cb.setChecked(false);
-                                                        checkBox.setChecked(false);
-
+                                    runOnUiThread(() -> {
+                                        if (!categoryModelList.isEmpty()) {
+                                            CheckBox checkBox = new CheckBox(UnitActivity.this);
+                                            checkBox.setText("Select All");
+                                            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                                if (!isChecked) {
+                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                    cb.setChecked(false);
+                                                } else {
+                                                    for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
+                                                        CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
+                                                        cb.setChecked(true);
                                                     }
                                                 }
-                                        );
-                                        checkboxContainer.addView(checkBox);
 
-                                    }
+                                            });
+                                            checkboxContainer.addView(checkBox);
+                                            CheckBox unselect = new CheckBox(UnitActivity.this);
+                                            unselect.setText("Unselect All");
+                                            unselect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                                                if (!isChecked) {
+                                                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                    cb.setChecked(true);
+                                                } else {
+                                                    for (int i = 1; i < checkboxContainer.getChildCount(); i++) {
+                                                        CheckBox cb = (CheckBox) checkboxContainer.getChildAt(i);
+                                                        cb.setChecked(false);
+                                                    }
+                                                }
 
-                                });
+                                            });
+                                            checkboxContainer.addView(unselect);
+                                        }
+                                        for (CategoryModel category : categoryModelList) {
+                                            CheckBox checkBox = new CheckBox(UnitActivity.this);
+                                            checkBox.setText(category.getCategoryName());
+                                            checkBox.setOnCheckedChangeListener(
+                                                    (buttonView, isChecked) -> {
+                                                        if (!isChecked) {
+                                                            CheckBox cb = (CheckBox) checkboxContainer.getChildAt(0);
+                                                            cb.setChecked(false);
+                                                            checkBox.setChecked(false);
+
+                                                        }
+                                                    }
+                                            );
+                                            checkboxContainer.addView(checkBox);
+
+                                        }
+
+                                    });
 
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        });
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            });
 
-                    } else {
-                        runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                        } else {
+                            runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                        }
                     }
-                }
+                });
+            }).exceptionally(ex -> {
+                Log.e("TokenError", "Failed to get user token", ex);
+                return null;
             });
+
             flag = false;
         }
 
@@ -247,38 +263,46 @@ public class UnitActivity extends AppCompatActivity {
 
     public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"type\":\"AddUnit\",\"Unit_QR\":\"1\" }";
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\" }";
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String apiUrl = BuildConfig.AddUnitEndPoint;
+        String apiUrl = BuildConfig.AddUnitEndpoint;
         RequestBody body = RequestBody.create(json, jsonObject);
         Log.i("hell", "createUnit: " + json);
-        Request request = new Request.Builder()
-                .url(apiUrl)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Unit Request Method", "GET request failed", e));
-                future.complete(false);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        runOnUiThread(() -> Log.e("Unit Response Results", responseData));
-                        future.complete(true);
-                    });
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+        Utils.getUserToken().thenAccept(token-> {
+            Log.i("token",token);
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .header("Authorization", "Bearer"+token)
+                    .post(body)
+                    .build();
+            Log.i("Unit Request", request.toString());
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Unit Request Method", "GET request failed", e));
                     future.complete(false);
                 }
-            }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            runOnUiThread(() -> Log.e("Unit Response Results", responseData));
+                            future.complete(true);
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "GET request failed: " + response));
+                        future.complete(false);
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            future.complete(false);
+            return null;
         });
         return future;
     }

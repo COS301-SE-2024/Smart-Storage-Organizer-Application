@@ -1,11 +1,18 @@
 package com.example.smartstorageorganizer;
 
+import static androidx.media.session.MediaButtonReceiver.handleIntent;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +30,19 @@ import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.databinding.ActivityHomeBinding;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
+import com.example.smartstorageorganizer.model.OrganizationModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.OrganizationUtils;
+import com.example.smartstorageorganizer.utils.UserUtils;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.MediaType;
@@ -34,11 +51,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 public class HomeActivity extends AppCompatActivity {
-    public TextView fullName;
+    public TextView fullName, organizationName;
     public ShapeableImageView profileImage;
     public AppBarConfiguration mAppBarConfiguration;
     public ActivityHomeBinding binding;
-    public String currentName, currentSurname, currentPicture;
+    public String currentName, currentSurname, currentPicture, organizationId;
+    NavigationView navigationView;
+    ImageButton searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         ConstraintLayout logout = binding.logoutButton;
         LottieAnimationView buttonLoader = binding.buttonLoader;
         TextView logoutButtonText = binding.logOutButtonText;
@@ -62,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
 
         View header = navigationView.getHeaderView(0);
         fullName = header.findViewById(R.id.fullName);
+        organizationName = header.findViewById(R.id.organizationName);
         profileImage = header.findViewById(R.id.profileImage);
 //        fullName.setText("Ezekiel Makau");
 
@@ -75,6 +95,14 @@ public class HomeActivity extends AppCompatActivity {
 //                        .setAction("Action", null)
 //                        .setAnchorView(R.id.fab).show();
         });
+        
+        findViewById(R.id.search_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -86,17 +114,55 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        if (!isAdmin()) {
-            hideAdminMenuItems(navigationView.getMenu());
-        }
+        getUserRole(getIntent().getStringExtra("email"), "");
+
+//        FirebaseApp.initializeApp(this);
+//
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(task -> {
+//                    if (!task.isSuccessful()) {
+//                        Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
+//                        return;
+//                    }
+//
+//                    String token = task.getResult();
+//                    Log.d("HomeActivity", "FCM Registration Token: " + token);
+//                });
+
+//        if (!isAdmin()) {
+//            hideAdminMenuItems(navigationView.getMenu());
+//        }
+        handleIntent(getIntent());
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
+
+    private void handleIntent(Intent intent) {
+        if (intent != null && "nav_notifications".equals(intent.getStringExtra("navigateTo"))) {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+            navController.navigate(R.id.nav_notifications);
+        }
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.home, menu);
+//
+//
+//        MenuItem searchItem = menu.findItem(R.id.searchButton);
+//        searchItem.setOnMenuItemClickListener(item -> {
+//            // Start the SearchActivity
+//            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+//            startActivity(intent);
+//            return true;
+//        });
+//        return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -114,6 +180,10 @@ public class HomeActivity extends AppCompatActivity {
     private void hideAdminMenuItems(Menu menu) {
         menu.findItem(R.id.nav_requests).setVisible(false);
         menu.findItem(R.id.nav_users).setVisible(false);
+    }
+    private void showAdminMenuItems(Menu menu) {
+        menu.findItem(R.id.nav_requests).setVisible(true);
+        menu.findItem(R.id.nav_users).setVisible(true);
     }
 
     public CompletableFuture<Boolean> getDetails() {
@@ -133,9 +203,9 @@ public class HomeActivity extends AppCompatActivity {
                             case "picture":
                                 currentPicture = attribute.getValue();
                                 break;
-//                            case "address":
-//                                currentAddress = attribute.getValue();
-//                                break;
+                            case "address":
+                                organizationId = attribute.getValue();
+                                break;
 //                            case "custom:myCustomAttribute":
 //                                customAttribute = attribute.getValue();
 //                                break;
@@ -147,6 +217,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
+                        fetchOrganizationDetails(organizationId);
                         Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         String username = currentName+" "+currentSurname;
                         fullName.setText(username);
@@ -166,7 +237,6 @@ public class HomeActivity extends AppCompatActivity {
             if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
                 // Sign Out completed fully and without errors.
                 Log.i("AuthQuickStart", "Signed out successfully");
-                //move to a different page
                 future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -174,8 +244,6 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 });
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                // Sign Out completed with some errors. User is signed out of the device.
-                //move to the different page
                 future.complete(true);
                 runOnUiThread(() -> {
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -199,233 +267,42 @@ public class HomeActivity extends AppCompatActivity {
         return future;
     }
 
-    public void DeleteCategory(int id, String email)
-    {
-        String json = "{\"useremail\":\""+email+"\", \"id\":\""+ id +"\" }";
-        Log.d("1Delete Item Payload", "JSON Payload: " + json);  // Log the JSON payload
+    private void getUserRole(String username, String authorization) {
+        hideAdminMenuItems(navigationView.getMenu());
+        UserUtils.getUserRole(username, authorization, this, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                if (Objects.equals(result, "Manager")) {
+                    showAdminMenuItems(navigationView.getMenu());
+                }
+                else {
+                    hideAdminMenuItems(navigationView.getMenu());
+                }
+            }
 
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteCategoryEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-    public void CategoryToUncategorized(int id)
-    {
-        String json = "{\"parentcategoryid\":\""+Integer.toString(id)+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.CategoryToUncategorized;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-    public void SubcategoryToUncategorized(int id)
-    {
-        String json = "{\"subcategoryid\":\""+Integer.toString(id)+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SubcategoryToUncategorized;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-    public void ModifyCategoryName(int id, String NewCategoryName)
-    {
-        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+NewCategoryName+"\" }";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.ModifyCategoryName;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+            @Override
+            public void onFailure(String error) {
+//                progressDialog.dismiss();
+                hideAdminMenuItems(navigationView.getMenu());
+                Toast.makeText(HomeActivity.this, "Getting user role failed", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    public void FetchAllItems(int HowMany, int PageNumber)
-    {
-        String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
+    private void fetchOrganizationDetails(String organizationId) {
+        OrganizationUtils.fetchOrganizationDetails(organizationId, this, new OperationCallback<OrganizationModel>() {
+            @Override
+            public void onSuccess(OrganizationModel result) {
+                organizationName.setText(result.getOrganizationName().toUpperCase());
+                Toast.makeText(HomeActivity.this, "organization fetched successfully", Toast.LENGTH_SHORT).show();
+            }
 
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchAllEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+            @Override
+            public void onFailure(String error) {
+//                loadingScreen.setVisibility(View.GONE);
+                Toast.makeText(HomeActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-    public void AddColourGroup(String colourcode, String title, String description)
-    {
-        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddColourEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-    public void AddItemToColour(int colourid, int itemid)
-    {
-        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\", \"itemid\":\""+Integer.toString(itemid)+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddItemToColourEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-    public void FetchByColour(int colourid)
-    {
-        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByColourEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-    public void FetchAllColour()
-    {
-        String json = "{}";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByColourEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .get()
-                .build();
-    }
-
-    public void DeleteColour(int colourid)
-    {
-        String json = "{\"colourid\":\""+Integer.toString(colourid)+"\"}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.DeleteColour;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-    public void FetchByID(int id)
-    {
-        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByIDEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-    public void RecommendMultiple(String id)
-    {
-        String json = "{\"id\":\""+id+"\"}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.RecommendMultipleEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-    public void CreateCategoryAI(String parentcategory, String item_name, String description)
-    {
-        String json = "{\"parentcategory\":\""+parentcategory+"\", \"description\":\""+description+"\", \"item_name\":\""+item_name+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.CreateCategoryAIEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-    public void FetchUncategorized(int HowMany, int PageNumber)
-    {
-        String json = "{\"limit\":\""+Integer.toString(HowMany)+"\", \"offset\":\""+Integer.toString(PageNumber)+"\" }";
-
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchUncategorizedEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-    }
-
-//    public void GenerateQrcode(int id)
-//    {
-//        String json = "{\"data\":\""+Integer.toString(id)+"\"}";
-//
-//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-//        OkHttpClient client = new OkHttpClient();
-//        String API_URL = BuildConfig.GenerateQrcode;
-//        RequestBody body = RequestBody.create(json, JSON);
-//
-//        Request request = new Request.Builder()
-//                .url(API_URL)
-//                .post(body)
-//                .build();
-//    }
 }
 

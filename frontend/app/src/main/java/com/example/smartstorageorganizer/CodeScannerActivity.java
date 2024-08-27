@@ -29,7 +29,7 @@ import java.io.InputStream;
 
 public class CodeScannerActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE = 1;
+    public static final int PICK_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class CodeScannerActivity extends AppCompatActivity {
         }
     }
 
-    private void scanQRCodeFromBitmap(Bitmap bitmap) {
+    public void scanQRCodeFromBitmap(Bitmap bitmap) {
         int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
         bitmap.getPixels(intArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 

@@ -18,11 +18,11 @@ import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 
 public class LandingActivity extends AppCompatActivity {
-    private static final String TAG = "LandingActivity";
+    public static final String TAG = "LandingActivity";
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_landing);
@@ -50,7 +50,7 @@ public class LandingActivity extends AppCompatActivity {
         });
     }
 
-    private void signOut() {
+    public void signOut() {
         Amplify.Auth.signOut(
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
@@ -62,11 +62,11 @@ public class LandingActivity extends AppCompatActivity {
         );
     }
 
-    private void handleSuccessfulSignOut() {
+    public void handleSuccessfulSignOut() {
         Log.i(TAG, "Signed out successfully");
     }
 
-    private void handleFailedSignOut(Exception exception) {
+    public void handleFailedSignOut(Exception exception) {
         Log.e(TAG, "Sign out failed", exception);
     }
 }

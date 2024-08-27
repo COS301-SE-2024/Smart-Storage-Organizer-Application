@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -45,6 +48,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     private final Context context;
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
+    private boolean selectAllFlag = true;
+    private String organizationID;
+
 
     public RecentAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -79,6 +85,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                 intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
                 intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
                 intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
+                intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
+                intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
+                intent.putExtra("organization_id", organizationID);
 
                 context.startActivity(intent);
             } else {
@@ -217,4 +226,55 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
         }
     }
+
+    public String getSelectedItemsIds() {
+        StringBuilder selectedIds = new StringBuilder();
+        for (int position : selectedItems) {
+            if (selectedIds.length() > 0) {
+                selectedIds.append(",");
+            }
+            selectedIds.append(itemModelList.get(position).getItemId());
+        }
+        return selectedIds.toString();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void selectAllItems() {
+        // Add logic to select all items
+        if(selectAllFlag){
+            for (int i = 0; i < itemModelList.size(); i++) {
+                selectedItems.add(i);
+            }
+            selectAllFlag = false;
+        }
+        else {
+            selectedItems.clear();
+            ((UncategorizedItemsActivity) context).updateBottomNavigationBar(selectedItems.size() > 0);
+            selectAllFlag = true;
+        }
+        notifyDataSetChanged(); // Update the adapter to refresh the UI
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationID = organizationId;
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

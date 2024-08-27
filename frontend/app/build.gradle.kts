@@ -31,6 +31,9 @@ android {
         }
     }
 
+
+
+
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
     android.buildFeatures.buildConfig = true
@@ -44,38 +47,78 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"")
-        buildConfigField("String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"")
-        buildConfigField("String", "RecommendCategoryEndPoint", "\"${localProperties["RecommendCategoryEndPoint"]}\"")
-        buildConfigField("String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"")
-        buildConfigField("String", "AddCategoryEndPoint", "\"${localProperties["AddCategoryEndPoint"]}\"")
-        buildConfigField("String", "EditItemEndPoint", "\"${localProperties["EditItemEndPoint"]}\"")
-        buildConfigField("String", "FetchByEmailEndPoint", "\"${localProperties["FetchByEmailEndPoint"]}\"")
-        buildConfigField("String", "AddItemEndPoint", "\"${localProperties["AddItemEndPoint"]}\"")
-        buildConfigField("String", "AddUnitEndPoint", "\"${localProperties["AddUnitEndPoint"]}\"")
-        buildConfigField("String", "DeleteItemEndPoint", "\"${localProperties["DeleteItemEndPoint"]}\"")
-        buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"")
-        buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"")
-        buildConfigField("String", "CategoryToUncategorized", "\"${localProperties["CategoryToUncategorized"]}\"")
-        buildConfigField("String", "SubcategoryToUncategorized", "\"${localProperties["SubcategoryToUncategorized"]}\"")
-        buildConfigField("String", "ModifyCategoryName", "\"${localProperties["ModifyCategoryName"]}\"")
-        buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"")
-        buildConfigField("String", "AddColourEndPoint", "\"${localProperties["AddColourEndPoint"]}\"")
-        buildConfigField("String", "AddItemToColourEndPoint", "\"${localProperties["AddItemToColourEndPoint"]}\"")
-        buildConfigField("String", "FetchByColourEndPoint", "\"${localProperties["FetchByColourEndPoint"]}\"")
-        buildConfigField("String", "DeleteColour", "\"${localProperties["DeleteColour"]}\"")
-        buildConfigField("String", "GenerateQrcode", "\"${localProperties["GenerateQrcode"]}\"")
-        buildConfigField("String", "FetchByIDEndPoint", "\"${localProperties["FetchByIDEndPoint"]}\"")
-        buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"")
-        buildConfigField("String", "SetRoleEndPoint", "\"${localProperties["SetRoleEndPoint"]}\"")
-        buildConfigField("String", "getUserRoles", "\"${localProperties["getUserRoles"]}\"")
-        buildConfigField("String", "getUserVerifIcationStatus", "\"${localProperties["getUserVerifIcationStatus"]}\"")
-        buildConfigField("String", "setUserToUnverified", "\"${localProperties["setUserToUnverified"]}\"")
-        buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"")
-        buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"")
-        buildConfigField("String", "RecommendMultipleEndPoint", "\"${localProperties["RecommendMultipleEndPoint"]}\"")
-        buildConfigField("String", "CreateCategoryAIEndPoint", "\"${localProperties["CreateCategoryAIEndPoint"]}\"")
-        buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"")
+        buildConfigField("String","changeCategory","\"${localProperties["changeCategory"]}\"")
+        buildConfigField("String","getParentCategory","\"${localProperties["getParentCategory"]}\"")
+        buildConfigField("String","getCategoryName","\"${localProperties["getCategoryName"]}\"")
+        buildConfigField("String","GetUnitConstraints","\"${localProperties["GetUnitConstraints"]}\"")
+        buildConfigField("String","AddUnitEndpoint","\"${localProperties["AddUnitEndpoint"]}\"")
+        buildConfigField( "String", "DefaultImage", "\"${localProperties["defaultpicture"]}\"");
+        //buildConfigField( "String", "DefaultImage", defaultpicture)
+        buildConfigField( "String", "DeleteCategoryEndPoint", "\"${localProperties["DeleteCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "RecommendCategoryEndPoint", "\"${localProperties["RecommendCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchCategoryEndPoint", "\"${localProperties["FetchCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "AddCategoryEndPoint", "\"${localProperties["AddCategoryEndPoint"]}\"");
+
+        buildConfigField( "String", "EditItemEndPoint", "\"${localProperties["EditItemEndPoint"]}\"");
+
+        buildConfigField( "String", "FetchByEmailEndPoint", "\"${localProperties["FetchByEmailEndPoint"]}\"");
+
+
+        buildConfigField( "String", "AddItemEndPoint", "\"${localProperties["AddItemEndPoint"]}\"");
+        buildConfigField("String", "AddUnitEndPoint", "\"${localProperties["AddUnitEndPoint"]}\"");
+
+
+//        buildConfigField( "String", "ChangeQuantityEndPoint", "\"${localProperties["ChangeQuantityEndPoint"]}\"");
+        buildConfigField( "String", "DeleteItemEndPoint", "\"${localProperties["DeleteItemEndPoint"]}\"");
+        buildConfigField("String", "CategoryFilterEndPoint", "\"${localProperties["CategoryFilterEndPoint"]}\"");
+
+        buildConfigField("String", "SubCategoryFilterEndPoint", "\"${localProperties["SubCategoryFilterEndPoint"]}\"");
+        buildConfigField("String", "CategoryToUncategorized", "\"${localProperties["CategoryToUncategorized"]}\"");
+        buildConfigField("String", "SubcategoryToUncategorized", "\"${localProperties["SubcategoryToUncategorized"]}\"");
+        buildConfigField("String", "ModifyCategoryName", "\"${localProperties["ModifyCategoryName"]}\"");
+        buildConfigField("String", "FetchAllEndPoint", "\"${localProperties["FetchAllEndPoint"]}\"");
+
+        buildConfigField("String", "AddColourEndPoint", "\"${localProperties["AddColourEndPoint"]}\"");
+
+        buildConfigField("String", "AddItemToColourEndPoint", "\"${localProperties["AddItemToColourEndPoint"]}\"");
+
+        buildConfigField("String", "FetchByColourEndPoint", "\"${localProperties["FetchByColourEndPoint"]}\"");
+
+        buildConfigField("String", "DeleteColour", "\"${localProperties["DeleteColour"]}\"");
+        buildConfigField("String", "GenerateQrcode", "\"${localProperties["GenerateQrcode"]}\"");
+
+        buildConfigField("String", "FetchByIDEndPoint", "\"${localProperties["FetchByIDEndPoint"]}\"");
+
+        buildConfigField("String", "GenerateBarcode", "\"${localProperties["GenerateBarcode"]}\"");
+
+        buildConfigField("String", "SetRoleEndPoint", "\"${localProperties["SetRoleEndPoint"]}\"");
+        buildConfigField("String", "getUserRoles", "\"${localProperties["getUserRoles"]}\"");
+        buildConfigField("String", "getUserVerifIcationStatus", "\"${localProperties["getUserVerifIcationStatus"]}\"");
+        buildConfigField("String", "setUserToUnverified", "\"${localProperties["setUserToUnverified"]}\"");
+        buildConfigField("String", "setUserToVerified", "\"${localProperties["setUserToVerified"]}\"");
+        buildConfigField("String", "getUsersInGroup", "\"${localProperties["getUsersInGroup"]}\"");
+
+        buildConfigField("String", "RecommendMultipleEndPoint", "\"${localProperties["RecommendMultipleEndPoint"]}\"");
+        buildConfigField("String", "CreateCategoryAIEndPoint", "\"${localProperties["CreateCategoryAIEndPoint"]}\"");
+
+        buildConfigField("String", "FetchUncategorizedEndPoint", "\"${localProperties["FetchUncategorizedEndPoint"]}\"");
+        buildConfigField("String", "getCategoryName", "\"${localProperties["getCategoryName"]}\"");
+        buildConfigField("String", "SearchEndPoint", "\"${localProperties["SearchEndPoint"]}\"");
+        buildConfigField("String", "GetAllUnits", "\"${localProperties["GetAllUnits"]}\"");
+        buildConfigField("String", "GetCategoriesOfUnits", "\"${localProperties["GetCategoriesOfUnits"]}\"");
+        buildConfigField("String", "GetItemsUnderUnit", "\"${localProperties["GetItemsUnderUnit"]}\"");
+        buildConfigField("String", "CreateOrganization", "\"${localProperties["CreateOrganization"]}\"");
+        buildConfigField("String", "FetchOrganization", "\"${localProperties["FetchOrganization"]}\"");
+        buildConfigField("String", "FetchAllColours", "\"${localProperties["FetchAllColours"]}\"");
+
+
+
+
+
+
     }
 
     buildTypes {
@@ -97,10 +140,12 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 
 dependencies {
     implementation("com.google.firebase:firebase-messaging:latest-version")
+    implementation(libs.firebase.database)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
@@ -108,15 +153,28 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.30")
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
     implementation("log4j:log4j:1.2.17")
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("com.google.zxing:core:3.3.3")
-    implementation("com.amazonaws:aws-android-sdk-core:2.42.+")
-    implementation("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
-    implementation("com.amplifyframework:core:1.28.4")
-    implementation("com.amplifyframework:aws-auth-cognito:latest-version")
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
-    implementation("com.google.firebase:firebase-messaging")
-    testImplementation("org.robolectric:robolectric:4.6.1")
+
+//    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
+    // Example for using ZXing
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation ("com.google.zxing:core:3.3.3")
+
+    implementation ("com.google.firebase:firebase-messaging:23.0.0")
+    implementation("com.google.firebase:firebase-core:21.1.1")
+
+
+
+    // for Cognito
+    implementation ("com.amazonaws:aws-android-sdk-core:2.42.+")
+    implementation ("com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.42.+")
+
+    implementation ("com.amplifyframework:core:1.28.4")
+//    implementation ("com.amplifyframework:aws-auth-cognito:1.28.4")
+    implementation ("com.amplifyframework:aws-auth-cognito:latest-version")
+
+
+
+    testImplementation ("org.robolectric:robolectric:4.6.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -134,8 +192,13 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
-    implementation("com.airbnb.android:lottie:6.4.1")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    implementation ("com.airbnb.android:lottie:6.4.1")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
+    implementation ("com.caverock:androidsvg:1.4")
+
+    // Unit testing dependencies
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.2.0")
     testImplementation("org.mockito:mockito-inline:4.2.0")

@@ -3,7 +3,7 @@ package com.example.smartstorageorganizer.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.util.Log;
+//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +19,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.model.unitModel;
 
@@ -47,9 +48,6 @@ public class UserUtils {
     public static void checkUserVerificationStatus(String username, String authorizationToken, Activity activity, OperationCallback<String> callback) {
         // Construct the JSON payload
         String json = "{"
-                + "\"header\": {"
-                + "\"Authorization\": \"" + authorizationToken + "\""
-                + "},"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\""
                 + "}"
@@ -78,7 +76,7 @@ public class UserUtils {
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
                 activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp", "POST request failed", e);
+//                    Log.d("MyAmplifyApp", "POST request failed", e);
                     callback.onFailure(e.getMessage());
                 });
             }
@@ -87,7 +85,7 @@ public class UserUtils {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+//                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
 
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
@@ -97,20 +95,20 @@ public class UserUtils {
                         String status = bodyObject.getString("status");
 
                         activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + status);
+//                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                            Log.e("MyAmplifyApp", "POST request succeeded: " + status);
 
                             callback.onSuccess(status);
                         });
                     }catch (JSONException e){
                         activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+//                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
                             callback.onFailure(e.getMessage());
                         });
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+//                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
                         callback.onFailure("Response code" + response.code());
                     });
                 }
@@ -142,50 +140,57 @@ public class UserUtils {
         RequestBody body = RequestBody.create(json, JSON);
 
         // Build the request
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp", "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
-
-                            callback.onSuccess(true);
-                        });
-                    }catch (JSONException e){
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
-                            callback.onFailure(e.getMessage());
-                        });
-                    }
-                } else {
+        TokenManager.getToken().thenAccept(results-> {
+//            activity.runOnUiThread(() -> Log.d("MyAmplifyApp", results));
+            Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
+//                        Log.d("MyAmplifyApp", "POST request failed", e);
+                        callback.onFailure(e.getMessage());
                     });
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                                callback.onSuccess(true);
+                            });
+                        }catch (JSONException e){
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+//                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
@@ -206,64 +211,70 @@ public class UserUtils {
         String API_URL = BuildConfig.setUserToUnverified;
 
         RequestBody body = RequestBody.create(json, JSON);
+            TokenManager.getToken().thenAccept(results-> {
+                Request request = new Request.Builder()
+                        .url(API_URL)
+                        .addHeader("Authorization", results)
+                        .post(body)
+                        .build();
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp", "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
                         activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
-
-                            callback.onSuccess(true);
-                        });
-                    }catch (JSONException e){
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+//                        Log.d("MyAmplifyApp", "POST request failed", e);
                             callback.onFailure(e.getMessage());
                         });
                     }
-                } else {
-                    activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
-                    });
-                }
-            }
-        });
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            final String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                String bodyString = jsonObject.getString("body");
+
+                                activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                                    callback.onSuccess(true);
+                                });
+                            }catch (JSONException e){
+                                activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                    callback.onFailure(e.getMessage());
+                                });
+                            }
+                        } else {
+                            activity.runOnUiThread(() -> {
+//                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                                callback.onFailure("Response code" + response.code());
+                            });
+                        }
+                    }
+                });
+
+            }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+                return null;
+            });
     }
 
     public static void getUsersInGroup(String username, String type, String authorizationToken, Activity activity, OperationCallback<List<UserModel>> callback) {
         String json = "{"
-                + "\"header\": {"
-                + "\"Authorization\": \"" + authorizationToken + "\""
-                + "},"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\","
                 + "\"type\": \"" + type + "\""
                 + "}"
                 + "}";
+
+//        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", username+" "+type));
+
 
         List<UserModel> usersList = new ArrayList<>();
 
@@ -275,74 +286,79 @@ public class UserUtils {
 
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(results-> {
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp Group", "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
+            Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp Group", responseData));
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-                        JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
-
-                        for (int i = 0; i < bodyArray.length(); i++) {
-                            JSONObject itemObject = bodyArray.getJSONObject(i);
-
-                            UserModel user = new UserModel();
-                            user.setEmail(itemObject.getString("email"));
-                            user.setName(itemObject.getString("name"));
-                            user.setSurname(itemObject.getString("surname"));
-                            if(Objects.equals(type, "verifiedUsers")){
-                                user.setStatus("Active");
-                            }
-                            else {
-                                user.setStatus("Pending");
-                            }
-
-                            usersList.add(user);
-                        }
-
-                        activity.runOnUiThread(() -> callback.onSuccess(usersList));
-
-
-                    }catch (JSONException e){
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp Group", "JSON parsing error: " + e.getMessage());
-                            callback.onFailure(e.getMessage());
-                        });
-                    }
-                } else {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp Group", "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
+//                        Log.d("MyAmplifyApp Group", "POST request failed", e);
+                        callback.onFailure(e.getMessage());
                     });
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp Group", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                UserModel user = new UserModel();
+                                user.setEmail(itemObject.getString("email"));
+                                user.setName(itemObject.getString("name"));
+                                user.setSurname(itemObject.getString("surname"));
+                                if(Objects.equals(type, "verifiedUsers")){
+                                    user.setStatus("Active");
+                                }
+                                else {
+                                    user.setStatus("Pending");
+                                }
+
+                                usersList.add(user);
+                            }
+
+                            activity.runOnUiThread(() -> callback.onSuccess(usersList));
+
+
+                        }catch (JSONException e){
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp Group", "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+//                            Log.d("MyAmplifyApp Group", "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
     public static void setUserRole(String username, String role, String authorizationToken, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{"
-                + "\"header\": {"
-                + "\"Authorization\": \"" + authorizationToken + "\""
-                + "},"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\","
                 + "\"role\": \"" + role + "\""
@@ -357,52 +373,132 @@ public class UserUtils {
 
         RequestBody body = RequestBody.create(json, JSON);
 
-        Request request = new Request.Builder()
-                .url(API_URL)
-                .post(body)
-                .build();
+        TokenManager.getToken().thenAccept(results-> {
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                activity.runOnUiThread(() -> {
-                    Log.d("MyAmplifyApp", "POST request failed", e);
-                    callback.onFailure(e.getMessage());
-                });
-            }
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("body");
-
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-                            Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
-
-                            callback.onSuccess(true);
-                        });
-                    }catch (JSONException e){
-                        activity.runOnUiThread(() -> {
-                            Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
-                            callback.onFailure(e.getMessage());
-                        });
-                    }
-                } else {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp", "POST request failed: " + response.code());
-                        callback.onFailure("Response code" + response.code());
+//                        Log.d("MyAmplifyApp", "POST request failed", e);
+                        callback.onFailure(e.getMessage());
                     });
                 }
-            }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                                callback.onSuccess(true);
+                            });
+                        }catch (JSONException e){
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+//                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 
+
+    public static void getUserRole(String username, String authorizationToken, Activity activity, OperationCallback<String> callback) {
+        String json = "{"
+                + "\"body\": {"
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.getUserRoles;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+//                        Log.d("MyAmplifyApp", "POST request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+
+                            JSONObject roleObject = new JSONObject(bodyString);
+                            String roleString = roleObject.getString("role");
+
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+//                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+
+                                callback.onSuccess(roleString);
+                            });
+                        }catch (JSONException e){
+                            activity.runOnUiThread(() -> {
+//                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+//                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
 
 }

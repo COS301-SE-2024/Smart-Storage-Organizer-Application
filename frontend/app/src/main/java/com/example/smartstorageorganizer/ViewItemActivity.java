@@ -1,19 +1,25 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -26,12 +32,16 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,8 +50,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ViewItemActivity extends AppCompatActivity {
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 10;
     private int currentPage = 1;
     private TextView notFoundText;
     private ImageView backButton;
@@ -63,7 +81,10 @@ public class ViewItemActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
     private NestedScrollView itemsLayout;
-    private BottomNavigationView bottomNavigationView;
+    private LinearLayout bottomNavigationView;
+    ProgressDialog progressDialog;
+    private int count;
+    private int size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +92,21 @@ public class ViewItemActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_item);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Assigning Item(s) to Color Code...");
+        progressDialog.setCancelable(false);
+
         initializeViews();
         setupBackButton();
         setupRecyclerView();
         loadInitialData();
+        setupBottomNavigationBar();
         if(!Objects.equals(getIntent().getStringExtra("category"), "")) {
             setupSpinnerListener();
         }
@@ -99,8 +131,6 @@ public class ViewItemActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
         pageNumber = findViewById(R.id.pageNumber);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        Menu menu = bottomNavigationView.getMenu();
-        menu.removeItem(R.id.navigation_categorize);
 
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
@@ -152,6 +182,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemModelList = new ArrayList<>();
         itemAdapter = new ItemAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
+        itemAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
 
     private void loadInitialData() {
@@ -170,7 +201,8 @@ public class ViewItemActivity extends AppCompatActivity {
                     }
                 } else {
                     loadItemsByCategory(Integer.parseInt(categoryID));
-                    fetchAndSetupCategories();            }
+                    fetchAndSetupCategories();
+                }
             }
         }
         else {
@@ -186,7 +218,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchAllItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -260,7 +292,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.filterByCategory(categoryId,PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -291,7 +323,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void fetchAndSetupCategories() {
-        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;
@@ -412,7 +444,7 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner.setVisibility(View.GONE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
-        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -497,29 +529,193 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigationBar() {
-//        ImageView deleteButton = findViewById(R.id.bottom_nav_delete);
-//        ImageView colorButton = findViewById(R.id.bottom_nav_color);
-//        ImageView shareButton = findViewById(R.id.bottom_nav_share);
-//        TextView selectAllButton = findViewById(R.id.bottom_nav_select_all);
-//
-//        deleteButton.setOnClickListener(view -> {
-//            // Handle delete action
-//        });
-//
-//        colorButton.setOnClickListener(view -> {
-//            // Handle color assign action
-//        });
-//
-//        shareButton.setOnClickListener(view -> {
-//            // Handle share action
-//        });
-//
-//        selectAllButton.setOnClickListener(view -> {
-//            // Handle select all action
-//        });
+        LinearLayout deleteButton = findViewById(R.id.delete);
+        LinearLayout colorButton = findViewById(R.id.color);
+        LinearLayout shareButton = findViewById(R.id.share);
+        LinearLayout selectAllButton = findViewById(R.id.select_all);
+
+        deleteButton.setOnClickListener(view -> {
+            // Handle delete action
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        progressDialog.setMessage("Deleting item(s)...");
+                        progressDialog.show();
+                        count = 0;
+                        List<String> selectedItemIds = itemAdapter.getSelectedItemsIdsArray();
+                        size = selectedItemIds.size();
+                        for(String itemId: selectedItemIds){
+                            deleteItem(itemId);
+                        }
+//                        for(String itemId: selectedItemIds){
+//                            deleteItem(itemId);
+//                        }
+//                        progressDialog.dismiss();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+
+        colorButton.setOnClickListener(view -> {
+            // Handle color assign action
+            String selectedIds = itemAdapter.getSelectedItemsIds();
+            progressDialog.setMessage("Fetching Color Codes...");
+            progressDialog.show();
+            assignItemToColor(selectedIds);
+        });
+
+        shareButton.setOnClickListener(view -> {
+            // Handle share action
+        });
+
+        selectAllButton.setOnClickListener(view -> {
+            // Handle select all action
+            itemAdapter.selectAllItems();
+        });
     }
 
     public void updateBottomNavigationBar(boolean isVisible) {
+        LinearLayout paginationLayout = findViewById(R.id.paginationLayout);
+        paginationLayout.setVisibility(isVisible ? View.GONE : View.VISIBLE);
         bottomNavigationView.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+    }
+
+    public void assignItemToColor(String itemId) {
+        // Fetch all available color codes
+        Utils.fetchAllColour(getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
+                // Create an array of color names to display to the user
+                String[] colorNames = new String[colorCodeModelList.size()];
+                for (int i = 0; i < colorCodeModelList.size(); i++) {
+                    colorNames[i] = colorCodeModelList.get(i).getName();
+                }
+
+                // Show the color options to the user (e.g., in a dialog)
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewItemActivity.this);
+                progressDialog.dismiss();
+                builder.setTitle("Choose a color for the item");
+                builder.setItems(colorNames, (dialog, which) -> {
+                    // Get the selected color code
+                    ColorCodeModel selectedColor = colorCodeModelList.get(which);
+                    String colourId = selectedColor.getId();
+                    Log.d("Selected Color", "Color ID: " + colourId);
+                    Log.d("Selected Item", "Item ID: " + itemId);
+                    progressDialog.setMessage("Assigning Item(s) to Color Code...");
+                    progressDialog.show();
+
+                    // Assign the selected color to the item
+                    assignColorToItem(itemId, selectedColor);
+
+                    //assigned to color db
+                    AssignColour(colourId,itemId);
+                });
+                builder.show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the error (e.g., show a toast or log the error)
+                Toast.makeText(ViewItemActivity.this, "Failed to fetch colors: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void assignColorToItem(String itemId, ColorCodeModel colorCode) {
+        // Your logic to assign the colorCode to the item with the given itemId
+        // This might involve updating a database, sending a request to a server, etc.
+        Log.d("AssignColor", "Item ID: " + itemId + " assigned to color: " + colorCode.getName());
+    }
+
+    public void AssignColour(String colourid, String itemid) {
+        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.AddItemToColourEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                    Log.e("AssignColour", "Request failed: " + e.getMessage());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        progressDialog.dismiss();
+                        runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Color Code Assigned Successfully.", Toast.LENGTH_SHORT).show());
+                    } else {
+                        progressDialog.dismiss();
+                        runOnUiThread(() -> Toast.makeText(ViewItemActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    private void deleteItem(String itemId) {
+        Utils.deleteItem(itemId, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    ++count;
+                    if(count == size){
+                        progressDialog.dismiss();
+                        itemAdapter.unselect();
+                        loadInitialData();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+//                showToast("Failed to add category: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+//                addCategoryLayout.setVisibility(View.VISIBLE);
+//                addButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void showBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_dialog_item, null);
+
+        TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+
+        deleteItem.setOnClickListener(v -> {
+            bottomSheetDialog.dismiss();
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Item")
+                    .setMessage("Are you sure you want to delete this item?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 }

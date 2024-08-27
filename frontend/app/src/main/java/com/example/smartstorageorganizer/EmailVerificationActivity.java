@@ -1,15 +1,19 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -22,14 +26,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.amplifyframework.auth.AuthUserAttribute;
+import com.amplifyframework.auth.AuthUserAttributeKey;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.model.OrganizationModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.OrganizationUtils;
 import com.example.smartstorageorganizer.utils.UserUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class EmailVerificationActivity extends AppCompatActivity {
-
+    public static final String TAG = "AmplifyQuickstart";
     // UI Elements
     EditText inputCode1;
     EditText inputCode2;
@@ -52,6 +66,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_email_verification);
 
         initializeUI();
+        signOut();
         setupOTPInputs();
         startCountdown();
         configureInsets();
@@ -84,6 +99,18 @@ public class EmailVerificationActivity extends AppCompatActivity {
         resendOtpTextView.setOnClickListener(v -> resendOtp());
     }
 
+    public void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+//                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
+    }
+
     private void configureInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -110,6 +137,50 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 + inputCode6.getText().toString().trim();
     }
 
+    CompletableFuture<Boolean> signIn(String email, String password) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Amplify.Auth.signIn(
+                email,
+                password,
+                result -> {
+                    if (result.isSignedIn()) {
+                        if(Objects.equals(getIntent().getStringExtra("type"), "registration")){
+                            setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
+                        }
+                        else {
+                            setUserRole(getIntent().getStringExtra(EMAIL), "Manager", "");
+//                            setUserToVerified(getIntent().getStringExtra(EMAIL), "");
+                        }
+                        future.complete(true);
+                    } else {
+                        handleSignInFailure("Sign in not complete.");
+                        future.complete(false);
+                    }
+                },
+                error -> handleSignInError(error, email, future)
+        );
+        return future;
+    }
+
+    public void handleSignInFailure(String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    public void handleSignInError(Throwable error, String email, CompletableFuture<Boolean> future) {
+        Log.e(TAG, error.toString());
+        String errorMessage = error.toString().toLowerCase(Locale.ROOT);
+
+        if (errorMessage.contains("user is not confirmed")) {
+            Toast.makeText(this, "Failed: "+error, Toast.LENGTH_LONG).show();
+//            handleUserNotConfirmed(email, future);
+        } else {
+            handleSignInFailure("Failed to confirm email address. Please try again.");
+            future.complete(false);
+        }
+    }
+
     CompletableFuture<Boolean> confirmSignUp(String email, String code) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         Amplify.Auth.confirmSignUp(
@@ -120,8 +191,10 @@ public class EmailVerificationActivity extends AppCompatActivity {
                     future.complete(true);
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
-                        setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
-                        showRequestSentDialog();
+//                        new Handler().postDelayed(() -> {
+                        checkIfSignedIn(email, getIntent().getStringExtra("password"));
+//                        }, 2000);
+
                     });
                 },
                 error -> {
@@ -131,13 +204,6 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 }
         );
         return future;
-    }
-
-    private void navigateToMainActivity(String email) {
-        Intent intent = new Intent(EmailVerificationActivity.this, MainActivity.class);
-        intent.putExtra(EMAIL, email);
-        startActivity(intent);
-        finish();
     }
 
     private void resendOtp() {
@@ -204,6 +270,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
                 if (Boolean.TRUE.equals(result)) {
 //                    navigateToMainActivity(username);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+//                    signOut();
+                    showRequestSentDialog();
                 }
             }
 
@@ -214,7 +282,89 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
     }
 
-    private void showRequestSentDialog() {
+    private void setUserToVerified(String username, String authorization) {
+        UserUtils.setUserToVerified(username, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+//                fetchOrganizationDetails();
+                showRequestSentDialog();
+                Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "User approval failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void setUserRole(String username, String role, String authorization) {
+        UserUtils.setUserRole(username, role, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    setUserToVerified(username, authorization);
+                    Toast.makeText(EmailVerificationActivity.this, "User role set successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "Setting user role failed", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void checkIfSignedIn(String email, String password) {
+        isSignedIn().thenAccept(isSignedIn -> {
+            if (Boolean.TRUE.equals(isSignedIn)) {
+                SignOut(email, password);
+            } else {
+                // User is not signed in, just proceed to sign them in
+                signIn(email, password);
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean> isSignedIn() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        Amplify.Auth.fetchAuthSession(
+                result -> future.complete(result.isSignedIn()),
+                error -> {
+                    Log.e(TAG, error.toString());
+                    future.completeExceptionally(error);
+                }
+        );
+        return future;
+    }
+
+    public CompletableFuture<Boolean> SignOut(String username, String password)
+    {
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+        Amplify.Auth.signOut(signOutResult -> {
+            if (signOutResult instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                runOnUiThread(() -> {
+                signIn(username, password);
+                });
+                future.complete(true);
+
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
+                runOnUiThread(() -> {
+                    signIn(username, password);
+                });
+                future.complete(true);
+            } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                AWSCognitoAuthSignOutResult.FailedSignOut failedSignOutResult =
+                        (AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult;
+                Log.e("AuthQuickStart", "Sign out Failed", failedSignOutResult.getException());
+                future.complete(false);
+            }
+        });
+        return future;
+    }
+
+    void showRequestSentDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.request_popup, null);
@@ -225,7 +375,7 @@ public class EmailVerificationActivity extends AppCompatActivity {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EmailVerificationActivity.this, LandingActivity.class);
+                Intent intent = new Intent(EmailVerificationActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -234,6 +384,42 @@ public class EmailVerificationActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCancelable(false);
         alertDialog.show();
+    }
+
+    private void fetchOrganizationDetails() {
+        OrganizationUtils.fetchOrganizationsDetails(this, new OperationCallback<List<OrganizationModel>>() {
+            @Override
+            public void onSuccess(List<OrganizationModel> result) {
+                List<String> organizationNames = new ArrayList<>();
+                for (OrganizationModel organization : result) {
+//                    if(Objects.equals(organization.getOrganizationName(), getIntent().getStringExtra("organization"))){
+//                        upDateDetails(organization.getOrganizationId()).thenAccept(updateDetails -> {
+                            showRequestSentDialog();
+//                        });
+//                    }
+                }
+
+                Toast.makeText(EmailVerificationActivity.this, "Organizations fetched successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EmailVerificationActivity.this, "Failed to fetch organizations: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean>  upDateDetails(String organizationId){
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+        Amplify.Auth.updateUserAttribute(
+                new AuthUserAttribute(AuthUserAttributeKey.address(), organizationId),
+                result -> Log.i("AuthDemo", "Updated address"),
+                error -> Log.e("AuthDemo", "Update failed", error)
+        );
+        future.complete(true);
+
+        return future;
     }
 
 

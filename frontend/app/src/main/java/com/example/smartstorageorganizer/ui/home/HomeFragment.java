@@ -2,13 +2,19 @@ package com.example.smartstorageorganizer.ui.home;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,13 +26,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import androidx.annotation.NonNull;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +62,7 @@ import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentHomeBinding;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -67,6 +81,9 @@ public class HomeFragment extends Fragment {
     Spinner suggestionSpinner, colorSpinner;
     List<CategoryModel> suggestedCategory = new ArrayList<>();
     int PICK_IMAGE_MULTIPLE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_IMAGE_PICK = 2;
     private static final int GALLERY_CODE = 1;
     private String currentSelectedCategory, currentSelectedSubcategory;
     Uri ImageUri;
@@ -83,13 +100,14 @@ public class HomeFragment extends Fragment {
     private ArrayAdapter<String> subAdapter;
     private RecentAdapter recentAdapter;
     private RecyclerView itemRecyclerView, category_RecyclerView;
-    private String currentEmail, currentName;
+    private String currentEmail, currentName, organizationID;
     AlertDialog alertDialog;
     private List<CategoryModel> categoryModelList;
     private List<CategoryModel> subcategoryModelList;
     private CategoryAdapter categoryAdapter;
     private String parentCategoryId, subcategoryId;
     Button buttonNext;
+    Button buttonTakePhoto;
     EditText itemDescription, itemName;
     ImageView itemImage;
     private List<String> parentCategories = new ArrayList<>();
@@ -98,8 +116,10 @@ public class HomeFragment extends Fragment {
     private ShimmerFrameLayout shimmerFrameLayoutCategory;
     private ShimmerFrameLayout shimmerFrameLayoutRecent;
     private TextView recentText;
-    private RecyclerView recyclerViewRecent;
+//    private RecyclerView recyclerViewRecent;
     ProgressDialog progressDialogAddingItem;
+    private LinearLayout noInternet;
+    private String imageFilePath;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -117,15 +137,16 @@ public class HomeFragment extends Fragment {
         category_RecyclerView = root.findViewById(R.id.category_rec);
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
-        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
+        noInternet = root.findViewById(R.id.noInternet);
+//        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
 
-        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
-        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
-        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
-        recyclerViewRecent.setAdapter(skeletonAdapter);
+//        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
+//        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
+//        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
+//        recyclerViewRecent.setAdapter(skeletonAdapter);
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
@@ -148,8 +169,8 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    private void loadRecentItems(String email) {
-        Utils.fetchRecentItems(email,requireActivity(), new OperationCallback<List<ItemModel>>() {
+    private void loadRecentItems(String email, String organizationID) {
+        Utils.fetchRecentItems(email, organizationID,requireActivity(), new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -174,6 +195,11 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutRecent.startShimmer();
                 shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
                 itemRecyclerView.setVisibility(View.GONE);
+                noInternet.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutCategory.stopShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                shimmerFrameLayoutRecent.stopShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.GONE);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -194,20 +220,39 @@ public class HomeFragment extends Fragment {
                             case "name":
                                 currentName = attribute.getValue();
                                 break;
+                            case "address":
+                                organizationID = attribute.getValue();
+                                break;
                             default:
                         }
                     }
                     Log.i("progress","User attributes fetched successfully");
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
-                        loadRecentItems(currentEmail);
+                        categoryAdapter.setOrganizationId(organizationID);
+                        recentAdapter.setOrganizationId(organizationID);
+                        loadRecentItems(currentEmail, organizationID);
                         shimmerFrameLayoutName.startShimmer();
                         shimmerFrameLayoutName.setVisibility(View.GONE);
-                        fetchParentCategories(0, currentEmail);
+                        fetchParentCategories(0, currentEmail, organizationID);
                     });
                     future.complete(true);
                 },
-                error -> Log.e("AuthDemo", "Failed to fetch user attributes.", error)
+                error -> {
+                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+                    requireActivity().runOnUiThread(() -> {
+                        recentText.setVisibility(View.GONE);
+                        shimmerFrameLayoutCategory.startShimmer();
+                        shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                        shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                        shimmerFrameLayoutName.setVisibility(View.GONE);
+                        itemRecyclerView.setVisibility(View.GONE);
+                        noInternet.setVisibility(View.VISIBLE);
+
+                        // If you want to return false in case of an error
+                        future.complete(false);
+                    });
+                }
 
         );
         return future;
@@ -246,7 +291,7 @@ public class HomeFragment extends Fragment {
         itemName.addTextChangedListener(textWatcher);
         itemDescription.addTextChangedListener(textWatcher);
 
-        itemImage.setOnClickListener(v -> OpenGallery());
+        itemImage.setOnClickListener(v -> showImagePickerDialog());
 
         buttonNext.setOnClickListener(v -> {
             showSuggestionPopup(itemName.getText().toString(), itemDescription.getText().toString());
@@ -286,7 +331,8 @@ public class HomeFragment extends Fragment {
 
         addButton.setOnClickListener(v -> {
             progressDialogAddingItem.show();
-            uploadItemImage(file);
+            File compressedFile = compressImage(file);
+            uploadItemImage(compressedFile);
         });
         reloadButton.setOnClickListener(v -> {
             progressDialog.show();
@@ -294,8 +340,23 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private File compressImage(File file) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            File compressedFile = new File(requireActivity().getCacheDir(), "compressed_image.jpeg");
+            try (FileOutputStream fos = new FileOutputStream(compressedFile)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos); // Compress to 50%
+                fos.flush();
+            }
+            return compressedFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return file; // Fallback to original if compression fails
+        }
+    }
+
     private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
-        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, requireActivity(), new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, organizationID, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 suggestedCategory.clear();
@@ -364,7 +425,7 @@ public class HomeFragment extends Fragment {
                 parentCategoryId = parentCategory;
                 if(!Objects.equals(parentCategory, "")){
                     parentCategoryId = parentCategory;
-                    fetchParentCategories(Integer.parseInt(parentCategory), currentEmail);
+                    fetchParentCategories(Integer.parseInt(parentCategory), currentEmail, organizationID);
                 }
             }
 
@@ -441,22 +502,30 @@ public class HomeFragment extends Fragment {
     }
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
-        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail, requireActivity(), new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
-                progressDialogAddingItem.hide();
-                Intent intent = new Intent(requireActivity(), HomeActivity.class);
-                startActivity(intent);
-                requireActivity().finish();
-            }
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
+            units.addAll(unitModels);
+            Log.i("progress", units.toString());
+            String allocated=Utils.AllocateUnitToItem(units);
+            Log.i("progress", "Allocated: "+allocated);
+            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, organizationID,requireActivity(), new OperationCallback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean result) {
+                    Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
+                    progressDialogAddingItem.hide();
+                    Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                }
 
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
-                progressDialogAddingItem.hide();
-            }
+                @Override
+                public void onFailure(String error) {
+                    Toast.makeText(requireActivity(), "Adding item failed... ", Toast.LENGTH_LONG).show();
+                    progressDialogAddingItem.hide();
+                }
+            });
         });
+
     }
 
     private String findCategoryByName(String categoryName, String type) {
@@ -484,8 +553,8 @@ public class HomeFragment extends Fragment {
         return ""; // Return null if no category with the given name is found
     }
 
-    private void fetchParentCategories(int categoryId, String email) {
-        Utils.fetchParentCategories(categoryId, email, requireActivity(), new OperationCallback<List<CategoryModel>>() {
+    private void fetchParentCategories(int categoryId, String email, String organizationID) {
+        Utils.fetchParentCategories(categoryId, email, organizationID, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId != 0) {
@@ -535,44 +604,66 @@ public class HomeFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+                imagesEncodedList = new ArrayList<>();
 
-            imagesEncodedList = new ArrayList<>();
-
-            if (data.getData() != null) {
-                ImageUri = data.getData();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (data.getData() != null) {
+                    ImageUri = data.getData();
+                    itemImage.setImageURI(ImageUri);
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                } else if (data.getClipData() != null) {
+                    ImageUri = data.getClipData().getItemAt(0).getUri();
+                    itemImage.setImageURI(ImageUri);
+//                    saveBitmapToFile();
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                file = new File(imageFilePath);
+                if (file.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    itemImage.setImageBitmap(myBitmap);
+                    saveBitmapToGallery(myBitmap);
+                    saveBitmapToFile(myBitmap);
                 }
             }
-
-            else if (data.getClipData() != null) {
-                ImageUri = data.getClipData().getItemAt(0).getUri();
-                itemImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) itemImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(requireActivity().getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveBitmapToFile(Bitmap bitmap) {
+        // Create a file to save the image
+        file = new File(requireActivity().getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveBitmapToGallery(Bitmap bitmap) {
+        String savedImageURL = MediaStore.Images.Media.insertImage(
+                getActivity().getContentResolver(),
+                bitmap,
+                "MyImage",
+                "Image of something"
+        );
+        Uri savedImageURI = Uri.parse(savedImageURL);
+
+        // Optional: Display a toast message
+        Toast.makeText(getActivity(), "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
+    }
+
 
     public void uploadItemImage(File parentCategoryImage)
     {
@@ -590,6 +681,7 @@ public class HomeFragment extends Fragment {
                 storageFailure -> {Log.e("MyAmplifyApp", "Upload failed", storageFailure);}
         );
     }
+
     public String getObjectUrl(String key)
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
@@ -597,6 +689,67 @@ public class HomeFragment extends Fragment {
         addItem(url, itemName.getText().toString().trim(), itemDescription.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
+    }
+
+    private void showImagePickerDialog() {
+        String[] options = {"Take Photo", "Choose from Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Action");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                takePhoto();
+            } else if (which == 1) {
+                OpenGallery();
+            }
+        });
+        builder.show();
+    }
+
+    private void takePhoto() {
+        // Check if the CAMERA permission is granted
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            // Request CAMERA permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        }
+        else
+        {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.example.smartstorageorganizer.provider", photoFile);
+                    Log.d("Photo URI", "photoURI: " + photoURI.toString());
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                    Toast.makeText(context, "PhotoFile not null", Toast.LENGTH_SHORT).show();
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } else {
+                    Log.e("PhotoFile", "photoFile is null");
+                }
+            }
+        }
+
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        imageFilePath = image.getAbsolutePath();
+        return image;
     }
 
     @Override
