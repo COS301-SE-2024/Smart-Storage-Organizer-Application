@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -14,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.amplifyframework.core.Amplify;
+import com.google.firebase.FirebaseApp; // Import Firebase
+import com.google.firebase.messaging.FirebaseMessaging; // Import Firebase Messaging
 
 import java.util.concurrent.CompletableFuture;
 
@@ -27,6 +27,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+        Log.d("MainActivity", "Firebase initialized in MainActivity.");
+
+        // Optionally retrieve the FCM token for debugging
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
+                return;
+            }
+            // Get new FCM registration token
+            String token = task.getResult();
+            Log.i("MainActivity", "FCM Token: " + token);
+        });
 
         setupWindowInsets();
         navigateAfterDelay();
