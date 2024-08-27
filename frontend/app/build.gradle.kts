@@ -1,8 +1,20 @@
 import java.util.Properties
 
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.10")
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
 }
+apply(plugin = "com.google.gms.google-services") // Apply Google Services plugin here
+
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -24,7 +36,7 @@ android {
 
     namespace = "com.example.smartstorageorganizer"
     compileSdk = 34
-    android.buildFeatures.buildConfig =true
+    android.buildFeatures.buildConfig = true
 
     defaultConfig {
         applicationId = "com.example.smartstorageorganizer"
@@ -34,6 +46,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         buildConfigField("String","changeCategory","\"${localProperties["changeCategory"]}\"")
         buildConfigField("String","getParentCategory","\"${localProperties["getParentCategory"]}\"")
         buildConfigField("String","getCategoryName","\"${localProperties["getCategoryName"]}\"")
@@ -128,26 +141,19 @@ android {
         viewBinding = true
     }
 
-    
-
 }
 
-
 dependencies {
+    implementation("com.google.firebase:firebase-messaging:latest-version")
     implementation(libs.firebase.database)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
-
-    implementation ("com.github.yukuku:ambilwarna:2.0.1");
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
-
-
+    implementation("com.github.yukuku:ambilwarna:2.0.1")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("org.slf4j:slf4j-api:1.7.30")
-
-
-
     implementation("org.slf4j:slf4j-log4j12:1.7.30")
     implementation("log4j:log4j:1.2.17")
+
 //    implementation ("com.github.yuriy-budiyev:code-scanner:2.3.0")
     // Example for using ZXing
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
@@ -186,6 +192,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
     implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
     implementation ("com.airbnb.android:lottie:6.4.1")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
@@ -195,49 +202,32 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.2.0")
     testImplementation("org.mockito:mockito-inline:4.2.0")
-
-    // AndroidX Test - Core, Runner, and Rules
     testImplementation("androidx.test:core:1.4.0")
     testImplementation("androidx.test:runner:1.4.0")
     testImplementation("androidx.test:rules:1.4.0")
-
-    // AndroidX Test - ExtJUnit for JUnit4 integration
     testImplementation("androidx.test.ext:junit:1.1.3")
-
-    // AndroidX Test - Espresso
-
     testImplementation("androidx.test.espresso:espresso-core:3.4.0")
-
     implementation("com.hbb20:ccp:2.5.0")
     implementation("com.amplifyframework:aws-api:2.16.1")
-    implementation("com.amplifyframework:aws-auth-cognito:2.16.1")
-
-    // AndroidX Test - Espresso Intents
     testImplementation("androidx.test.espresso:espresso-intents:3.4.0")
-
-    // AndroidX Test - Espresso Idling Resource
     testImplementation("androidx.test.espresso:espresso-idling-resource:3.4.0")
-
-    // AndroidX Test - Espresso Contrib
     testImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
-    // AndroidX Test - Espresso Remote
     testImplementation("androidx.test.espresso:espresso-remote:3.4.0")
-
-    implementation("com.hbb20:ccp:2.5.0");
-
-    // Amplify API plugin for REST
+    implementation("com.hbb20:ccp:2.5.0")
     implementation("com.amplifyframework:aws-api:1.35.4")
-
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
-
-    implementation("com.google.code.gson:gson:2.8.8") // Use the latest version
-
+    implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.amplifyframework:aws-storage-s3:2.16.1")
-
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.25.+")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
 
+//    FirebaseMessaging Tests
+    testImplementation ("org.robolectric:robolectric:4.6.1")
+    testImplementation ("androidx.test:core:1.4.0")
+    testImplementation ("androidx.test.ext:junit:1.1.3")
+    testImplementation ("androidx.test:runner:1.4.0")
+    testImplementation ("androidx.test:rules:1.4.0")
 
-
-
-
+    // oneSignal
+    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
 }

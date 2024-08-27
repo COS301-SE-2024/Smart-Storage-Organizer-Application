@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import androidx.activity.EdgeToEdge;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -14,6 +16,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.amplifyframework.core.Amplify;
+import com.google.firebase.FirebaseApp; // Import Firebase
+import com.google.firebase.messaging.FirebaseMessaging; // Import Firebase Messaging
+
+import java.util.concurrent.CompletableFuture;
 import com.example.smartstorageorganizer.adapters.SlidePagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +54,24 @@ public class MainActivity extends AppCompatActivity {
         SlidePagerAdapter pagerAdapter = new SlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
 
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+        Log.d("MainActivity", "Firebase initialized in MainActivity.");
+
+        // Optionally retrieve the FCM token for debugging
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
+                return;
+            }
+            // Get new FCM registration token
+            String token = task.getResult();
+            Log.i("MainActivity", "FCM Token: " + token);
+        });
+
+        setupWindowInsets();
+        navigateAfterDelay();
+    }
         addDotsIndicator(0);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

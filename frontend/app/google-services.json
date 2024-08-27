@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "51934466122",
+    "project_id": "smartstorage-2a7b4",
+    "storage_bucket": "smartstorage-2a7b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51934466122:android:5c9b0d56c619731fd056b3",
+        "android_client_info": {
+          "package_name": "com.example.smartstorageorganizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2TVReqHyOuFRjYM4h2hB305fURro6ozE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
