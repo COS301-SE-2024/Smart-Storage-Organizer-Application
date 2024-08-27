@@ -37,6 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private List<CategoryModel> categoryModelList;
+    private String organizationID;
 
     public CategoryAdapter(Context context, List<CategoryModel> categoryModelList) {
         this.context = context;
@@ -77,6 +78,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
             intent.putExtra("color_code_id", "");
+            intent.putExtra("organization_id", organizationID);
 
             context.startActivity(intent);
 
@@ -262,5 +264,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private void navigateToHome() {
         Intent intent = new Intent(context, ViewItemActivity.class);
         context.startActivity(intent);
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationID = organizationId;
     }
 }

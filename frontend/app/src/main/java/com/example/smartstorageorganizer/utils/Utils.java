@@ -55,8 +55,10 @@ public class Utils
 
     private Utils() {}
 
-    public static void fetchParentCategories(int categoryId, String email, Activity activity, OperationCallback<List<CategoryModel>> callback) {
-        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
+    public static void fetchParentCategories(int categoryId, String email, String organizationID, Activity activity, OperationCallback<List<CategoryModel>> callback) {
+//        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) + "\" }";
+        String json = "{\"parentcategory\":\"" + Integer.toString(categoryId) +"\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
+
 
         List<CategoryModel> categoryModelList = new ArrayList<>();
 
@@ -172,9 +174,9 @@ public class Utils
         });
     }
 
-    public static void filterByCategory(int parentCategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+    public static void filterByCategory(int parentCategory, int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
 //        String json = "{\"parentcategory\":\"" + parentCategory + "\" }";
-        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\""+ Integer.parseInt(organizationID)+"\" }";
         String message = "View Response Results";
 
         List<ItemModel> itemModelList = new ArrayList<>();
@@ -257,9 +259,9 @@ public class Utils
         });
     }
 
-    public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback) {
+    public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
 //        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\" }";
-        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID) +"\" }";
 
         String message = "View Request Method";
 
@@ -561,9 +563,9 @@ public class Utils
         });
     }
 
-    public static void fetchAllItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void fetchAllItems(int howMany, int pageNumber,String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID)+"\"}";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -690,20 +692,21 @@ public class Utils
         });
     }
 
-    public static void fetchAllColour(Activity activity, OperationCallback<List<ColorCodeModel>> callback)
+    public static void fetchAllColour(String organizationId, Activity activity, OperationCallback<List<ColorCodeModel>> callback)
     {
-        String json = "{}";
+//        String json = "{}";
+        String json = "{\"organizationid\":\""+organizationId+"\" }";
 
         List<ColorCodeModel> colorCodeModelList = new ArrayList<>();
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByColourEndPoint;
+        String API_URL = BuildConfig.FetchAllColours;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
                 .url(API_URL)
-                .get()
+                .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -884,8 +887,10 @@ public class Utils
         });
     }
 
-    public static void fetchRecentItems(String email, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"email\":\"" + email + "\" }";
+    public static void fetchRecentItems(String email, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
+//        String json = "{\"email\":\"" + email + "\" }";
+        String json = "{\"email\":\""+ email +"\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
+
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -964,7 +969,7 @@ public class Utils
         });
     }
 
-    public static void fetchCategorySuggestions(String name, String description, String email, Activity activity, OperationCallback<List<CategoryModel>> callback) {
+    public static void fetchCategorySuggestions(String name, String description, String email,String organizationId, Activity activity, OperationCallback<List<CategoryModel>> callback) {
         // API endpoint that can return category suggestions based on the item
         String API_URL = BuildConfig.RecommendCategoryEndPoint;
         OkHttpClient client = new OkHttpClient();
@@ -974,6 +979,7 @@ public class Utils
             jsonObject.put("itemname", name);
             jsonObject.put("itemdescription", description);
             jsonObject.put("useremail", email);
+            jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -1052,7 +1058,7 @@ public class Utils
         });
     }
 
-    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, Activity activity, OperationCallback<Boolean> callback) {
+    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
@@ -1061,7 +1067,6 @@ public class Utils
         int quantity = 1;
 
         String email = userEmail;
-        String json = "{\"item_name\":\""+item_name+"\",\"description\":\""+description+"\" ,\"colourcoding\":\""+colourcoding+"\",\"barcode\":\""+barcode+"\",\"qrcode\":\""+qrcode+"\",\"quanity\":"+quantity+",\"location\":\""+location+"\",\"email\":\""+email+"\", \"category\":\""+3+"\", \"sub_category\":\""+5+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.AddItemEndPoint;
@@ -1079,6 +1084,7 @@ public class Utils
             jsonObject.put("quanity", quantity);
             jsonObject.put("location", location);
             jsonObject.put("email", email);
+            jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -1207,9 +1213,9 @@ public class Utils
         });
     }
 
-    public static void FetchUncategorizedItems(int howMany, int pageNumber, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void FetchUncategorizedItems(int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\" }";
+        String json = "{\"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID) + "\" }";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 

@@ -162,6 +162,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
                 intent.putExtra("parentCategoryName", parentCategory);
                 intent.putExtra("subCategoryName", subcategory);
+                intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
 
                 startActivity(intent);
             }

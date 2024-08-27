@@ -100,7 +100,7 @@ public class HomeFragment extends Fragment {
     private ArrayAdapter<String> subAdapter;
     private RecentAdapter recentAdapter;
     private RecyclerView itemRecyclerView, category_RecyclerView;
-    private String currentEmail, currentName;
+    private String currentEmail, currentName, organizationID;
     AlertDialog alertDialog;
     private List<CategoryModel> categoryModelList;
     private List<CategoryModel> subcategoryModelList;
@@ -169,8 +169,8 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    private void loadRecentItems(String email) {
-        Utils.fetchRecentItems(email,requireActivity(), new OperationCallback<List<ItemModel>>() {
+    private void loadRecentItems(String email, String organizationID) {
+        Utils.fetchRecentItems(email, organizationID,requireActivity(), new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -196,6 +196,10 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
                 itemRecyclerView.setVisibility(View.GONE);
                 noInternet.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutCategory.stopShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                shimmerFrameLayoutRecent.stopShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.GONE);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -216,16 +220,21 @@ public class HomeFragment extends Fragment {
                             case "name":
                                 currentName = attribute.getValue();
                                 break;
+                            case "address":
+                                organizationID = attribute.getValue();
+                                break;
                             default:
                         }
                     }
                     Log.i("progress","User attributes fetched successfully");
                     requireActivity().runOnUiThread(() -> {
                         name.setText("Hi "+currentName);
-                        loadRecentItems(currentEmail);
+                        categoryAdapter.setOrganizationId(organizationID);
+                        recentAdapter.setOrganizationId(organizationID);
+                        loadRecentItems(currentEmail, organizationID);
                         shimmerFrameLayoutName.startShimmer();
                         shimmerFrameLayoutName.setVisibility(View.GONE);
-                        fetchParentCategories(0, currentEmail);
+                        fetchParentCategories(0, currentEmail, organizationID);
                     });
                     future.complete(true);
                 },
@@ -347,7 +356,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription, ProgressDialog progressDialog, Button reloadButton) {
-        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, requireActivity(), new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchCategorySuggestions(itemName, itemDescription, currentEmail, organizationID, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 suggestedCategory.clear();
@@ -416,7 +425,7 @@ public class HomeFragment extends Fragment {
                 parentCategoryId = parentCategory;
                 if(!Objects.equals(parentCategory, "")){
                     parentCategoryId = parentCategory;
-                    fetchParentCategories(Integer.parseInt(parentCategory), currentEmail);
+                    fetchParentCategories(Integer.parseInt(parentCategory), currentEmail, organizationID);
                 }
             }
 
@@ -499,7 +508,7 @@ public class HomeFragment extends Fragment {
             Log.i("progress", units.toString());
             String allocated=Utils.AllocateUnitToItem(units);
             Log.i("progress", "Allocated: "+allocated);
-            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, requireActivity(), new OperationCallback<Boolean>() {
+            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, organizationID,requireActivity(), new OperationCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean result) {
                     Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
@@ -544,8 +553,8 @@ public class HomeFragment extends Fragment {
         return ""; // Return null if no category with the given name is found
     }
 
-    private void fetchParentCategories(int categoryId, String email) {
-        Utils.fetchParentCategories(categoryId, email, requireActivity(), new OperationCallback<List<CategoryModel>>() {
+    private void fetchParentCategories(int categoryId, String email, String organizationID) {
+        Utils.fetchParentCategories(categoryId, email, organizationID, requireActivity(), new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId != 0) {

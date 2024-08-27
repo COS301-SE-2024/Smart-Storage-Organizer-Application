@@ -5,6 +5,10 @@ public class OrganizationModel {
     String organizationId;
     String createdAt;
 
+    public OrganizationModel() {
+
+    }
+
     public OrganizationModel(String organizationName, String organizationId, String createdAt) {
         this.organizationName = organizationName;
         this.organizationId = organizationId;

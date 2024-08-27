@@ -161,6 +161,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         suggestedCategoriesList = new ArrayList<>();
         recentAdapter = new RecentAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
+        recentAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
 
     public void loadInitialData() {
@@ -173,7 +174,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
 
-        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -375,7 +376,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
 
     public void assignItemToColor(String itemId) {
         // Fetch all available color codes
-        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+        Utils.fetchAllColour(getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
                 // Create an array of color names to display to the user

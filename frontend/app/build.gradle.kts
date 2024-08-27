@@ -97,6 +97,10 @@ android {
         buildConfigField("String", "GetAllUnits", "\"${localProperties["GetAllUnits"]}\"");
         buildConfigField("String", "GetCategoriesOfUnits", "\"${localProperties["GetCategoriesOfUnits"]}\"");
         buildConfigField("String", "GetItemsUnderUnit", "\"${localProperties["GetItemsUnderUnit"]}\"");
+        buildConfigField("String", "CreateOrganization", "\"${localProperties["CreateOrganization"]}\"");
+        buildConfigField("String", "FetchOrganization", "\"${localProperties["FetchOrganization"]}\"");
+        buildConfigField("String", "FetchAllColours", "\"${localProperties["FetchAllColours"]}\"");
+
 
 
 

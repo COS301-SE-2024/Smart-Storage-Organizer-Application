@@ -49,6 +49,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     private final List<ItemModel> itemModelList;
     private final Set<Integer> selectedItems = new HashSet<>();
     private boolean selectAllFlag = true;
+    private String organizationID;
+
 
     public RecentAdapter(Context context, List<ItemModel> itemModelList) {
         this.context = context;
@@ -85,6 +87,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                 intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
                 intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
                 intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
+                intent.putExtra("organization_id", organizationID);
 
                 context.startActivity(intent);
             } else {
@@ -250,6 +253,10 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             selectAllFlag = true;
         }
         notifyDataSetChanged(); // Update the adapter to refresh the UI
+    }
+
+    public void setOrganizationId(String organizationId) {
+        this.organizationID = organizationId;
     }
 
 

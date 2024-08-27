@@ -182,6 +182,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemModelList = new ArrayList<>();
         itemAdapter = new ItemAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(itemAdapter);
+        itemAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
 
     private void loadInitialData() {
@@ -217,7 +218,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchAllItems(PAGE_SIZE, currentPage,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchAllItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -291,7 +292,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -322,7 +323,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void fetchAndSetupCategories() {
-        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(Integer.parseInt(categoryID), getIntent().getStringExtra("email"), getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;
@@ -443,7 +444,7 @@ public class ViewItemActivity extends AppCompatActivity {
         mySpinner.setVisibility(View.GONE);
         itemModelList.clear();
         itemAdapter.notifyDataSetChanged();
-        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterBySubCategory(Integer.parseInt(categoryID), subcategoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -583,7 +584,7 @@ public class ViewItemActivity extends AppCompatActivity {
 
     public void assignItemToColor(String itemId) {
         // Fetch all available color codes
-        Utils.fetchAllColour(this, new OperationCallback<List<ColorCodeModel>>() {
+        Utils.fetchAllColour(getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
                 // Create an array of color names to display to the user

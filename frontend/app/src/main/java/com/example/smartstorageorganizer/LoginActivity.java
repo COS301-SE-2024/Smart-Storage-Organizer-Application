@@ -36,6 +36,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
@@ -62,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         initializeUI();
-        checkIfSignedIn();
+//        checkIfSignedIn();
+        signOut();
         configureInsets();
         setOnClickListeners();
     }
@@ -76,6 +78,19 @@ public class LoginActivity extends AppCompatActivity {
         loginButtonIcon = findViewById(R.id.login_button_icon);
         loginButtonText = findViewById(R.id.login_button_text);
         resetPasswordLink = findViewById(R.id.resetPasswordLink);
+    }
+
+    public void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+//                        showRequestSentDialog()
+//                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+//                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
     }
 
     public void checkIfSignedIn() {
@@ -120,7 +135,8 @@ public class LoginActivity extends AppCompatActivity {
         String passwordInput = password.getText().toString().trim();
         if (validateForm(emailInput, passwordInput)) {
             showLoading();
-            checkUserVerificationStatus(emailInput, "");
+//            checkUserVerificationStatus(emailInput, "");
+            signIn(emailInput, passwordInput);
 //            signIn(emailInput, passwordInput);
         }
     }
@@ -170,6 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                 password,
                 result -> {
                     if (result.isSignedIn()) {
+                        checkUserVerificationStatus(email, "");
                         fetchUserSession(email);
                         future.complete(true);
                     } else {
@@ -189,7 +206,6 @@ public class LoginActivity extends AppCompatActivity {
                     String token = cognitoSession.getUserPoolTokensResult().getValue().getIdToken();
                     fetchUserAttributes();
                     makeApiRequest(token);
-                    runOnUiThread(() -> navigateToHome(email));
                 },
                 error -> Log.e(TAG, error.toString())
         );
@@ -321,11 +337,10 @@ public class LoginActivity extends AppCompatActivity {
                     if(Objects.equals(result, "unverified")){
                         hideLoading();
                         showUnverifiedDialog();
+//                        setUserToUnverified(username, authorization);
                     }
                     else {
-                        String emailInput = email.getText().toString().trim();
-                        String passwordInput = password.getText().toString().trim();
-                        signIn(emailInput, passwordInput);
+                        navigateToHome(username);
                     }
 //                    Toast.makeText(LoginActivity.this, "check user verification successful: "+ result, Toast.LENGTH_LONG).show();
                 }
@@ -357,5 +372,25 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void setUserToUnverified(String username, String authorization) {
+        UserUtils.setUserToUnverified(username, authorization, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    hideLoading();
+                    showUnverifiedDialog();
+//                    navigateToMainActivity(username);
+//                    Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+//                    showRequestSentDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(LoginActivity.this, "Login Failed! please try again", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
