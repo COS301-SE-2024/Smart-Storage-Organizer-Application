@@ -164,4 +164,7 @@ dependencies {
     testImplementation ("androidx.test.ext:junit:1.1.3")
     testImplementation ("androidx.test:runner:1.4.0")
     testImplementation ("androidx.test:rules:1.4.0")
+
+    // oneSignal
+    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
 }
