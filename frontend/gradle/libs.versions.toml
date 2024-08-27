@@ -14,6 +14,7 @@ navigationUi = "2.6.0"
 legacySupportV4 = "1.0.0"
 supportAnnotations = "28.0.0"
 firebaseMessaging = "24.0.0"
+googleGmsGoogleServices = "4.4.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -33,4 +34,5 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
