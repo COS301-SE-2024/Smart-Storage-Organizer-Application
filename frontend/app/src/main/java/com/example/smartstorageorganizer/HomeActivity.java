@@ -95,6 +95,14 @@ public class HomeActivity extends AppCompatActivity {
 //                        .setAction("Action", null)
 //                        .setAnchorView(R.id.fab).show();
         });
+        
+        findViewById(R.id.search_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -140,21 +148,21 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-
-
-        MenuItem searchItem = menu.findItem(R.id.searchButton);
-        searchItem.setOnMenuItemClickListener(item -> {
-            // Start the SearchActivity
-            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
-            startActivity(intent);
-            return true;
-        });
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.home, menu);
+//
+//
+//        MenuItem searchItem = menu.findItem(R.id.searchButton);
+//        searchItem.setOnMenuItemClickListener(item -> {
+//            // Start the SearchActivity
+//            Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
+//            startActivity(intent);
+//            return true;
+//        });
+//        return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {

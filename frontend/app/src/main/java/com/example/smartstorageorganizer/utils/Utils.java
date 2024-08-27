@@ -695,18 +695,18 @@ public class Utils
     public static void fetchAllColour(String organizationId, Activity activity, OperationCallback<List<ColorCodeModel>> callback)
     {
 //        String json = "{}";
-        String json = "{\"organizationid\":\""+Integer.parseInt(organizationId)+"\" }";
+        String json = "{\"organizationid\":\""+organizationId+"\" }";
 
         List<ColorCodeModel> colorCodeModelList = new ArrayList<>();
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.FetchByColourEndPoint;
+        String API_URL = BuildConfig.FetchAllColours;
         RequestBody body = RequestBody.create(json, JSON);
 
         Request request = new Request.Builder()
                 .url(API_URL)
-                .get()
+                .post(body)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

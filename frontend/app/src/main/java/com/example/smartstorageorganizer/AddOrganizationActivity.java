@@ -221,6 +221,10 @@ public class AddOrganizationActivity extends AppCompatActivity {
     }
 
     public void addNewOrganization(String organizationName, String ownerEmail, String password) {
+        buttonLoader.setVisibility(View.VISIBLE);
+        buttonLoader.playAnimation();
+        registerButtonText.setVisibility(View.GONE);
+        registerButtonIcon.setVisibility(View.GONE);
         OrganizationUtils.addOrganization(organizationName, ownerEmail, this, new OperationCallback<OrganizationModel>() {
             @Override
             public void onSuccess(OrganizationModel result) {
@@ -231,6 +235,7 @@ public class AddOrganizationActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String error) {
+                resetSignUpButton();
                 Toast.makeText(AddOrganizationActivity.this, "Adding Organization failed, please try again later.", Toast.LENGTH_LONG).show();
             }
         });
