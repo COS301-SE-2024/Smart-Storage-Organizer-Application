@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 
@@ -69,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
             Log.i("MainActivity", "FCM Token: " + token);
         });
 
-        setupWindowInsets();
-        navigateAfterDelay();
-    }
+//        setupWindowInsets();
+//        navigateAfterDelay();
+//    }
         addDotsIndicator(0);
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
