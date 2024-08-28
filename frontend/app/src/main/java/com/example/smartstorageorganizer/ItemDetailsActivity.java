@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Picture;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
@@ -35,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.caverock.androidsvg.SVG;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -43,6 +46,8 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -381,7 +386,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             if (Objects.equals(type, "qrcode")) {
                 shareImage(qrCodeUrl);
             } else {
-                shareImage(barcodeUrl);
+                shareSvgImage(barcodeUrl);
             }
         });
 
@@ -403,18 +408,29 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                         try {
-                            File file = new File(getExternalCacheDir(), "shared_image.png");
+                            // Use the external directory as defined in file_paths.xml
+                            File imagesDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "shared_images");
+
+                            if (!imagesDir.exists()) {
+                                imagesDir.mkdirs();  // Create the directory if it doesn't exist
+                            }
+
+                            File file = new File(imagesDir, "shared_image.png");
                             FileOutputStream fOut = new FileOutputStream(file);
                             resource.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                             fOut.flush();
                             fOut.close();
                             file.setReadable(true, false);
 
+                            // Get URI using FileProvider
                             Uri uri = FileProvider.getUriForFile(ItemDetailsActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                            // Share image intent
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(Intent.EXTRA_STREAM, uri);
                             intent.setType("image/png");
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             startActivity(Intent.createChooser(intent, "Share image via"));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -424,9 +440,62 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Handle cleanup if necessary
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        Toast.makeText(ItemDetailsActivity.this, "Failed to load image", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    private void shareSvgImage(String imageUrl) {
+        new Thread(() -> {
+            try {
+                // Step 1: Download the SVG from the URL
+                URL url = new URL(imageUrl);
+                InputStream inputStream = (InputStream) url.getContent();
+
+                // Step 2: Load the SVG using AndroidSVG
+                SVG svg = SVG.getFromInputStream(inputStream);
+
+                // Step 3: Render the SVG to a Bitmap
+                Picture picture = svg.renderToPicture();
+                Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawPicture(picture);
+
+                // Step 4: Save the Bitmap to a file
+                File cacheDir = getExternalCacheDir();
+                if (cacheDir != null) {
+                    File file = new File(cacheDir, "shared_svg_image.png");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+
+                    // Step 5: Share the image using FileProvider
+                    Uri uri = FileProvider.getUriForFile(ItemDetailsActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    intent.setType("image/png");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(intent, "Share image via"));
+                } else {
+                    runOnUiThread(() -> Toast.makeText(ItemDetailsActivity.this, "Unable to access cache directory", Toast.LENGTH_SHORT).show());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(ItemDetailsActivity.this, "Failed to share image", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+
 
     private void downloadImage(String imageUrl) {
         Glide.with(this)
