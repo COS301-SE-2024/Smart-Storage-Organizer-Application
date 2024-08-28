@@ -350,7 +350,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
-        Utils.addCategory(parentCategory, categoryName, currentEmail, url, this, new OperationCallback<Boolean>() {
+        Utils.addCategory(parentCategory, categoryName, currentEmail, url, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

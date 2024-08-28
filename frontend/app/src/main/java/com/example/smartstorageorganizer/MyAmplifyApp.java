@@ -15,6 +15,7 @@ import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
     private String organizationID;
+    private String userRole;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -47,6 +48,13 @@ public class MyAmplifyApp extends Application {
 
     public void setOrganizationID(String organizationID) {
         this.organizationID = organizationID;
+    }
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
 

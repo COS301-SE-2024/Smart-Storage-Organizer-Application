@@ -128,8 +128,8 @@ public class Utils
         });
     }
 
-    public static void addCategory(int parentCategory, String categoryName, String email, String url, Activity activity, OperationCallback<Boolean> callback) {
-        String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\", \"categoryname\":\"" + categoryName + "\", \"icon\": \"" + url + "\" }";
+    public static void addCategory(int parentCategory, String categoryName, String email, String url, String organizationID, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\", \"categoryname\":\"" + categoryName + "\", \"icon\": \"" + url + "\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
 
         String message = "Add Category";
         MediaType mediaType = MediaType.get(type);
@@ -148,7 +148,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -158,12 +158,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }

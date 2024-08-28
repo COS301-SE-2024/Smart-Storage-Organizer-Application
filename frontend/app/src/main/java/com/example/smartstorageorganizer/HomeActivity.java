@@ -117,8 +117,17 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        getUserRole(getIntent().getStringExtra("email"), "");
-
+        if(Objects.equals(app.getUserRole(), "")){
+            getUserRole(getIntent().getStringExtra("email"), "");
+        }
+        else {
+            if (Objects.equals(app.getUserRole(), "Manager")) {
+                showAdminMenuItems(navigationView.getMenu());
+            }
+            else {
+                hideAdminMenuItems(navigationView.getMenu());
+            }
+        }
 //        FirebaseApp.initializeApp(this);
 //
 //        FirebaseMessaging.getInstance().getToken()
@@ -278,6 +287,7 @@ public class HomeActivity extends AppCompatActivity {
         UserUtils.getUserRole(username, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                app.setUserRole(result);
                 if (Objects.equals(result, "Manager")) {
                     showAdminMenuItems(navigationView.getMenu());
                 }
