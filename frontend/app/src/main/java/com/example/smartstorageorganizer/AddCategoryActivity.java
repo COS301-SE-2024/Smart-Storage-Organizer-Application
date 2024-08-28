@@ -70,12 +70,16 @@ public class AddCategoryActivity extends AppCompatActivity {
     public List<CategoryModel> categoryModelList = new ArrayList<>();
     public Spinner categorySpinner;
     public String currentEmail;
+    private MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_category);
+
+        app = (MyAmplifyApp) getApplicationContext();
+
         initViews();
         setupWindowInsets();
         getDetails();
@@ -146,7 +150,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void fetchParentCategories() {
         String email = getIntent().getStringExtra(EMAIL_KEY);
-        Utils.fetchParentCategories(0, email,"", this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(0, email,app.getOrganizationID(), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;
@@ -346,7 +350,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
-        Utils.addCategory(parentCategory, categoryName, currentEmail, url, this, new OperationCallback<Boolean>() {
+        Utils.addCategory(parentCategory, categoryName, currentEmail, url, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

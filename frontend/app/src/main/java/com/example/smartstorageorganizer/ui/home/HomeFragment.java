@@ -503,12 +503,12 @@ public class HomeFragment extends Fragment {
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
-            units.addAll(unitModels);
-            Log.i("progress", units.toString());
-            String allocated=Utils.AllocateUnitToItem(units);
-            Log.i("progress", "Allocated: "+allocated);
-            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,allocated, organizationID,requireActivity(), new OperationCallback<Boolean>() {
+//        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
+//            units.addAll(unitModels);
+//            Log.i("progress", units.toString());
+//            String allocated=Utils.AllocateUnitToItem(units);
+//            Log.i("progress", "Allocated: "+allocated);
+            Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,"unitRed", organizationID,requireActivity(), new OperationCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean result) {
                     Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
@@ -524,7 +524,7 @@ public class HomeFragment extends Fragment {
                     progressDialogAddingItem.hide();
                 }
             });
-        });
+//        });
 
     }
 

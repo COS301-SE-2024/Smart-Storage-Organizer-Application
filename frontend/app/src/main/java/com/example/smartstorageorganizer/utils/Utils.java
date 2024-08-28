@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 //import android.util.Log;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -127,8 +128,8 @@ public class Utils
         });
     }
 
-    public static void addCategory(int parentCategory, String categoryName, String email, String url, Activity activity, OperationCallback<Boolean> callback) {
-        String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\", \"categoryname\":\"" + categoryName + "\", \"icon\": \"" + url + "\" }";
+    public static void addCategory(int parentCategory, String categoryName, String email, String url, String organizationID, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{\"useremail\":\"" + email + "\", \"parentcategory\":\"" + Integer.toString(parentCategory) + "\", \"categoryname\":\"" + categoryName + "\", \"icon\": \"" + url + "\", \"organizationid\":\""+Integer.parseInt(organizationID)+"\" }";
 
         String message = "Add Category";
         MediaType mediaType = MediaType.get(type);
@@ -147,7 +148,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -157,12 +158,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -644,9 +645,9 @@ public class Utils
         });
     }
 
-    public static void addColourGroup(String colourcode, String title, String description, String email, Activity activity, OperationCallback<Boolean> callback)
+    public static void addColourGroup(String colourcode, String title, String description, String email, String organizationId, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\", \"createremail\":\""+email+"\"}";
+        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\", \"createremail\":\""+email+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
 
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -665,7 +666,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e("Color Coding", "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -675,12 +676,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i("Color Coding", "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e("Color Coding", "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -807,8 +808,8 @@ public class Utils
         });
     }
 
-    public static void fetchByColour(int colourId, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"colourid\":\"" + Integer.toString(colourId) + "\"}";
+    public static void fetchByColour(int colourId, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback) {
+        String json = "{\"colourid\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\"" + Integer.parseInt(organizationId)+"\"}";
         List<ItemModel> itemModelList = new ArrayList<>();
 
 
@@ -1103,7 +1104,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1113,13 +1114,13 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
-                            callback.onFailure("Response code" + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
+//                            callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
@@ -1131,9 +1132,9 @@ public class Utils
         });
     }
 
-    public static void fetchByID(int id, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void fetchByID(int id, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"item_id\":\""+Integer.toString(id)+"\"}";
+        String json = "{\"item_id\":\""+Integer.toString(id)+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -1154,7 +1155,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed", e);
+                        Log.e("QR Code", "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1163,13 +1164,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            activity.runOnUiThread(() -> Log.e("QR Code", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1195,7 +1196,7 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e("QR Code", "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }

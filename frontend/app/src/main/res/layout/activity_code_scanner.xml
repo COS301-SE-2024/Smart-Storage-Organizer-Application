@@ -22,5 +22,13 @@
         android:layout_centerHorizontal="true"
         android:text="Select Image from Gallery"/>
 
+    <Button
+        android:id="@+id/barcode_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/select_image_button"
+        android:layout_centerHorizontal="true"
+        android:text="Scan Barcode"/>
+
 
 </RelativeLayout>

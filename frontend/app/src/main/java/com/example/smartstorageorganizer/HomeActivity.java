@@ -58,10 +58,13 @@ public class HomeActivity extends AppCompatActivity {
     public String currentName, currentSurname, currentPicture, organizationId;
     NavigationView navigationView;
     ImageButton searchButton;
-
+    MyAmplifyApp app;
+//    MyAmplifyApp app = (MyAmplifyApp) getApplicationContext();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -114,8 +117,17 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        getUserRole(getIntent().getStringExtra("email"), "");
-
+        if(Objects.equals(app.getUserRole(), "")){
+            getUserRole(getIntent().getStringExtra("email"), "");
+        }
+        else {
+            if (Objects.equals(app.getUserRole(), "Manager")) {
+                showAdminMenuItems(navigationView.getMenu());
+            }
+            else {
+                hideAdminMenuItems(navigationView.getMenu());
+            }
+        }
 //        FirebaseApp.initializeApp(this);
 //
 //        FirebaseMessaging.getInstance().getToken()
@@ -217,7 +229,10 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
-                        fetchOrganizationDetails(organizationId);
+                        app.setOrganizationID(organizationId);
+                        String id = app.getOrganizationID();
+
+                        fetchOrganizationDetails(id);
                         Glide.with(this).load(currentPicture).placeholder(R.drawable.no_profile_image).error(R.drawable.no_profile_image).into(profileImage);
                         String username = currentName+" "+currentSurname;
                         fullName.setText(username);
@@ -272,6 +287,7 @@ public class HomeActivity extends AppCompatActivity {
         UserUtils.getUserRole(username, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                app.setUserRole(result);
                 if (Objects.equals(result, "Manager")) {
                     showAdminMenuItems(navigationView.getMenu());
                 }

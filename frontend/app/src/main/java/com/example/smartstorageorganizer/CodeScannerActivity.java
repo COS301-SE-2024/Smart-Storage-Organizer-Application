@@ -54,6 +54,18 @@ public class CodeScannerActivity extends AppCompatActivity {
             integrator.initiateScan();
         });
 
+//        Button barcodeButton = findViewById(R.id.barcode_button);
+//        barcodeButton.setOnClickListener(view -> {
+//            IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
+//            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+//            integrator.setPrompt("Scan a Barcode");
+//            integrator.setCameraId(0);  // Use a specific camera of the device
+//            integrator.setBeepEnabled(true);
+//            integrator.setBarcodeImageEnabled(true);
+//            integrator.setOrientationLocked(true);  // Lock orientation to current
+//            integrator.initiateScan();
+//        });
+
         Button selectImageButton = findViewById(R.id.select_image_button);
         selectImageButton.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -82,16 +94,28 @@ public class CodeScannerActivity extends AppCompatActivity {
                 if (result.getContents() == null) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    String scannedResult = result.getContents();
+                    String format = result.getFormatName();
+
+                    // If the scanned format is a barcode, remove the last character
+                    if (format != null && !format.equalsIgnoreCase("QR_CODE")) {
+                        if (scannedResult != null && scannedResult.length() > 1) {
+                            scannedResult = scannedResult.substring(0, scannedResult.length() - 1);
+                        }
+                    }
+
+                    // Display and send the result (modified for barcodes, unmodified for QR codes)
+                    Toast.makeText(this, "Scanned: " + scannedResult, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
                     intent.putExtra("item_name", "");
-                    intent.putExtra("item_id", result.getContents());
+                    intent.putExtra("item_id", scannedResult);
                     startActivity(intent);
                     finish();
                 }
             }
         }
     }
+
 
     public void scanQRCodeFromBitmap(Bitmap bitmap) {
         int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
