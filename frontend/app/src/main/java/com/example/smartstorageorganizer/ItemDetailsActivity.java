@@ -58,6 +58,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
     private String parentCategory, subcategory;
+    private MyAmplifyApp app;
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -65,6 +66,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_item_details);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         ImageView backButton = findViewById(R.id.backButton);
 
@@ -252,9 +255,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemCategory = findViewById(R.id.itemCategory);
         arrowCategory = findViewById(R.id.arrowCategory);
 
-        getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "");
-
-        itemCategory.setText(parentCategory+" - "+subcategory);
+        if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+            getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
+            itemCategory.setText(parentCategory+" - "+subcategory);
+        }
 
         cardViewCategory.setTranslationX(800);
         cardViewCategory.setAlpha(v);
@@ -304,9 +308,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
     }
 
     private void fetchItemDetails(int itemId) {
-        Utils.fetchByID(itemId,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByID(itemId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
+                getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
                 Glide.with(ItemDetailsActivity.this)
                         .load(result.get(0).getItemImage())
                         .placeholder(R.drawable.no_image)
@@ -461,13 +466,18 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 });
     }
 
-    private void getParentCategoryName(String categoryId, String authorization) {
+    private void getParentCategoryName(String categoryId, String authorization, String subcategoryId) {
 //        hideAdminMenuItems(navigationView.getMenu());
         Utils.getCategory(categoryId, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 parentCategory = result;
-                getSubCategoryName(getIntent().getStringExtra("subcategory_id"), "");
+                if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+                    getSubCategoryName(getIntent().getStringExtra("subcategory_id"), "");
+                }
+                else {
+                    getSubCategoryName(subcategoryId, "");
+                }
 
             }
 
@@ -475,7 +485,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onFailure(String error) {
 //                progressDialog.dismiss();
 //                hideAdminMenuItems(navigationView.getMenu());
-                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(ItemDetailsActivity.this, "Getting category failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -493,7 +503,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onFailure(String error) {
 //                progressDialog.dismiss();
 //                hideAdminMenuItems(navigationView.getMenu());
-                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(ItemDetailsActivity.this, "Getting category failed", Toast.LENGTH_LONG).show();
             }
         });
     }

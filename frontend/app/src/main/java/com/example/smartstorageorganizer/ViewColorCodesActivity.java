@@ -42,6 +42,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
     private String organizationID;
+    MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,20 +50,27 @@ public class ViewColorCodesActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_color_codes);
 
+        app = (MyAmplifyApp) getApplicationContext();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        String id = app.getOrganizationID();
+        Log.i("AuthDemo", "organization id: "+id);
+
+//        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
         loadingScreen = findViewById(R.id.loadingScreen);
         colorCodeRecyclerView = findViewById(R.id.color_code_rec);
         deleteFab = findViewById(R.id.delete_fab);
-        deleteFab.setVisibility(View.GONE); // Initially hidden
+        deleteFab.setVisibility(View.GONE);
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         recyclerView = findViewById(R.id.recycler_view);
+
+        loadAllColorCodes();
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -104,46 +112,46 @@ public class ViewColorCodesActivity extends AppCompatActivity {
 //        loadAllColorCodes();
     }
 
-    private CompletableFuture<Boolean> getDetails()
-    {
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
+//    private CompletableFuture<Boolean> getDetails()
+//    {
+//        CompletableFuture<Boolean> future=new CompletableFuture<>();
+//
+//        Amplify.Auth.fetchUserAttributes(
+//                attributes -> {
+//
+//                    for (AuthUserAttribute attribute : attributes) {
+//                        switch (attribute.getKey().getKeyString()) {
+//                            case "address":
+//                                organizationID = attribute.getValue();
+//                                break;
+//                            default:
+//                        }
+//                    }
+//                    Log.i("progress","User attributes fetched successfully");
+//                    runOnUiThread(() -> {
+//                        loadAllColorCodes();
+//                    });
+//                    future.complete(true);
+//                },
+//                error -> {
+//                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
+//                    runOnUiThread(() -> {
+//
+//                        // If you want to return false in case of an error
+//                        future.complete(false);
+//                    });
+//                }
+//
+//        );
+//        return future;
+//    }
 
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> {
-
-                    for (AuthUserAttribute attribute : attributes) {
-                        switch (attribute.getKey().getKeyString()) {
-                            case "address":
-                                organizationID = attribute.getValue();
-                                break;
-                            default:
-                        }
-                    }
-                    Log.i("progress","User attributes fetched successfully");
-                    runOnUiThread(() -> {
-                        loadAllColorCodes(organizationID);
-                    });
-                    future.complete(true);
-                },
-                error -> {
-                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
-                    runOnUiThread(() -> {
-
-                        // If you want to return false in case of an error
-                        future.complete(false);
-                    });
-                }
-
-        );
-        return future;
-    }
-
-    private void loadAllColorCodes(String organizationId) {
+    private void loadAllColorCodes() {
 //        loadingScreen.setVisibility(View.VISIBLE);
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.fetchAllColour(organizationId, this, new OperationCallback<List<ColorCodeModel>>() {
+        Utils.fetchAllColour(app.getOrganizationID(), this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> result) {
                 colorCodeModelList.clear();

@@ -33,12 +33,16 @@ public class AddColorCodeActivity extends AppCompatActivity {
     public TextInputEditText titleEditText;
     public TextInputEditText descriptionEditText;
     public String currentEmail;
+    MyAmplifyApp app;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_color_code);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         TextView gfgTextView = findViewById(R.id.gfg_heading);
         Button mPickColorButton = findViewById(R.id.pick_color_button);
@@ -59,8 +63,7 @@ public class AddColorCodeActivity extends AppCompatActivity {
             String descriptionInput = descriptionEditText.getText().toString().trim();
 
             if (validateForm(titleInput, descriptionInput)) {
-                //call the add color code function
-                addNewColorCode(color, titleInput, descriptionInput);
+                addNewColorCode(color, titleInput, descriptionInput, app.getOrganizationID());
             }
         });
 
@@ -133,8 +136,8 @@ public class AddColorCodeActivity extends AppCompatActivity {
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
-    public void addNewColorCode(String colorCode, String title, String description) {
-        Utils.addColourGroup(colorCode, title, description, currentEmail, this, new OperationCallback<Boolean>() {
+    public void addNewColorCode(String colorCode, String title, String description, String organizationId) {
+        Utils.addColourGroup(colorCode, title, description, currentEmail, organizationId, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
