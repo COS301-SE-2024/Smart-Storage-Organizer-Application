@@ -37,6 +37,7 @@ import java.util.Date;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -91,7 +92,7 @@ public class HomeFragment extends Fragment {
     List<String> imagesEncodedList;
     private Spinner parentSpinner, subcategorySpinner;
 
-    LottieAnimationView fetchItemsLoader;
+    LottieAnimationView fetchItemsLoader, addButton;
     RecyclerView.LayoutManager layoutManager;
     private TextView name;
     private FragmentHomeBinding binding;
@@ -110,6 +111,7 @@ public class HomeFragment extends Fragment {
     Button buttonTakePhoto;
     EditText itemDescription, itemName;
     ImageView itemImage;
+    private FloatingActionButton addItemButton;
     private List<String> parentCategories = new ArrayList<>();
     private List<String> subCategories = new ArrayList<>();
     private ShimmerFrameLayout shimmerFrameLayoutName;
@@ -120,6 +122,7 @@ public class HomeFragment extends Fragment {
     ProgressDialog progressDialogAddingItem;
     private LinearLayout noInternet;
     private String imageFilePath;
+    private AppCompatButton tryAgainButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -131,9 +134,11 @@ public class HomeFragment extends Fragment {
 
         getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
-        FloatingActionButton addItemButton = root.findViewById(R.id.addItemButton);
+        addItemButton = root.findViewById(R.id.addItemButton);
+        addButton = root.findViewById(R.id.addButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
         fetchItemsLoader = root.findViewById(R.id.fetchItemsLoader);
+        tryAgainButton = root.findViewById(R.id.tryAgainButton);
         category_RecyclerView = root.findViewById(R.id.category_rec);
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
@@ -161,10 +166,22 @@ public class HomeFragment extends Fragment {
         itemRecyclerView.setLayoutManager(layoutManager);
 
         addItemButton.setOnClickListener(v -> showAddButtonPopup());
+        tryAgainButton.setOnClickListener(v -> {
+            recentText.setVisibility(View.GONE);
+            shimmerFrameLayoutCategory.startShimmer();
+            shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutName.setVisibility(View.VISIBLE);
+            itemRecyclerView.setVisibility(View.VISIBLE);
+            noInternet.setVisibility(View.GONE);
+            getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        });
 
         itemModelList = new ArrayList<>();
         recentAdapter = new RecentAdapter(requireActivity(), itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
+
+        addButton.setOnClickListener(v -> showAddButtonPopup());
 
         return root;
     }
@@ -182,6 +199,15 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutCategory.setVisibility(View.GONE);
                 shimmerFrameLayoutRecent.stopShimmer();
                 shimmerFrameLayoutRecent.setVisibility(View.GONE);
+
+                if(result.isEmpty()){
+                    addButton.setVisibility(View.VISIBLE);
+                    addItemButton.setVisibility(View.GONE);
+                }
+                else {
+                    addButton.setVisibility(View.GONE);
+                    addItemButton.setVisibility(View.VISIBLE);
+                }
 
                 itemRecyclerView.setVisibility(View.VISIBLE);
                 Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
