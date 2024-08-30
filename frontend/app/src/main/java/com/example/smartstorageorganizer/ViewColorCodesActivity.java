@@ -177,7 +177,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.deleteColour(Integer.parseInt(colorCodeId), this, new OperationCallback<Boolean>() {
+        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(),this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

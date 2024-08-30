@@ -762,8 +762,8 @@ public class Utils
 
     }
 
-    public static void deleteColour(int colourId, Activity activity, OperationCallback<Boolean> callback) {
-        String json = "{\"id\":\"" + Integer.toString(colourId) + "\"}";
+    public static void deleteColour(int colourId, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{\"id\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -1447,9 +1447,9 @@ public class Utils
         return name;
     }
 
-    public static void deleteItem(String itemId, Activity activity, OperationCallback<Boolean> callback) {
+    public static void deleteItem(String itemId, String organizationId,Activity activity, OperationCallback<Boolean> callback) {
         int itemIdInt = Integer.parseInt(itemId);
-        String json = "{\"item_id\":\"" + itemIdInt + "\"}";
+        String json = "{\"item_id\":\"" + itemIdInt + "\", \"organizationid\":\""+organizationId+"\"}";
 //        Log.d("Delete Item Payload", "JSON Payload: " + json);
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String API_URL = BuildConfig.DeleteItemEndPoint;

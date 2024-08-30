@@ -633,7 +633,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     public void AssignColour(String colourid, String itemid) {
-        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\"}";
+        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\", \"organizationid\":\""+app.getOrganizationID()+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -675,7 +675,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void deleteItem(String itemId) {
-        Utils.deleteItem(itemId, this, new OperationCallback<Boolean>() {
+        Utils.deleteItem(itemId, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
