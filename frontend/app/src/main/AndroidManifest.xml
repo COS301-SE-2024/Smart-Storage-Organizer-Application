@@ -140,6 +140,10 @@
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
+            android:name=".ItemPackingActivity"
+            android:exported="false"/>
+
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
