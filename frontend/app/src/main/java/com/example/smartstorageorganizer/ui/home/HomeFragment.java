@@ -51,6 +51,7 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.AddColorCodeActivity;
+import com.example.smartstorageorganizer.ItemPackingActivity;
 import com.example.smartstorageorganizer.adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.HomeActivity;
@@ -463,43 +464,86 @@ public class HomeFragment extends Fragment {
         builder.show();
     }
 
-    private void showAddButtonPopup() {
-        AlertDialog alertDialog;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.add_button_popup, null);
-        builder.setView(dialogView);
+//    private void showAddButtonPopup() {
+//        AlertDialog alertDialog;
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        LayoutInflater inflater = getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.add_button_popup, null);
+//        builder.setView(dialogView);
+//
+//        Button addItemButton = dialogView.findViewById(R.id.addItemButton);
+//        Button addCategoryButton = dialogView.findViewById(R.id.addCategoryButton);
+//        Button addUnitButton = dialogView.findViewById(R.id.addUnitButton);
+//        Button addColorButton = dialogView.findViewById(R.id.addColorButton);
+//
+//        alertDialog = builder.create();
+//
+//        addItemButton.setOnClickListener(v -> {
+//
+//            showAddItemPopup();
+//            alertDialog.dismiss();
+//        });
+//        addCategoryButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+//            intent.putExtra("email", currentEmail);
+//            startActivity(intent);
+//        });
+//        addUnitButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), UnitActivity.class);
+//            startActivity(intent);
+//        });
+//        addColorButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
+//            intent.putExtra("email", currentEmail);
+//            startActivity(intent);
+//        });
+//
+//        // Show the AlertDialog
+//        alertDialog.show();
+//    }
+private void showAddButtonPopup() {
+    AlertDialog alertDialog;
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    LayoutInflater inflater = getLayoutInflater();
+    View dialogView = inflater.inflate(R.layout.add_button_popup, null);
+    builder.setView(dialogView);
 
-        Button addItemButton = dialogView.findViewById(R.id.addItemButton);
-        Button addCategoryButton = dialogView.findViewById(R.id.addCategoryButton);
-        Button addUnitButton = dialogView.findViewById(R.id.addUnitButton);
-        Button addColorButton = dialogView.findViewById(R.id.addColorButton);
+    Button addItemButton = dialogView.findViewById(R.id.addItemButton);
+    Button addCategoryButton = dialogView.findViewById(R.id.addCategoryButton);
+    Button addUnitButton = dialogView.findViewById(R.id.addUnitButton);
+    Button addColorButton = dialogView.findViewById(R.id.addColorButton);
 
-        alertDialog = builder.create();
+    alertDialog = builder.create();
 
-        addItemButton.setOnClickListener(v -> {
+    addItemButton.setOnClickListener(v -> {
+        // Start ItemPackingActivity when the Add Item button is clicked
+        Intent intent = new Intent(getActivity(), ItemPackingActivity.class);
+        startActivity(intent);
 
-            showAddItemPopup();
-            alertDialog.dismiss();
-        });
-        addCategoryButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
-            intent.putExtra("email", currentEmail);
-            startActivity(intent);
-        });
-        addUnitButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), UnitActivity.class);
-            startActivity(intent);
-        });
-        addColorButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
-            intent.putExtra("email", currentEmail);
-            startActivity(intent);
-        });
+        // Dismiss the popup dialog
+        alertDialog.dismiss();
+    });
 
-        // Show the AlertDialog
-        alertDialog.show();
-    }
+    addCategoryButton.setOnClickListener(v -> {
+        Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+        intent.putExtra("email", currentEmail);
+        startActivity(intent);
+    });
+
+    addUnitButton.setOnClickListener(v -> {
+        Intent intent = new Intent(getActivity(), UnitActivity.class);
+        startActivity(intent);
+    });
+
+    addColorButton.setOnClickListener(v -> {
+        Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
+        intent.putExtra("email", currentEmail);
+        startActivity(intent);
+    });
+
+    // Show the AlertDialog
+    alertDialog.show();
+}
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
         ArrayList<unitModel> units = new ArrayList<>();
