@@ -74,6 +74,7 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
     private LinearLayout bottomNavigationView;
     List<SuggestedCategoryModel> suggestedCategoriesList;
     ProgressDialog progressDialog;
+    private MyAmplifyApp app;
 
 
     @Override
@@ -81,6 +82,8 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_unit_items);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -277,7 +280,7 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
     public void suggestCategory(String selectedIds) {
         //Show the progress bar loader
         progressDialog.show();
-        Utils.RecommendMultipleCategories(selectedIds, this, new OperationCallback<List<SuggestedCategoryModel>>() {
+        Utils.RecommendMultipleCategories(selectedIds, app.getOrganizationID() , this, new OperationCallback<List<SuggestedCategoryModel>>() {
             @Override
             public void onSuccess(List<SuggestedCategoryModel> result) {
                 //stop the progress bar loader

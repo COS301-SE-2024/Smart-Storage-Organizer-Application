@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.smartstorageorganizer.DesignActivity;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.ReportsActivity;
 import com.example.smartstorageorganizer.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -35,7 +36,7 @@ public class SettingsFragment extends Fragment {
         });
 
         color.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DesignActivity.class);
+            Intent intent = new Intent(getActivity(), ReportsActivity.class);
             startActivity(intent);
         });
 

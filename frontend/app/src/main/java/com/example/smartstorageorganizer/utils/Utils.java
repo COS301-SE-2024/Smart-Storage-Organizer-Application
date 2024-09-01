@@ -1347,9 +1347,9 @@ public class Utils
         return future;
     }
 
-    public static void RecommendMultipleCategories(String id, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
+    public static void RecommendMultipleCategories(String id, String organizationId, Activity activity, OperationCallback<List<SuggestedCategoryModel>> callback)
     {
-        String json = "{\"id\":\""+id+"\"}";
+        String json = "{\"id\":\""+id+"\", \"organizationid\":\""+organizationId+"\"}";
 
         List<SuggestedCategoryModel> categoryModelList = new ArrayList<>();
 

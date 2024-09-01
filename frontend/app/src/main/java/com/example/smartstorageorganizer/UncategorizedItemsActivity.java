@@ -72,6 +72,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     public LinearLayout bottomNavigationView;
     List<SuggestedCategoryModel> suggestedCategoriesList;
     ProgressDialog progressDialog;
+    private MyAmplifyApp app;
 
 
     @Override
@@ -85,6 +86,8 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         initializeViews();
         setupBackButton();
@@ -161,7 +164,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         suggestedCategoriesList = new ArrayList<>();
         recentAdapter = new RecentAdapter(this, itemModelList);
         itemRecyclerView.setAdapter(recentAdapter);
-        recentAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
+        recentAdapter.setOrganizationId(app.getOrganizationID());
     }
 
     public void loadInitialData() {
@@ -174,7 +177,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
 
-        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
+        Utils.FetchUncategorizedItems(PAGE_SIZE, currentPage, app.getOrganizationID(),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -276,7 +279,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
     public void suggestCategory(String selectedIds) {
         //Show the progress bar loader
         progressDialog.show();
-        Utils.RecommendMultipleCategories(selectedIds, this, new OperationCallback<List<SuggestedCategoryModel>>() {
+        Utils.RecommendMultipleCategories(selectedIds, app.getOrganizationID(), this, new OperationCallback<List<SuggestedCategoryModel>>() {
             @Override
             public void onSuccess(List<SuggestedCategoryModel> result) {
                 //stop the progress bar loader
