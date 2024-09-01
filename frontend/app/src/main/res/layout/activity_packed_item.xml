@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/itemWidthInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Item Width"/>
+
+    <EditText
+        android:id="@+id/itemHeightInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Item Height"/>
+
+    <EditText
+        android:id="@+id/itemDepthInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Item Depth"/>
+
+    <EditText
+        android:id="@+id/itemWeightInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Item Weight"/>
+
+    <Button
+        android:id="@+id/packItemsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pack Items"/>
+
+    <TextView
+        android:id="@+id/packedItemsOutput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"/>
+</LinearLayout>
