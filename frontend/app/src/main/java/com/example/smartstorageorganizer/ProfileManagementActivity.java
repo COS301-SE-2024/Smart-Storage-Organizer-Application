@@ -69,6 +69,13 @@ public class ProfileManagementActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: Fetching user details to refresh profile picture.");
+        fetchUserDetails();
+    }
+
     private void fetchUserDetails() {
         getDetails().thenAccept(success -> {
             Log.i(TAG, "User details fetched successfully");
@@ -172,8 +179,12 @@ public class ProfileManagementActivity extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
 }
