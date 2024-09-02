@@ -16,8 +16,8 @@ def get_db_connection():
     return con
 def increment_quantity(conn,curr,event):
 
-    query = "UPDATE ITEMS SET quanity = %s item_id = %s"
-    parameters = (event['item_id'], event['quantity'],)
+    query = "UPDATE ITEMS SET quanity = %s WHERE item_id = %s"
+    parameters = ( event['body']['quantity'],event['body']['item_id'],)
     curr.execute(query,parameters)
     conn.commit()
     return {
