@@ -195,51 +195,75 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
-    public CompletableFuture<Boolean>  upDateDetails(){
-        Log.i("We are here","We are here");
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
+    public CompletableFuture<Boolean> upDateDetails() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
         String Name = Objects.requireNonNull(name.getText()).toString().trim();
         String Surname = Objects.requireNonNull(surname.getText()).toString().trim();
         String Address = Objects.requireNonNull(address.getText()).toString().trim();
         String Phone = Objects.requireNonNull(phone.getText()).toString().trim();
-        if(!Name.equals(name)){
+
+        List<CompletableFuture<Boolean>> futures = new ArrayList<>();
+
+        if (!Name.equals(currentName)) {
+            CompletableFuture<Boolean> updateNameFuture = new CompletableFuture<>();
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
-                    result -> Log.i("AuthDemo", "Updated name"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
+                    result -> updateNameFuture.complete(true),
+                    error -> updateNameFuture.completeExceptionally(error)
             );
-            future.complete(true);
+            futures.add(updateNameFuture);
         }
-        if(!Surname.equals(surname)){
+
+        if (!Surname.equals(currentSurname)) {
+            CompletableFuture<Boolean> updateSurnameFuture = new CompletableFuture<>();
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
-                    result -> Log.i("AuthDemo", "Updated surname"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
+                    result -> updateSurnameFuture.complete(true),
+                    error -> updateSurnameFuture.completeExceptionally(error)
             );
-            future.complete(true);
+            futures.add(updateSurnameFuture);
         }
-        if(!Address.equals(address)){
+
+        if (!Address.equals(currentAddress)) {
+            CompletableFuture<Boolean> updateAddressFuture = new CompletableFuture<>();
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
-                    result -> Log.i("AuthDemo", "Updated address"),
-                    error -> Log.e("AuthDemo", "Update failed", error)
+                    result -> updateAddressFuture.complete(true),
+                    error -> updateAddressFuture.completeExceptionally(error)
             );
-            future.complete(true);
+            futures.add(updateAddressFuture);
         }
-        if(true){
-            UploadProfilePicture(file);
+
+        if (file != null && file.exists()) {
+            futures.add(UploadProfilePicture(file));
         }
-//        if(!Phone.equals(phone)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
-//                    result -> Log.i("AuthDemo", "Updated phone"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//
-//            );
-//            future.complete(true);
-//        }
+
+        // Wait for all futures to complete
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenAccept(v -> {
+                    future.complete(true);
+                    runOnUiThread(() -> {
+                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
+                })
+                .exceptionally(ex -> {
+                    Log.e("EditProfileActivity", "Error updating details", ex);
+                    future.complete(false);
+                    runOnUiThread(() -> {
+                        loadingScreen.setVisibility(View.GONE);
+                        content.setVisibility(View.VISIBLE);
+                        Toast.makeText(EditProfileActivity.this, "Failed to update details", Toast.LENGTH_SHORT).show();
+                    });
+                    return null;
+                });
+
         return future;
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -332,7 +356,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
     public String GetObjectUrl(String key)
     {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/Public/ProfilePictures/"+key+".png";
         Amplify.Auth.updateUserAttribute(
                 new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
                 resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
@@ -343,7 +367,7 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
 
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        return url;
     }
 
 
