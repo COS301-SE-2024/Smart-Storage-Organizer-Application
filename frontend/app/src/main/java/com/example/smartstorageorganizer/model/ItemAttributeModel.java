@@ -46,5 +46,40 @@ public class ItemAttributeModel {
     public boolean isTemperatureSensitive() { return temperatureSensitive; }
     public void setTemperatureSensitive(boolean temperatureSensitive) { this.temperatureSensitive = temperatureSensitive; }
 
+    public boolean isPerishable() { return perishable; }
+    public void setPerishable(boolean perishable) { this.perishable = perishable; }
+
+    public boolean isHazardous() { return hazardous; }
+    public void setHazardous(boolean hazardous) { this.flammable = hazardous; }
+
+    public boolean isCorrosive() { return corrosive; }
+    public void setCorrosive(boolean corrosive) { this.corrosive = corrosive; }
+
+    public boolean isExplosive() { return explosive; }
+    public void setExplosive(boolean explosive) { this.explosive = explosive; }
+
+    public boolean isHumiditySensitive() { return humiditySensitive; }
+    public void setHumiditySensitive(boolean humiditySensitive) { this.humiditySensitive = humiditySensitive; }
+
+    public boolean isRadiationSensitive() { return radiationSensitive; }
+    public void setRadiationSensitive(boolean radiationSensitive) { this.flammable = radiationSensitive; }
+
+    public boolean isLightSensitive() { return lightSensitive; }
+    public void setLightSensitive(boolean lightSensitive) { this.lightSensitive = lightSensitive; }
+
+    public boolean isPressureSensitive() { return pressureSensitive; }
+    public void setPressureSensitive(boolean pressureSensitive) { this.pressureSensitive = pressureSensitive; }
+
+    public boolean isToxic() { return toxic; }
+    public void setToxic(boolean toxic) { this.toxic = toxic; }
+
+    public boolean isReactive() { return reactive; }
+    public void setReactive(boolean reactive) { this.reactive = reactive; }
+
+    public boolean isOdorSensitive() { return odorSensitive; }
+    public void setOdorSensitive(boolean odorSensitive) { this.odorSensitive = odorSensitive; }
+
+    public boolean isMagnetic() { return magnetic; }
+    public void setMagnetic(boolean magnetic) { this.magnetic = magnetic; }
 
 }
