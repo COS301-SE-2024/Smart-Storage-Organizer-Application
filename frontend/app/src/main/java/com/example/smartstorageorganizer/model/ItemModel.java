@@ -14,12 +14,13 @@ public class ItemModel {
     private String createdAt;
     private String parentCategoryId;
     private String subCategoryId;
+    private String attributes;
 
     public ItemModel() {
 
     }
 
-    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt) {
+    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage,String attribute, String createdAt) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;
@@ -30,6 +31,7 @@ public class ItemModel {
         this.location = location;
         this.email = email;
         this.itemImage = itemImage;
+        this.attributes = attributes;
         this.createdAt = createdAt;
     }
 
@@ -111,6 +113,14 @@ public class ItemModel {
 
     public void setItemImage(String itemImage) {
         this.itemImage = itemImage;
+    }
+
+    public String getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
     }
 
     public String getCreatedAt() {
