@@ -48,7 +48,7 @@ public class ItemAttributeAdapter extends RecyclerView.Adapter<ItemAttributeAdap
 
     @Override
     public int getItemCount() {
-        return 1; // Since we only have one ItemAttributesModel object.
+        return 1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,6 +75,16 @@ public class ItemAttributeAdapter extends RecyclerView.Adapter<ItemAttributeAdap
             temperatureCheckbox = itemView.findViewById(R.id.temperature_checkbox);
             perishableCheckbox = itemView.findViewById(R.id.perishable_checkbox);
             hazardousCheckbox = itemView.findViewById(R.id.hazadous_checkbox);
+            corrosiveCheckbox = itemView.findViewById(R.id.corrosive_checkbox);
+            explosiveCheckbox = itemView.findViewById(R.id.explosive_checkbox);
+            humidityCheckbox = itemView.findViewById(R.id.humidity_checkbox);
+            radiationCheckbox = itemView.findViewById(R.id.radiation_checkbox);
+            lightSensetiveCheckbox = itemView.findViewById(R.id.light_checkbox);
+            pressureCheckbox = itemView.findViewById(R.id.pressure_checkbox);
+            toxicCheckbox = itemView.findViewById(R.id.toxic_checkbox);
+            reactiveCheckbox = itemView.findViewById(R.id.reactive_checkbox);
+            odorCheckbox = itemView.findViewById(R.id.odor_checkbox);
+            magneticbox = itemView.findViewById(R.id.magnetic_checkbox);
         }
     }
 }

@@ -17,6 +17,84 @@
         android:layout_height="wrap_content"
         android:text="Breakable" />
 
+    <CheckBox
+        android:id="@+id/temperature_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperature Sensetive" />
+
+    <CheckBox
+        android:id="@+id/perishable_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perishable" />
+
+    <CheckBox
+        android:id="@+id/hazadous_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hazadous" />
+
+    <CheckBox
+        android:id="@+id/corrosive_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Corrosive" />
+
+    <CheckBox
+        android:id="@+id/explosive_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Explosive" />
+
+    <CheckBox
+        android:id="@+id/humidity_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Humidity" />
+
+    <CheckBox
+        android:id="@+id/radiation_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Radiation Sensetive" />
+
+    <CheckBox
+        android:id="@+id/light_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Light Sensetive" />
+
+    <CheckBox
+        android:id="@+id/pressure_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pressure Sensetive" />
+
+    <CheckBox
+        android:id="@+id/toxic_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toxic Sensetive" />
+
+    <CheckBox
+        android:id="@+id/reactive_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reactive" />
+
+    <CheckBox
+        android:id="@+id/odor_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Odor Sensetive" />
+
+    <CheckBox
+        android:id="@+id/magnetic_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Magnetic" />
+
     <!-- Add more checkboxes for other attributes -->
 
 </LinearLayout>
