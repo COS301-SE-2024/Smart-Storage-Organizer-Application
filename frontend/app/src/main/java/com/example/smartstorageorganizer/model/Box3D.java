@@ -1,9 +1,5 @@
 package com.example.smartstorageorganizer.model;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Comparator;
-
 public class Box3D {
     private int height, width, depth, maxWeight;
     private int usedHeight, usedWidth, usedDepth, currentWeight;
@@ -19,7 +15,7 @@ public class Box3D {
         this.currentWeight = 0;
     }
 
-    public boolean addItem(Item3D item) {
+    public boolean addItem(ItemModel item) {
         if (canFit(item) && canHoldWeight(item)) {
             usedHeight += item.getHeight();
             usedWidth += item.getWidth();
@@ -38,22 +34,6 @@ public class Box3D {
 
     private boolean canHoldWeight(Item3D item) {
         return currentWeight + item.getWeight() <= maxWeight;
-    }
-
-    public void packItems(List<Item3D> items) {
-        Collections.sort(items, new Comparator<Item3D>() {
-            @Override
-            public int compare(Item3D i1, Item3D i2) {
-                return Integer.compare(i2.getWeight(), i1.getWeight());
-            }
-        });
-
-        for (Item3D item : items) {
-            if (!addItem(item)) {
-                // Handle the case where the item doesn't fit
-                // For example, you could skip this item or log a message
-            }
-        }
     }
 
     public int getRemainingSpace() {

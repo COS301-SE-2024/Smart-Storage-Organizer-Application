@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.smartstorageorganizer.model.Box3D;
 import com.example.smartstorageorganizer.model.Item3D;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 
 import java.util.ArrayList;
@@ -30,22 +31,17 @@ public class PackingManager extends AppCompatActivity {
         this.boxMaxWeight = boxMaxWeight;
     }
 
-    public void packItems(List<Item3D> items) {
+    public void packItems(List<ItemModel> items) {
         // Fetch the categories for each item
-        for (Item3D item : items) {
-            fetchCategorySuggestions(item.getName(), item.getDescription(), item.getEmail(), item.getOrganizationId(), this, new OperationCallback<List<CategoryModel>>() {
+        for (ItemModel item : items) {
+            fetchCategorySuggestions(item.getItemName(), item.getDescription(), item.getEmail(), item.getOrganizationId(), this, new OperationCallback<List<CategoryModel>>() {
                 @Override
                 public void onSuccess(List<CategoryModel> categories) {
                     String category = categories.get(0).getCategoryName(); // Assuming the first category is the most relevant
                     List<Box3D> boxes = categoryBoxes.getOrDefault(category, new ArrayList<>());
 
                     // Sort items by volume (largest first) to optimize space
-                    Collections.sort(items, new Comparator<Item3D>() {
-                        @Override
-                        public int compare(Item3D i1, Item3D i2) {
-                            return Integer.compare(i2.getVolume(), i1.getVolume());
-                        }
-                    });
+                    Collections.sort(items, (i1, i2) -> Integer.compare(i2.getVolume(), i1.getVolume()));
 
                     // Try to place the item in a box for this category
                     boolean itemPlaced = false;

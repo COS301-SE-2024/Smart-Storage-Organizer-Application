@@ -18,9 +18,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.model.Box3D;
+import com.example.smartstorageorganizer.model.Item3D;
 import com.google.firebase.FirebaseApp; // Import Firebase
 import com.google.firebase.messaging.FirebaseMessaging; // Import Firebase Messaging
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import com.example.smartstorageorganizer.adapters.SlidePagerAdapter;
 
@@ -88,6 +92,25 @@ public class MainActivity extends AppCompatActivity {
                 onGetStartedClicked();
             }
         });
+
+//        PackingManager packingManager = new PackingManager();
+//
+//        // Add some boxes
+//        packingManager.addBox(new Box3D(100, 100, 100, 1000)); // Example box, adjust as needed
+//
+//        // Create items to be packed
+//        List<Item3D> items = Arrays.asList(
+//                new Item3D(50, 50, 50, 200),
+//                new Item3D(30, 30, 30, 100),
+//                new Item3D(20, 20, 20, 50),
+//                new Item3D(10, 10, 10, 25)
+//        );
+//
+//        // Pack items
+//        packingManager.packItems(items);
+//
+//        // Display results
+//        packingManager.displayPackingResults();
     }
 
     private boolean isOnboardingCompleted() {

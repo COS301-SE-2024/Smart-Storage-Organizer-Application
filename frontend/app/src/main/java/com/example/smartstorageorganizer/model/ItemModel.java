@@ -14,12 +14,14 @@ public class ItemModel {
     private String createdAt;
     private String parentCategoryId;
     private String subCategoryId;
+    private int height, width, depth, weight;
+    private String organizationId;
 
     public ItemModel() {
 
     }
 
-    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt) {
+    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, int height, int width, int depth, int weight, String organizationId, String createdAt) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.description = description;
@@ -30,6 +32,11 @@ public class ItemModel {
         this.location = location;
         this.email = email;
         this.itemImage = itemImage;
+        this.height = height;
+        this.width = width;
+        this.depth = depth;
+        this.weight = weight;
+        this.organizationId = organizationId;
         this.createdAt = createdAt;
     }
 
@@ -119,6 +126,26 @@ public class ItemModel {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getVolume() {
+        return height * width * depth;
+    }
+
+    public String getOrganizationId() {
+        return organizationId;
     }
 
 
