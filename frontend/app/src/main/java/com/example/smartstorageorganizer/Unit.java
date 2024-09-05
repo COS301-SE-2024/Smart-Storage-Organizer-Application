@@ -5,14 +5,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Box {
-    private int width;
-    private int height;
-    private int depth;
-    private int remainingCapacity;
+public class Unit {
+    private double width;
+    private double height;
+    private double depth;
+    private double remainingCapacity;
     private List<Item3D> items;
 
-    public Box(int width, int height, int depth) {
+    public Unit(double width, double height, double depth) {
         this.width = width;
         this.height = height;
         this.depth = depth;
