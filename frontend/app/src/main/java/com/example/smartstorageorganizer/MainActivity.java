@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
 //        setupWindowInsets();
 
         // Check if onboarding is already completed
-//        if (isOnboardingCompleted()) {
-//            // If completed, go directly to the HomeActivity
-//            navigateToHome();
-//            return;
-//        }
+        if (isOnboardingCompleted()) {
+            // If completed, go directly to the HomeActivity
+            Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         setContentView(R.layout.activity_main);
 //
@@ -127,7 +129,9 @@ public class MainActivity extends AppCompatActivity {
         setOnboardingCompleted();
 
         // Navigate to the HomeActivity
-        navigateToHome();
+        Intent intent = new Intent(MainActivity.this, GetStartedActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void navigateToHome() {
