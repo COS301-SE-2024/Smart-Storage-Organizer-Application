@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
@@ -25,6 +27,8 @@ import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.ui.home.HomeFragment;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -50,11 +54,13 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     private final Set<Integer> selectedItems = new HashSet<>();
     private boolean selectAllFlag = true;
     private String organizationID;
+    private String type;
 
 
-    public RecentAdapter(Context context, List<ItemModel> itemModelList) {
+    public RecentAdapter(Context context, List<ItemModel> itemModelList, String type) {
         this.context = context;
         this.itemModelList = itemModelList;
+        this.type = type;
         new OkHttpClient();
     }
 
@@ -65,7 +71,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     }
 
     public void onBindViewHolder(@NonNull RecentAdapter.ViewHolder holder, int position) {
-        Log.i("Adapter", "Adapter function.");
+        if (Objects.equals(type, "add")){
+            holder.deleteIcon.setVisibility(View.GONE);
+        }
         holder.name.setText(itemModelList.get(position).getItemName());
         holder.description.setText(itemModelList.get(position).getDescription());
 
@@ -75,21 +83,27 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 
         holder.itemView.setOnClickListener(view -> {
             if (selectedItems.isEmpty()) {
-                Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
-                intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
-                intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
-                intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
-                intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
-                intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
-                intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
-                intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
-                intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
-                intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
-                intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
-                intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
-                intent.putExtra("organization_id", organizationID);
+                if(Objects.equals(type, "add")){
+                    int quantity = Integer.parseInt(itemModelList.get(holder.getAdapterPosition()).getQuantity());
+                    incrementQuantity(itemModelList.get(holder.getAdapterPosition()).getItemId(), quantity);
+                }
+                else {
+                    Intent intent = new Intent(view.getContext(), ItemDetailsActivity.class);
+                    intent.putExtra("item_name", itemModelList.get(holder.getAdapterPosition()).getItemName());
+                    intent.putExtra("item_description", itemModelList.get(holder.getAdapterPosition()).getDescription());
+                    intent.putExtra("location", itemModelList.get(holder.getAdapterPosition()).getLocation());
+                    intent.putExtra("color_code", itemModelList.get(holder.getAdapterPosition()).getColourCoding());
+                    intent.putExtra("item_id", itemModelList.get(holder.getAdapterPosition()).getItemId());
+                    intent.putExtra("item_image", itemModelList.get(holder.getAdapterPosition()).getItemImage());
+                    intent.putExtra("subcategory_id", itemModelList.get(holder.getAdapterPosition()).getSubCategoryId());
+                    intent.putExtra("parentcategory_id", itemModelList.get(holder.getAdapterPosition()).getParentCategoryId());
+                    intent.putExtra("item_qrcode", itemModelList.get(holder.getAdapterPosition()).getQrcode());
+                    intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
+                    intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
+                    intent.putExtra("organization_id", organizationID);
 
-                context.startActivity(intent);
+                    context.startActivity(intent);
+                }
             } else {
                 toggleSelection(holder.getAdapterPosition());
             }
@@ -257,6 +271,29 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 
     public void setOrganizationId(String organizationId) {
         this.organizationID = organizationId;
+    }
+
+    public void incrementQuantity(String item_id, int quantity) {
+        Utils.incrementQuantity(item_id, ++quantity, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    Toast.makeText(context, "Item added successfully!!!", Toast.LENGTH_SHORT).show();
+                    ((Activity) context).finish();
+//                    showToast("Category added successfully");
+//                    navigateToHome();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to add item!!!", Toast.LENGTH_SHORT).show();
+//                showToast("Failed to add category: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+//                addCategoryLayout.setVisibility(View.VISIBLE);
+//                addButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 

@@ -162,7 +162,7 @@ public class UncategorizedItemsActivity extends AppCompatActivity {
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemModelList = new ArrayList<>();
         suggestedCategoriesList = new ArrayList<>();
-        recentAdapter = new RecentAdapter(this, itemModelList);
+        recentAdapter = new RecentAdapter(this, itemModelList, "");
         itemRecyclerView.setAdapter(recentAdapter);
         recentAdapter.setOrganizationId(app.getOrganizationID());
     }

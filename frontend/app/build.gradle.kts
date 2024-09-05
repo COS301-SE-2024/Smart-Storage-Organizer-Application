@@ -113,6 +113,7 @@ android {
         buildConfigField("String", "CreateOrganization", "\"${localProperties["CreateOrganization"]}\"");
         buildConfigField("String", "FetchOrganization", "\"${localProperties["FetchOrganization"]}\"");
         buildConfigField("String", "FetchAllColours", "\"${localProperties["FetchAllColours"]}\"");
+        buildConfigField("String", "increaseQuantity", "\"${localProperties["increaseQuantity"]}\"");
 
 
 

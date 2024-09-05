@@ -90,7 +90,7 @@ public class AddItemActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
 
-        adapter = new RecentAdapter(this, searchResults);
+        adapter = new RecentAdapter(this, searchResults, "add");
         recyclerView.setAdapter(adapter);
 
         SearchForItem(name.getText().toString().trim(), "*", "*");
@@ -136,7 +136,8 @@ public class AddItemActivity extends AppCompatActivity {
                             JSONArray bodyArray = new JSONArray(bodyString);
                             runOnUiThread(() -> Log.e("Search Results Body Array", bodyArray.toString()));
 
-                            for (int i = 0; i < 4; i++) {
+                            int size = Math.min(bodyArray.length(), 4);
+                            for (int i = 0; i < size; i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
 
                                 JSONObject itemObj = new JSONObject(itemObject.getString("_source"));

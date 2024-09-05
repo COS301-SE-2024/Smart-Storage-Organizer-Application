@@ -94,7 +94,7 @@ public class SearchActivity extends AppCompatActivity {
         searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
 
-        adapter = new RecentAdapter(this, searchResults);
+        adapter = new RecentAdapter(this, searchResults, "");
         searchResultsRecyclerView.setAdapter(adapter);
 
         findViewById(R.id.scanButton).setOnClickListener(new View.OnClickListener() {

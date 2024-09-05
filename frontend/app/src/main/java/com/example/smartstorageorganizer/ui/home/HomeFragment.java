@@ -179,7 +179,7 @@ public class HomeFragment extends Fragment {
         });
 
         itemModelList = new ArrayList<>();
-        recentAdapter = new RecentAdapter(requireActivity(), itemModelList);
+        recentAdapter = new RecentAdapter(requireActivity(), itemModelList, "");
         itemRecyclerView.setAdapter(recentAdapter);
 
         addButton.setOnClickListener(v -> showAddButtonPopup());
