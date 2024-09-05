@@ -182,6 +182,7 @@ public class AddItemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 alertDialog.dismiss();
                 itemDetailscardView.setVisibility(View.GONE);
+                itemImage.setVisibility(View.GONE);
                 categorycardView.setVisibility(View.VISIBLE);
             }
         });

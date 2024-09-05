@@ -224,7 +224,7 @@
             android:layout_below="@id/inputColorCode"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/para_background"
             android:clickable="true"
             android:focusable="true">
