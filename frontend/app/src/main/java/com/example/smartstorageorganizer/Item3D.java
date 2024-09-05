@@ -1,12 +1,12 @@
 package com.example.smartstorageorganizer;
 
 public class Item3D {
-    private int width;
-    private int height;
-    private int depth;
-    private int weight;
+    private double width;
+    private double height;
+    private double depth;
+    private double weight;
 
-    public Item3D(int width, int height, int depth, int weight) {
+    public Item3D(double width, double height, double depth, double weight) {
         this.width = width;
         this.height = height;
         this.depth = depth;
@@ -14,8 +14,8 @@ public class Item3D {
     }
 
     // Getters for the dimensions and weight
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
-    public int getDepth() { return depth; }
-    public int getWeight() { return weight; }
+    public double getWidth() { return width; }
+    public double getHeight() { return height; }
+    public double getDepth() { return depth; }
+    public double getWeight() { return weight; }
 }
