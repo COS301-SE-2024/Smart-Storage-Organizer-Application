@@ -43,22 +43,59 @@
                 android:inputType="textAutoComplete" />
         </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Width Input -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/capacityLayout"
+            android:id="@+id/unitWidthInputLayout"
             style="CustomTextInputOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp">
-
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/capacity"
+                android:id="@+id/unitWidthInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Capacity"
-                android:inputType="textAutoComplete" />
+                android:hint="Unit Width"
+                android:inputType="numberDecimal"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Height Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unitHeightInputLayout"
+            style="CustomTextInputOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/unitHeightInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Unit Height"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Depth Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/unitDepthInputLayout"
+            style="CustomTextInputOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/unitDepthInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Unit Depth"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+<!--            &lt;!&ndash; Save Button &ndash;&gt;-->
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,7 +119,7 @@
             </LinearLayout>
         </ScrollView>
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/addButton"
+            android:id="@+id/buttonContainer"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginHorizontal="32dp"
@@ -90,22 +127,14 @@
             android:background="@color/colorPrimary"
             android:clickable="true"
             android:focusable="true">
-
-            <TextView
-                android:id="@+id/logOutButtonText"
+            <Button
+                android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="0dp"
-                android:fontFamily="sans-serif"
-                android:text="Add Unit"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:text="Save"
+                android:layout_gravity="end"/>
+
+
 
             <!--            <ImageView-->
             <!--                android:id="@+id/logoutButtonIcon"-->
