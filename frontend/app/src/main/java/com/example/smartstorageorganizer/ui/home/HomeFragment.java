@@ -52,6 +52,7 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.AddColorCodeActivity;
+import com.example.smartstorageorganizer.AddItemActivity;
 import com.example.smartstorageorganizer.adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.HomeActivity;
@@ -504,9 +505,11 @@ public class HomeFragment extends Fragment {
         alertDialog = builder.create();
 
         addItemButton.setOnClickListener(v -> {
-
-            showAddItemPopup();
-            alertDialog.dismiss();
+            Intent intent = new Intent(getActivity(), AddItemActivity.class);
+//            intent.putExtra("email", currentEmail);
+            startActivity(intent);
+//            showAddItemPopup();
+//            alertDialog.dismiss();
         });
         addCategoryButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
