@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:hint="Enter Item Weight"/>
 
+
+
     <Button
         android:id="@+id/packItemsButton"
         android:layout_width="match_parent"
