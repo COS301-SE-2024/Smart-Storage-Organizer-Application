@@ -4,11 +4,15 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()  // Ensure this line is present
+
     }
     dependencies {
         classpath("com.google.gms:google-services:4.3.10")
     }
 }
+
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -230,4 +234,9 @@ dependencies {
 
     // oneSignal
     implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+
+//    3D Model
+    implementation ("org.rajawali3d:rajawali:1.1.970")
+
 }
+

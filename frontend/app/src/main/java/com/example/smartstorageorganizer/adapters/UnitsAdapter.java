@@ -22,6 +22,7 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.unitModel;
+import com.example.smartstorageorganizer.ui.home.HomeViewModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 
@@ -48,8 +49,32 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
     public void onBindViewHolder(@NonNull UnitViewHolder holder, int position) {
         unitModel unit = unitList.get(position);
         holder.unitName.setText(unit.getUnitName());
-        holder.capacity.setText(unit.getCapacityAsString());
-        holder.capacityUsed.setText(unit.getCapacityUsedAsString());
+//        holder.capacity.setText(unit.getCapacityAsString());
+//        holder.capacityUsed.setText(unit.getCapacityUsedAsString());
+
+        // Handle save button click
+        holder.saveButton.setOnClickListener(v -> {
+            try {
+                // Fetch user inputs
+                float unitWidth = Float.parseFloat(holder.unitWidthInput.getText().toString());
+                float unitHeight = Float.parseFloat(holder.unitHeightInput.getText().toString());
+                float unitDepth = Float.parseFloat(holder.unitDepthInput.getText().toString());
+
+                // Update the unit model with the new configuration
+                unit.setUnitWidth(unitWidth);
+                unit.setUnitHeight(unitHeight);
+                unit.setUnitDepth(unitDepth);
+
+                // Notify the user
+                Toast.makeText(context, "Unit configuration saved for: " + unit.getUnitName(), Toast.LENGTH_SHORT).show();
+
+                // Optionally, refresh the view or trigger any additional logic
+                notifyItemChanged(position);
+
+            } catch (NumberFormatException e) {
+                Toast.makeText(context, "Please enter valid dimensions.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         boolean isExpanded = unit.isExpanded();
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -83,6 +108,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
     }
 
     public static class UnitViewHolder extends RecyclerView.ViewHolder {
+        public HomeViewModel unitWidthInput;
         TextView unitName, capacity, capacityUsed, categories;
         ImageView arrow, viewItemsButton;
         CardView cardViewDescription;
