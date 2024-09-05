@@ -14,12 +14,17 @@ public class ItemPackingActivity extends AppCompatActivity {
     private EditText widthInput, heightInput, depthInput, weightInput;
     private TextView packedItemsOutput;
     private List<Item3D> items;
-    private BoxPacking3D boxPacking;
+    private UnitPacking3D unitPacking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_packed_item);
+
+        // Retrieve unit dimensions from the Intent
+        double unitWidth = getIntent().getDoubleExtra("unitWidth", 20);  // Default value
+        double unitHeight = getIntent().getDoubleExtra("unitHeight", 20);
+        double unitDepth = getIntent().getDoubleExtra("unitDepth", 20);
 
         widthInput = findViewById(R.id.itemWidthInput);
         heightInput = findViewById(R.id.itemHeightInput);
@@ -28,7 +33,7 @@ public class ItemPackingActivity extends AppCompatActivity {
         packedItemsOutput = findViewById(R.id.packedItemsOutput);
 
         items = new ArrayList<>();
-        boxPacking = new BoxPacking3D(20, 20, 20);  // Example box size
+        unitPacking = new UnitPacking3D(unitWidth, unitHeight, unitDepth);  // Unit or plane size
 
         Button packItemsButton = findViewById(R.id.packItemsButton);
         packItemsButton.setOnClickListener(new View.OnClickListener() {
@@ -40,16 +45,16 @@ public class ItemPackingActivity extends AppCompatActivity {
     }
 
     private void addItemAndPack() {
-        int width = Integer.parseInt(widthInput.getText().toString());
-        int height = Integer.parseInt(heightInput.getText().toString());
-        int depth = Integer.parseInt(depthInput.getText().toString());
-        int weight = Integer.parseInt(weightInput.getText().toString());
+        double width = Double.parseDouble(widthInput.getText().toString());
+        double height = Double.parseDouble(heightInput.getText().toString());
+        double depth = Double.parseDouble(depthInput.getText().toString());
+        double weight = Double.parseDouble(weightInput.getText().toString());
 
         items.add(new Item3D(width, height, depth, weight));
-        boxPacking.packItems(items);
+        unitPacking.packItems(items);
 
         StringBuilder result = new StringBuilder();
-        for (Item3D item : boxPacking.getBox().getItems()) {
+        for (Item3D item : unitPacking.getBox().getItems()) {
             result.append("Item Volume: ").append(item.getWidth()).append("x")
                     .append(item.getHeight()).append("x")
                     .append(item.getDepth()).append(" Weight: ")
