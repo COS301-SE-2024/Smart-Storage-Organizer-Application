@@ -65,3 +65,35 @@ def create_new_container():
     df_containers.loc[len(df_containers)] = new_container
     print(f"New container {new_container_id} created.")
     return new_container
+
+# Check and place items in containers
+for index, item in df_items.iterrows():
+    print(f"Placing item {item['item_id']}...")
+
+    # Use the decision tree to predict the best container
+    item_dimensions = pd.DataFrame([[item['width'], item['height'], item['depth']]], columns=['width', 'height', 'depth'])
+    predicted_container_id = model.predict(item_dimensions)[0]
+    container = df_containers[df_containers['container_id'] == predicted_container_id].iloc[0]
+
+    # Check if the item fits in the predicted container
+    if check_if_item_fits(item, container):
+        print(f"Item {item['item_id']} fits in container {predicted_container_id}.")
+        place_item_in_container(item, container)
+    else:
+        print(f"Item {item['item_id']} doesn't fit in container {predicted_container_id}. Finding another container...")
+
+        # Find an alternative container where the item fits
+        for _, alt_container in df_containers.iterrows():
+            if check_if_item_fits(item, alt_container):
+                print(f"Item {item['item_id']} placed in alternative container {alt_container['container_id']}.")
+                place_item_in_container(item, alt_container)
+                break
+        else:
+            # If no existing container fits, create a new one
+            new_container = create_new_container()
+            print(f"Item {item['item_id']} placed in new container {new_container['container_id']}.")
+            place_item_in_container(item, new_container)
+
+# Display updated container data with remaining available space
+print("\nUpdated container data:")
+print(df_containers)
