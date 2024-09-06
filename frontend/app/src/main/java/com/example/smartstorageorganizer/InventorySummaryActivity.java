@@ -3,6 +3,8 @@ package com.example.smartstorageorganizer;
 import android.animation.LayoutTransition;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -32,6 +37,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InventorySummaryActivity extends AppCompatActivity {
     private PieChart parentCategoriesPieChart;
@@ -62,6 +68,10 @@ public class InventorySummaryActivity extends AppCompatActivity {
         RelativeLayout parentLayout = findViewById(R.id.parentLayout); // Replace with the correct ID
         LayoutTransition layoutTransition = new LayoutTransition();
         parentLayout.setLayoutTransition(layoutTransition);
+
+        List<ItemModel> items = fetchItems();
+
+        populateTable(items);
 
         // Set click listener for expanding/collapsing the GridLayout
         findViewById(R.id.cardViewItemsReports).setOnClickListener(v -> {
@@ -196,5 +206,69 @@ public class InventorySummaryActivity extends AppCompatActivity {
         rotate.setDuration(300);
         rotate.setFillAfter(true);
         arrow.startAnimation(rotate);
+    }
+
+    private List<ItemModel> fetchItems() {
+        ItemModel item1 = new ItemModel();
+        item1.setItemName("Item One Name");
+        item1.setCreatedAt("2024/09/06");
+        item1.setParentCategoryId("Electronics");
+        ItemModel item2 = new ItemModel();
+        item2.setItemName("Item Two Name");
+        item2.setCreatedAt("2024/09/06");
+        item2.setParentCategoryId("Electronics");
+        ItemModel item3 = new ItemModel();
+        item3.setItemName("Item Three Name");
+        item3.setCreatedAt("2024/09/06");
+        item3.setParentCategoryId("Electronics");
+        List<ItemModel> list = new ArrayList<>();
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        return list;
+        // Fetch or generate your list of ItemModel here
+        // This is just a placeholder method
+    }
+
+    private void populateTable(List<ItemModel> items) {
+        // Clear any existing rows except the header
+//        itemsListTable.removeAllViews();
+//        TableRow headerRow = (TableRow) LayoutInflater.from(this).inflate(R.layout.table_row_header, itemsListTable, false);
+//        itemsListTable.addView(headerRow);
+
+        // Populate table rows
+        for (ItemModel item : items) {
+            TableRow row = new TableRow(this);
+
+            TextView nameTextView = new TextView(this);
+            nameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
+            nameTextView.setText(item.getItemName());
+            nameTextView.setGravity(Gravity.CENTER);
+            nameTextView.setPadding(10, 10, 10, 10);
+            nameTextView.setTextSize(12);
+//            nameTextView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+
+            TextView categoryTextView = new TextView(this);
+            categoryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+            categoryTextView.setText(item.getParentCategoryId()); // Assuming this field is used for category
+            categoryTextView.setGravity(Gravity.CENTER);
+            categoryTextView.setPadding(10, 10, 10, 10);
+            categoryTextView.setTextSize(12);
+//            categoryTextView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+
+            TextView dateTextView = new TextView(this);
+            dateTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
+            dateTextView.setText(item.getCreatedAt());
+            dateTextView.setGravity(Gravity.CENTER);
+            dateTextView.setPadding(10, 10, 10, 10);
+            dateTextView.setTextSize(12);
+//            dateTextView.setGravity(View.TEXT_ALIGNMENT_CENTER);
+
+            row.addView(nameTextView);
+            row.addView(categoryTextView);
+            row.addView(dateTextView);
+
+            itemsListTable.addView(row);
+        }
     }
 }

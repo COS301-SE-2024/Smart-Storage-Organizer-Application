@@ -325,149 +325,45 @@
                             android:background="@android:color/white"
                             android:visibility="gone"
                             android:padding="16dp"
+                            android:gravity="center_horizontal"
                             android:layout_below="@id/itemContent">
 
                             <!-- Table Heading -->
-
                             <TableRow
                                 android:background="@color/colorPrimary">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/col1"
+                                    android:text="Item Name"
                                     android:textColor="@android:color/white"
                                     android:padding="10sp"
                                     android:textSize="14sp"
                                     android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
+                                    android:gravity="center_horizontal" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/col2"
+                                    android:text="Category"
                                     android:textColor="@android:color/white"
                                     android:padding="10sp"
                                     android:textSize="14sp"
                                     android:layout_weight="2"
-                                    android:gravity="center_horizontal"
-                                    />
+                                    android:gravity="center_horizontal" />
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/col3"
+                                    android:text="Date Created"
                                     android:textColor="@android:color/white"
                                     android:padding="10sp"
                                     android:textSize="14sp"
                                     android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-
+                                    android:gravity="center_horizontal" />
                             </TableRow>
 
-                            <!-- Table Data -->
-
-                            <TableRow>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row1Name"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row1Age"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="2"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row1Surname"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                            </TableRow>
-                            <TableRow>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row2Name"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row2Age"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="2"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row2Surname"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                            </TableRow>
-                            <TableRow>
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row3Name"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row3Age"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="2"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/row3Surname"
-                                    android:padding="10sp"
-                                    android:textSize="12sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal"
-                                    />
-
-                            </TableRow>
+                            <!-- Table Data will be added dynamically here -->
 
                         </TableLayout>
 
