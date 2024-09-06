@@ -128,6 +128,10 @@ public class ItemModel {
         this.createdAt = createdAt;
     }
 
+    public int getHeight(){
+        return height;
+    }
+
     public int getWidth() {
         return width;
     }

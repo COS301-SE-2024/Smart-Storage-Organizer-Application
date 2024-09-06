@@ -10,18 +10,16 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PackingManager extends AppCompatActivity {
-    private Map<String, List<Box3D>> categoryBoxes;
-    private int boxHeight;
-    private int boxWidth;
-    private int boxDepth;
-    private int boxMaxWeight;
+    private final Map<String, List<Box3D>> categoryBoxes;
+    private final int boxHeight;
+    private final int boxWidth;
+    private final int boxDepth;
+    private final int boxMaxWeight;
 
     public PackingManager(int boxHeight, int boxWidth, int boxDepth, int boxMaxWeight) {
         this.categoryBoxes = new HashMap<>();
@@ -41,10 +39,11 @@ public class PackingManager extends AppCompatActivity {
                     List<Box3D> boxes = categoryBoxes.getOrDefault(category, new ArrayList<>());
 
                     // Sort items by volume (largest first) to optimize space
-                    Collections.sort(items, (i1, i2) -> Integer.compare(i2.getVolume(), i1.getVolume()));
+                    items.sort((i1, i2) -> Integer.compare(i2.getVolume(), i1.getVolume()));
 
                     // Try to place the item in a box for this category
                     boolean itemPlaced = false;
+                    assert boxes != null;
                     for (Box3D box : boxes) {
                         if (box.addItem(item)) {
                             itemPlaced = true;

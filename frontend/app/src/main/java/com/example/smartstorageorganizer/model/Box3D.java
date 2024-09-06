@@ -26,15 +26,17 @@ public class Box3D {
         return false;
     }
 
-    private boolean canFit(Item3D item) {
+    private boolean canFit(ItemModel item) {
         return (usedHeight + item.getHeight() <= height) &&
                 (usedWidth + item.getWidth() <= width) &&
                 (usedDepth + item.getDepth() <= depth);
     }
 
-    private boolean canHoldWeight(Item3D item) {
+    private boolean canHoldWeight(ItemModel item) {
         return currentWeight + item.getWeight() <= maxWeight;
     }
+
+
 
     public int getRemainingSpace() {
         int usedSpace = usedHeight * usedWidth * usedDepth;
