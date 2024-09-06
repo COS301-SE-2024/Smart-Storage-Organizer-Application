@@ -102,4 +102,30 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string-array name="category_array">
+        <item>Electronics</item>
+        <item>All Automotive</item>
+        <item>Health</item>
+    </string-array>
+
+    <string-array name="date_array">
+        <item>Last 30 Days</item>
+        <item>Last 14 Days</item>
+        <item>Last 7 Days</item>
+        <item>All Time</item>
+    </string-array>
+
+    <string name="col1">Name</string>
+    <string name="col2">Category</string>
+    <string name="col3">Created at</string>
+    <string name="row1Name">Ali</string>
+    <string name="row1Age">51</string>
+    <string name="row1Surname">Mohammad</string>
+    <string name="row2Name">Dave</string>
+    <string name="row2Age">45</string>
+    <string name="row2Surname">Smith</string>
+    <string name="row3Name">Jason</string>
+    <string name="row3Age">67</string>
+    <string name="row3Surname">William</string>
+
 </resources>

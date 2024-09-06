@@ -40,221 +40,475 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="55dp" />
+            android:minHeight="55dp"
+            android:entries="@array/date_array"/>
     </LinearLayout>
 
-    <GridLayout
-        android:id="@+id/gridLayoutSummary"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:columnCount="2"
-        android:rowCount="2"
-        android:padding="16dp"
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/filterDateLayout"
-        android:alignmentMode="alignMargins"
-        android:rowOrderPreserved="false"
-        android:useDefaultMargins="true"
-        android:visibility="visible">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <GridLayout
+                android:id="@+id/gridLayoutSummary"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:padding="16dp"
+                app:layout_constraintTop_toBottomOf="@id/filterDateLayout"
+                android:alignmentMode="alignMargins"
+                android:rowOrderPreserved="false"
+                android:useDefaultMargins="true"
+                android:visibility="visible">
 
-        <!-- CardView 1 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+                <!-- CardView 1 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="fill"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Unique Items"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="14dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:text="252"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Number of Unique Items"
+                            android:textStyle="normal"
+                            android:textColor="@color/gray"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- CardView 2 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="fill"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quantity of Items"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="14dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:text="358"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Quantity of Items"
+                            android:textStyle="normal"
+                            android:textColor="@color/gray"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- CardView 3 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="fill"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Parent Categories"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="14dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:text="8"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Number of Parent Categories"
+                            android:textStyle="normal"
+                            android:textColor="@color/gray"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- CardView 4 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:layout_gravity="fill"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sub-Categories"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="14dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:text="29"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorSecondary"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Number of Sub-Categories"
+                            android:textStyle="normal"
+                            android:textColor="@color/gray"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewItemsReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/white"
+                    android:elevation="4dp"
+                    app:cardCornerRadius="8dp">
+
+                    <RelativeLayout
+                        android:id="@+id/parentLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/itemContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="74dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="74dp"
+                                android:layout_height="74dp"
+                                android:src="@drawable/item_report"
+                                android:padding="16dp"
+                                android:contentDescription="Item Report Image"/>
+
+                            <TextView
+                                android:id="@+id/itemsReportText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:padding="16dp"
+                                android:text="List of All Items"
+                                android:textColor="@color/colorSecondary"
+                                android:textSize="16sp" />
+
+                            <!-- Arrow ImageView on the right -->
+                            <ImageView
+                                android:id="@+id/arrow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/baseline_keyboard_arrow_down_24"
+                                android:contentDescription="Arrow" />
+
+                        </LinearLayout>
+
+                        <TableLayout
+                            android:id="@+id/itemsListTable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:visibility="gone"
+                            android:padding="16dp"
+                            android:layout_below="@id/itemContent">
+
+                            <!-- Table Heading -->
+
+                            <TableRow
+                                android:background="@color/colorPrimary">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/col1"
+                                    android:textColor="@android:color/white"
+                                    android:padding="10sp"
+                                    android:textSize="14sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/col2"
+                                    android:textColor="@android:color/white"
+                                    android:padding="10sp"
+                                    android:textSize="14sp"
+                                    android:layout_weight="2"
+                                    android:gravity="center_horizontal"
+                                    />
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/col3"
+                                    android:textColor="@android:color/white"
+                                    android:padding="10sp"
+                                    android:textSize="14sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+
+                            </TableRow>
+
+                            <!-- Table Data -->
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row1Name"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row1Age"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="2"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row1Surname"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                            </TableRow>
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row2Name"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row2Age"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="2"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row2Surname"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                            </TableRow>
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row3Name"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row3Age"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="2"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/row3Surname"
+                                    android:padding="10sp"
+                                    android:textSize="12sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center_horizontal"
+                                    />
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_constraintTop_toBottomOf="@id/gridLayoutSummary"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
+                app:layout_constraintTop_toBottomOf="@id/pieChart">
 
-                <TextView
+                <Spinner
+                    android:id="@+id/categorySpinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Unique Items"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:textSize="14dp"/>
+                    android:layout_height="50dp"
+                    android:layout_marginTop="16dp"
+                    android:entries="@array/category_array" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="252"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartSubcategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="16dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Number of Unique Items"
-                    android:textStyle="normal"
-                    android:textColor="@color/gray"
-                    android:textSize="10dp"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <!-- CardView 2 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quantity of Items"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:textSize="14dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="358"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Quantity of Items"
-                    android:textStyle="normal"
-                    android:textColor="@color/gray"
-                    android:textSize="10dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- CardView 3 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Parent Categories"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:textSize="14dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="8"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Number of Parent Categories"
-                    android:textStyle="normal"
-                    android:textColor="@color/gray"
-                    android:textSize="10dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- CardView 4 -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sub-Categories"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:textSize="14dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:text="29"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSecondary"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Number of Sub-Categories"
-                    android:textStyle="normal"
-                    android:textColor="@color/gray"
-                    android:textSize="10dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-    </GridLayout>
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintTop_toBottomOf="@id/gridLayoutSummary"/>
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
