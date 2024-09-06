@@ -130,14 +130,17 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/item_report"
+                                android:src="@drawable/inventory"
                                 android:contentDescription="Icon 1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Card 1"
-                                android:textSize="16sp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:text="Generate Inventory Summary"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/white"
                                 android:layout_marginTop="8dp" />
                         </LinearLayout>
@@ -165,14 +168,17 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/item_report"
+                                android:src="@drawable/expiry"
                                 android:contentDescription="Icon 2" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Card 2"
-                                android:textSize="16sp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:text=" Generate Expiry Reports"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/white"
                                 android:layout_marginTop="8dp" />
                         </LinearLayout>
@@ -200,14 +206,17 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/item_report"
+                                android:src="@drawable/low_stock"
                                 android:contentDescription="Icon 3" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Card 3"
-                                android:textSize="16sp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:text="Generate Low Stock Alerts"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/white"
                                 android:layout_marginTop="8dp" />
                         </LinearLayout>
@@ -235,14 +244,17 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/item_report"
+                                android:src="@drawable/location"
                                 android:contentDescription="Icon 4" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Card 4"
-                                android:textSize="16sp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:text="Generate Location-Based Reports"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
                                 android:textColor="@color/white"
                                 android:layout_marginTop="8dp" />
                         </LinearLayout>
