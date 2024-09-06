@@ -231,4 +231,7 @@ dependencies {
 
     // oneSignal
     implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+
+    //Graphs dependency
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
