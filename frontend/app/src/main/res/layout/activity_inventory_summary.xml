@@ -38,6 +38,7 @@
             android:textStyle="bold"/>
 
         <Spinner
+            android:id="@+id/dateFilterSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="55dp"
@@ -95,11 +96,12 @@
                             android:textSize="14dp"/>
 
                         <TextView
+                            android:id="@+id/uniqueItems"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text="252"
+                            android:text=""
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
@@ -143,11 +145,12 @@
                             android:textSize="14dp"/>
 
                         <TextView
+                            android:id="@+id/quantityOfItems"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text="358"
+                            android:text=""
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"

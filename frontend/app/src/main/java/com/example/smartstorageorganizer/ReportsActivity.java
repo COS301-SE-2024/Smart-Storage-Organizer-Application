@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -10,6 +11,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,16 +24,20 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.ReportAdapter;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.ReportModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReportsActivity extends AppCompatActivity {
     private CardView cardViewItemsReports, cardViewUnit, cardViewCategory, cardViewColorCode;
-    private GridLayout itemName, gridLayoutItems, itemUnit, itemCategory, itemColorCode;
-    private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
-    private boolean isExpanded = false, isUnitExpanded = false, isCategoryExpanded = false, isColorCodeExpanded = false;
+    private GridLayout gridLayoutItems;
+    private ImageView arrow;
+    private CardView inventorySummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class ReportsActivity extends AppCompatActivity {
 
         arrow = findViewById(R.id.arrow);
         gridLayoutItems = findViewById(R.id.gridLayoutItems);
+        inventorySummary = findViewById(R.id.inventorySummary);
 
         // Get the parent layout (RelativeLayout or CardView) and set LayoutTransition
         RelativeLayout parentLayout = findViewById(R.id.parentLayout); // Replace with the correct ID
@@ -53,8 +60,18 @@ public class ReportsActivity extends AppCompatActivity {
                 gridLayoutItems.setVisibility(View.GONE); // Collapse
                 rotateArrow(arrow, 180, 0);
             } else {
-                gridLayoutItems.setVisibility(View.VISIBLE); // Expand
+                gridLayoutItems.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
+            }
+        });
+
+        inventorySummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gridLayoutItems.setVisibility(View.VISIBLE);
+                rotateArrow(arrow, 0, 180);
+                Intent intent = new Intent(ReportsActivity.this, InventorySummaryActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -66,5 +83,4 @@ public class ReportsActivity extends AppCompatActivity {
         rotate.setFillAfter(true);
         arrow.startAnimation(rotate);
     }
-
 }

@@ -619,7 +619,7 @@ public class Utils
                                 item.setItemImage(itemObject.getString("item_image"));
                                 item.setParentCategoryId(itemObject.getString("parentcategoryid"));
                                 item.setSubCategoryId(itemObject.getString("subcategoryid"));
-//                            item.setCreatedAt(itemObject.getString("created_at"));
+                                item.setCreatedAt(itemObject.getString("created_at"));
 
                                 itemModelList.add(item);
                             }
