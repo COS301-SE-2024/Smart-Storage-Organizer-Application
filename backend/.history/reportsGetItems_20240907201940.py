@@ -40,13 +40,11 @@ def get_all_units(conn,curr):
 def parentIds(body):
     lambda_client = boto3.client('lambda')
     response= lambda_client.invoke(
-        FunctionName="CategoryFilter",
+        FunctionName="FetchCategory",
         InvocationType='RequestResponse',
         Payload=json.dumps({
             "parentcategory": body['parentcategory'],
-            "organizationid":body['organizationid'],
-            "limit":body['limit'],
-            "offset":body['offset']
+            "organizationid":body['organizationid']
         })
     )
     return  response['Payload'].read()

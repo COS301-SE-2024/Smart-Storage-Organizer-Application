@@ -2,8 +2,6 @@ import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-import boto3
-
 
 con = None
 def get_db_connection():
@@ -38,15 +36,12 @@ def get_all_units(conn,curr):
             'body': json.dumps(counts)
         }
 def parentIds(body):
-    lambda_client = boto3.client('lambda')
     response= lambda_client.invoke(
-        FunctionName="CategoryFilter",
+        FunctionName="FetchCategory",
         InvocationType='RequestResponse',
         Payload=json.dumps({
             "parentcategory": body['parentcategory'],
-            "organizationid":body['organizationid'],
-            "limit":body['limit'],
-            "offset":body['offset']
+            "organizationid":body['organizationid']
         })
     )
     return  response['Payload'].read()
@@ -56,7 +51,7 @@ def lambda_handler(event, context):
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-        response=parentIds(event['body'])
+        response=parentIds(body)
         print(response)
       #  response=get_all_units(conn,curr)
     except Exception as e:

@@ -16,47 +16,48 @@ def get_db_connection():
             password=os.environ.get('Password')
          )
     return con
-def get_all_units(conn,curr):
-    query = """
+def get_all_units(conn,curr,body):
+    list_of_lists = []
+    for json_obj in body['subcategory']:
+        list_of_lists.append(list(json_obj.values()))
+    ids = [item[0] for item in list_of_lists]
+    
+    names = [item[1] for item in list_of_lists]
+    subcategory_ids_placeholder = ', '.join(['%s'] * len(ids))  # Create placeholders for the query
+  
+    query = f"""
     SELECT
         COUNT(*) AS total_units,
-        COUNT(CASE WHEN categoryid = 1 THEN 1 END) AS category1_count,
-        COUNT(CASE WHEN categoryid = 2 THEN 1 END) AS category2_count
-    FROM UNITS
+        {', '.join([f"COUNT(CASE WHEN subcategoryid = %s THEN 1 END) AS subcategory_{i+1}_count" for i in range(len(ids))])}
+    FROM items
+    WHERE subcategoryid IN ({ids}) AND organizationid = %s;
     """
-    curr.execute(query)
+    params = (*ids, *ids, body['organizationid'])
+    curr.execute(query, params)
     conn.commit()
     results = curr.fetchone()
+    print (results)
     if results:
         counts = {
             'total_units': results['total_units'],
-            'category1_count': results['category1_count'],
-            'category2_count': results['category2_count']
         }
+        for i in range(len(ids)):
+            counts[names[i]] = results[{i+1}]
         return {
             'statusCode': 200,
             'body': json.dumps(counts)
         }
-def parentIds(body):
-    lambda_client = boto3.client('lambda')
-    response= lambda_client.invoke(
-        FunctionName="CategoryFilter",
-        InvocationType='RequestResponse',
-        Payload=json.dumps({
-            "parentcategory": body['parentcategory'],
-            "organizationid":body['organizationid'],
-            "limit":body['limit'],
-            "offset":body['offset']
-        })
-    )
-    return  response['Payload'].read()
-
+    else:
+        return {
+            'statusCode': 404,
+            'body': json.dumps({'error': 'No items found'})
+        }
 def lambda_handler(event, context):
     conn = get_db_connection()
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-        response=parentIds(event['body'])
+        response=get_all_units(conn,curr,event['body'])
         print(response)
       #  response=get_all_units(conn,curr)
     except Exception as e:

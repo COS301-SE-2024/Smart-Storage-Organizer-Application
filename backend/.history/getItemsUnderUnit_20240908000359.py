@@ -16,15 +16,14 @@ def get_db_connection():
             password=os.environ.get('Password')
          )
     return con
-def get_all_units(conn,curr):
+def get_all_units(conn,curr,body):
     query = """
-    SELECT
-        COUNT(*) AS total_units,
-        COUNT(CASE WHEN categoryid = 1 THEN 1 END) AS category1_count,
-        COUNT(CASE WHEN categoryid = 2 THEN 1 END) AS category2_count
-    FROM UNITS
+    SELECT COUNT(*) AS item_count
+    FROM items
+    WHERE subcategoryid=%s AND organizationid=%s;
     """
-    curr.execute(query)
+    params = (body['parentcategory'], body['organizationid'])
+    curr.execute(query, params)
     conn.commit()
     results = curr.fetchone()
     if results:

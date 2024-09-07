@@ -45,8 +45,7 @@ def parentIds(body):
         Payload=json.dumps({
             "parentcategory": body['parentcategory'],
             "organizationid":body['organizationid'],
-            "limit":body['limit'],
-            "offset":body['offset']
+            "limit":body['limit']
         })
     )
     return  response['Payload'].read()
