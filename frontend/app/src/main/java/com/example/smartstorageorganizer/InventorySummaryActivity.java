@@ -1,16 +1,22 @@
 package com.example.smartstorageorganizer;
 
 import android.animation.LayoutTransition;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -40,6 +46,9 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,6 +106,15 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
 //        populateTable(items);
         fetchItems();
+
+        Button generatePdfButton = findViewById(R.id.btnGeneratePdf);
+        generatePdfButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the method to generate PDF when button is clicked
+                createPdf();
+            }
+        });
 
         dateFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -384,5 +402,75 @@ public class InventorySummaryActivity extends AppCompatActivity {
         long daysDiff = TimeUnit.MILLISECONDS.toDays(diffInMillies);
         return daysDiff <= days;
     }
+
+    private void createPdf() {
+        // Get the ScrollView content
+        ScrollView scrollView = findViewById(R.id.mainScrollview);
+        LinearLayout contentLayout = (LinearLayout) scrollView.getChildAt(0); // The child of the ScrollView
+
+        // Create a PdfDocument object
+        PdfDocument document = new PdfDocument();
+
+        // Define page size (A4 size in points: 595x842)
+        int pageHeight = 842; // Height for A4 page in points
+        int pageWidth = 595;  // Width for A4 page in points
+
+        // Measure the total height and width of the content
+        contentLayout.measure(
+                View.MeasureSpec.makeMeasureSpec(scrollView.getWidth(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        );
+        int contentHeight = contentLayout.getMeasuredHeight();
+        int contentWidth = contentLayout.getMeasuredWidth();
+
+        // Scale factor to fit the content width to the page width
+        float scaleFactor = (float) pageWidth / contentWidth;
+
+        // Calculate the scaled content height
+        int scaledContentHeight = (int) (contentHeight * scaleFactor);
+
+        // Calculate the number of pages needed
+        int totalPages = (int) Math.ceil((float) scaledContentHeight / pageHeight);
+
+        for (int i = 0; i < totalPages; i++) {
+            // Create page info for each page
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, i + 1).create();
+            PdfDocument.Page page = document.startPage(pageInfo);
+
+            Canvas canvas = page.getCanvas();
+
+            // Calculate the top position of the content to draw
+            int translateY = -i * pageHeight;
+
+            // Apply scaling to the canvas
+            canvas.scale(scaleFactor, scaleFactor);
+
+            // Translate the canvas vertically to the correct portion of the content
+            canvas.translate(0, translateY / scaleFactor);
+
+            // Draw the content onto the scaled canvas
+            contentLayout.draw(canvas);
+
+            // Finish the page
+            document.finishPage(page);
+        }
+
+        // Define the output file location
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "inventory_summary.pdf");
+
+        try {
+            // Write the document content to the file
+            document.writeTo(new FileOutputStream(pdfFile));
+            Toast.makeText(this, "PDF saved to: " + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        // Close the document
+        document.close();
+    }
+
+
 
 }
