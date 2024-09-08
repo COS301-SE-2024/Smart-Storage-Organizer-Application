@@ -100,7 +100,7 @@ def lambda_handler(event, context):
             subCategories=getSubCategories(conn,curr,organizationid,i)
             
             if  subCategories=="[]":
-                finalList.append({"Category":j,"Subcategories":"No subcategories", "totalAMount":0})
+                finalList.append({"Category":j,"Subcategory":No subcategories", "totalAMount":0})
                 continue
             subsId=[item['id'] for item in json.loads(subCategories)]
             subsName=[item['categoryname'] for item in json.loads(subCategories)]

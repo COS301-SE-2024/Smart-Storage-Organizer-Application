@@ -77,8 +77,7 @@ def getSubCategoriesTotals(conn, curr,organizationid, ids,names,parentCategoryNa
             print(f"Warning: subcategoryid {result['subcategoryid']} not found in provided IDs")
 
     return {
-        "Category":parentCategoryName,
-       "Subcategories":  json.dumps(counts),
+        parentCategoryName:  json.dumps(counts),
         "totalAMount": totalAMount
     }
 
@@ -100,7 +99,7 @@ def lambda_handler(event, context):
             subCategories=getSubCategories(conn,curr,organizationid,i)
             
             if  subCategories=="[]":
-                finalList.append({"Category":j,"Subcategories":"No subcategories", "totalAMount":0})
+                finalList.append({j:"No subcategories", "totalAMount":0})
                 continue
             subsId=[item['id'] for item in json.loads(subCategories)]
             subsName=[item['categoryname'] for item in json.loads(subCategories)]
