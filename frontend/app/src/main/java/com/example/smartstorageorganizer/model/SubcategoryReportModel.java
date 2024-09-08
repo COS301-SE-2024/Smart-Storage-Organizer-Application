@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer.model;
 public class SubcategoryReportModel {
     String subcategory;
     int totalNumberOfItems;
+    int totalQuantity;
 
     public SubcategoryReportModel() {
 
@@ -26,5 +27,17 @@ public class SubcategoryReportModel {
 
     public void setTotalNumberOfItems(int totalNumberOfItems) {
         this.totalNumberOfItems = totalNumberOfItems;
+    }
+
+    public double getPercentage(double totalItems) {
+        return (totalNumberOfItems / totalItems) * 100;
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity) {
+        this.totalQuantity = totalQuantity;
     }
 }

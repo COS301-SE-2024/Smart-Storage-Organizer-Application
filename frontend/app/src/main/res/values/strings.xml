@@ -102,17 +102,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="category_array">
-        <item>Electronics</item>
-        <item>All Automotive</item>
-        <item>Health</item>
-    </string-array>
-
     <string-array name="date_array">
+        <item>All Time</item>
         <item>Last 30 Days</item>
         <item>Last 14 Days</item>
         <item>Last 7 Days</item>
-        <item>All Time</item>
     </string-array>
 
     <string-array name="date_range_options">

@@ -1953,28 +1953,36 @@ public class Utils
                                     // List to store the models
                                     List<SubcategoryReportModel> modelList = new ArrayList<>();
 
-                                    // Iterate through the keys
+// Iterate through the keys (subcategories)
                                     Iterator<String> keys = subcategoryObject.keys();
                                     while (keys.hasNext()) {
-                                        String key = keys.next();
-                                        int value = subcategoryObject.getInt(key);
+                                        String key = keys.next(); // This is the subcategory name (e.g., "Braai & Barbecue")
 
-                                        // Create a new model instance
+                                        // Get the JSON object representing the "total_items" and "total_quantity" for the current subcategory
+                                        JSONObject subcategoryDetails = subcategoryObject.getJSONObject(key);
+
+                                        // Extract the values for "total_items" and "total_quantity"
+                                        int totalItems = subcategoryDetails.getInt("total_items");
+                                        int totalQuantity = subcategoryDetails.getInt("total_quantity");
+
+                                        // Create a new model instance and set its fields
                                         SubcategoryReportModel item = new SubcategoryReportModel();
                                         item.setSubcategory(key);
-                                        item.setTotalNumberOfItems(value);
+                                        item.setTotalNumberOfItems(totalItems);
+                                        item.setTotalQuantity(totalQuantity); // Assuming you have a field for totalQuantity in your model
 
                                         // Add the model to the list
                                         modelList.add(item);
                                     }
+
+// Set the subcategories to the category object
                                     category.setSubCategories(modelList);
 
-                                    // Now you can use modelList as needed
+// Now you can use the modelList as needed
                                     for (SubcategoryReportModel model : modelList) {
                                         activity.runOnUiThread(() -> {
-                                            Log.e("View Response Results Body Array", "Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems());
+                                            Log.e("View Response Results Body Array", "Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems() + ", Total Quantity: " + model.getTotalQuantity());
                                         });
-//                                        System.out.println("Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems());
                                     }
                                 }
 //

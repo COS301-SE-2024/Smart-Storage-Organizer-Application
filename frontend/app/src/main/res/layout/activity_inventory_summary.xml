@@ -404,8 +404,7 @@
                     android:id="@+id/categorySpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_marginTop="16dp"
-                    android:entries="@array/category_array" />
+                    android:layout_marginTop="16dp" />
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChartSubcategory"

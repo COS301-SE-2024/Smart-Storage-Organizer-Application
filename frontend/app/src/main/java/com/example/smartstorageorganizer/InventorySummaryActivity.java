@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,11 +33,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.SubcategoryReportModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -72,6 +75,8 @@ public class InventorySummaryActivity extends AppCompatActivity {
     private MyAmplifyApp app;
     private TextView quantityOfItems, uniqueItems;
     private List<CategoryReportModel> categoryReportModelList;
+    private ArrayList<String> parentCategories;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
         });
 
         categoryReportModelList = new ArrayList<>();
+        parentCategories = new ArrayList<>();
 
         uniqueItems = findViewById(R.id.uniqueItems);
         quantityOfItems = findViewById(R.id.quantityOfItems);
@@ -94,7 +100,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
         originalItemList = new ArrayList<>();
 
 //        parentCategoryPieChart();
-        subcategoryPieChart();
+//        subcategoryPieChart();
         colorCodingBarGraph();
 
         arrow = findViewById(R.id.arrow);
@@ -151,12 +157,41 @@ public class InventorySummaryActivity extends AppCompatActivity {
         ArrayList<PieEntry> entries = new ArrayList<>();
         for (CategoryReportModel categoryReport : categoryReportModelList) {
             if (categoryReport.getTotalNumberOfItems() != 0) {
-                entries.add(new PieEntry((float) categoryReport.getPercentage(46.00), categoryReport.getParentCategory()));
+                entries.add(new PieEntry((float) categoryReport.getPercentage(38.00), categoryReport.getParentCategory()));
             }
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "Parent Categories");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        // Define a custom color array
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(192, 0, 0));     // Dark Red
+        colors.add(Color.rgb(255, 87, 34));   // Orange
+        colors.add(Color.rgb(34, 139, 34));   // Forest Green
+        colors.add(Color.rgb(0, 0, 255));     // Blue
+        colors.add(Color.rgb(255, 193, 7));   // Amber
+        colors.add(Color.rgb(75, 0, 130));    // Indigo
+        colors.add(Color.rgb(238, 130, 238)); // Violet
+        colors.add(Color.rgb(128, 0, 128));   // Purple
+        colors.add(Color.rgb(0, 128, 128));   // Teal
+        colors.add(Color.rgb(255, 165, 0));   // Orange
+        colors.add(Color.rgb(0, 255, 127));   // Spring Green
+        colors.add(Color.rgb(173, 216, 230)); // Light Blue
+        colors.add(Color.rgb(255, 69, 0));    // Red-Orange
+        colors.add(Color.rgb(154, 205, 50));  // Yellow-Green
+        colors.add(Color.rgb(220, 20, 60));   // Crimson
+        colors.add(Color.rgb(64, 224, 208));  // Turquoise
+        colors.add(Color.rgb(255, 105, 180)); // Hot Pink
+        colors.add(Color.rgb(0, 191, 255));   // Deep Sky Blue
+        colors.add(Color.rgb(139, 69, 19));   // Saddle Brown
+        colors.add(Color.rgb(70, 130, 180));  // Steel Blue
+
+        Legend legend = parentCategoriesPieChart.getLegend();
+        legend.setWordWrapEnabled(true); // Enable word wrapping
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // Align the legend to the center
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // Align legend at the bottom
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set orientation to horizontal
+
+        dataSet.setColors(colors); // Set custom colors
 
         PieData data = new PieData(dataSet);
         data.setValueTextSize(10f);
@@ -174,7 +209,15 @@ public class InventorySummaryActivity extends AppCompatActivity {
         subCategoriesPieChart = findViewById(R.id.pieChartSubcategory);
         Spinner categorySpinner = findViewById(R.id.categorySpinner);
 
-        // Set an item selected listener on the spinner
+        for(CategoryReportModel categoryReport: categoryReportModelList) {
+            parentCategories.add(categoryReport.getParentCategory());
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        categorySpinner.setAdapter(adapter);
+
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -187,49 +230,81 @@ public class InventorySummaryActivity extends AppCompatActivity {
                 // Do nothing if nothing is selected
             }
         });
+    }
 
-        // Display the pie chart for the default selection (e.g., "Electronics")
-        updatePieChart("Electronics");
+    private CategoryReportModel getSubcategories(String parentName) {
+        CategoryReportModel subcategories = new CategoryReportModel();
+        for(CategoryReportModel categoryReport : categoryReportModelList){
+            if(Objects.equals(categoryReport.getParentCategory(), parentName)) {
+                return categoryReport;
+            }
+        }
+        return subcategories;
     }
 
     private void updatePieChart(String category) {
         ArrayList<PieEntry> entries = new ArrayList<>();
+        CategoryReportModel categoryReportModel = getSubcategories(category);
 
-        switch (category) {
-            case "Electronics":
-                entries.add(new PieEntry(40f, "Laptops"));
-                entries.add(new PieEntry(30f, "Cellphones"));
-                entries.add(new PieEntry(20f, "Desktops"));
-                entries.add(new PieEntry(10f, "Tablets"));
-                break;
-
-            case "All Automotive":
-                entries.add(new PieEntry(50f, "Cars"));
-                entries.add(new PieEntry(30f, "Motorcycles"));
-                entries.add(new PieEntry(20f, "Trucks"));
-                break;
-
-            case "Health":
-                entries.add(new PieEntry(40f, "Medicine"));
-                entries.add(new PieEntry(30f, "Fitness Equipment"));
-                entries.add(new PieEntry(30f, "Supplements"));
-                break;
+        for(SubcategoryReportModel subcategoryReport: categoryReportModel.getSubCategories()) {
+            if(subcategoryReport.getTotalNumberOfItems() != 0){
+                entries.add(new PieEntry((float) subcategoryReport.getPercentage(categoryReportModel.getTotalNumberOfItems()), subcategoryReport.getSubcategory()));
+            }
         }
 
         PieDataSet dataSet = new PieDataSet(entries, category + " Subcategories");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        // Define a custom color array
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(192, 0, 0));     // Dark Red
+        colors.add(Color.rgb(255, 87, 34));   // Orange
+        colors.add(Color.rgb(34, 139, 34));   // Forest Green
+        colors.add(Color.rgb(0, 0, 255));     // Blue
+        colors.add(Color.rgb(255, 193, 7));   // Amber
+        colors.add(Color.rgb(75, 0, 130));    // Indigo
+        colors.add(Color.rgb(238, 130, 238)); // Violet
+        colors.add(Color.rgb(128, 0, 128));   // Purple
+        colors.add(Color.rgb(0, 128, 128));   // Teal
+        colors.add(Color.rgb(255, 165, 0));   // Orange
+        colors.add(Color.rgb(0, 255, 127));   // Spring Green
+        colors.add(Color.rgb(173, 216, 230)); // Light Blue
+        colors.add(Color.rgb(255, 69, 0));    // Red-Orange
+        colors.add(Color.rgb(154, 205, 50));  // Yellow-Green
+        colors.add(Color.rgb(220, 20, 60));   // Crimson
+        colors.add(Color.rgb(64, 224, 208));  // Turquoise
+        colors.add(Color.rgb(255, 105, 180)); // Hot Pink
+        colors.add(Color.rgb(0, 191, 255));   // Deep Sky Blue
+        colors.add(Color.rgb(139, 69, 19));   // Saddle Brown
+        colors.add(Color.rgb(70, 130, 180));  // Steel Blue
+
+        // Add more colors if needed
+
+        Legend legend = subCategoriesPieChart.getLegend();
+        legend.setWordWrapEnabled(true); // Enable word wrapping
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // Align the legend to the center
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // Align legend at the bottom
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set orientation to horizontal
+
+
+        dataSet.setColors(colors); // Set custom colors
+
         PieData data = new PieData(dataSet);
         data.setValueTextSize(14f);
         data.setValueTextColor(Color.WHITE);
 
         subCategoriesPieChart.setData(data);
-
         subCategoriesPieChart.setEntryLabelColor(Color.BLACK);
-
+        subCategoriesPieChart.setDrawSliceText(false);
         subCategoriesPieChart.invalidate();
         subCategoriesPieChart.getDescription().setEnabled(false);
 
+        // Set the text in the center of the PieChart
+        subCategoriesPieChart.setCenterText("Total: " + categoryReportModel.getTotalNumberOfItems() + " Items");
+        subCategoriesPieChart.setCenterTextSize(18f);  // Set text size
+        subCategoriesPieChart.setCenterTextColor(Color.BLACK); // Set text color
+        subCategoriesPieChart.setDrawCenterText(true); // Enable center text
     }
+
 
     private void colorCodingBarGraph(){
         colorCodingBarGraph = findViewById(R.id.barChart);
@@ -482,6 +557,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
             public void onSuccess(List<CategoryReportModel> result) {
                 categoryReportModelList.addAll(result);
                 parentCategoryPieChart();
+                subcategoryPieChart();
                 Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!", Toast.LENGTH_SHORT).show();
             }
 
