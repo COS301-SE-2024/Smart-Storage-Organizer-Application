@@ -6,20 +6,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".InventorySummaryActivity">
+    tools:context=".ExpiryActivity">
 
-    <TextView
+    <LinearLayout
         android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Inventory Summary Report"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:textColor="@color/black"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expiry Report"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:textColor="@color/black" />
+        <!-- Add a space view to push the button to the right -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnGeneratePdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Generate PDF" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/filterDateLayout"
@@ -39,24 +57,10 @@
             android:textStyle="bold"/>
 
         <Spinner
-            android:id="@+id/dateFilterSpinner"
+            android:id="@+id/spinner_date_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="55dp"
-            android:entries="@array/date_array"/>
-
-        <!-- Add a space view to push the button to the right -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/btnGeneratePdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Generate PDF" />
+            android:minHeight="55dp"/>
 
     </LinearLayout>
 
@@ -75,9 +79,9 @@
             <GridLayout
                 android:id="@+id/gridLayoutSummary"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="160dp"
                 android:columnCount="2"
-                android:rowCount="2"
+                android:rowCount="1"
                 android:padding="16dp"
                 app:layout_constraintTop_toBottomOf="@id/filterDateLayout"
                 android:alignmentMode="alignMargins"
@@ -106,7 +110,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Unique Items"
+                            android:text="Items Near Expiry"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
                             android:textSize="14dp"/>
@@ -117,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text=""
+                            android:text="56"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
@@ -127,7 +131,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Number of Unique Items"
+                            android:text="Total Items Near Expiry"
                             android:textStyle="normal"
                             android:textColor="@color/gray"
                             android:textSize="10dp"/>
@@ -155,7 +159,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Quantity of Items"
+                            android:text="Expired Items"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
                             android:textSize="14dp"/>
@@ -166,7 +170,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text=""
+                            android:text="16"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
@@ -176,103 +180,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Total Quantity of Items"
-                            android:textStyle="normal"
-                            android:textColor="@color/gray"
-                            android:textSize="10dp"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- CardView 3 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:layout_gravity="fill"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Parent Categories"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorSecondary"
-                            android:textSize="14dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"
-                            android:text="8"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorSecondary"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Number of Parent Categories"
-                            android:textStyle="normal"
-                            android:textColor="@color/gray"
-                            android:textSize="10dp"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- CardView 4 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1"
-                    android:layout_gravity="fill"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sub-Categories"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorSecondary"
-                            android:textSize="14dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"
-                            android:text="29"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorSecondary"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Number of Sub-Categories"
+                            android:text="Total Expired Items"
                             android:textStyle="normal"
                             android:textColor="@color/gray"
                             android:textSize="10dp"/>
@@ -280,6 +188,32 @@
                 </androidx.cardview.widget.CardView>
 
             </GridLayout>
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+<!--                <Spinner-->
+<!--                    android:id="@+id/spinner_date_range"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginBottom="16dp"-->
+<!--                    android:background="@drawable/spinner_background"-->
+<!--                    android:spinnerMode="dropdown"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/dateRange"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text=""-->
+<!--                    android:layout_marginStart="16dp"-->
+<!--                    android:layout_marginTop="16dp"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/colorSecondary"/>-->
+<!--            </LinearLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -310,7 +244,7 @@
                             <ImageView
                                 android:layout_width="74dp"
                                 android:layout_height="74dp"
-                                android:src="@drawable/item_report"
+                                android:src="@drawable/expiry"
                                 android:padding="16dp"
                                 android:contentDescription="Item Report Image"/>
 
@@ -321,7 +255,7 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="center_vertical"
                                 android:padding="16dp"
-                                android:text="List of All Items"
+                                android:text="List of Items Near Expiry"
                                 android:textColor="@color/colorSecondary"
                                 android:textSize="16sp" />
 
@@ -347,81 +281,12 @@
                             android:gravity="center_horizontal"
                             android:layout_below="@id/itemContent">
 
-                            <!-- Table Heading -->
-                            <TableRow
-                                android:background="@color/colorPrimary">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="Item Name"
-                                    android:textColor="@android:color/white"
-                                    android:padding="10sp"
-                                    android:textSize="14sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="Category"
-                                    android:textColor="@android:color/white"
-                                    android:padding="10sp"
-                                    android:textSize="14sp"
-                                    android:layout_weight="2"
-                                    android:gravity="center_horizontal" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="Date Created"
-                                    android:textColor="@android:color/white"
-                                    android:padding="10sp"
-                                    android:textSize="14sp"
-                                    android:layout_weight="4"
-                                    android:gravity="center_horizontal" />
-                            </TableRow>
-
                         </TableLayout>
 
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:layout_constraintTop_toBottomOf="@id/gridLayoutSummary"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/pieChart">
-
-                <Spinner
-                    android:id="@+id/categorySpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="16dp"
-                    android:entries="@array/category_array" />
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartSubcategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="16dp" />
-
-            </LinearLayout>
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"/>
         </LinearLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

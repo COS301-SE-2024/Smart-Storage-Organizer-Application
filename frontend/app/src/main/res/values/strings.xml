@@ -115,17 +115,10 @@
         <item>All Time</item>
     </string-array>
 
-    <string name="col1">Name</string>
-    <string name="col2">Category</string>
-    <string name="col3">Created at</string>
-    <string name="row1Name">Ali</string>
-    <string name="row1Age">51</string>
-    <string name="row1Surname">Mohammad</string>
-    <string name="row2Name">Dave</string>
-    <string name="row2Age">45</string>
-    <string name="row2Surname">Smith</string>
-    <string name="row3Name">Jason</string>
-    <string name="row3Age">67</string>
-    <string name="row3Surname">William</string>
+    <string-array name="date_range_options">
+        <item>Next 7 Days</item>
+        <item>Next 30 Days</item>
+        <item>Custom Range</item>
+    </string-array>
 
 </resources>
