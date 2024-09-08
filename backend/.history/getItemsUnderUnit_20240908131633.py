@@ -18,7 +18,6 @@ def get_db_connection():
 
 def get_all_units(conn, curr, body):
     subcategories = body['subcategory']
-       subcategory_list = json.loads(subcategory_str)
     ids = [item['id'] for item in subcategories]
     names = [item['categoryname'] for item in subcategories]
 
@@ -76,4 +75,3 @@ def lambda_handler(event, context):
 # Example event
 event = {'body': {'organizationid': 1, 'subcategory': ["[{\"id\": 1, \"categoryname\": \"Garden, Pool & Patio\"}, {\"id\": 2, \"categoryname\": \"Health & Personal Care\"}, {\"id\": 3, \"categoryname\": \"Home & Appliances\"}, {\"id\": 4, \"categoryname\": \"Baby & Toddler\"}, {\"id\": 5, \"categoryname\": \"Automative & DIY\"}, {\"id\": 6, \"categoryname\": \"Beauty\"}, {\"id\": 7, \"categoryname\": \"Books\"}, {\"id\": 8, \"categoryname\": \"Clothing, Shoes, Accessories\"}, {\"id\": 9, \"categoryname\": \"Electronics\"}, {\"id\": 10, \"categoryname\": \"Sport & Training\"}]", "[{\"id\": 1, \"categoryname\": \"Garden, Pool & Patio\"}, {\"id\": 2, \"categoryname\": \"Health & Personal Care\"}, {\"id\": 3, \"categoryname\": \"Home & Appliances\"}, {\"id\": 4, \"categoryname\": \"Baby & Toddler\"}, {\"id\": 5, \"categoryname\": \"Automative & DIY\"}, {\"id\": 6, \"categoryname\": \"Beauty\"}, {\"id\": 7, \"categoryname\": \"Books\"}, {\"id\": 8, \"categoryname\": \"Clothing, Shoes, Accessories\"}, {\"id\": 9, \"categoryname\": \"Electronics\"}, {\"id\": 10, \"categoryname\": \"Sport & Training\"}]", "[{\"id\": 1, \"categoryname\": \"Garden, Pool & Patio\"}, {\"id\": 2, \"categoryname\": \"Health & Personal Care\"}, {\"id\": 3, \"categoryname\": \"Home & Appliances\"}, {\"id\": 4, \"categoryname\": \"Baby & Toddler\"}, {\"id\": 5, \"categoryname\": \"Automative & DIY\"}, {\"id\": 6, \"categoryname\": \"Beauty\"}, {\"id\": 7, \"categoryname\": \"Books\"}, {\"id\": 8, \"categoryname\": \"Clothing, Shoes, Accessories\"}, {\"id\": 9, \"categoryname\": \"Electronics\"}, {\"id\": 10, \"categoryname\": \"Sport & Training\"}]"]}}
 print(lambda_handler(event, None))
-

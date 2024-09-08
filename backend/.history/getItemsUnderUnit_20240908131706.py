@@ -18,7 +18,6 @@ def get_db_connection():
 
 def get_all_units(conn, curr, body):
     subcategories = body['subcategory']
-       subcategory_list = json.loads(subcategory_str)
     ids = [item['id'] for item in subcategories]
     names = [item['categoryname'] for item in subcategories]
 

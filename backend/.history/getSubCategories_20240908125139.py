@@ -27,7 +27,7 @@ def get_all_units(conn,curr,organizationid,parentcategory):
     curr.execute(query,parameters)
     conn.commit()
     results = curr.fetchall()
-
+    print(results)
     if results:
 
         return json.dumps(results)
@@ -44,7 +44,7 @@ def getAllParentsIds(conn,curr,body):
     names = [item[1] for item in list_of_lists]
     list=[]
     for i in ids:
-        list.append(get_all_units(conn,curr,0,0))
+        list.append(get_all_units(conn,curr,0,i))
     return list
 
 def lambda_handler(event, context):
@@ -64,10 +64,7 @@ def lambda_handler(event, context):
     finally:
        curr.close()
        conn.close()
-    return json.dumps(response)
+    return response
 
-event={'body': [{"id": 84, "categoryname": "Plants"}, {"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}]}
+event={'body': [{"id": 84, "categoryname": "Plants"}, {"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}, {"id": 3, "categoryname": "Home & Appliances"}, {"id": 4, "categoryname": "Baby & Toddler"}, {"id": 5, "categoryname": "Automative & DIY"}, {"id": 6, "categoryname": "Beauty"}, {"id": 7, "categoryname": "Books"}, {"id": 8, "categoryname": "Clothing, Shoes, Accessories"}, {"id": 9, "categoryname": "Electronics"}, {"id": 10, "categoryname": "Sport & Training"}]}
 print(lambda_handler(event, None))
-
-
-['[{"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}, {"id": 3, "categoryname": "Home & Appliances"}, {"id": 4, "categoryname": "Baby & Toddler"}, {"id": 5, "categoryname": "Automative & DIY"}, {"id": 6, "categoryname": "Beauty"}, {"id": 7, "categoryname": "Books"}, {"id": 8, "categoryname": "Clothing, Shoes, Accessories"}, {"id": 9, "categoryname": "Electronics"}, {"id": 10, "categoryname": "Sport & Training"}]', '[{"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}, {"id": 3, "categoryname": "Home & Appliances"}, {"id": 4, "categoryname": "Baby & Toddler"}, {"id": 5, "categoryname": "Automative & DIY"}, {"id": 6, "categoryname": "Beauty"}, {"id": 7, "categoryname": "Books"}, {"id": 8, "categoryname": "Clothing, Shoes, Accessories"}, {"id": 9, "categoryname": "Electronics"}, {"id": 10, "categoryname": "Sport & Training"}]', '[{"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}, {"id": 3, "categoryname": "Home & Appliances"}, {"id": 4, "categoryname": "Baby & Toddler"}, {"id": 5, "categoryname": "Automative & DIY"}, {"id": 6, "categoryname": "Beauty"}, {"id": 7, "categoryname": "Books"}, {"id": 8, "categoryname": "Clothing, Shoes, Accessories"}, {"id": 9, "categoryname": "Electronics"}, {"id": 10, "categoryname": "Sport & Training"}]']
