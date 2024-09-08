@@ -52,8 +52,7 @@ def getSubCategoriesTotals(conn, curr,organizationid, ids,names,parentCategoryNa
    
     query = f"""
     SELECT
-        subcategoryid,
-        SUM(quanity) AS total_quantity,
+        subcategoryid,quanity
         COUNT(*) AS total_items
     FROM items
     WHERE subcategoryid IN ({subcategory_ids_placeholder}) AND organizationid ={'%s'}
@@ -73,17 +72,16 @@ def getSubCategoriesTotals(conn, curr,organizationid, ids,names,parentCategoryNa
     # Update counts with actual results
     for result in results:
         if result['subcategoryid'] in id_to_name:
-            counts[id_to_name[result['subcategoryid']]]['total_items'] = result['total_items']
-            counts[id_to_name[result['subcategoryid']]]['total_quantity'] = result['total_quantity']
-            totalAMount += result['total_items']
+            counts[id_to_name[result['subcategoryid']]] = result['total_items']
+            totalAMount+=result['total_items']
+            totalUnique+=result['quanity']
         else:
             print(f"Warning: subcategoryid {result['subcategoryid']} not found in provided IDs")
 
     return {
         "Category":parentCategoryName,
        "Subcategories":  json.dumps(counts),
-        "totalAMount": totalAMount,
-        "totalUniqueItems": totalUnique
+        "totalAMount": totalAMount
     }
 
 

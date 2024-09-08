@@ -53,7 +53,7 @@ def getSubCategoriesTotals(conn, curr,organizationid, ids,names,parentCategoryNa
     query = f"""
     SELECT
         subcategoryid,
-        SUM(quanity) AS total_quantity,
+        SUM(quantity) AS total_quantity,
         COUNT(*) AS total_items
     FROM items
     WHERE subcategoryid IN ({subcategory_ids_placeholder}) AND organizationid ={'%s'}
