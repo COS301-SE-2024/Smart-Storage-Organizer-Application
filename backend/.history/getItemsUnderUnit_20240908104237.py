@@ -21,18 +21,31 @@ def get_db_connection():
          )
     return con
 def get_all_units(conn,curr,body):
+    list_of_lists = []
+    for json_obj in body['subcategory']:
+        list_of_lists.append(list(json_obj.values()))
+    ids = [item[0] for item in list_of_lists]
+    names = [item[1] for item in list_of_lists]
 
-    query ="SELECT id, categoryname FROM category WHERE (organizationid =%s OR organizationid=0) AND parentcategory =%s"
-    parameters=(body['organizationid'],body['parentcategory'])
-    curr.execute(query,parameters)
+    print("IDs:", ids)
+    print("Names:", names)
+    subcategory_ids_placeholder = ', '.join(['%s'] * len(ids))
+    query = f"""
+    SELECT subcategoryid,
+        COUNT(*) AS total_items
+    FROM items
+    WHERE subcategoryid IN ({subcategory_ids_placeholder})
+    GROUP BY subcategoryid;
+    """
+    curr.execute(query, ids)
     conn.commit()
     results = curr.fetchall()
     print(results)
     if results:
-        
+        counts = {result['subcategoryid']: result['total_items'] for result in results}
         return {
         'statusCode': 200,
-        'body': json.dumps(results)
+        'body': json.dumps(counts)
         }
     else:
         return {
@@ -60,5 +73,5 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={'body': {'organizationid': 1, 'parentcategory': 9}}
+event={'body': {'organizationid': 1, 'subcategory': [{'id': 11, 'name': 'subcategory1'}, {'id': 14, 'name': 'subcategory2'}]}}
 print(lambda_handler(event, None))

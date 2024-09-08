@@ -4,15 +4,10 @@ from psycopg2.extras import RealDictCursor
 
 def get_db_connection():
     con = psycopg2.connect(
-        # host="localhost",
-        # database="your_database",
-        # user="your_user",
-        # password="your_password"
-
-        host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
-        database="postgres",
-        user="MasterUser",
-        password="MasterDb#ss1"
+        host="localhost",
+        database="your_database",
+        user="your_user",
+        password="your_password"
     )
     return con
 
@@ -73,5 +68,5 @@ def lambda_handler(event, context):
     return response
 
 # Example event
-event = {'body': {'organizationid': 1, 'subcategory': [{"id": 56, "categoryname": "TV, Audio & Media"}, {"id": 57, "categoryname": "Cellphones"}, {"id": 58, "categoryname": "Laptops"}, {"id": 59, "categoryname": "Wearable Tech"}, {"id": 60, "categoryname": "Computers"}, {"id": 61, "categoryname": "Monitor"}, {"id": 62, "categoryname": "Tablets"}, {"id": 63, "categoryname": "Camera"}, {"id": 64, "categoryname": "Others"}]}}
+event = {'body': {'organizationid': 1, 'subcategory': [{"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}, {"id": 3, "categoryname": "Home & Appliances"}, {"id": 4, "categoryname": "Baby & Toddler"}, {"id": 5, "categoryname": "Automative & DIY"}, {"id": 6, "categoryname": "Beauty"}, {"id": 7, "categoryname": "Books"}, {"id": 8, "categoryname": "Clothing, Shoes, Accessories"}, {"id": 9, "categoryname": "Electronics"}, {"id": 10, "categoryname": "Sport & Training"}]}}
 print(lambda_handler(event, None))

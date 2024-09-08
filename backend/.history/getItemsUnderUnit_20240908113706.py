@@ -73,5 +73,5 @@ def lambda_handler(event, context):
     return response
 
 # Example event
-event = {'body': {'organizationid': 1, 'subcategory': [{"id": 56, "categoryname": "TV, Audio & Media"}, {"id": 57, "categoryname": "Cellphones"}, {"id": 58, "categoryname": "Laptops"}, {"id": 59, "categoryname": "Wearable Tech"}, {"id": 60, "categoryname": "Computers"}, {"id": 61, "categoryname": "Monitor"}, {"id": 62, "categoryname": "Tablets"}, {"id": 63, "categoryname": "Camera"}, {"id": 64, "categoryname": "Others"}]}}
+event = {'body': {'organizationid': 1, 'subcategory': [{"id": 40, "categoryname": "Men Grooming"}, {"id": 41, "categoryname": "Hair Care"}, {"id": 42, "categoryname": "Makeup"}, {"id": 43, "categoryname": "Woman Essentials"}, {"id": 44, "categoryname": "Others"}]}}
 print(lambda_handler(event, None))

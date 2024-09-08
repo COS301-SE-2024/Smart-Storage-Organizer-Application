@@ -22,7 +22,7 @@ def get_db_connection():
     return con
 def get_all_units(conn,curr,body):
 
-    query ="SELECT id, categoryname FROM category WHERE (organizationid =%s OR organizationid=0) AND parentcategory =%s"
+    query ="SELECT id, categoryname FROM category WHERE organizationid =%s AND parentcategory =%s"
     parameters=(body['organizationid'],body['parentcategory'])
     curr.execute(query,parameters)
     conn.commit()

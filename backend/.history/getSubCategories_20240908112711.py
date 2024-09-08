@@ -60,5 +60,5 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={'body': {'organizationid': 1, 'parentcategory': 9}}
+event={'body': {'organizationid': 0, 'parentcategory': 0}}
 print(lambda_handler(event, None))
