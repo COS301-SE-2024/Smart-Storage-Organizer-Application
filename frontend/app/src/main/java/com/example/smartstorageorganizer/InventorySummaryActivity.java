@@ -30,6 +30,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
+import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -70,7 +71,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
     List<ItemModel> originalItemList; // Store the original unfiltered list
     private MyAmplifyApp app;
     private TextView quantityOfItems, uniqueItems;
-
+    private List<CategoryReportModel> categoryReportModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,8 @@ public class InventorySummaryActivity extends AppCompatActivity {
             return insets;
         });
 
+        categoryReportModelList = new ArrayList<>();
+
         uniqueItems = findViewById(R.id.uniqueItems);
         quantityOfItems = findViewById(R.id.quantityOfItems);
         dateFilterSpinner = findViewById(R.id.dateFilterSpinner);
@@ -90,7 +93,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
         app = (MyAmplifyApp) getApplicationContext();
         originalItemList = new ArrayList<>();
 
-        parentCategoryPieChart();
+//        parentCategoryPieChart();
         subcategoryPieChart();
         colorCodingBarGraph();
 
@@ -106,6 +109,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
 //        populateTable(items);
         fetchItems();
+        fetchCategoryStats();
 
         Button generatePdfButton = findViewById(R.id.btnGeneratePdf);
         generatePdfButton.setOnClickListener(new View.OnClickListener() {
@@ -141,13 +145,15 @@ public class InventorySummaryActivity extends AppCompatActivity {
         });
     }
 
-    private void parentCategoryPieChart(){
+    private void parentCategoryPieChart() {
         parentCategoriesPieChart = findViewById(R.id.pieChart);
 
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(30f, "Electronics"));
-        entries.add(new PieEntry(20f, "All Automotive"));
-        entries.add(new PieEntry(50f, "Health"));
+        for (CategoryReportModel categoryReport : categoryReportModelList) {
+            if (categoryReport.getTotalNumberOfItems() != 0) {
+                entries.add(new PieEntry((float) categoryReport.getPercentage(46.00), categoryReport.getParentCategory()));
+            }
+        }
 
         PieDataSet dataSet = new PieDataSet(entries, "Parent Categories");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -157,13 +163,12 @@ public class InventorySummaryActivity extends AppCompatActivity {
         data.setValueTextColor(Color.WHITE);
         parentCategoriesPieChart.setData(data);
 
-        parentCategoriesPieChart.setEntryLabelColor(Color.BLACK); // Change the label color to black
-//        pieChart.setEntryLabelTextSize(14f);
-
+        parentCategoriesPieChart.setDrawSliceText(false); // Hide the labels on the slices
         parentCategoriesPieChart.invalidate();
 
         parentCategoriesPieChart.getDescription().setEnabled(false);
     }
+
 
     private void subcategoryPieChart(){
         subCategoriesPieChart = findViewById(R.id.pieChartSubcategory);
@@ -471,6 +476,20 @@ public class InventorySummaryActivity extends AppCompatActivity {
         document.close();
     }
 
+    public void fetchCategoryStats() {
+        Utils.fetchCategoryStats(app.getOrganizationID(), this, new OperationCallback<List<CategoryReportModel>>() {
+            @Override
+            public void onSuccess(List<CategoryReportModel> result) {
+                categoryReportModelList.addAll(result);
+                parentCategoryPieChart();
+                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(InventorySummaryActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

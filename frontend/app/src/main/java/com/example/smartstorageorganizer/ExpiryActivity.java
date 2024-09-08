@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +16,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smartstorageorganizer.model.CategoryReportModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class ExpiryActivity extends AppCompatActivity {
 
@@ -24,6 +30,7 @@ public class ExpiryActivity extends AppCompatActivity {
     private ArrayList<String> dateRangeOptions;
     private ArrayAdapter<String> adapter;
     private String customRangeText = "";
+    private MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,9 @@ public class ExpiryActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        app = (MyAmplifyApp) getApplicationContext();
+
         // Initialize the spinner
         spinnerDateRange = findViewById(R.id.spinner_date_range);
 

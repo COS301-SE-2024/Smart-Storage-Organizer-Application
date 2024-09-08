@@ -114,6 +114,7 @@ android {
         buildConfigField("String", "FetchOrganization", "\"${localProperties["FetchOrganization"]}\"");
         buildConfigField("String", "FetchAllColours", "\"${localProperties["FetchAllColours"]}\"");
         buildConfigField("String", "increaseQuantity", "\"${localProperties["increaseQuantity"]}\"");
+        buildConfigField("String", "reports_getTotalItemsUnderAllParentCategories", "\"${localProperties["reports_getTotalItemsUnderAllParentCategories"]}\"");
 
 
 

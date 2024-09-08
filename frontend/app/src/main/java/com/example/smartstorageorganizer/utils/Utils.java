@@ -24,8 +24,10 @@ import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.SubcategoryReportModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
 import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.model.unitModel;
@@ -36,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -1888,7 +1891,7 @@ public class Utils
         });
     }
 
-    public static void fetchCategoryStats(String organizationid, Activity activity, OperationCallback<Boolean> callback)
+    public static void fetchCategoryStats(String organizationid, Activity activity, OperationCallback<List<CategoryReportModel>> callback)
     {
         String json = "{"
                 + "\"body\": {"
@@ -1897,11 +1900,11 @@ public class Utils
                 + "}";
 
 
-        List<ItemModel> itemModelList = new ArrayList<>();
+        List<CategoryReportModel> categoriesModelList = new ArrayList<>();
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.GetItemsUnderUnit;
+        String API_URL = BuildConfig.reports_getTotalItemsUnderAllParentCategories;
         RequestBody body = RequestBody.create(json, JSON);
 
         TokenManager.getToken().thenAccept(results-> {
@@ -1916,7 +1919,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed", e);
+                        Log.e("View Response Results Body Array", "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1925,39 +1928,63 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
 
-//                            for (int i = 0; i < bodyArray.length(); i++) {
-//                                JSONObject itemObject = bodyArray.getJSONObject(i);
-//
-//                                ItemModel item = new ItemModel();
-//                                item.setItemId(itemObject.getString("item_id"));
-//                                item.setItemName(itemObject.getString("item_name"));
-//                                item.setDescription(itemObject.getString("description"));
-//                                item.setColourCoding(itemObject.getString("colour_coding"));
-//                                item.setBarcode(itemObject.getString("barcode"));
-//                                item.setQrcode(itemObject.getString("qrcode"));
-//                                item.setQuantity(itemObject.getString("quanity"));
-//                                item.setLocation(itemObject.getString("location"));
-//                                item.setEmail(itemObject.getString("email"));
-//                                item.setItemImage(itemObject.getString("item_image"));
-//                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-//                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
-////                            item.setCreatedAt(itemObject.getString("created_at"));
-//
-//                                itemModelList.add(item);
-//                            }
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject categoryObject = bodyArray.getJSONObject(i);
 
-                            activity.runOnUiThread(() -> callback.onSuccess(true));
+                                CategoryReportModel category = new CategoryReportModel();
+                                category.setParentCategory(categoryObject.getString("Category"));
+                                category.setTotalNumberOfItems(Double.parseDouble(categoryObject.getString("totalAMount")));
+                                if(categoryObject.getString("Subcategories").equals("No subcategories")){
+                                    List<SubcategoryReportModel> subcategory = new ArrayList<>();
+                                    category.setSubCategories(subcategory);
+                                }
+                                else {
+                                    String subcategories = categoryObject.getString("Subcategories");
+                                    JSONObject subcategoryObject = new JSONObject(subcategories);
+
+                                    // List to store the models
+                                    List<SubcategoryReportModel> modelList = new ArrayList<>();
+
+                                    // Iterate through the keys
+                                    Iterator<String> keys = subcategoryObject.keys();
+                                    while (keys.hasNext()) {
+                                        String key = keys.next();
+                                        int value = subcategoryObject.getInt(key);
+
+                                        // Create a new model instance
+                                        SubcategoryReportModel item = new SubcategoryReportModel();
+                                        item.setSubcategory(key);
+                                        item.setTotalNumberOfItems(value);
+
+                                        // Add the model to the list
+                                        modelList.add(item);
+                                    }
+                                    category.setSubCategories(modelList);
+
+                                    // Now you can use modelList as needed
+                                    for (SubcategoryReportModel model : modelList) {
+                                        activity.runOnUiThread(() -> {
+                                            Log.e("View Response Results Body Array", "Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems());
+                                        });
+//                                        System.out.println("Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems());
+                                    }
+                                }
+//
+                                categoriesModelList.add(category);
+                            }
+
+                            activity.runOnUiThread(() -> callback.onSuccess(categoriesModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e(message, "View Response Results Body Array" + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
