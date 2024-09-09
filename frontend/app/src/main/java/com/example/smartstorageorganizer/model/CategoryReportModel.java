@@ -42,4 +42,12 @@ public class CategoryReportModel {
     public void setTotalNumberOfItems(double totalNumberOfItems) {
         this.totalNumberOfItems = totalNumberOfItems;
     }
+
+    public double getTotalQuantity(){
+        double total = 0;
+        for(SubcategoryReportModel subcategory: subCategories){
+            total += subcategory.getTotalQuantity();
+        }
+        return total;
+    }
 }

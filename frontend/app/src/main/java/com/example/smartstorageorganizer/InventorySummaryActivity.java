@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +32,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
+import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SubcategoryReportModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -65,7 +69,8 @@ import java.util.concurrent.TimeUnit;
 public class InventorySummaryActivity extends AppCompatActivity {
     private PieChart parentCategoriesPieChart;
     private PieChart subCategoriesPieChart;
-    private BarChart colorCodingBarGraph;
+    private HorizontalBarChart categoriesBarGraph;
+    private HorizontalBarChart parentCategoriesgroupedBarChart;
     private ImageView arrow;
     private TableLayout itemsListTable;
     private static final int PAGE_SIZE = 1000;
@@ -75,6 +80,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
     private MyAmplifyApp app;
     private TextView quantityOfItems, uniqueItems;
     private List<CategoryReportModel> categoryReportModelList;
+    private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
     private ArrayAdapter<String> adapter;
 
@@ -91,31 +97,26 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
         categoryReportModelList = new ArrayList<>();
         parentCategories = new ArrayList<>();
+        categoryModelList = new ArrayList<>();
 
         uniqueItems = findViewById(R.id.uniqueItems);
         quantityOfItems = findViewById(R.id.quantityOfItems);
         dateFilterSpinner = findViewById(R.id.dateFilterSpinner);
+        parentCategoriesgroupedBarChart = findViewById(R.id.parentCategoriesgroupedBarChart);
 
         app = (MyAmplifyApp) getApplicationContext();
         originalItemList = new ArrayList<>();
 
-//        parentCategoryPieChart();
-//        subcategoryPieChart();
-        colorCodingBarGraph();
-
         arrow = findViewById(R.id.arrow);
         itemsListTable = findViewById(R.id.itemsListTable);
 
-        // Get the parent layout (RelativeLayout or CardView) and set LayoutTransition
-        RelativeLayout parentLayout = findViewById(R.id.parentLayout); // Replace with the correct ID
+        RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         LayoutTransition layoutTransition = new LayoutTransition();
         parentLayout.setLayoutTransition(layoutTransition);
 
-//        List<ItemModel> items = fetchItems();
-
-//        populateTable(items);
         fetchItems();
         fetchCategoryStats();
+//        fetchAllCategories();
 
         Button generatePdfButton = findViewById(R.id.btnGeneratePdf);
         generatePdfButton.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +208,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
     private void subcategoryPieChart(){
         subCategoriesPieChart = findViewById(R.id.pieChartSubcategory);
+        categoriesBarGraph = findViewById(R.id.groupedBarChart);
         Spinner categorySpinner = findViewById(R.id.categorySpinner);
 
         for(CategoryReportModel categoryReport: categoryReportModelList) {
@@ -222,7 +224,9 @@ public class InventorySummaryActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCategory = parent.getItemAtPosition(position).toString();
-                updatePieChart(selectedCategory); // Update pie chart based on the selected category
+                // Update pie and bar chart based on the selected category
+                updatePieChart(selectedCategory);
+                categoriesBarGraph(selectedCategory);
             }
 
             @Override
@@ -252,7 +256,7 @@ public class InventorySummaryActivity extends AppCompatActivity {
             }
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, category + " Subcategories");
+        PieDataSet dataSet = new PieDataSet(entries, "("+category + " Subcategories)");
 
         // Define a custom color array
         ArrayList<Integer> colors = new ArrayList<>();
@@ -306,31 +310,137 @@ public class InventorySummaryActivity extends AppCompatActivity {
     }
 
 
-    private void colorCodingBarGraph(){
-        colorCodingBarGraph = findViewById(R.id.barChart);
+    private void categoriesBarGraph(String category) {
+        List<BarEntry> entriesGroup1 = new ArrayList<>();
+        CategoryReportModel categoryReportModel = getSubcategories(category);
+        int i = 0;
+        for (SubcategoryReportModel subcategoryReport : categoryReportModel.getSubCategories()) {
+            if (subcategoryReport.getTotalNumberOfItems() != 0) {
+                entriesGroup1.add(new BarEntry(i, (float) subcategoryReport.getTotalNumberOfItems()));
+                i++;
+            }
+        }
 
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1f, 30f));
-        entries.add(new BarEntry(2f, 20f));
-        entries.add(new BarEntry(3f, 50f));
+        List<BarEntry> entriesGroup2 = new ArrayList<>();
+        int j = 0;
+        for (SubcategoryReportModel subcategoryReport : categoryReportModel.getSubCategories()) {
+            if (subcategoryReport.getTotalNumberOfItems() != 0) {
+                entriesGroup2.add(new BarEntry(j, (float) subcategoryReport.getTotalQuantity()));
+                j++;
+            }
+        }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Color Codes");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        BarDataSet set1 = new BarDataSet(entriesGroup1, "Unique Items");
+        set1.setColor(Color.BLUE);
 
-        BarData data = new BarData(dataSet);
-        colorCodingBarGraph.setData(data);
+        BarDataSet set2 = new BarDataSet(entriesGroup2, "Total Quantity");
+        set2.setColor(Color.RED);
 
-// Create a list of labels for the X-axis
-        final String[] labels = new String[]{"Category 1", "Category 2", "Category 3"};
+        BarData data = new BarData(set1, set2);
 
-// Set the labels to the X-axis
-        XAxis xAxis = colorCodingBarGraph.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setGranularity(1f); // Set the granularity to 1 to show each label
-        xAxis.setGranularityEnabled(true);
+        float groupSpace = 0.1f;
+        float barSpace = 0.05f;
+        float barWidth = 0.4f;
+        data.setBarWidth(barWidth);
 
-        colorCodingBarGraph.invalidate(); // Refresh the chart
-        colorCodingBarGraph.getDescription().setEnabled(false);
+        categoriesBarGraph.setData(data);
+
+        XAxis xAxis = categoriesBarGraph.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setCenterAxisLabels(true);
+
+        List<SubcategoryReportModel> subcategoryList = categoryReportModel.getSubCategories();
+        String[] subcategoryNames = new String[i];
+
+        int k = 0;
+        for (int n = 0; n < subcategoryList.size(); n++) {
+            if(subcategoryList.get(n).getTotalNumberOfItems() != 0){
+                subcategoryNames[k] = subcategoryList.get(n).getSubcategory();
+                k += 1;
+            }
+        }
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(subcategoryNames));
+        YAxis leftAxis = categoriesBarGraph.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawGridLines(false);
+
+        categoriesBarGraph.getAxisRight().setEnabled(false);
+        categoriesBarGraph.groupBars(0f, groupSpace, barSpace);
+        categoriesBarGraph.getXAxis().setAxisMinimum(0f);
+        categoriesBarGraph.getXAxis().setAxisMaximum(categoriesBarGraph.getBarData().getGroupWidth(groupSpace, barSpace) * i);
+
+        categoriesBarGraph.setScaleEnabled(true);
+        categoriesBarGraph.getDescription().setEnabled(false);
+        categoriesBarGraph.invalidate();
+    }
+
+    private void parentCategoriesBarGraph() {
+        List<BarEntry> entriesGroup1 = new ArrayList<>();
+        int i = 0;
+        for (CategoryReportModel categoryReport : categoryReportModelList) {
+            if (categoryReport.getTotalNumberOfItems() != 0) {
+                entriesGroup1.add(new BarEntry(i, (float) categoryReport.getTotalNumberOfItems()));
+                i++;
+            }
+        }
+
+        List<BarEntry> entriesGroup2 = new ArrayList<>();
+        int j = 0;
+        for (CategoryReportModel categoryReport : categoryReportModelList) {
+            if (categoryReport.getTotalNumberOfItems() != 0) {
+                entriesGroup2.add(new BarEntry(j, (float) categoryReport.getTotalQuantity()));
+                j++;
+            }
+        }
+
+        BarDataSet set1 = new BarDataSet(entriesGroup1, "Unique Items");
+        set1.setColor(Color.BLUE);
+
+        BarDataSet set2 = new BarDataSet(entriesGroup2, "Total Quantity");
+        set2.setColor(Color.RED);
+
+        BarData data = new BarData(set1, set2);
+
+        float groupSpace = 0.1f;
+        float barSpace = 0.05f;
+        float barWidth = 0.4f;
+        data.setBarWidth(barWidth);
+
+        parentCategoriesgroupedBarChart.setData(data);
+
+        XAxis xAxis = parentCategoriesgroupedBarChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setCenterAxisLabels(true);
+
+//        List<SubcategoryReportModel> subcategoryList = categoryReportModel.getSubCategories();
+        String[] subcategoryNames = new String[i];
+
+        int k = 0;
+        for (int n = 0; n < categoryReportModelList.size(); n++) {
+            if(categoryReportModelList.get(n).getTotalNumberOfItems() != 0){
+                subcategoryNames[k] = categoryReportModelList.get(n).getParentCategory();
+                k += 1;
+            }
+        }
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(subcategoryNames));
+        YAxis leftAxis = parentCategoriesgroupedBarChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawGridLines(false);
+
+        parentCategoriesgroupedBarChart.getAxisRight().setEnabled(false);
+        parentCategoriesgroupedBarChart.groupBars(0f, groupSpace, barSpace);
+        parentCategoriesgroupedBarChart.getXAxis().setAxisMinimum(0f);
+        parentCategoriesgroupedBarChart.getXAxis().setAxisMaximum(parentCategoriesgroupedBarChart.getBarData().getGroupWidth(groupSpace, barSpace) * i);
+
+        parentCategoriesgroupedBarChart.setScaleEnabled(true);
+        parentCategoriesgroupedBarChart.getDescription().setEnabled(false);
+        parentCategoriesgroupedBarChart.invalidate();
     }
 
     private void rotateArrow(ImageView arrow, float fromDegree, float toDegree) {
@@ -395,7 +505,12 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
             TextView categoryTextView = new TextView(this);
             categoryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
-            categoryTextView.setText(item.getParentCategoryId());
+            if(Objects.equals(item.getParentCategoryName(), "")){
+                categoryTextView.setText("Uncategorized");
+            }
+            else {
+                categoryTextView.setText(item.getParentCategoryName()+" - "+item.getSubcategoryName());
+            }
             categoryTextView.setGravity(Gravity.CENTER);
             categoryTextView.setPadding(10, 10, 10, 10);
             categoryTextView.setTextSize(12);
@@ -424,10 +539,9 @@ public class InventorySummaryActivity extends AppCompatActivity {
             public void onSuccess(List<ItemModel> result) {
                 originalItemList.clear();
                 originalItemList.addAll(result);
-                String selectedRange = dateFilterSpinner.getSelectedItem().toString();
-                filterItemsByDate(selectedRange);
+                fetchAllCategories();
 //                populateTable(originalItemList);
-                Toast.makeText(InventorySummaryActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(InventorySummaryActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -443,11 +557,9 @@ public class InventorySummaryActivity extends AppCompatActivity {
 
         for (ItemModel item : originalItemList) {
             try {
-                // Convert the createdAt string to a Date object
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                Date itemDate = sdf.parse(item.getCreatedAt().split("\\.")[0]); // Ignore the fractional seconds
+                Date itemDate = sdf.parse(item.getCreatedAt().split("\\.")[0]);
 
-                // Calculate date range based on selected filter
                 switch (selectedRange) {
                     case "Last 30 Days":
                         if (isWithinDays(itemDate, now, 30)) filteredItems.add(item);
@@ -467,7 +579,6 @@ public class InventorySummaryActivity extends AppCompatActivity {
             }
         }
 
-        // Update the table with the filtered list
         populateTable(filteredItems);
         uniqueItems.setText(String.valueOf(filteredItems.size()));
         int quantitySize = 0;
@@ -484,18 +595,14 @@ public class InventorySummaryActivity extends AppCompatActivity {
     }
 
     private void createPdf() {
-        // Get the ScrollView content
         ScrollView scrollView = findViewById(R.id.mainScrollview);
-        LinearLayout contentLayout = (LinearLayout) scrollView.getChildAt(0); // The child of the ScrollView
+        LinearLayout contentLayout = (LinearLayout) scrollView.getChildAt(0);
 
-        // Create a PdfDocument object
         PdfDocument document = new PdfDocument();
 
-        // Define page size (A4 size in points: 595x842)
-        int pageHeight = 842; // Height for A4 page in points
-        int pageWidth = 595;  // Width for A4 page in points
+        int pageHeight = 842;
+        int pageWidth = 595;
 
-        // Measure the total height and width of the content
         contentLayout.measure(
                 View.MeasureSpec.makeMeasureSpec(scrollView.getWidth(), View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -503,51 +610,38 @@ public class InventorySummaryActivity extends AppCompatActivity {
         int contentHeight = contentLayout.getMeasuredHeight();
         int contentWidth = contentLayout.getMeasuredWidth();
 
-        // Scale factor to fit the content width to the page width
         float scaleFactor = (float) pageWidth / contentWidth;
 
-        // Calculate the scaled content height
         int scaledContentHeight = (int) (contentHeight * scaleFactor);
 
-        // Calculate the number of pages needed
         int totalPages = (int) Math.ceil((float) scaledContentHeight / pageHeight);
 
         for (int i = 0; i < totalPages; i++) {
-            // Create page info for each page
             PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, i + 1).create();
             PdfDocument.Page page = document.startPage(pageInfo);
 
             Canvas canvas = page.getCanvas();
 
-            // Calculate the top position of the content to draw
             int translateY = -i * pageHeight;
 
-            // Apply scaling to the canvas
             canvas.scale(scaleFactor, scaleFactor);
 
-            // Translate the canvas vertically to the correct portion of the content
             canvas.translate(0, translateY / scaleFactor);
 
-            // Draw the content onto the scaled canvas
             contentLayout.draw(canvas);
 
-            // Finish the page
             document.finishPage(page);
         }
 
-        // Define the output file location
         File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "inventory_summary.pdf");
 
         try {
-            // Write the document content to the file
             document.writeTo(new FileOutputStream(pdfFile));
             Toast.makeText(this, "PDF saved to: " + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-        // Close the document
         document.close();
     }
 
@@ -557,8 +651,9 @@ public class InventorySummaryActivity extends AppCompatActivity {
             public void onSuccess(List<CategoryReportModel> result) {
                 categoryReportModelList.addAll(result);
                 parentCategoryPieChart();
+                parentCategoriesBarGraph();
                 subcategoryPieChart();
-                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -566,6 +661,38 @@ public class InventorySummaryActivity extends AppCompatActivity {
                 Toast.makeText(InventorySummaryActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void fetchAllCategories() {
+        Utils.fetchAllCategories(app.getOrganizationID(), this, new OperationCallback<List<CategoryModel>>() {
+            @Override
+            public void onSuccess(List<CategoryModel> result) {
+                categoryModelList.addAll(result);
+                for (ItemModel item: originalItemList){
+                    String parentCategoryName = getCategoryName(item.getParentCategoryId());
+                    String subCategoryName = getCategoryName(item.getSubCategoryId());
+                    item.setParentCategoryName(parentCategoryName);
+                    item.setSubcategoryName(subCategoryName);
+                }
+                String selectedRange = dateFilterSpinner.getSelectedItem().toString();
+                filterItemsByDate(selectedRange);
+                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(InventorySummaryActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getCategoryName(String categoryId) {
+        for(CategoryModel category: categoryModelList){
+            if(Objects.equals(category.getCategoryID(), categoryId)){
+                return category.getCategoryName();
+            }
+        }
+        return "";
     }
 
 }

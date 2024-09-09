@@ -14,6 +14,8 @@ public class ItemModel {
     private String createdAt;
     private String parentCategoryId;
     private String subCategoryId;
+    private String parentCategoryName;
+    private String subcategoryName;
 
     public ItemModel() {
 
@@ -138,4 +140,19 @@ public class ItemModel {
         this.subCategoryId = subCategoryId;
     }
 
+    public String getParentCategoryName() {
+        return parentCategoryName;
+    }
+
+    public void setParentCategoryName(String parentCategoryName) {
+        this.parentCategoryName = parentCategoryName;
+    }
+
+    public String getSubcategoryName() {
+        return subcategoryName;
+    }
+
+    public void setSubcategoryName(String subcategoryName) {
+        this.subcategoryName = subcategoryName;
+    }
 }

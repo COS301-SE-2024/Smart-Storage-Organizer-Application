@@ -1950,42 +1950,26 @@ public class Utils
                                     String subcategories = categoryObject.getString("Subcategories");
                                     JSONObject subcategoryObject = new JSONObject(subcategories);
 
-                                    // List to store the models
                                     List<SubcategoryReportModel> modelList = new ArrayList<>();
 
-// Iterate through the keys (subcategories)
                                     Iterator<String> keys = subcategoryObject.keys();
                                     while (keys.hasNext()) {
-                                        String key = keys.next(); // This is the subcategory name (e.g., "Braai & Barbecue")
+                                        String key = keys.next();
 
-                                        // Get the JSON object representing the "total_items" and "total_quantity" for the current subcategory
                                         JSONObject subcategoryDetails = subcategoryObject.getJSONObject(key);
 
-                                        // Extract the values for "total_items" and "total_quantity"
                                         int totalItems = subcategoryDetails.getInt("total_items");
                                         int totalQuantity = subcategoryDetails.getInt("total_quantity");
 
-                                        // Create a new model instance and set its fields
                                         SubcategoryReportModel item = new SubcategoryReportModel();
                                         item.setSubcategory(key);
                                         item.setTotalNumberOfItems(totalItems);
-                                        item.setTotalQuantity(totalQuantity); // Assuming you have a field for totalQuantity in your model
+                                        item.setTotalQuantity(totalQuantity);
 
-                                        // Add the model to the list
                                         modelList.add(item);
                                     }
-
-// Set the subcategories to the category object
                                     category.setSubCategories(modelList);
-
-// Now you can use the modelList as needed
-                                    for (SubcategoryReportModel model : modelList) {
-                                        activity.runOnUiThread(() -> {
-                                            Log.e("View Response Results Body Array", "Subcategory: " + model.getSubcategory() + ", Total Number of Items: " + model.getTotalNumberOfItems() + ", Total Quantity: " + model.getTotalQuantity());
-                                        });
-                                    }
                                 }
-//
                                 categoriesModelList.add(category);
                             }
 
@@ -1999,6 +1983,82 @@ public class Utils
                     } else {
                         activity.runOnUiThread(() -> {
 //                            Log.e(message, "GET request failed:" + response);
+                            callback.onFailure("Response code:" + response.code());
+                        });
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void fetchAllCategories(String organizationid, Activity activity, OperationCallback<List<CategoryModel>> callback)
+    {
+        String json = "{"
+                + "\"body\": {"
+                + "\"organizationid\": \"" + Integer.parseInt(organizationid) + "\""
+                + "}"
+                + "}";
+
+
+        List<CategoryModel> categoriesModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.GetAllCategories;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .addHeader("Authorization", results)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.e("View Response Results Body Array", "GET request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
+
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject categoryObject = bodyArray.getJSONObject(i);
+
+                                CategoryModel category = new CategoryModel();
+                                category.setCategoryID(categoryObject.getString("id"));
+                                category.setCategoryName(categoryObject.getString("categoryname"));
+
+                                categoriesModelList.add(category);
+                            }
+
+                            activity.runOnUiThread(() -> callback.onSuccess(categoriesModelList));
+                        } catch (JSONException e) {
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "View Response Results Body Array" + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "View Response Results Body Array" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
