@@ -2,7 +2,6 @@ import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-import requests
 
 con = None
 opensearch_endpoint = 'https://your-opensearch-domain.com'

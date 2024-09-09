@@ -35,9 +35,9 @@ def lambda_handler(event, context):
     roles = get_user_role(event['body']['username'])
     group_names = [roles['body']]  # Extract the role directly from the dictionary
     group = [group['GroupName'] for group in group_names[0]]
-
+   
     for roles in group:
-        if roles =='GuestUser' or  roles=='normalUser':
+        if roles =='GuestUser'or  roles=='NormalUser':
             return {
                 'statusCode': 404,
                 'body': "User is not authorized"
@@ -76,7 +76,10 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': filtered_users
     }
-   
+    return {
+        "statusCode": 403,
+        "body": 'User is not a Manager'
+    }
 
 event={'body': {'username': 'musician.pianist23@gmail.com',
                 'Group':'Admin',

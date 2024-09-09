@@ -19,8 +19,9 @@ def get_user_role(username):
     
         return{
             "statusCode": 200,
-            "body":groups
-        
+            "body":{
+                "role": groups
+            }
         }
     except client.exceptions.ClientError as error:
         return {
@@ -32,17 +33,10 @@ def get_user_role(username):
 def lambda_handler(event, context):
 
 
-    roles = get_user_role(event['body']['username'])
-    group_names = [roles['body']]  # Extract the role directly from the dictionary
-    group = [group['GroupName'] for group in group_names[0]]
+    roles=get_user_role(event['body']['username'])
+    print(roles)
+    #print(group_names)
 
-    for roles in group:
-        if roles =='GuestUser' or  roles=='normalUser':
-            return {
-                'statusCode': 404,
-                'body': "User is not authorized"
-            }
-        
     client=boto3.client('cognito-idp')
     try:
         response = client.list_users_in_group(
@@ -76,9 +70,12 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': filtered_users
     }
-   
+    return {
+        "statusCode": 403,
+        "body": 'User is not a Manager'
+    }
 
-event={'body': {'username': 'musician.pianist23@gmail.com',
+event={'body': {'username': 'zhouvel7@gmail.com',
                 'Group':'Admin',
                 'organization_id': 'Makro'}}
 context={}

@@ -35,7 +35,7 @@ def lambda_handler(event, context):
     roles = get_user_role(event['body']['username'])
     group_names = [roles['body']]  # Extract the role directly from the dictionary
     group = [group['GroupName'] for group in group_names[0]]
-
+    print(group)
     for roles in group:
         if roles =='GuestUser' or  roles=='normalUser':
             return {

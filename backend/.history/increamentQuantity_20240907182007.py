@@ -2,12 +2,8 @@ import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-import requests
 
 con = None
-opensearch_endpoint = 'https://your-opensearch-domain.com'
-index_name = 'your-index-name'
-document_id = 'your-document-id'
 def get_db_connection():
     global con
     if con is None or con.closed:
@@ -34,31 +30,6 @@ def lambda_handler(event, context):
 
     try:
         response=increment_quantity(conn,curr,event)
-        opensearch_endpoint = 'https://your-opensearch-domain.com'
-        index_name = 'your-index-name'
-        document_id = 'your-document-id'
-
-# Data to update
-        update_data = {
-            "doc": {
-                "field_to_update": "new_value",
-                "another_field_to_update": "another_new_value"
-            }
-        }
-
-# Construct the URL for the update request
-        url = f"{opensearch_endpoint}/{index_name}/_update/{document_id}"
-
-# Send the update request
-        response = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(update_data))
-
-# Check the response
-        if response.status_code == 200:
-            print("Document updated successfully")
-        else:
-            print(f"Failed to update document: {response.status_code}")
-        print(response.text)
-        
     except Exception as e:
       conn.rollback()
       return {

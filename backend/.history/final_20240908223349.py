@@ -52,7 +52,7 @@ def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategor
     query = f"""
     SELECT
         subcategoryid,
-        SUM(quanity) AS total_quantity,
+        SUM(quantity) AS total_quantity,
         COUNT(*) AS total_items
     FROM items
     WHERE subcategoryid IN ({subcategory_ids_placeholder}) AND organizationid = %s
@@ -78,11 +78,9 @@ def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategor
             print(f"Warning: subcategoryid {result['subcategoryid']} not found in provided IDs")
 
     return {
-        "Category":parentCategoryName,
-       "Subcategories":  json.dumps(counts),
-        "totalAMount": totalAMount,  # Ensure the key is a string
+        parentCategoryName: json.dumps(counts),
+        "totalAMount": totalAMount  # Ensure the key is a string
     }
-
 
 
 def lambda_handler(event, context):

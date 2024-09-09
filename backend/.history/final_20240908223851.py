@@ -46,7 +46,8 @@ def getSubCategories(conn,curr,organizationid,parentcategoryIds):
     results = curr.fetchall()
     return json.dumps(results)
 
-def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategoryName):
+def getSubCategoriesTotals(conn, curr,organizationid, ids,names,parentCategoryName):
+   
     subcategory_ids_placeholder = ', '.join(['%s'] * len(ids))
    
     query = f"""
@@ -55,7 +56,7 @@ def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategor
         SUM(quanity) AS total_quantity,
         COUNT(*) AS total_items
     FROM items
-    WHERE subcategoryid IN ({subcategory_ids_placeholder}) AND organizationid = %s
+    WHERE subcategoryid IN ({subcategory_ids_placeholder}) AND organizationid ={'%s'}
     GROUP BY subcategoryid;
     """
     params = ids + [organizationid]
@@ -63,11 +64,12 @@ def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategor
     conn.commit()
     results = curr.fetchall()
   
+
     # Initialize counts with zeros
     id_to_name = dict(zip(ids, names))
-    counts = {name: {'total_items': 0, 'total_quantity': 0} for name in names}
-    totalAMount = 0
-
+    counts = {name: 0 for name in names}
+    totalAMount=0
+    totalUnique=0
     # Update counts with actual results
     for result in results:
         if result['subcategoryid'] in id_to_name:
@@ -80,9 +82,9 @@ def getSubCategoriesTotals(conn, curr, organizationid, ids, names, parentCategor
     return {
         "Category":parentCategoryName,
        "Subcategories":  json.dumps(counts),
-        "totalAMount": totalAMount,  # Ensure the key is a string
+        "totalAMount": totalAMount,
+        "totalUniqueItems": totalUnique
     }
-
 
 
 def lambda_handler(event, context):
