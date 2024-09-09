@@ -1,0 +1,102 @@
+Metadata-Version: 2.1
+Name: opensearch-dsl
+Version: 2.1.0
+Summary: Python client for OpenSearch
+Home-page: https://github.com/opensearch-project/opensearch-dsl-py
+Author: Honza Král, Guian Gumpac
+Author-email: honza.kral@gmail.com, guiang@bitquilltech.com
+Maintainer: Charlene Solonynka, Yury Fridlyand, Guian Gumpac
+Maintainer-email: charlenes@bitquilltech.com, yuryf@bitquilltech.com, guiang@bitquilltech.com
+License: Apache-2.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+License-File: NOTICE.txt
+License-File: AUTHORS
+Requires-Dist: six
+Requires-Dist: python-dateutil
+Requires-Dist: opensearch-py (>=2.2.0)
+Requires-Dist: ipaddress ; python_version < "3.3"
+Provides-Extra: develop
+Requires-Dist: mock ; extra == 'develop'
+Requires-Dist: pytest (>=3.0.0) ; extra == 'develop'
+Requires-Dist: pytest-cov ; extra == 'develop'
+Requires-Dist: pytest-mock (<4.0.0) ; extra == 'develop'
+Requires-Dist: pytz ; extra == 'develop'
+Requires-Dist: coverage (<7.0.0) ; extra == 'develop'
+Requires-Dist: sphinx ; extra == 'develop'
+Requires-Dist: sphinx-rtd-theme ; extra == 'develop'
+
+[![CI](https://github.com/opensearch-project/opensearch-dsl-py/actions/workflows/ci.yml/badge.svg)](https://github.com/opensearch-project/opensearch-dsl-py/actions/workflows/ci.yml)
+[![Integration](https://github.com/opensearch-project/opensearch-dsl-py/actions/workflows/integration.yml/badge.svg)](https://github.com/opensearch-project/opensearch-dsl-py/actions/workflows/integration.yml)
+[![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://forum.opensearch.org/c/clients)
+![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
+
+![OpenSearch logo](https://github.com/opensearch-project/opensearch-dsl-py/raw/main/OpenSearch.svg)
+
+> **Warning**
+> 
+>The OpenSearch high-level Python client (opensearch-dsl-py) will be deprecated after version 2.1.0. We recommend switching to the OpenSearch Python client ([opensearch-py](https://github.com/opensearch-project/opensearch-py)), which now includes the functionality of opensearch-dsl-py.
+
+OpenSearch DSL Python Client
+
+- [Welcome!](https://github.com/opensearch-project/opensearch-dsl-py#welcome)
+- [Getting Started](https://github.com/opensearch-project/opensearch-dsl-py#getting-started)
+- [Compatibility with OpenSearch](https://github.com/opensearch-project/opensearch-dsl-py#compatibility-with-opensearch)
+- [Project Resources](https://github.com/opensearch-project/opensearch-dsl-py#project-resources)
+- [Code of Conduct](https://github.com/opensearch-project/opensearch-dsl-py#code-of-conduct)
+- [License](https://github.com/opensearch-project/opensearch-dsl-py#license)
+- [Copyright](https://github.com/opensearch-project/opensearch-dsl-py#copyright)
+
+## Welcome!
+
+**opensearch-dsl-py** is [a community-driven, open source fork](https://aws.amazon.com/blogs/opensource/introducing-opensearch/) of elasticsearch-dsl-py licensed under the [Apache v2.0 License](LICENSE.txt). It is a Python client specifically used for build and running queries against OpenSearch built on top of [`opensearch-py`](https://github.com/opensearch-project/opensearch-py). For more information, see [opensearch.org](https://opensearch.org/).
+
+## Getting Started
+
+To get started with the OpenSearch DSL Python Client, see [USER GUIDE](USER_GUIDE.md).
+
+## Compatibility with OpenSearch
+
+See [COMPATIBILITY](COMPATIBILITY.md).
+
+## Project Resources
+
+* [Project Website](https://opensearch.org/)
+* [Downloads](https://opensearch.org/downloads.html).
+* [Documentation](https://opensearch.org/docs/)
+* Need help? Try [Forums](https://forum.opensearch.org/)
+* [Project Principles](https://opensearch.org/#principles)
+* [Contributing to OpenSearch](CONTRIBUTING.md)
+* [Maintainer Responsibilities](MAINTAINERS.md)
+* [Release Management](RELEASING.md)
+* [Admin Responsibilities](ADMINS.md)
+* [Security](SECURITY.md)
+
+## Code of Conduct
+
+This project has adopted the [Amazon Open Source Code of Conduct](CODE_OF_CONDUCT.md). For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq), or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
+
+## License
+
+This project is licensed under the [Apache v2.0 License](LICENSE.txt).
+
+## Copyright
+
+Copyright OpenSearch Contributors. See [NOTICE](NOTICE.txt) for details.
