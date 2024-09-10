@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer;
 
 import android.animation.LayoutTransition;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -48,7 +49,9 @@ public class LowStockActivity extends AppCompatActivity {
     private Button confirmButton;
     private int selectedNumber;
     private ImageView arrow;
+    private ImageView indicatorArrow;
     private TableLayout itemsListTable;
+    private TableLayout indicatorItemsListTable;
     private static final int PAGE_SIZE = 1000;
     private int currentPage = 1;
     List<ItemModel> originalItemList; // Store the original unfiltered list
@@ -80,7 +83,9 @@ public class LowStockActivity extends AppCompatActivity {
         originalItemList = new ArrayList<>();
 
         arrow = findViewById(R.id.arrow);
+        indicatorArrow = findViewById(R.id.indicatorArrow);
         itemsListTable = findViewById(R.id.itemsListTable);
+        indicatorItemsListTable = findViewById(R.id.indicatorItemsListTable);
 
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         LayoutTransition layoutTransition = new LayoutTransition();
@@ -96,13 +101,27 @@ public class LowStockActivity extends AppCompatActivity {
             }
         });
 
+        RelativeLayout parentLayoutIndicator = findViewById(R.id.parentLayoutIndicator);
+        LayoutTransition layoutTransitionIndicator = new LayoutTransition();
+        parentLayoutIndicator.setLayoutTransition(layoutTransitionIndicator);
+
+        findViewById(R.id.cardViewIndicator).setOnClickListener(v -> {
+            if (indicatorItemsListTable.getVisibility() == View.VISIBLE) {
+                indicatorItemsListTable.setVisibility(View.GONE); // Collapse
+                rotateArrow(indicatorArrow, 180, 0);
+            } else {
+                indicatorItemsListTable.setVisibility(View.VISIBLE); // Expand
+                rotateArrow(indicatorArrow, 0, 180);
+            }
+        });
+
         confirmButton.setOnClickListener(v -> {
             String customNumberText = customNumberEditText.getText().toString();
 
             if (!customNumberText.isEmpty()) {
                 try {
                     selectedNumber = Integer.parseInt(customNumberText);
-                    populateTable(originalItemList);
+                    populateTable(originalItemList, "");
                     subcategoryPieChart();
                     Toast.makeText(LowStockActivity.this, "Custom number: " + selectedNumber, Toast.LENGTH_SHORT).show();
                 } catch (NumberFormatException e) {
@@ -152,7 +171,8 @@ public class LowStockActivity extends AppCompatActivity {
                     item.setParentCategoryName(parentCategoryName);
                     item.setSubcategoryName(subCategoryName);
                 }
-                populateTable(originalItemList);
+                populateTable(originalItemList, "");
+                populateTable(originalItemList, "indicator");
                 subcategoryPieChart();
 //                String selectedRange = dateFilterSpinner.getSelectedItem().toString();
 //                filterItemsByDate(selectedRange);
@@ -175,9 +195,14 @@ public class LowStockActivity extends AppCompatActivity {
         return "";
     }
 
-    private void populateTable(List<ItemModel> items) {
-        // Clear all rows from the table first
-        itemsListTable.removeAllViews();
+    private void populateTable(List<ItemModel> items, String type) {
+        if(Objects.equals(type, "indicator")){
+            indicatorItemsListTable.removeAllViews();
+        }
+        else {
+            // Clear all rows from the table first
+            itemsListTable.removeAllViews();
+        }
 
         // Add the header row first
         TableRow headerRow = new TableRow(this);
@@ -209,12 +234,23 @@ public class LowStockActivity extends AppCompatActivity {
         headerThresholdTextView.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TextView headerShortfallTextView = new TextView(this);
-        headerShortfallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
-        headerShortfallTextView.setText("Shortfall");
-        headerShortfallTextView.setTextColor(Color.WHITE);
-        headerShortfallTextView.setPadding(10, 10, 10, 10);
-        headerShortfallTextView.setTextSize(14);
-        headerShortfallTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        if(Objects.equals(type, "indicator")){
+            headerShortfallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+            headerShortfallTextView.setText("Status");
+            headerShortfallTextView.setTextColor(Color.WHITE);
+            headerShortfallTextView.setPadding(10, 10, 10, 10);
+            headerShortfallTextView.setTextSize(14);
+            headerShortfallTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
+        else {
+            headerShortfallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+            headerShortfallTextView.setText("Shortfall");
+            headerShortfallTextView.setTextColor(Color.WHITE);
+            headerShortfallTextView.setPadding(10, 10, 10, 10);
+            headerShortfallTextView.setTextSize(14);
+            headerShortfallTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
 
         // Add TextViews to the header row
         headerRow.addView(headerNameTextView);
@@ -222,51 +258,103 @@ public class LowStockActivity extends AppCompatActivity {
         headerRow.addView(headerThresholdTextView);
         headerRow.addView(headerShortfallTextView);
 
-        // Add the header row to the table
-        itemsListTable.addView(headerRow);
+        if(Objects.equals(type, "indicator")){
+            // Add the header row to the table
+            indicatorItemsListTable.addView(headerRow);
+        }
+        else {
+            // Add the header row to the table
+            itemsListTable.addView(headerRow);
+        }
 
         // Add the item rows
         for (ItemModel item : items) {
-            if(Integer.parseInt(item.getQuantity()) < Integer.parseInt(customNumberEditText.getText().toString())){
-                TableRow row = new TableRow(this);
+            if(Objects.equals(type, "indicator")){
+                if(Integer.parseInt(item.getQuantity()) < 2){
+                    TableRow row = new TableRow(this);
 
-                TextView nameTextView = new TextView(this);
-                nameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
-                nameTextView.setText(item.getItemName());
-                nameTextView.setGravity(Gravity.CENTER);
-                nameTextView.setPadding(10, 10, 10, 10);
-                nameTextView.setTextSize(12);
+                    TextView nameTextView = new TextView(this);
+                    nameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
+                    nameTextView.setText(item.getItemName());
+                    nameTextView.setGravity(Gravity.CENTER);
+                    nameTextView.setPadding(10, 10, 10, 10);
+                    nameTextView.setTextSize(12);
 
-                TextView quantityTextView = new TextView(this);
-                quantityTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
-                quantityTextView.setText(item.getQuantity());
-                quantityTextView.setGravity(Gravity.CENTER);
-                quantityTextView.setPadding(10, 10, 10, 10);
-                quantityTextView.setTextSize(12);
+                    TextView quantityTextView = new TextView(this);
+                    quantityTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    quantityTextView.setText(item.getQuantity());
+                    quantityTextView.setGravity(Gravity.CENTER);
+                    quantityTextView.setPadding(10, 10, 10, 10);
+                    quantityTextView.setTextSize(12);
 
-                TextView thresholdTextView = new TextView(this);
-                thresholdTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
-                thresholdTextView.setText(customNumberEditText.getText().toString());
-                thresholdTextView.setGravity(Gravity.CENTER);
-                thresholdTextView.setPadding(10, 10, 10, 10);
-                thresholdTextView.setTextSize(12);
+                    TextView thresholdTextView = new TextView(this);
+                    thresholdTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    thresholdTextView.setText(customNumberEditText.getText().toString());
+                    thresholdTextView.setGravity(Gravity.CENTER);
+                    thresholdTextView.setPadding(10, 10, 10, 10);
+                    thresholdTextView.setTextSize(12);
 
-                TextView shortFallTextView = new TextView(this);
-                shortFallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
-                int shortFall = (Integer.parseInt(customNumberEditText.getText().toString())-Integer.parseInt(item.getQuantity()));
-                shortFallTextView.setText(String.valueOf(shortFall));
-                shortFallTextView.setGravity(Gravity.CENTER);
-                shortFallTextView.setPadding(10, 10, 10, 10);
-                shortFallTextView.setTextSize(12);
+                    TextView shortFallTextView = new TextView(this);
+                    shortFallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    shortFallTextView.setText("Critical");
+                    int color = Color.parseColor("#FF0000");
+                    shortFallTextView.setTextColor(color);
+                    shortFallTextView.setGravity(Gravity.CENTER);
+                    shortFallTextView.setPadding(10, 10, 10, 10);
+                    shortFallTextView.setTextSize(12);
 
-                // Add TextViews to the item row
-                row.addView(nameTextView);
-                row.addView(quantityTextView);
-                row.addView(thresholdTextView);
-                row.addView(shortFallTextView);
+                    // Add TextViews to the item row
+                    row.addView(nameTextView);
+                    row.addView(quantityTextView);
+                    row.addView(thresholdTextView);
+                    row.addView(shortFallTextView);
 
-                // Add the item row to the table
-                itemsListTable.addView(row);
+                    // Add the item row to the table
+                    indicatorItemsListTable.addView(row);
+                }
+            }
+            else {
+                if(Integer.parseInt(item.getQuantity()) < Integer.parseInt(customNumberEditText.getText().toString())){
+                    TableRow row = new TableRow(this);
+
+                    TextView nameTextView = new TextView(this);
+                    nameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
+                    nameTextView.setText(item.getItemName());
+                    nameTextView.setGravity(Gravity.CENTER);
+                    nameTextView.setPadding(10, 10, 10, 10);
+                    nameTextView.setTextSize(12);
+
+                    TextView quantityTextView = new TextView(this);
+                    quantityTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    quantityTextView.setText(item.getQuantity());
+                    quantityTextView.setGravity(Gravity.CENTER);
+                    quantityTextView.setPadding(10, 10, 10, 10);
+                    quantityTextView.setTextSize(12);
+
+                    TextView thresholdTextView = new TextView(this);
+                    thresholdTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    thresholdTextView.setText(customNumberEditText.getText().toString());
+                    thresholdTextView.setGravity(Gravity.CENTER);
+                    thresholdTextView.setPadding(10, 10, 10, 10);
+                    thresholdTextView.setTextSize(12);
+
+                    TextView shortFallTextView = new TextView(this);
+                    shortFallTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+                    int shortFall = (Integer.parseInt(customNumberEditText.getText().toString())-Integer.parseInt(item.getQuantity()));
+                    shortFallTextView.setText(String.valueOf(shortFall));
+                    shortFallTextView.setGravity(Gravity.CENTER);
+                    shortFallTextView.setPadding(10, 10, 10, 10);
+                    shortFallTextView.setTextSize(12);
+
+                    // Add TextViews to the item row
+                    row.addView(nameTextView);
+                    row.addView(quantityTextView);
+                    row.addView(thresholdTextView);
+                    row.addView(shortFallTextView);
+
+                    // Add the item row to the table
+                    itemsListTable.addView(row);
+                }
             }
         }
     }
