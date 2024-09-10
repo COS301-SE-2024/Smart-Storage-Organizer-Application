@@ -37,7 +37,7 @@ public class ReportsActivity extends AppCompatActivity {
     private CardView cardViewItemsReports, cardViewUnit, cardViewCategory, cardViewColorCode;
     private GridLayout gridLayoutItems;
     private ImageView arrow;
-    private CardView inventorySummary, expiryReport;
+    private CardView inventorySummary, expiryReport, stockReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class ReportsActivity extends AppCompatActivity {
         gridLayoutItems = findViewById(R.id.gridLayoutItems);
         inventorySummary = findViewById(R.id.inventorySummary);
         expiryReport = findViewById(R.id.expiryReport);
+        stockReport = findViewById(R.id.stockReport);
 
         // Get the parent layout (RelativeLayout or CardView) and set LayoutTransition
         RelativeLayout parentLayout = findViewById(R.id.parentLayout); // Replace with the correct ID
@@ -81,6 +82,15 @@ public class ReportsActivity extends AppCompatActivity {
                 gridLayoutItems.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, ExpiryActivity.class);
+                startActivity(intent);
+            }
+        });
+        stockReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gridLayoutItems.setVisibility(View.VISIBLE);
+                rotateArrow(arrow, 0, 180);
+                Intent intent = new Intent(ReportsActivity.this, LowStockActivity.class);
                 startActivity(intent);
             }
         });

@@ -188,6 +188,7 @@
 
                     <!-- CardView 3 -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/stockReport"
                         android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_columnWeight="1"
