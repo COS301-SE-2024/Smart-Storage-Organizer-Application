@@ -2046,6 +2046,7 @@ public class Utils
                                 CategoryModel category = new CategoryModel();
                                 category.setCategoryID(categoryObject.getString("id"));
                                 category.setCategoryName(categoryObject.getString("categoryname"));
+                                category.setParentCategoryId(categoryObject.getString("parentcategory"));
 
                                 categoriesModelList.add(category);
                             }

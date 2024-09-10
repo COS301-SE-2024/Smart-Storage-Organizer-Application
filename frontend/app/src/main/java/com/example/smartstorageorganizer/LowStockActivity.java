@@ -28,16 +28,22 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.SubcategoryReportModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class LowStockActivity extends AppCompatActivity {
+    private PieChart subCategoriesPieChart;
     private EditText customNumberEditText;
     private Button confirmButton;
     private int selectedNumber;
@@ -50,6 +56,7 @@ public class LowStockActivity extends AppCompatActivity {
     private List<CategoryReportModel> categoryReportModelList;
     private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +103,7 @@ public class LowStockActivity extends AppCompatActivity {
                 try {
                     selectedNumber = Integer.parseInt(customNumberText);
                     populateTable(originalItemList);
+                    subcategoryPieChart();
                     Toast.makeText(LowStockActivity.this, "Custom number: " + selectedNumber, Toast.LENGTH_SHORT).show();
                 } catch (NumberFormatException e) {
                     Toast.makeText(LowStockActivity.this, "Invalid number entered", Toast.LENGTH_SHORT).show();
@@ -145,6 +153,7 @@ public class LowStockActivity extends AppCompatActivity {
                     item.setSubcategoryName(subCategoryName);
                 }
                 populateTable(originalItemList);
+                subcategoryPieChart();
 //                String selectedRange = dateFilterSpinner.getSelectedItem().toString();
 //                filterItemsByDate(selectedRange);
                 Toast.makeText(LowStockActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
@@ -260,5 +269,141 @@ public class LowStockActivity extends AppCompatActivity {
                 itemsListTable.addView(row);
             }
         }
+    }
+
+    private void subcategoryPieChart(){
+        subCategoriesPieChart = findViewById(R.id.pieChartSubcategory);
+//        categoriesBarGraph = findViewById(R.id.groupedBarChart);
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+
+        for(CategoryModel category: categoryModelList) {
+            if(Objects.equals(category.getParentCategoryId(), "0")){
+                parentCategories.add(category.getCategoryName());
+            }
+//            parentCategories.add(categoryReport.getParentCategory());
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        categorySpinner.setAdapter(adapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = parent.getItemAtPosition(position).toString();
+                // Update pie and bar chart based on the selected category
+                updatePieChart(selectedCategory);
+//                categoriesBarGraph(selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing if nothing is selected
+            }
+        });
+    }
+
+    private String getParentCategoryId(String parentCategory) {
+        for(CategoryModel categoryModel : categoryModelList){
+            if(Objects.equals(categoryModel.getCategoryName(), parentCategory)) {
+                return categoryModel.getCategoryID();
+            }
+        }
+        return null;
+    }
+
+    private List<String> getSubcategories(String parentCategoryId) {
+        List<String> subcategories = new ArrayList<>();
+        for(CategoryModel categoryModel : categoryModelList){
+            if(Objects.equals(categoryModel.getParentCategoryId(), parentCategoryId)) {
+                subcategories.add(categoryModel.getCategoryName());
+            }
+        }
+        return subcategories;
+    }
+
+    private double getSumOfItemsBelowThreshold(String category){
+        double total = 0;
+        for (ItemModel item: originalItemList){
+            if(Objects.equals(item.getSubcategoryName(), category) && (Integer.parseInt(item.getQuantity()) < Integer.parseInt(customNumberEditText.getText().toString()))){
+                total += 1;
+            }
+        }
+        return total;
+    }
+
+    private double getTotal(List<String> subcategories) {
+        double total = 0;
+        for (String subcategory: subcategories){
+            total += getSumOfItemsBelowThreshold(subcategory);
+        }
+        return total;
+    }
+
+    private void updatePieChart(String category) {
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        String parentCategoryId = getParentCategoryId(category);
+        List<String> subcategories = getSubcategories(parentCategoryId);
+        double total = getTotal(subcategories);
+
+        for(String subcategory: subcategories) {
+            double sum = getSumOfItemsBelowThreshold(subcategory);
+            if ( sum > 0){
+                entries.add(new PieEntry((float) ((sum / total) * 100), subcategory));
+            }
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "("+category + " Subcategories)");
+
+        // Define a custom color array
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.rgb(192, 0, 0));     // Dark Red
+        colors.add(Color.rgb(255, 87, 34));   // Orange
+        colors.add(Color.rgb(34, 139, 34));   // Forest Green
+        colors.add(Color.rgb(0, 0, 255));     // Blue
+        colors.add(Color.rgb(255, 193, 7));   // Amber
+        colors.add(Color.rgb(75, 0, 130));    // Indigo
+        colors.add(Color.rgb(238, 130, 238)); // Violet
+        colors.add(Color.rgb(128, 0, 128));   // Purple
+        colors.add(Color.rgb(0, 128, 128));   // Teal
+        colors.add(Color.rgb(255, 165, 0));   // Orange
+        colors.add(Color.rgb(0, 255, 127));   // Spring Green
+        colors.add(Color.rgb(173, 216, 230)); // Light Blue
+        colors.add(Color.rgb(255, 69, 0));    // Red-Orange
+        colors.add(Color.rgb(154, 205, 50));  // Yellow-Green
+        colors.add(Color.rgb(220, 20, 60));   // Crimson
+        colors.add(Color.rgb(64, 224, 208));  // Turquoise
+        colors.add(Color.rgb(255, 105, 180)); // Hot Pink
+        colors.add(Color.rgb(0, 191, 255));   // Deep Sky Blue
+        colors.add(Color.rgb(139, 69, 19));   // Saddle Brown
+        colors.add(Color.rgb(70, 130, 180));  // Steel Blue
+
+        // Add more colors if needed
+
+        Legend legend = subCategoriesPieChart.getLegend();
+        legend.setWordWrapEnabled(true); // Enable word wrapping
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // Align the legend to the center
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // Align legend at the bottom
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set orientation to horizontal
+
+
+        dataSet.setColors(colors); // Set custom colors
+
+        PieData data = new PieData(dataSet);
+        data.setValueTextSize(14f);
+        data.setValueTextColor(Color.WHITE);
+
+        subCategoriesPieChart.setData(data);
+        subCategoriesPieChart.setEntryLabelColor(Color.BLACK);
+        subCategoriesPieChart.setDrawSliceText(false);
+        subCategoriesPieChart.invalidate();
+        subCategoriesPieChart.getDescription().setEnabled(false);
+
+        // Set the text in the center of the PieChart
+        subCategoriesPieChart.setCenterText("Total: " + total + " Items");
+        subCategoriesPieChart.setCenterTextSize(18f);  // Set text size
+        subCategoriesPieChart.setCenterTextColor(Color.BLACK); // Set text color
+        subCategoriesPieChart.setDrawCenterText(true); // Enable center text
     }
 }
