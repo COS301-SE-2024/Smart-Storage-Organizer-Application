@@ -598,13 +598,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -623,7 +623,7 @@ public class Utils
                                 item.setParentCategoryId(itemObject.getString("parentcategoryid"));
                                 item.setSubCategoryId(itemObject.getString("subcategoryid"));
                                 item.setCreatedAt(itemObject.getString("created_at"));
-                                item.setCreatedAt(itemObject.getString("expiry_date"));
+                                item.setExpiryDate(itemObject.getString("expiry_date"));
 
                                 itemModelList.add(item);
                             }

@@ -16,6 +16,7 @@ public class ItemModel {
     private String subCategoryId;
     private String parentCategoryName;
     private String subcategoryName;
+    private String expiryDate;
 
     public ItemModel() {
 
@@ -154,5 +155,13 @@ public class ItemModel {
 
     public void setSubcategoryName(String subcategoryName) {
         this.subcategoryName = subcategoryName;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
     }
 }
