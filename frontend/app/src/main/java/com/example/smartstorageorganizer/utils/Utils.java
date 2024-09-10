@@ -623,6 +623,7 @@ public class Utils
                                 item.setParentCategoryId(itemObject.getString("parentcategoryid"));
                                 item.setSubCategoryId(itemObject.getString("subcategoryid"));
                                 item.setCreatedAt(itemObject.getString("created_at"));
+                                item.setCreatedAt(itemObject.getString("expiry_date"));
 
                                 itemModelList.add(item);
                             }

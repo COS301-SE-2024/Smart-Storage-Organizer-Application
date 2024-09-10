@@ -19,6 +19,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +78,7 @@ public class ExpiryActivity extends AppCompatActivity {
                     showCustomDateRangePicker();
                 } else {
                     Toast.makeText(ExpiryActivity.this, "Selected: " + selectedOption, Toast.LENGTH_SHORT).show();
+                    barGraph();
                     // Handle predefined date ranges
                 }
             }
@@ -121,5 +127,22 @@ public class ExpiryActivity extends AppCompatActivity {
 
         }, year, month, day);
         startDatePicker.show();
+    }
+
+    private void barGraph() {
+        BarChart barChart = findViewById(R.id.barChart);
+
+// Prepare data for the Bar Chart
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, 30f)); // X value, Y value
+        entries.add(new BarEntry(1f, 25f));
+
+        BarDataSet dataSet = new BarDataSet(entries, "Categories");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Use default material colors
+
+        BarData data = new BarData(dataSet);
+        barChart.setData(data);
+        barChart.invalidate(); // Refresh the chart
+
     }
 }

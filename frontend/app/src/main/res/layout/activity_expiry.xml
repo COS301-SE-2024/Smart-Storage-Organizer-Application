@@ -219,7 +219,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardViewItemsReports"
+                    android:id="@+id/cardViewItems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -286,6 +286,82 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewItemsReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/white"
+                    android:elevation="4dp"
+                    app:cardCornerRadius="8dp">
+
+                    <RelativeLayout
+                        android:id="@+id/parentLayoutExpired"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/expiredItemContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="74dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="74dp"
+                                android:layout_height="74dp"
+                                android:src="@drawable/expiry"
+                                android:padding="16dp"
+                                android:contentDescription="Item Report Image"/>
+
+                            <TextView
+                                android:id="@+id/expiredText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:padding="16dp"
+                                android:text="List of Expired Items"
+                                android:textColor="@color/colorSecondary"
+                                android:textSize="16sp" />
+
+                            <!-- Arrow ImageView on the right -->
+                            <ImageView
+                                android:id="@+id/expiredArrow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="16dp"
+                                android:src="@drawable/baseline_keyboard_arrow_down_24"
+                                android:contentDescription="Arrow" />
+
+                        </LinearLayout>
+
+                        <TableLayout
+                            android:id="@+id/expiredItemsListTable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:visibility="gone"
+                            android:padding="16dp"
+                            android:gravity="center_horizontal"
+                            android:layout_below="@id/expiredItemContent">
+
+                        </TableLayout>
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp" />
+
         </LinearLayout>
     </ScrollView>
 
