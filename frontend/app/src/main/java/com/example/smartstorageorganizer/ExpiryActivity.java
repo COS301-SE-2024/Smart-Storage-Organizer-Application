@@ -32,9 +32,11 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.ParseException;
@@ -58,7 +60,7 @@ public class ExpiryActivity extends AppCompatActivity {
     private MyAmplifyApp app;
     List<ItemModel> originalItemList;
     private ImageView arrow;
-    private TableLayout itemsListTable;
+    private TableLayout itemsListTable, expiredItemsListTable;
 
     private static final int PAGE_SIZE = 1000;
     private int currentPage = 1;
@@ -84,8 +86,10 @@ public class ExpiryActivity extends AppCompatActivity {
 
         arrow = findViewById(R.id.arrow);
         itemsListTable = findViewById(R.id.itemsListTable);
+        expiredItemsListTable = findViewById(R.id.expiredItemsListTable);
 
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
+        RelativeLayout parentLayoutExpired = findViewById(R.id.parentLayoutExpired);
 
         // Initialize the spinner
         spinnerDateRange = findViewById(R.id.spinner_date_range);
@@ -129,6 +133,8 @@ public class ExpiryActivity extends AppCompatActivity {
 
         LayoutTransition layoutTransition = new LayoutTransition();
         parentLayout.setLayoutTransition(layoutTransition);
+        LayoutTransition ExpiredLayoutTransition = new LayoutTransition();
+        parentLayoutExpired.setLayoutTransition(ExpiredLayoutTransition);
 
         fetchItems();
 //        fetchCategoryStats();
@@ -139,6 +145,15 @@ public class ExpiryActivity extends AppCompatActivity {
                 rotateArrow(arrow, 180, 0);
             } else {
                 itemsListTable.setVisibility(View.VISIBLE); // Expand
+                rotateArrow(arrow, 0, 180);
+            }
+        });
+        findViewById(R.id.cardViewExpiredItems).setOnClickListener(v -> {
+            if (expiredItemsListTable.getVisibility() == View.VISIBLE) {
+                expiredItemsListTable.setVisibility(View.GONE); // Collapse
+                rotateArrow(arrow, 180, 0);
+            } else {
+                expiredItemsListTable.setVisibility(View.VISIBLE); // Expand
                 rotateArrow(arrow, 0, 180);
             }
         });
@@ -183,22 +198,33 @@ public class ExpiryActivity extends AppCompatActivity {
         startDatePicker.show();
     }
 
-    private void barGraph() {
+    private void drawBarGraph(int expiredCount, int nearExpiryCount) {
         BarChart barChart = findViewById(R.id.barChart);
 
-// Prepare data for the Bar Chart
+        // Prepare data for the Bar Chart
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 30f)); // X value, Y value
-        entries.add(new BarEntry(1f, 25f));
+        entries.add(new BarEntry(0f, expiredCount));  // X value = 0 for "Expired"
+        entries.add(new BarEntry(1f, nearExpiryCount));  // X value = 1 for "Near Expiry"
 
-        BarDataSet dataSet = new BarDataSet(entries, "Categories");
+        BarDataSet dataSet = new BarDataSet(entries, "Items Status");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Use default material colors
 
         BarData data = new BarData(dataSet);
-        barChart.setData(data);
-        barChart.invalidate(); // Refresh the chart
+        data.setBarWidth(0.9f);  // Set the bar width
 
+        // Set the labels for the X axis
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Expired", "Near Expiry"}));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
+
+        // Set data to the bar chart
+        barChart.setData(data);
+        barChart.setFitBars(true);  // Make the bars fit nicely in the graph
+        barChart.invalidate();  // Refresh the chart
     }
+
 
     private void fetchItems() {
         Utils.fetchAllItems(PAGE_SIZE, currentPage, app.getOrganizationID(),this, new OperationCallback<List<ItemModel>>() {
@@ -207,7 +233,7 @@ public class ExpiryActivity extends AppCompatActivity {
                 originalItemList.clear();
                 originalItemList.addAll(result);
                 fetchAllCategories();
-                populateTable(originalItemList);
+                populateTable(originalItemList, "");
 //                Toast.makeText(InventorySummaryActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
@@ -231,7 +257,9 @@ public class ExpiryActivity extends AppCompatActivity {
                 }
                 String selectedRange = spinnerDateRange.getSelectedItem().toString();
                 filterItemsByDate(selectedRange);
-                Toast.makeText(ExpiryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
+                expiredItems();
+                countExpiredAndNearExpiryItems();
+//                Toast.makeText(ExpiryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -279,8 +307,34 @@ public class ExpiryActivity extends AppCompatActivity {
         Log.d("populateTable", "Number of items: " + filteredItems.size());
 
         // Update the table with filtered items
-        populateTable(filteredItems);
+        populateTable(filteredItems, "");
     }
+
+    private void expiredItems() {
+        List<ItemModel> filteredItems = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date now = new Date();
+
+        for (ItemModel item : originalItemList) {
+            String expiryDateString = item.getExpiryDate();
+            if (!expiryDateString.equalsIgnoreCase("no expiry date")) {
+                try {
+                    // Parse the expiry date
+                    Date expiryDate = sdf.parse(expiryDateString);
+                    if (expiryDate != null && expiryDate.before(now)) {
+                        // If the expiry date is before the current date, add to the filtered list
+                        filteredItems.add(item);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Update the table with filtered items (expired items only)
+        populateTable(filteredItems, "expired");
+    }
+
 
     private boolean isWithinDays(Date expiryDate, Date currentDate, int days) {
         long diffInMillies = expiryDate.getTime() - currentDate.getTime();
@@ -304,9 +358,14 @@ public class ExpiryActivity extends AppCompatActivity {
     }
 
 
-    private void populateTable(List<ItemModel> items) {
+    private void populateTable(List<ItemModel> items, String type) {
         // Clear all rows from the table first
-        itemsListTable.removeAllViews();
+        if(Objects.equals(type, "")){
+            itemsListTable.removeAllViews();
+        }
+        else {
+            expiredItemsListTable.removeAllViews();
+        }
 
         // Add the header row first
         TableRow headerRow = new TableRow(this);
@@ -342,8 +401,13 @@ public class ExpiryActivity extends AppCompatActivity {
         headerRow.addView(headerCategoryTextView);
         headerRow.addView(headerDateTextView);
 
+        if(Objects.equals(type, "")){
+            itemsListTable.addView(headerRow);
+        }
+        else {
+            expiredItemsListTable.addView(headerRow);
+        }
         // Add the header row to the table
-        itemsListTable.addView(headerRow);
 
         // Add the item rows
         for (ItemModel item : items) {
@@ -380,8 +444,13 @@ public class ExpiryActivity extends AppCompatActivity {
             row.addView(categoryTextView);
             row.addView(dateTextView);
 
+            if(Objects.equals(type, "")){
+                itemsListTable.addView(row);
+            }
+            else {
+                expiredItemsListTable.addView(row);
+            }
             // Add the item row to the table
-            itemsListTable.addView(row);
         }
     }
 
@@ -401,4 +470,40 @@ public class ExpiryActivity extends AppCompatActivity {
         rotate.setFillAfter(true);
         arrow.startAnimation(rotate);
     }
+
+    private void countExpiredAndNearExpiryItems() {
+        int expiredCount = 0;
+        int nearExpiryCount = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date now = new Date();
+
+        for (ItemModel item : originalItemList) {
+            String expiryDateString = item.getExpiryDate();
+            if (!expiryDateString.equalsIgnoreCase("no expiry date")) {
+                try {
+                    // Parse the expiry date
+                    Date expiryDate = sdf.parse(expiryDateString);
+                    if (expiryDate != null) {
+                        long diffInMillies = expiryDate.getTime() - now.getTime();
+                        long daysDiff = TimeUnit.MILLISECONDS.toDays(diffInMillies);
+
+                        // Count expired items
+                        if (expiryDate.before(now)) {
+                            expiredCount++;
+                        }
+                        // Count near expiry items (within the next 7 days)
+                        else if (daysDiff <= 7) {
+                            nearExpiryCount++;
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Draw the bar graph with expiredCount and nearExpiryCount
+        drawBarGraph(expiredCount, nearExpiryCount);
+    }
+
 }
