@@ -66,6 +66,7 @@ public class ExpiryActivity extends AppCompatActivity {
     private int currentPage = 1;
     private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
+    private TextView ItemsNearExpiry, expiredItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,10 @@ public class ExpiryActivity extends AppCompatActivity {
         arrow = findViewById(R.id.arrow);
         itemsListTable = findViewById(R.id.itemsListTable);
         expiredItemsListTable = findViewById(R.id.expiredItemsListTable);
+        ItemsNearExpiry = findViewById(R.id.ItemsNearExpiry);
+        expiredItems = findViewById(R.id.expiredItems);
+
+
 
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         RelativeLayout parentLayoutExpired = findViewById(R.id.parentLayoutExpired);
@@ -258,7 +263,7 @@ public class ExpiryActivity extends AppCompatActivity {
                 String selectedRange = spinnerDateRange.getSelectedItem().toString();
                 filterItemsByDate(selectedRange);
                 expiredItems();
-                countExpiredAndNearExpiryItems();
+//                countExpiredAndNearExpiryItems();
 //                Toast.makeText(ExpiryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
             }
 
@@ -304,10 +309,11 @@ public class ExpiryActivity extends AppCompatActivity {
                 }
             }
         }
-        Log.d("populateTable", "Number of items: " + filteredItems.size());
 
         // Update the table with filtered items
+        ItemsNearExpiry.setText(String.valueOf(filteredItems.size()));
         populateTable(filteredItems, "");
+        countExpiredAndNearExpiryItems(filteredItems.size());
     }
 
     private void expiredItems() {
@@ -332,6 +338,7 @@ public class ExpiryActivity extends AppCompatActivity {
         }
 
         // Update the table with filtered items (expired items only)
+        expiredItems.setText(String.valueOf(filteredItems.size()));
         populateTable(filteredItems, "expired");
     }
 
@@ -471,11 +478,13 @@ public class ExpiryActivity extends AppCompatActivity {
         arrow.startAnimation(rotate);
     }
 
-    private void countExpiredAndNearExpiryItems() {
+    private void countExpiredAndNearExpiryItems(int nearExpiryCount) {
         int expiredCount = 0;
-        int nearExpiryCount = 0;
+//        int nearExpiryCount = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date now = new Date();
+
+        String selectedRange = spinnerDateRange.getSelectedItem().toString();
 
         for (ItemModel item : originalItemList) {
             String expiryDateString = item.getExpiryDate();
@@ -490,10 +499,6 @@ public class ExpiryActivity extends AppCompatActivity {
                         // Count expired items
                         if (expiryDate.before(now)) {
                             expiredCount++;
-                        }
-                        // Count near expiry items (within the next 7 days)
-                        else if (daysDiff <= 7) {
-                            nearExpiryCount++;
                         }
                     }
                 } catch (ParseException e) {

@@ -116,12 +116,12 @@
                             android:textSize="14dp"/>
 
                         <TextView
-                            android:id="@+id/uniqueItems"
+                            android:id="@+id/ItemsNearExpiry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text="56"
+                            android:text=""
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
@@ -165,12 +165,12 @@
                             android:textSize="14dp"/>
 
                         <TextView
-                            android:id="@+id/quantityOfItems"
+                            android:id="@+id/expiredItems"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center_horizontal"
-                            android:text="16"
+                            android:text=""
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/colorSecondary"
