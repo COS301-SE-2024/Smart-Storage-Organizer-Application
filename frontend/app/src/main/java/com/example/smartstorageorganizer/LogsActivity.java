@@ -37,14 +37,13 @@ public class LogsActivity extends AppCompatActivity {
     private LinearLayout expandableSection, activitiesList;
     private boolean isExpanded = false;
     private ImageView arrow;
+    private LinearLayout paginationLayout;
     private RecyclerView recyclerView;
     private LogEntryAdapter logEntryAdapter;
     private List<LogEntry> logEntryList;
-    private boolean isLoading = false;
-    private int visibleThreshold = 1; // Trigger load more when 1 item is visible at the bottom
-    private int lastVisibleItem, totalItemCount;
     private int currentPage = 1;
     private int itemsPerPage = 5;
+    private int totalPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,18 +75,18 @@ public class LogsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize the log entry list
+        // Initialize the log entry list and the adapter
         logEntryList = new ArrayList<>();
-        loadInitialData();
-//        logEntryList.add(new LogEntry("John Doe", "Added", "Laptop", "Role: Admin | 2 hours ago", null, null));
-//        logEntryList.add(new LogEntry("Jane Smith", "Modified", "Smartphone", "Role: Manager | 5 hours ago", "iPhone X", "iPhone 12"));
-//        logEntryList.add(new LogEntry("Sam Wilson", "Deleted", "Tablet", "Role: User | 1 day ago", null, null));
-
-        // Add more log entries as needed
-
-        // Set the adapter
-        logEntryAdapter = new LogEntryAdapter(logEntryList);
+        logEntryAdapter = new LogEntryAdapter(new ArrayList<>());
         recyclerView.setAdapter(logEntryAdapter);
+
+        // Initialize pagination layout
+        paginationLayout = findViewById(R.id.paginationLayout);
+
+        loadInitialData(); // Load all data
+
+        // Calculate total pages and set up pagination buttons
+        setupPagination();
 
         btnOpenBottomSheet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,29 +152,55 @@ public class LogsActivity extends AppCompatActivity {
         arrow.startAnimation(rotate);
     }
 
-    // Load the initial set of data (first 5 items)
+    // Load the initial set of data
     private void loadInitialData() {
         logEntryList.add(new LogEntry("John Doe", "Added", "Laptop", "Role: Admin | 2 hours ago", null, null));
         logEntryList.add(new LogEntry("Jane Smith", "Modified", "Smartphone", "Role: Manager | 5 hours ago", "iPhone X", "iPhone 12"));
         logEntryList.add(new LogEntry("Sam Wilson", "Deleted", "Tablet", "Role: User | 1 day ago", null, null));
         logEntryList.add(new LogEntry("Emily Stone", "Added", "Printer", "Role: Admin | 3 days ago", null, null));
         logEntryList.add(new LogEntry("Robert Brown", "Modified", "Monitor", "Role: Manager | 5 days ago", "Samsung 24\"", "Samsung 27\""));
+        logEntryList.add(new LogEntry("John Doe", "Added", "Laptop", "Role: Admin | 2 hours ago", null, null));
+        logEntryList.add(new LogEntry("Jane Smith", "Modified", "Smartphone", "Role: Manager | 5 hours ago", "iPhone X", "iPhone 12"));
+        logEntryList.add(new LogEntry("Sam Wilson", "Deleted", "Tablet", "Role: User | 1 day ago", null, null));
+//        logEntryList.add(new LogEntry("Emily Stone", "Added", "Printer", "Role: Admin | 3 days ago", null, null));
+//        logEntryList.add(new LogEntry("Robert Brown", "Modified", "Monitor", "Role: Manager | 5 days ago", "Samsung 24\"", "Samsung 27\""));
 
-//        logEntryAdapter.addData(logEntryList.subList(0, Math.min(itemsPerPage, logEntryList.size())));
+        // Initially load the first page
+        logEntryAdapter.addData(new ArrayList<>(logEntryList.subList(0, Math.min(itemsPerPage, logEntryList.size()))));
     }
 
-    // Load more data for pagination
-    private void loadMoreData(int page) {
-        List<LogEntry> moreEntries = new ArrayList<>();
-        int start = (page - 1) * itemsPerPage;
+    // Set up pagination buttons based on the total number of items
+    private void setupPagination() {
+        totalPages = (int) Math.ceil((double) logEntryList.size() / itemsPerPage);
+
+        // Dynamically create page buttons
+        paginationLayout.removeAllViews(); // Clear existing buttons if any
+        for (int i = 1; i <= totalPages; i++) {
+            Button pageButton = new Button(this);
+            pageButton.setText(String.valueOf(i));
+            pageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int page = Integer.parseInt(pageButton.getText().toString());
+                    loadPageData(page);
+                }
+            });
+
+            // Add the button to the layout
+            paginationLayout.addView(pageButton);
+        }
+    }
+
+    // Load the data for a specific page
+    private void loadPageData(int page) {
+        currentPage = page;
+        int start = (currentPage - 1) * itemsPerPage;
         int end = Math.min(start + itemsPerPage, logEntryList.size());
 
-        // Simulate adding more items
-        if (start < logEntryList.size()) {
-            moreEntries.addAll(logEntryList.subList(start, end));
-            logEntryAdapter.addData(moreEntries);
-        }
+        // Clear the adapter and load the new set of items for the selected page
+        logEntryAdapter.clearData();
+        logEntryAdapter.addData(new ArrayList<>(logEntryList.subList(start, end)));
+//        logEntryAdapter.addData(new ArrayList<>(logEntryList.subList(0, 3)));
 
-        isLoading = false;
     }
 }

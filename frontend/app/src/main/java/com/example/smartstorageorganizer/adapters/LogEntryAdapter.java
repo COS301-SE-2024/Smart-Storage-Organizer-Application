@@ -75,7 +75,12 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.ViewHo
     public void addData(List<LogEntry> newLogEntries) {
         int initialSize = logEntries.size();
         logEntries.addAll(newLogEntries);
-        notifyItemRangeInserted(initialSize, newLogEntries.size());
+        notifyDataSetChanged();
+//        notifyItemRangeInserted(initialSize, newLogEntries.size());
+    }
+
+    public void clearData(){
+        logEntries.clear();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
