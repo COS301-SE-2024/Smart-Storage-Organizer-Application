@@ -115,4 +115,19 @@
         <item>Custom Range</item>
     </string-array>
 
+
+    <string-array name="action_type_options">
+        <item>Action Type</item>
+        <item>Added</item>
+        <item>Modified</item>
+        <item>Deleted</item>
+    </string-array>
+
+    <string-array name="user_roles_options">
+        <item>User Role</item>
+        <item>Admin</item>
+        <item>Manager</item>
+        <item>Normal User</item>
+    </string-array>
+
 </resources>
