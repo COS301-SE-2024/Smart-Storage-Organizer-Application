@@ -8,7 +8,7 @@ def get_db_connection():
             database=os.environ.get('DB_Name'),
             user=os.environ.get('Username'),
             password=os.environ.get('Password')
-        )
+    )
     return con
 
 def get_all_units(conn, curr, body):

@@ -4,11 +4,12 @@ from psycopg2.extras import RealDictCursor
 
 def get_db_connection():
     con = psycopg2.connect(
-            host=os.environ.get('Host_address'),
-            database=os.environ.get('DB_Name'),
-            user=os.environ.get('Username'),
-            password=os.environ.get('Password')
-        )
+        host="localhost",
+        database="your_database",
+        user="your_user",
+        password="your_password"
+
+    )
     return con
 
 def get_all_units(conn, curr, body):

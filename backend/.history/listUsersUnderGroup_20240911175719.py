@@ -6,7 +6,7 @@ def lambda_handler(event, context):
     client=boto3.client('cognito-idp')
     try:
         response = client.list_users_in_group(
-            UserPoolId='os.getenv("UserPoolId")',
+            UserPoolId='us-east-1_EPbgIUMEQ',
             GroupName=event['body']['Group'],
         )
     except client.exceptions.ClientError as error:
