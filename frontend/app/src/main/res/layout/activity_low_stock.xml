@@ -206,33 +206,6 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/pieChart">
-
-                <Spinner
-                    android:id="@+id/categorySpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="16dp" />
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartSubcategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="16dp" />
-
-            </LinearLayout>
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/groupedBarChart"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"/>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -262,7 +235,7 @@
                             <ImageView
                                 android:layout_width="74dp"
                                 android:layout_height="74dp"
-                                android:src="@drawable/low_stock"
+                                android:src="@drawable/siren"
                                 android:padding="16dp"
                                 android:contentDescription="Item Report Image"/>
 
@@ -304,6 +277,32 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/pieChart">
+
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="16dp" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartSubcategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="16dp" />
+
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/groupedBarChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"/>
         </LinearLayout>
 
     </ScrollView>

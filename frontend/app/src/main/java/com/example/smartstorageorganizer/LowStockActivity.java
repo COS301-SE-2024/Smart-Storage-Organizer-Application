@@ -1,9 +1,12 @@
 package com.example.smartstorageorganizer;
 
 import android.animation.LayoutTransition;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,7 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -39,6 +44,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -90,6 +98,15 @@ public class LowStockActivity extends AppCompatActivity {
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         LayoutTransition layoutTransition = new LayoutTransition();
         parentLayout.setLayoutTransition(layoutTransition);
+
+        Button generatePdfButton = findViewById(R.id.btnGeneratePdf);
+        generatePdfButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the method to generate PDF when button is clicked
+                createPdf();
+            }
+        });
 
         findViewById(R.id.cardViewItemsReports).setOnClickListener(v -> {
             if (itemsListTable.getVisibility() == View.VISIBLE) {
@@ -493,5 +510,56 @@ public class LowStockActivity extends AppCompatActivity {
         subCategoriesPieChart.setCenterTextSize(18f);  // Set text size
         subCategoriesPieChart.setCenterTextColor(Color.BLACK); // Set text color
         subCategoriesPieChart.setDrawCenterText(true); // Enable center text
+    }
+
+    private void createPdf() {
+        ScrollView scrollView = findViewById(R.id.mainScrollview);
+        LinearLayout contentLayout = (LinearLayout) scrollView.getChildAt(0);
+
+        PdfDocument document = new PdfDocument();
+
+        int pageHeight = 842;
+        int pageWidth = 595;
+
+        contentLayout.measure(
+                View.MeasureSpec.makeMeasureSpec(scrollView.getWidth(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        );
+        int contentHeight = contentLayout.getMeasuredHeight();
+        int contentWidth = contentLayout.getMeasuredWidth();
+
+        float scaleFactor = (float) pageWidth / contentWidth;
+
+        int scaledContentHeight = (int) (contentHeight * scaleFactor);
+
+        int totalPages = (int) Math.ceil((float) scaledContentHeight / pageHeight);
+
+        for (int i = 0; i < totalPages; i++) {
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, i + 1).create();
+            PdfDocument.Page page = document.startPage(pageInfo);
+
+            Canvas canvas = page.getCanvas();
+
+            int translateY = -i * pageHeight;
+
+            canvas.scale(scaleFactor, scaleFactor);
+
+            canvas.translate(0, translateY / scaleFactor);
+
+            contentLayout.draw(canvas);
+
+            document.finishPage(page);
+        }
+
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "low_stock_report.pdf");
+
+        try {
+            document.writeTo(new FileOutputStream(pdfFile));
+            Toast.makeText(this, "PDF saved to: " + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error creating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        document.close();
     }
 }

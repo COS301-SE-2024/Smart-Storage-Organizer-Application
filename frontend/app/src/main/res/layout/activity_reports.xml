@@ -37,239 +37,395 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="130dp"
-        android:padding="16dp">
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewItemsReports"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="@color/white"
-            android:elevation="4dp"
-            app:cardCornerRadius="8dp">
-
-            <RelativeLayout
-                android:id="@+id/parentLayout"
+            android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewItemsReports"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:cardCornerRadius="8dp">
 
-                <LinearLayout
-                    android:id="@+id/itemContent"
+                <RelativeLayout
+                    android:id="@+id/parentLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="74dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="74dp"
+                    <LinearLayout
+                        android:id="@+id/itemContent"
+                        android:layout_width="match_parent"
                         android:layout_height="74dp"
-                        android:src="@drawable/item_report"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="74dp"
+                            android:layout_height="74dp"
+                            android:src="@drawable/item_report"
+                            android:padding="16dp"
+                            android:contentDescription="Item Report Image"/>
+
+                        <TextView
+                            android:id="@+id/itemsReportText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:text="Items Reports"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="16sp" />
+
+                        <!-- Arrow ImageView on the right -->
+                        <ImageView
+                            android:id="@+id/arrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/baseline_keyboard_arrow_down_24"
+                            android:contentDescription="Arrow" />
+
+                    </LinearLayout>
+
+                    <GridLayout
+                        android:id="@+id/gridLayoutItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="16dp"
+                        android:columnCount="2"
+                        android:rowCount="2"
                         android:padding="16dp"
-                        android:contentDescription="Item Report Image"/>
+                        android:layout_below="@id/itemContent"
+                        android:alignmentMode="alignMargins"
+                        android:rowOrderPreserved="false"
+                        android:useDefaultMargins="true"
+                        android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/itemsReportText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical"
-                        android:padding="16dp"
-                        android:text="Items Reports"
-                        android:textColor="@color/colorSecondary"
-                        android:textSize="16sp" />
+                        <!-- CardView 1 -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/inventorySummary"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
 
-                    <!-- Arrow ImageView on the right -->
-                    <ImageView
-                        android:id="@+id/arrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="16dp"
-                        android:src="@drawable/baseline_keyboard_arrow_down_24"
-                        android:contentDescription="Arrow" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:padding="16dp">
 
-                </LinearLayout>
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/inventory"
+                                    android:contentDescription="Icon 1" />
 
-                <GridLayout
-                    android:id="@+id/gridLayoutItems"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="Generate Inventory Summary"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- CardView 2 -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/expiryReport"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/expiry"
+                                    android:contentDescription="Icon 2" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text=" Generate Expiry Reports"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- CardView 3 -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/stockReport"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/low_stock"
+                                    android:contentDescription="Icon 3" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="Generate Low Stock Alerts"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- CardView 4 -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_horizontal"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/location"
+                                    android:contentDescription="Icon 4" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="Generate Location-Based Reports"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </GridLayout>
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewAppReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@color/white"
+                android:elevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <RelativeLayout
+                    android:id="@+id/parentLayoutApp"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="16dp"
-                    android:columnCount="2"
-                    android:rowCount="2"
-                    android:padding="16dp"
-                    android:layout_below="@id/itemContent"
-                    android:alignmentMode="alignMargins"
-                    android:rowOrderPreserved="false"
-                    android:useDefaultMargins="true"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content">
 
-                    <!-- CardView 1 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/inventorySummary"
-                        android:layout_width="0dp"
-                        android:layout_height="100dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:layout_gravity="fill"
-                        android:layout_margin="8dp"
-                        app:cardBackgroundColor="@color/colorPrimary"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp">
+                    <LinearLayout
+                        android:id="@+id/appContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="74dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="74dp"
+                            android:layout_height="74dp"
+                            android:src="@drawable/app"
+                            android:padding="16dp"
+                            android:contentDescription="Item Report Image"/>
+
+                        <TextView
+                            android:id="@+id/appReportText"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal"
-                            android:padding="16dp">
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:text="App Reports"
+                            android:textColor="@color/colorSecondary"
+                            android:textSize="16sp" />
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/inventory"
-                                android:contentDescription="Icon 1" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal"
-                                android:text="Generate Inventory Summary"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:layout_marginTop="8dp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- CardView 2 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/expiryReport"
-                        android:layout_width="0dp"
-                        android:layout_height="100dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:layout_gravity="fill"
-                        android:layout_margin="8dp"
-                        app:cardBackgroundColor="@color/colorPrimary"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <!-- Arrow ImageView on the right -->
+                        <ImageView
+                            android:id="@+id/appReportarrow"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal"
-                            android:padding="16dp">
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/baseline_keyboard_arrow_down_24"
+                            android:contentDescription="Arrow" />
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/expiry"
-                                android:contentDescription="Icon 2" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                    <GridLayout
+                        android:id="@+id/gridLayoutLoginReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="16dp"
+                        android:columnCount="2"
+                        android:rowCount="1"
+                        android:padding="16dp"
+                        android:layout_below="@id/appContent"
+                        android:alignmentMode="alignMargins"
+                        android:rowOrderPreserved="false"
+                        android:useDefaultMargins="true"
+                        android:visibility="gone">
+
+                        <!-- CardView 1 -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/loginReport"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
+                                android:orientation="vertical"
                                 android:gravity="center_horizontal"
-                                android:text=" Generate Expiry Reports"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:layout_marginTop="8dp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                                android:padding="16dp">
 
-                    <!-- CardView 3 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/stockReport"
-                        android:layout_width="0dp"
-                        android:layout_height="100dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:layout_gravity="fill"
-                        android:layout_margin="8dp"
-                        app:cardBackgroundColor="@color/colorPrimary"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp">
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/login"
+                                    android:contentDescription="Icon 1" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal"
-                            android:padding="16dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="Generate Login Reports"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/low_stock"
-                                android:contentDescription="Icon 3" />
+                        <!-- CardView 2 -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/userActivityLogs"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:layout_gravity="fill"
+                            android:layout_margin="8dp"
+                            app:cardBackgroundColor="@color/colorPrimary"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
+                                android:orientation="vertical"
                                 android:gravity="center_horizontal"
-                                android:text="Generate Low Stock Alerts"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:layout_marginTop="8dp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                                android:padding="16dp">
 
-                    <!-- CardView 4 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
-                        android:layout_height="100dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:layout_gravity="fill"
-                        android:layout_margin="8dp"
-                        app:cardBackgroundColor="@color/colorPrimary"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp">
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/log"
+                                    android:contentDescription="Icon 2" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal"
-                            android:padding="16dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
+                                    android:text="Generate User Activity Logs"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:layout_marginTop="8dp" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
 
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/location"
-                                android:contentDescription="Icon 4" />
+                    </GridLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal"
-                                android:text="Generate Location-Based Reports"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/white"
-                                android:layout_marginTop="8dp" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                </GridLayout>
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
 
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
