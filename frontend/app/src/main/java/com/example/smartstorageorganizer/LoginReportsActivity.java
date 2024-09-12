@@ -89,13 +89,13 @@ public class LoginReportsActivity extends AppCompatActivity {
 
             TextView nameTextView = new TextView(this);
             nameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
-            nameTextView.setText(item.getName()+item.getSurname());
+            nameTextView.setText(item.getName()+" "+item.getSurname());
             nameTextView.setGravity(Gravity.CENTER);
             nameTextView.setPadding(10, 10, 10, 10);
             nameTextView.setTextSize(12);
 
             TextView categoryTextView = new TextView(this);
-            categoryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2));
+            categoryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 4));
             categoryTextView.setText(item.getTimeIn());
             categoryTextView.setGravity(Gravity.CENTER);
             categoryTextView.setPadding(10, 10, 10, 10);
@@ -119,7 +119,7 @@ public class LoginReportsActivity extends AppCompatActivity {
     }
 
     public void getLoginReports() {
-        Utils.getLoginReports(app.getOrganizationID(), "ezemakau@gmail.com", this, new OperationCallback<List<LoginReportsModel>>() {
+        Utils.getLoginReports(app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<LoginReportsModel>>() {
             @Override
             public void onSuccess(List<LoginReportsModel> result) {
                 populateTable(result);

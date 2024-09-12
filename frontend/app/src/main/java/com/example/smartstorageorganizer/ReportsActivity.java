@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ReportsActivity extends AppCompatActivity {
+public class ReportsActivity extends BaseActivity  {
     private CardView cardViewItemsReports, cardViewUnit, cardViewCategory, cardViewColorCode;
     private GridLayout gridLayoutItems, gridLayoutApp;
     private ImageView arrow, appArrow;
