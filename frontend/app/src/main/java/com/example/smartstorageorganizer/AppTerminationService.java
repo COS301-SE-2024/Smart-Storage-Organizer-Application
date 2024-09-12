@@ -14,6 +14,8 @@ import androidx.core.app.NotificationCompat;
 import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,8 @@ import okhttp3.Response;
 
 public class AppTerminationService extends Service {
     MyAmplifyApp app;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     private static final String CHANNEL_ID = "AppExitServiceChannel";
 
     @Override
@@ -61,6 +65,13 @@ public class AppTerminationService extends Service {
         String formattedDate = dateFormat.format(currentDate);
         // Send API request when the app is force-closed
         sendAppExitApi(app.getEmail(), app.getName(), app.getSurname(), "sign_out", app.getOrganizationID(), formattedDate);
+
+        String userId = "ezemakau@gmail.com";
+        db.collection("active_users").document(userId)
+                .delete()
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User removed from active users"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error removing user", e));
+
 
         // Stop the service after sending the API
         stopSelf();
