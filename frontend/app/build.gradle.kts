@@ -117,12 +117,7 @@ android {
         buildConfigField("String", "reports_getTotalItemsUnderAllParentCategories", "\"${localProperties["reports_getTotalItemsUnderAllParentCategories"]}\"");
         buildConfigField("String", "GetAllCategories", "\"${localProperties["GetAllCategories"]}\"");
         buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
-
-
-
-
-
-
+        buildConfigField("String", "GetLoginReports", "\"${localProperties["GetLoginReports"]}\"");
     }
 
     buildTypes {

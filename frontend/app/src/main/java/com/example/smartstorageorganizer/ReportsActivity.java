@@ -118,7 +118,7 @@ public class ReportsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 gridLayoutApp.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
-                Intent intent = new Intent(ReportsActivity.this, LowStockActivity.class);
+                Intent intent = new Intent(ReportsActivity.this, LoginReportsActivity.class);
                 startActivity(intent);
             }
         });

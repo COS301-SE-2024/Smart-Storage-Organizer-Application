@@ -34,10 +34,11 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".LoginReportsActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogsActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false"></activity>
         <activity
             android:name=".LowStockActivity"
             android:exported="false" />

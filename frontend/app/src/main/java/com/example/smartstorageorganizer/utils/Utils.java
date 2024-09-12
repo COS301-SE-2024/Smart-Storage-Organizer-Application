@@ -27,6 +27,7 @@ import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.model.LoginReportsModel;
 import com.example.smartstorageorganizer.model.SubcategoryReportModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
 import com.example.smartstorageorganizer.model.TokenManager;
@@ -2052,6 +2053,86 @@ public class Utils
                             }
 
                             activity.runOnUiThread(() -> callback.onSuccess(categoriesModelList));
+                        } catch (JSONException e) {
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "View Response Results Body Array" + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "View Response Results Body Array" + response);
+                            callback.onFailure("Response code:" + response.code());
+                        });
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void getLoginReports(String organizationid, String username, Activity activity, OperationCallback<List<LoginReportsModel>> callback)
+    {
+        String json = "{"
+                + "\"body\": {"
+                + "\"organization_id\": \"" + Integer.parseInt(organizationid) + "\","
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+
+        List<LoginReportsModel> reportsModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.GetLoginReports;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .addHeader("Authorization", results)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.e("View Response Results Body Array", "GET request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+                            JSONArray bodyArray = new JSONArray(bodyString);
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
+
+                            for (int i = 0; i < bodyArray.length(); i++) {
+                                JSONObject reportObject = bodyArray.getJSONObject(i);
+
+                                LoginReportsModel loginReport = new LoginReportsModel();
+                                loginReport.setEmail(reportObject.getString("email"));
+                                loginReport.setName(reportObject.getString("name"));
+                                loginReport.setSurname(reportObject.getString("surname"));
+                                loginReport.setTimeIn(reportObject.getString("time_in"));
+                                loginReport.setTimeOut(reportObject.getString("time_out"));
+
+                                reportsModelList.add(loginReport);
+                            }
+
+                            activity.runOnUiThread(() -> callback.onSuccess(reportsModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
                                 Log.e(message, "View Response Results Body Array" + e.getMessage());
