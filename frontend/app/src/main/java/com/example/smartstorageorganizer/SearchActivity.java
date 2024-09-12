@@ -56,7 +56,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private List<ItemModel> searchResults;
     private EditText searchView;

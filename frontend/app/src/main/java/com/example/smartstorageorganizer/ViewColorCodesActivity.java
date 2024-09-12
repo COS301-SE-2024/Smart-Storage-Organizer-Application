@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class ViewColorCodesActivity extends AppCompatActivity {
+public class ViewColorCodesActivity extends BaseActivity {
     private RecyclerView colorCodeRecyclerView;
     private List<ColorCodeModel> colorCodeModelList;
     private ColorCodeAdapter colorCodeAdapter;

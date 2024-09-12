@@ -43,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UnitActivity extends AppCompatActivity {
+public class UnitActivity extends BaseActivity {
 
     boolean flag = true;
     private ArrayList<CategoryModel> categoryModelList= new ArrayList<>();

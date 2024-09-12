@@ -51,7 +51,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
-public class ItemDetailsActivity extends AppCompatActivity {
+public class ItemDetailsActivity extends BaseActivity {
     float v = 0;
     private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
     private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;

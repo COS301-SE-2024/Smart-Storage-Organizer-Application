@@ -19,7 +19,7 @@ import com.example.smartstorageorganizer.adapters.ViewUsersAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class UsersActivity extends AppCompatActivity {
+public class UsersActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

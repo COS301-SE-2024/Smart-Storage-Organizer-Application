@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
-public class AddColorCodeActivity extends AppCompatActivity {
+public class AddColorCodeActivity extends BaseActivity  {
     public View mColorPreview;
 
     public int mDefaultColor;

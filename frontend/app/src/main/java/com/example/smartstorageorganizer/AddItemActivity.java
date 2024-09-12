@@ -73,7 +73,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddItemActivity extends AppCompatActivity {
+public class AddItemActivity extends BaseActivity  {
     int PICK_IMAGE_MULTIPLE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 1;

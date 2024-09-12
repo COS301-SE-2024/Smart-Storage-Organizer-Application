@@ -23,7 +23,7 @@ import com.example.smartstorageorganizer.utils.Utils;
 import java.util.List;
 import java.util.Objects;
 
-public class LoginReportsActivity extends AppCompatActivity {
+public class LoginReportsActivity extends BaseActivity {
     private MyAmplifyApp app;
     private TableLayout usersListTable;
     @Override

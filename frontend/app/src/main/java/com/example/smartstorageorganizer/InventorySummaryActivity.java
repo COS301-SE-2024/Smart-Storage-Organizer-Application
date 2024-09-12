@@ -66,7 +66,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class InventorySummaryActivity extends AppCompatActivity {
+public class InventorySummaryActivity extends BaseActivity {
     private PieChart parentCategoriesPieChart;
     private PieChart subCategoriesPieChart;
     private HorizontalBarChart categoriesBarGraph;

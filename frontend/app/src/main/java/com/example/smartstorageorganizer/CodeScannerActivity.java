@@ -27,7 +27,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.io.InputStream;
 
-public class CodeScannerActivity extends AppCompatActivity {
+public class CodeScannerActivity extends BaseActivity {
 
     public static final int PICK_IMAGE = 1;
 

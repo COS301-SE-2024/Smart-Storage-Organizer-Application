@@ -24,7 +24,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ProfileManagementActivity extends AppCompatActivity {
+public class ProfileManagementActivity extends BaseActivity {
 
     private static final String TAG = "ProfileManagementActivity";
     private TextView email;

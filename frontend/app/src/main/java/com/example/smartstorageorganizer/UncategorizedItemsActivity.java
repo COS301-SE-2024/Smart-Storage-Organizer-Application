@@ -51,7 +51,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UncategorizedItemsActivity extends AppCompatActivity {
+public class UncategorizedItemsActivity extends BaseActivity {
     public static final int PAGE_SIZE = 10;
     public int currentPage = 1;
     public TextView notFoundText;

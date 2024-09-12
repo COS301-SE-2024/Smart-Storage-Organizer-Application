@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ViewUnitsActivity extends AppCompatActivity {
+public class ViewUnitsActivity extends BaseActivity {
     private RecyclerView recyclerViewUnits;
     private UnitsAdapter unitsAdapter;
     private List<unitModel> unitList;

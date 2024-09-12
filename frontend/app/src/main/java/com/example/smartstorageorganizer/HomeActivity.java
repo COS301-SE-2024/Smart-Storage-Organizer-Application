@@ -60,7 +60,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity  {
     public TextView fullName, organizationName;
     public ShapeableImageView profileImage;
     public AppBarConfiguration mAppBarConfiguration;

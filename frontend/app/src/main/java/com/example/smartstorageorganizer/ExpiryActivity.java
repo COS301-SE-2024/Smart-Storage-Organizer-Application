@@ -58,7 +58,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class ExpiryActivity extends AppCompatActivity {
+public class ExpiryActivity extends BaseActivity {
 
     String customStartDate;
     String customEndDate;

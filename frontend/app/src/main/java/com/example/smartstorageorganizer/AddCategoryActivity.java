@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class AddCategoryActivity extends AppCompatActivity {
+public class AddCategoryActivity extends BaseActivity  {
     public static final int GALLERY_CODE = 1;
     public static final String EMAIL_KEY = "email";
     public static final String IMAGE_TYPE = "image/*";

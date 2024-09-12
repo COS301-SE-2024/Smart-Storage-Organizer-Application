@@ -28,7 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogsActivity extends AppCompatActivity {
+public class LogsActivity extends BaseActivity {
     private AppCompatButton btnAdd, btnModify, btnDelete;
     private Button userRoleBtn;
     private RelativeLayout btnOpenBottomSheet;

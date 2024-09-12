@@ -145,6 +145,8 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-messaging:latest-version")
     implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
@@ -232,4 +234,9 @@ dependencies {
 
     //Graphs dependency
     implementation ("com.github.PhilJay:MPAndroidChart:3.1.0")
+
+    //firebase
+    implementation ("com.google.firebase:firebase-analytics")
+//    implementation ("com.google.firebase:firebase-firestore:24.1.2")
+
 }

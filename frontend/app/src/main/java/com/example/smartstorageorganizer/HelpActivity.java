@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.view.View;
 import android.text.method.LinkMovementMethod;
 
-public class HelpActivity extends AppCompatActivity {
+public class HelpActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

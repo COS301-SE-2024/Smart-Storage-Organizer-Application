@@ -20,7 +20,7 @@ import com.example.smartstorageorganizer.adapters.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class RequestsActivity extends AppCompatActivity {
+public class RequestsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class LowStockActivity extends AppCompatActivity {
+public class LowStockActivity extends BaseActivity {
     private PieChart subCategoriesPieChart;
     private EditText customNumberEditText;
     private Button confirmButton;

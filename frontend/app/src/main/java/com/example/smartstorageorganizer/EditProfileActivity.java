@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends BaseActivity {
 
     TextInputEditText name, surname, email, phone, address;
     LinearLayout content;

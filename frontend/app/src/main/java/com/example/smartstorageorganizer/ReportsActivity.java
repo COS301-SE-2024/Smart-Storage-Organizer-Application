@@ -132,6 +132,16 @@ public class ReportsActivity extends BaseActivity  {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.unitsReport).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gridLayoutApp.setVisibility(View.VISIBLE);
+                rotateArrow(arrow, 0, 180);
+                Intent intent = new Intent(ReportsActivity.this, AppReportActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void rotateArrow(ImageView arrow, float fromDegree, float toDegree) {

@@ -19,7 +19,7 @@ import android.os.Environment;
 import android.widget.Toast;
 import android.Manifest;
 
-public class ManualActivity extends AppCompatActivity {
+public class ManualActivity extends BaseActivity {
 
     public ImageView pdfImageView;
     public PdfRenderer pdfRenderer;
