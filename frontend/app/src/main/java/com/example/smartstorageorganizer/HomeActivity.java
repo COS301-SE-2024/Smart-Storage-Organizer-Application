@@ -3,8 +3,13 @@ package com.example.smartstorageorganizer;
 import static androidx.media.session.MediaButtonReceiver.handleIntent;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -61,12 +67,17 @@ public class HomeActivity extends AppCompatActivity {
     NavigationView navigationView;
     ImageButton searchButton;
     MyAmplifyApp app;
-//    MyAmplifyApp app = (MyAmplifyApp) getApplicationContext();
+    private static final String CHANNEL_ID = "AppExitServiceChannel";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         app = (MyAmplifyApp) getApplicationContext();
+
+        if(!app.isStartService()){
+            startAppExitService();
+            app.setStartService(true);
+        }
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -235,6 +246,9 @@ public class HomeActivity extends AppCompatActivity {
                     Log.i("progress","User attributes fetched successfully");
                     runOnUiThread(() -> {
                         app.setOrganizationID(organizationId);
+                        app.setName(currentName);
+                        app.setEmail(currentEmail);
+                        app.setSurname(currentSurname);
                         String id = app.getOrganizationID();
 
                         fetchOrganizationDetails(id);
@@ -349,6 +363,41 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void startAppExitService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "App Exit Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(serviceChannel);
+            }
+        }
+
+        // Create a notification for the foreground service
+        Intent notificationIntent = new Intent(this, HomeActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("App is running")
+                .setContentText("Tracking app exit...")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentIntent(pendingIntent)
+                .build();
+
+        // Start the service as a foreground service with the notification
+//        Intent serviceIntent = new Intent(this, AppTerminationService.class);
+        Intent serviceIntent = new Intent(this, AppTerminationService.class);
+//        startForegroundService(serviceIntent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        }
     }
 }
 
