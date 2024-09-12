@@ -3,11 +3,13 @@ package com.example.smartstorageorganizer;
 import static androidx.media.session.MediaButtonReceiver.handleIntent;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,15 +70,24 @@ public class HomeActivity extends AppCompatActivity {
     ImageButton searchButton;
     MyAmplifyApp app;
     private static final String CHANNEL_ID = "AppExitServiceChannel";
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         app = (MyAmplifyApp) getApplicationContext();
 
-        if(!app.isStartService()){
+        if (!isServiceRunning(AppTerminationService.class)) {
             startAppExitService();
-            app.setStartService(true);
         }
 
         binding = ActivityHomeBinding.inflate(getLayoutInflater());

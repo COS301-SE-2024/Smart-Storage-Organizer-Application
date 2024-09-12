@@ -56,25 +56,19 @@ public class AppTerminationService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d("AppTerminationService", "App removed from recent apps");
-
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(currentDate);
         // Send API request when the app is force-closed
-        sendAppExitApi();
+        sendAppExitApi(app.getEmail(), app.getName(), app.getSurname(), "sign_out", app.getOrganizationID(), formattedDate);
 
         // Stop the service after sending the API
         stopSelf();
     }
 
-    private void sendAppExitApi() {
+    private void sendAppExitApi(String email, String name, String surname, String type, String organization_id, String time) {
         Log.d("AppTerminationService", "Sending API for app exit time");
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = dateFormat.format(currentDate);
-        loginActivities(app.getEmail(), app.getName(), app.getSurname(), "sign_out", app.getOrganizationID(), formattedDate);
 
-        // Your API sending logic here
-    }
-
-    public static void loginActivities(String email, String name, String surname, String type, String organization_id, String time) {
         String json = "{"
                 + "\"body\": {"
                 + "\"email\": \"" + email + "\","
