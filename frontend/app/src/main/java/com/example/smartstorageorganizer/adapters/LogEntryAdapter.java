@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.LogEntry;
 
 import java.util.List;
+import java.util.Objects;
 
 public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.ViewHolder> {
 
@@ -37,6 +39,15 @@ public class LogEntryAdapter extends RecyclerView.Adapter<LogEntryAdapter.ViewHo
         holder.actionDone.setText(logEntry.getActionDone());
         holder.itemActedUpon.setText(logEntry.getItemActedUpon());
         holder.details.setText(logEntry.getDetails());
+
+        int color = Color.parseColor("#4CAF50");
+        if(Objects.equals(logEntry.getActionDone(), "Modified")){
+            color = Color.parseColor("#2196F3");
+        }
+        else if(Objects.equals(logEntry.getActionDone(), "Deleted")){
+            color = Color.parseColor("#F44336");
+        }
+        holder.actionDone.setTextColor(color);
 
         // Update expandable section if available
         if (logEntry.getPreviousDetails() != null && logEntry.getNewDetails() != null) {

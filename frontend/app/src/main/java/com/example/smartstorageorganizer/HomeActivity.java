@@ -41,6 +41,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -55,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     public ShapeableImageView profileImage;
     public AppBarConfiguration mAppBarConfiguration;
     public ActivityHomeBinding binding;
-    public String currentName, currentSurname, currentPicture, organizationId;
+    public String currentEmail, currentName, currentSurname, currentPicture, organizationId;
     NavigationView navigationView;
     ImageButton searchButton;
     MyAmplifyApp app;
@@ -206,6 +208,9 @@ public class HomeActivity extends AppCompatActivity {
 
                     for (AuthUserAttribute attribute : attributes) {
                         switch (attribute.getKey().getKeyString()) {
+                            case "email":
+                                currentEmail = attribute.getValue();
+                                break;
                             case "name":
                                 currentName = attribute.getValue();
                                 break;
@@ -254,6 +259,10 @@ public class HomeActivity extends AppCompatActivity {
                 Log.i("AuthQuickStart", "Signed out successfully");
                 future.complete(true);
                 runOnUiThread(() -> {
+                    Date currentDate = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = dateFormat.format(currentDate);
+                    loginActivities(currentEmail, currentName, currentSurname, "sign_out", organizationId, formattedDate);
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -261,6 +270,10 @@ public class HomeActivity extends AppCompatActivity {
             } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
                 future.complete(true);
                 runOnUiThread(() -> {
+                    Date currentDate = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = dateFormat.format(currentDate);
+                    loginActivities(currentEmail, currentName, currentSurname, "sign_out", organizationId, formattedDate);
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -317,6 +330,23 @@ public class HomeActivity extends AppCompatActivity {
             public void onFailure(String error) {
 //                loadingScreen.setVisibility(View.GONE);
                 Toast.makeText(HomeActivity.this, "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void loginActivities(String email, String name, String surname, String type, String organization_id, String time) {
+        UserUtils.loginActivities(email, name, surname, type, organization_id, time, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+
+//                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save"+ result, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                hideLoading();
+//                loginActivities(email, name, surname, "sign_out", organization_id, time);
+                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
             }
         });
     }

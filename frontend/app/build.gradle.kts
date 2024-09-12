@@ -116,6 +116,7 @@ android {
         buildConfigField("String", "increaseQuantity", "\"${localProperties["increaseQuantity"]}\"");
         buildConfigField("String", "reports_getTotalItemsUnderAllParentCategories", "\"${localProperties["reports_getTotalItemsUnderAllParentCategories"]}\"");
         buildConfigField("String", "GetAllCategories", "\"${localProperties["GetAllCategories"]}\"");
+        buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
 
 
 

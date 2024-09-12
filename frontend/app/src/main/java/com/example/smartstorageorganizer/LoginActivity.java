@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     public LottieAnimationView buttonLoader;
     public TextView resetPasswordLink;
     RelativeLayout registerButton;
+    MyAmplifyApp app;
     public static final String API_REQUEST = "API Request";
 
     @Override
@@ -61,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         initializeUI();
 //        checkIfSignedIn();
@@ -307,6 +311,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void navigateToHome(String email) {
+        app.setLoggedIn(true);
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);

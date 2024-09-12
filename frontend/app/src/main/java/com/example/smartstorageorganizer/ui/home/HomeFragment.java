@@ -53,6 +53,8 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.AddItemActivity;
+import com.example.smartstorageorganizer.LoginActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.adapters.CategoryAdapter;
 import com.example.smartstorageorganizer.AddCategoryActivity;
 import com.example.smartstorageorganizer.HomeActivity;
@@ -66,6 +68,7 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -102,7 +105,7 @@ public class HomeFragment extends Fragment {
     private ArrayAdapter<String> subAdapter;
     private RecentAdapter recentAdapter;
     private RecyclerView itemRecyclerView, category_RecyclerView;
-    private String currentEmail, currentName, organizationID;
+    private String currentEmail, currentName, currentSurname, organizationID;
     AlertDialog alertDialog;
     private List<CategoryModel> categoryModelList;
     private List<CategoryModel> subcategoryModelList;
@@ -124,6 +127,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout noInternet;
     private String imageFilePath;
     private AppCompatButton tryAgainButton;
+    MyAmplifyApp app;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -132,6 +136,8 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
         getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
@@ -211,7 +217,7 @@ public class HomeFragment extends Fragment {
                 }
 
                 itemRecyclerView.setVisibility(View.VISIBLE);
-                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -247,6 +253,9 @@ public class HomeFragment extends Fragment {
                             case "name":
                                 currentName = attribute.getValue();
                                 break;
+                            case "family_name":
+                                currentSurname = attribute.getValue();
+                                break;
                             case "address":
                                 organizationID = attribute.getValue();
                                 break;
@@ -255,6 +264,12 @@ public class HomeFragment extends Fragment {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     requireActivity().runOnUiThread(() -> {
+                        if(app.isLoggedIn()){
+                            Date currentDate = new Date();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String formattedDate = dateFormat.format(currentDate);
+                            loginActivities(currentEmail, currentName, currentSurname, "sign_in", organizationID, formattedDate);
+                        }
                         name.setText("Hi "+currentName);
                         categoryAdapter.setOrganizationId(organizationID);
                         recentAdapter.setOrganizationId(organizationID);
@@ -540,7 +555,7 @@ public class HomeFragment extends Fragment {
             Utils.postAddItem(itemImage, itemName, description, category, parentCategory, currentEmail,"unitRed", organizationID,requireActivity(), new OperationCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean result) {
-                    Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(requireActivity(), "Item Added Successfully ", Toast.LENGTH_LONG).show();
                     progressDialogAddingItem.hide();
                     Intent intent = new Intent(requireActivity(), HomeActivity.class);
                     startActivity(intent);
@@ -785,5 +800,21 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void loginActivities(String email, String name, String surname, String type, String organization_id, String time) {
+        UserUtils.loginActivities(email, name, surname, type, organization_id, time, requireActivity(), new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                app.setLoggedIn(false);
+                Toast.makeText(requireActivity(), "Login Activities Successfully Saved"+ result, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                loginActivities(email, name, surname, "sign_in", organization_id, time);
+                Toast.makeText(requireActivity(), "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

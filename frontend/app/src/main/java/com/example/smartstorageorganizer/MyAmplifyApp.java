@@ -16,6 +16,7 @@ public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
     private String organizationID;
     private String userRole;
+    private boolean loggedIn;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,7 +58,11 @@ public class MyAmplifyApp extends Application {
         this.userRole = userRole;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
 
-
-
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
 }
