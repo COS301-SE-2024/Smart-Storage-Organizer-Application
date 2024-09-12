@@ -2,7 +2,9 @@ package com.example.smartstorageorganizer;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,6 +45,9 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     public TextView resetPasswordLink;
     RelativeLayout registerButton;
     MyAmplifyApp app;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     public static final String API_REQUEST = "API Request";
 
     @Override
@@ -65,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         app = (MyAmplifyApp) getApplicationContext();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         initializeUI();
 //        checkIfSignedIn();
@@ -312,10 +321,23 @@ public class LoginActivity extends AppCompatActivity {
 
     public void navigateToHome(String email) {
         app.setLoggedIn(true);
+        updateActiveUser(email);
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
+    }
+
+    private void updateActiveUser(String email) {
+//        String userId = app.getEmail();
+        Map<String, Object> activeUserData = new HashMap<>();
+        activeUserData.put("last_active_time", Timestamp.now());
+//        activeUserData.put("email", email);
+
+        db.collection("active_users").document(email)
+                .set(activeUserData)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
     }
 
     public void navigateToRegistration() {

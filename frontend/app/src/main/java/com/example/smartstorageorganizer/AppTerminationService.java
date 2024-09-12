@@ -66,7 +66,10 @@ public class AppTerminationService extends Service {
         // Send API request when the app is force-closed
         sendAppExitApi(app.getEmail(), app.getName(), app.getSurname(), "sign_out", app.getOrganizationID(), formattedDate);
 
-        String userId = "ezemakau@gmail.com";
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
+        String userId = app.getEmail();
         db.collection("active_users").document(userId)
                 .delete()
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User removed from active users"))

@@ -1,11 +1,20 @@
 package com.example.smartstorageorganizer;
 
+import android.animation.LayoutTransition;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -13,11 +22,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import com.google.firebase.firestore.EventListener;
@@ -27,6 +36,8 @@ public class AppReportActivity extends BaseActivity {
     FirebaseFirestore db;
     FirebaseAuth auth;
     MyAmplifyApp app;
+    TableLayout usersListTable;
+    private ImageView arrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +51,27 @@ public class AppReportActivity extends BaseActivity {
         });
 
         app = (MyAmplifyApp) getApplicationContext();
-
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        // Update user's last active time when the app opens
-        updateActiveUser();
+        arrow = findViewById(R.id.arrow);
+        usersListTable = findViewById(R.id.usersListTable);
+
+        RelativeLayout parentLayout = findViewById(R.id.parentLayout);
+        LayoutTransition layoutTransition = new LayoutTransition();
+        parentLayout.setLayoutTransition(layoutTransition);
+
+        findViewById(R.id.cardViewAppReports).setOnClickListener(v -> {
+            if (usersListTable.getVisibility() == View.VISIBLE) {
+                usersListTable.setVisibility(View.GONE); // Collapse
+                rotateArrow(arrow, 180, 0);
+            } else {
+                usersListTable.setVisibility(View.VISIBLE); // Expand
+                rotateArrow(arrow, 0, 180);
+            }
+        });
     }
 
-    private void updateActiveUser() {
-        String userId = "ezemakau@gmail.com";
-        Map<String, Object> activeUserData = new HashMap<>();
-        activeUserData.put("last_active_time", Timestamp.now());
-
-        db.collection("active_users").document(userId)
-                .set(activeUserData)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
-                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
-    }
-
-    // Call this method to listen for real-time updates
     private void listenForActiveUsersRealTime() {
         Timestamp thirtyMinutesAgo = new Timestamp(new Date(System.currentTimeMillis() - (30 * 60 * 1000)));
 
@@ -79,17 +91,105 @@ public class AppReportActivity extends BaseActivity {
 
                             // Update your UI with the count
                             TextView activeUsersTextView = findViewById(R.id.activeUsersTextView);
-                            activeUsersTextView.setText("Active Users: " + activeUsersCount);
+                            activeUsersTextView.setText(String.valueOf(activeUsersCount));
+                            TableLayout usersListTable = findViewById(R.id.usersListTable);
+                            usersListTable.removeAllViews();
+                            addRowHeader();
+                            /* // Loop through all the active users and display their emails */
+                            for (QueryDocumentSnapshot doc : value) {
+                                String email = doc.getId(); // Assuming document ID is the email
+                                Timestamp lastActiveTimestamp = doc.getTimestamp("last_active_time");
+
+                                String lastActiveTime = formatTimestamp(lastActiveTimestamp);
+
+                                addRowToTable(email, lastActiveTime);
+                            }
                         }
                     }
                 });
     }
 
+    private void addRowHeader(){
+        TableRow headerRow = new TableRow(this);
+        headerRow.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        // Create TextViews for the header row
+        TextView headerNameTextView = new TextView(this);
+        headerNameTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 6));
+        headerNameTextView.setText("Username");
+        headerNameTextView.setTextColor(Color.WHITE);
+        headerNameTextView.setPadding(10, 10, 10, 10);
+        headerNameTextView.setTextSize(14);
+        headerNameTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        TextView headerQuantityTextView = new TextView(this);
+        headerQuantityTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 6));
+        headerQuantityTextView.setText("Time");
+        headerQuantityTextView.setTextColor(Color.WHITE);
+        headerQuantityTextView.setPadding(10, 10, 10, 10);
+        headerQuantityTextView.setTextSize(14);
+        headerQuantityTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        headerRow.addView(headerNameTextView);
+        headerRow.addView(headerQuantityTextView);
+
+        usersListTable.addView(headerRow);
+    }
+
+    private String formatTimestamp(Timestamp timestamp) {
+        if (timestamp != null) {
+            Date date = timestamp.toDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.format(date);
+        }
+        return "N/A";
+    }
+
+    // Method to add a row to the TableLayout with the user's email and last active time
+    private void addRowToTable(String email, String lastActiveTime) {
+        // Create a new TableRow
+        TableRow tableRow = new TableRow(this);
+        tableRow.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT));
+        tableRow.setGravity(Gravity.CENTER_VERTICAL);
+
+        // Create a TextView for the email
+        TextView emailTextView = new TextView(this);
+        emailTextView.setText(email);
+        emailTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 6));
+        emailTextView.setPadding(16, 16, 16, 16);
+        emailTextView.setTextSize(16);
+        emailTextView.setTextColor(Color.BLACK);
+
+        // Create a TextView for the last active time
+        TextView lastActiveTextView = new TextView(this);
+        lastActiveTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 6));
+        lastActiveTextView.setText(lastActiveTime);
+        lastActiveTextView.setPadding(16, 16, 16, 16);
+        lastActiveTextView.setTextSize(16);
+        lastActiveTextView.setTextColor(Color.GRAY);
+
+        // Add TextViews to the TableRow
+        tableRow.addView(emailTextView);
+        tableRow.addView(lastActiveTextView);
+
+        // Add TableRow to TableLayout
+        usersListTable.addView(tableRow);
+    }
+
+    private void rotateArrow(ImageView arrow, float fromDegree, float toDegree) {
+        RotateAnimation rotate = new RotateAnimation(fromDegree, toDegree,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(300);
+        rotate.setFillAfter(true);
+        arrow.startAnimation(rotate);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        updateActiveUser();  // Update user activity
-        listenForActiveUsersRealTime();  // Listen for real-time active users
+        listenForActiveUsersRealTime();
     }
 
 }

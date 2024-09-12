@@ -47,11 +47,19 @@ import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -85,6 +93,9 @@ public class HomeActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
 
         app = (MyAmplifyApp) getApplicationContext();
+
+        // Update user's last active time when the app opens
+//        updateActiveUser();
 
         if (!isServiceRunning(AppTerminationService.class)) {
             startAppExitService();
@@ -410,5 +421,23 @@ public class HomeActivity extends BaseActivity  {
             startForegroundService(serviceIntent);
         }
     }
+
+//    private void updateActiveUser() {
+//        String userId = app.getEmail();
+//        Map<String, Object> activeUserData = new HashMap<>();
+//        activeUserData.put("last_active_time", Timestamp.now());
+//
+//        db.collection("active_users").document(userId)
+//                .set(activeUserData)
+//                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
+//                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
+//    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+////        updateActiveUser();  // Update user activity
+////        listenForActiveUsersRealTime();  // Listen for real-time active users
+//    }
 }
 
