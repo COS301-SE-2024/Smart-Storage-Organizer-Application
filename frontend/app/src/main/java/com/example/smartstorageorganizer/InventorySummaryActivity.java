@@ -31,6 +31,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
@@ -83,6 +84,8 @@ public class InventorySummaryActivity extends BaseActivity {
     private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
     private ArrayAdapter<String> adapter;
+    private LottieAnimationView reportLoader;
+    private ScrollView mainScrollview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,8 @@ public class InventorySummaryActivity extends BaseActivity {
         quantityOfItems = findViewById(R.id.quantityOfItems);
         dateFilterSpinner = findViewById(R.id.dateFilterSpinner);
         parentCategoriesgroupedBarChart = findViewById(R.id.parentCategoriesgroupedBarChart);
+        reportLoader = findViewById(R.id.loadingScreen);
+        mainScrollview = findViewById(R.id.mainScrollview);
 
         app = (MyAmplifyApp) getApplicationContext();
         originalItemList = new ArrayList<>();
@@ -676,7 +681,9 @@ public class InventorySummaryActivity extends BaseActivity {
                 }
                 String selectedRange = dateFilterSpinner.getSelectedItem().toString();
                 filterItemsByDate(selectedRange);
-                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
+                mainScrollview.setVisibility(View.VISIBLE);
+                reportLoader.setVisibility(View.GONE);
+//                Toast.makeText(InventorySummaryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

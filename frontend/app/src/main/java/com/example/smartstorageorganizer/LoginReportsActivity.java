@@ -3,6 +3,8 @@ package com.example.smartstorageorganizer;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.LoginReportsModel;
@@ -26,6 +29,8 @@ import java.util.Objects;
 public class LoginReportsActivity extends BaseActivity {
     private MyAmplifyApp app;
     private TableLayout usersListTable;
+    private LottieAnimationView reportLoader;
+    private ScrollView mainScrollview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,8 @@ public class LoginReportsActivity extends BaseActivity {
 
         app = (MyAmplifyApp) getApplicationContext();
         usersListTable = findViewById(R.id.usersListTable);
+        reportLoader = findViewById(R.id.loadingScreen);
+        mainScrollview = findViewById(R.id.mainScrollview);
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -123,7 +130,9 @@ public class LoginReportsActivity extends BaseActivity {
             @Override
             public void onSuccess(List<LoginReportsModel> result) {
                 populateTable(result);
-                Toast.makeText(LoginReportsActivity.this, "Stats fetched successfully!!!"+result.get(0).getName(), Toast.LENGTH_SHORT).show();
+                mainScrollview.setVisibility(View.VISIBLE);
+                reportLoader.setVisibility(View.GONE);
+//                Toast.makeText(LoginReportsActivity.this, "Stats fetched successfully!!!"+result.get(0).getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

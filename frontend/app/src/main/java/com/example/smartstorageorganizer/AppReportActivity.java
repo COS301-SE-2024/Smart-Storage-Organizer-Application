@@ -85,7 +85,7 @@ public class AppReportActivity extends BaseActivity {
         List<String> activities = new ArrayList<>();
         activities.add("HomeFragment");
         activities.add("SearchActivity");
-        activities.add("ReportActivity");
+        activities.add("ReportsActivity");
         activities.add("ViewItemActivity");
         activities.add("ViewUnitItemsActivity");
         activities.add("UncategorizedItemsActivity");
@@ -95,6 +95,9 @@ public class AppReportActivity extends BaseActivity {
         activities.add("AddOrganizationActivity");
         activities.add("GetStartedActivity");
         activities.add("AddCategoryActivity");
+        activities.add("UnitActivity");
+        activities.add("AddColorCodeActivity");
+        activities.add("AddItemActivity");
 
         arrow = findViewById(R.id.arrow);
         usersListTable = findViewById(R.id.usersListTable);

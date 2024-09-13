@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer;
 import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -28,9 +29,14 @@ import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.ReportModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ReportsActivity extends BaseActivity  {
@@ -38,12 +44,17 @@ public class ReportsActivity extends BaseActivity  {
     private GridLayout gridLayoutItems, gridLayoutApp;
     private ImageView arrow, appArrow;
     private CardView inventorySummary, expiryReport, stockReport, loginReport, logsReport;
+    private MyAmplifyApp app;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_reports);
+
+        app = (MyAmplifyApp) getApplicationContext();
+
 
         arrow = findViewById(R.id.arrow);
         appArrow = findViewById(R.id.appReportarrow);
@@ -91,6 +102,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutItems.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, InventorySummaryActivity.class);
+                logUserFlow("InventorySummaryActivity");
                 startActivity(intent);
             }
         });
@@ -100,6 +112,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutItems.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, ExpiryActivity.class);
+                logUserFlow("ExpiryActivity");
                 startActivity(intent);
             }
         });
@@ -109,6 +122,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutItems.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, LowStockActivity.class);
+                logUserFlow("LowStockActivity");
                 startActivity(intent);
             }
         });
@@ -119,6 +133,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutApp.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, LoginReportsActivity.class);
+                logUserFlow("LoginReportsActivity");
                 startActivity(intent);
             }
         });
@@ -129,6 +144,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutApp.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, LogsActivity.class);
+                logUserFlow("LogsActivity");
                 startActivity(intent);
             }
         });
@@ -139,6 +155,7 @@ public class ReportsActivity extends BaseActivity  {
                 gridLayoutApp.setVisibility(View.VISIBLE);
                 rotateArrow(arrow, 0, 180);
                 Intent intent = new Intent(ReportsActivity.this, AppReportActivity.class);
+                logUserFlow("AppReportActivity");
                 startActivity(intent);
             }
         });
@@ -150,5 +167,73 @@ public class ReportsActivity extends BaseActivity  {
         rotate.setDuration(300);
         rotate.setFillAfter(true);
         arrow.startAnimation(rotate);
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("ReportsActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "ReportsActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("ReportsActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

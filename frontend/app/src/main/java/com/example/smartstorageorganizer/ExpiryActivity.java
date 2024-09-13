@@ -32,6 +32,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -76,6 +77,8 @@ public class ExpiryActivity extends BaseActivity {
     private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
     private TextView ItemsNearExpiry, expiredItems;
+    private LottieAnimationView reportLoader;
+    private ScrollView mainScrollview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,8 @@ public class ExpiryActivity extends BaseActivity {
         expiredItemsListTable = findViewById(R.id.expiredItemsListTable);
         ItemsNearExpiry = findViewById(R.id.ItemsNearExpiry);
         expiredItems = findViewById(R.id.expiredItems);
+        reportLoader = findViewById(R.id.loadingScreen);
+        mainScrollview = findViewById(R.id.mainScrollview);
 
 
 
@@ -281,6 +286,8 @@ public class ExpiryActivity extends BaseActivity {
                 String selectedRange = spinnerDateRange.getSelectedItem().toString();
                 filterItemsByDate(selectedRange);
                 expiredItems();
+                mainScrollview.setVisibility(View.VISIBLE);
+                reportLoader.setVisibility(View.GONE);
 //                countExpiredAndNearExpiryItems();
 //                Toast.makeText(ExpiryActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
             }

@@ -50,6 +50,8 @@ import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +63,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -98,6 +102,7 @@ public class AddItemActivity extends BaseActivity  {
     private List<CategoryModel> subcategoryModelList;
     ProgressDialog progressDialogAddingItem;
     MyAmplifyApp app;
+    private long startTime;
 
 
     @Override
@@ -512,6 +517,7 @@ public class AddItemActivity extends BaseActivity  {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 //                progressDialogAddingItem.hide();
                 Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
+                logUserFlow("HomeFragment");
                 startActivity(intent);
                 finish();
             }
@@ -549,5 +555,73 @@ public class AddItemActivity extends BaseActivity  {
         }
 
         return ""; // Return null if no category with the given name is found
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("AddItemActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "AddItemActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("AddItemActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

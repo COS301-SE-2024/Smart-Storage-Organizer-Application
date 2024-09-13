@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.LogEntryAdapter;
 import com.example.smartstorageorganizer.model.LogEntry;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -44,6 +46,8 @@ public class LogsActivity extends BaseActivity {
     private int currentPage = 1;
     private int itemsPerPage = 5;
     private int totalPages;
+    private LottieAnimationView reportLoader;
+    private ScrollView mainScrollview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,8 @@ public class LogsActivity extends BaseActivity {
         btnOpenBottomSheet = findViewById(R.id.buttonFilter);
         activitiesList = findViewById(R.id.activitiesList);
         arrow = findViewById(R.id.arrow);
+        reportLoader = findViewById(R.id.loadingScreen);
+        mainScrollview = findViewById(R.id.mainScrollview);
 
 //        expandCollapseText = findViewById(R.id.expandCollapseText);
 //        expandableSection = findViewById(R.id.expandableSection);
@@ -167,6 +173,8 @@ public class LogsActivity extends BaseActivity {
 
         // Initially load the first page
         logEntryAdapter.addData(new ArrayList<>(logEntryList.subList(0, Math.min(itemsPerPage, logEntryList.size()))));
+        mainScrollview.setVisibility(View.VISIBLE);
+        reportLoader.setVisibility(View.GONE);
     }
 
     // Set up pagination buttons based on the total number of items

@@ -31,6 +31,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -68,6 +69,8 @@ public class LowStockActivity extends BaseActivity {
     private List<CategoryModel> categoryModelList;
     private ArrayList<String> parentCategories;
     private ArrayAdapter<String> adapter;
+    private LottieAnimationView reportLoader;
+    private ScrollView mainScrollview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,8 @@ public class LowStockActivity extends BaseActivity {
 
         customNumberEditText = findViewById(R.id.custom_number_editText);
         confirmButton = findViewById(R.id.confirm_button);
+        reportLoader = findViewById(R.id.loadingScreen);
+        mainScrollview = findViewById(R.id.mainScrollview);
 
         app = (MyAmplifyApp) getApplicationContext();
         originalItemList = new ArrayList<>();
@@ -191,9 +196,11 @@ public class LowStockActivity extends BaseActivity {
                 populateTable(originalItemList, "");
                 populateTable(originalItemList, "indicator");
                 subcategoryPieChart();
+                mainScrollview.setVisibility(View.VISIBLE);
+                reportLoader.setVisibility(View.GONE);
 //                String selectedRange = dateFilterSpinner.getSelectedItem().toString();
 //                filterItemsByDate(selectedRange);
-                Toast.makeText(LowStockActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LowStockActivity.this, "Stats fetched successfully!!!"+result.get(0).getCategoryName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
