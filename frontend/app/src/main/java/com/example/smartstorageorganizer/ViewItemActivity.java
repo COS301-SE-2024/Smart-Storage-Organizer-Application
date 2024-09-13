@@ -723,7 +723,7 @@ public class ViewItemActivity extends BaseActivity {
 
     private void logActivityView(String activityName) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = getIntent().getStringExtra("email");
+        String userId = app.getEmail();
 
         Map<String, Object> activityView = new HashMap<>();
         activityView.put("user_id", userId);
@@ -738,7 +738,7 @@ public class ViewItemActivity extends BaseActivity {
 
     private void logSessionDuration(String activityName, long sessionDuration) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = getIntent().getStringExtra("email");
+        String userId = app.getEmail();
 
         Map<String, Object> sessionData = new HashMap<>();
         sessionData.put("user_id", userId);
@@ -756,7 +756,7 @@ public class ViewItemActivity extends BaseActivity {
         long transitionTime = System.currentTimeMillis();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = getIntent().getStringExtra("email");
+        String userId = app.getEmail();
 
         Map<String, Object> userFlowData = new HashMap<>();
         userFlowData.put("user_id", userId);

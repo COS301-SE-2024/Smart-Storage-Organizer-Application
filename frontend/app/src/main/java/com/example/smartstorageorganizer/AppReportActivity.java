@@ -32,7 +32,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -73,7 +76,7 @@ public class AppReportActivity extends BaseActivity {
         appReportAdapter = new AppReportAdapter(appReportModelList);
         recyclerView.setAdapter(appReportAdapter);
 
-        loadInitialData();
+//        loadInitialData();
 
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         LayoutTransition layoutTransition = new LayoutTransition();
@@ -213,10 +216,154 @@ public class AppReportActivity extends BaseActivity {
         appReportAdapter.notifyDataSetChanged();
     }
 
+    private void listenForActivityViewsRealTime() {
+        db.collection("activity_views")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Firestore", "Listen failed.", e);
+                            return;
+                        }
+
+                        // Map to hold the view counts per activity
+                        HashMap<String, Integer> activityViewsMap = new HashMap<>();
+                        HashSet<String> activeUsersSet = new HashSet<>();
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            String activityName = doc.getString("activity_name");
+                            String userId = doc.getString("user_id");
+
+                            // Add user to active users set
+                            activeUsersSet.add(userId);
+
+                            // Increment view count for the activity
+                            if (activityViewsMap.containsKey(activityName)) {
+                                activityViewsMap.put(activityName, activityViewsMap.get(activityName) + 1);
+                            } else {
+                                activityViewsMap.put(activityName, 1);
+                            }
+                        }
+
+                        // Now update the appReportModelList based on the activityViewsMap
+                        updateAppReportViews(activityViewsMap, activeUsersSet.size());
+                    }
+                });
+    }
+
+    private void updateAppReportViews(HashMap<String, Integer> activityViewsMap, int activeUsersCount) {
+        appReportModelList.clear(); // Clear the list before adding updated data
+
+        for (Map.Entry<String, Integer> entry : activityViewsMap.entrySet()) {
+            String activityName = entry.getKey();
+            String views = String.valueOf(entry.getValue());
+
+            // Create a new AppReportModel with the activity views and active users count
+            AppReportModel reportModel = new AppReportModel(
+                    activityName,
+                    views,
+                    String.valueOf(activeUsersCount),
+                    "N/A",  // Placeholder for viewsPerActiveUser
+                    "N/A",  // Placeholder for average engagement time
+                    views   // Event count (assuming it's the same as views)
+            );
+
+            appReportModelList.add(reportModel);
+        }
+
+        // Notify the adapter of the data change
+        appReportAdapter.notifyDataSetChanged();
+    }
+
+    private void listenForActivitySessionsRealTime() {
+        db.collection("activity_sessions")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Firestore", "Listen failed.", e);
+                            return;
+                        }
+
+                        // Map to hold total session durations and count per activity
+                        HashMap<String, Long> totalDurationMap = new HashMap<>();
+                        HashMap<String, Integer> sessionCountMap = new HashMap<>();
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            String activityName = doc.getString("activity_name");
+                            Long sessionDuration = doc.getLong("session_duration");
+
+                            // Increment total duration for the activity
+                            totalDurationMap.put(activityName, totalDurationMap.getOrDefault(activityName, 0L) + sessionDuration);
+
+                            // Increment session count for the activity
+                            sessionCountMap.put(activityName, sessionCountMap.getOrDefault(activityName, 0) + 1);
+                        }
+
+                        // Now update the appReportModelList based on totalDurationMap and sessionCountMap
+                        updateAppReportSessions(totalDurationMap, sessionCountMap);
+                    }
+                });
+    }
+
+    private void updateAppReportSessions(HashMap<String, Long> totalDurationMap, HashMap<String, Integer> sessionCountMap) {
+        for (AppReportModel reportModel : appReportModelList) {
+            String activityName = reportModel.getPageTitle();
+
+            if (totalDurationMap.containsKey(activityName)) {
+                long totalDuration = totalDurationMap.get(activityName);
+                int sessionCount = sessionCountMap.get(activityName);
+
+                // Calculate the average session duration
+                long averageDuration = totalDuration / sessionCount;
+                String averageDurationFormatted = formatDuration(averageDuration);
+
+                // Update the report model
+                reportModel.setAverageEngagementTimePerActiveUser(averageDurationFormatted);
+            }
+        }
+
+        // Notify the adapter of the data change
+        appReportAdapter.notifyDataSetChanged();
+    }
+
+    // Helper method to format the duration in milliseconds to a readable time (minutes:seconds)
+    private String formatDuration(long durationMillis) {
+        long minutes = (durationMillis / 1000) / 60;
+        long seconds = (durationMillis / 1000) % 60;
+        return String.format("%dm %02ds", minutes, seconds);
+    }
+
+    private void listenForUserFlowRealTime() {
+        db.collection("user_flow")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Firestore", "Listen failed.", e);
+                            return;
+                        }
+
+                        // Just log or track activity transitions
+                        for (QueryDocumentSnapshot doc : value) {
+                            String previousActivity = doc.getString("previous_activity");
+                            String nextActivity = doc.getString("next_activity");
+
+                            Log.d("UserFlow", "Transition from " + previousActivity + " to " + nextActivity);
+                        }
+                    }
+                });
+    }
+
+
+
     @Override
     protected void onResume() {
         super.onResume();
         listenForActiveUsersRealTime();
+        listenForActivityViewsRealTime();
+        listenForActivitySessionsRealTime();
+        listenForUserFlowRealTime();
     }
 
 }
