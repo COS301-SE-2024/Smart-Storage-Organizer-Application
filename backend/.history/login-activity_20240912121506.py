@@ -191,14 +191,5 @@ def heartbeat_check(body):
             connection.close()
 
 
-body ={
-    "body":{
-        "email":"admin",
-        "name":"victor",
-        "surname":"zhou",
-        "type":"sign_in",
-        "organization_id":1,
-        "time":"2024-09-12 11:52:16"
-}
-}
+body ={"email": "ezemakau@gmail.com","name": "Ezekiel","surname": "null","type": "sign_out","organization_id": "1","time": "2024-09-12 11:52:16"}
 print(lambda_handler({'body': json.dumps(body)}, {}))

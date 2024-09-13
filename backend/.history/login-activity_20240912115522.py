@@ -18,10 +18,10 @@ def get_db_connection():
                 # user=os.environ.get('Username'),
                 # password=os.environ.get('Password')
 
-                host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
-                database="postgres",
-                user="MasterUser",
-                password="MasterDb#ss1"
+            host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
+            database="postgres",
+            user="MasterUser",
+            password="MasterDb#ss1"
             )
         except Exception as e:
             return {
@@ -64,13 +64,13 @@ def sign_in(body):
     try:
         with connection.cursor() as cursor:
             date_str = body['time']
-            date_obj = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d')
             timestamp = date_obj.strftime('%Y-%m-%d %H:%M:%S')
 
             query = "INSERT INTO login_activity (email, name, surname, time_in, last_heartbeat,organization_id) VALUES (%s, %s, %s, %s,%s,%s)"
             cursor.execute(query, (body['email'], body['name'], body['surname'], timestamp,timestamp,body['organization_id']))
             connection.commit()
-
+            
         return {
             'statusCode': 200,
             'body': 'Login activity recorded successfully'
@@ -92,7 +92,7 @@ def sign_out(body):
     try:
         with connection.cursor() as cursor:
             date_str = body['time']
-            date_obj = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d')
             timestamp = date_obj.strftime('%Y-%m-%d %H:%M:%S')
 
             check_query = "SELECT * FROM login_activity WHERE email = %s AND organization_id = %s AND time_out IS NULL"
@@ -190,15 +190,4 @@ def heartbeat_check(body):
         if connection:
             connection.close()
 
-
-body ={
-    "body":{
-        "email":"admin",
-        "name":"victor",
-        "surname":"zhou",
-        "type":"sign_in",
-        "organization_id":1,
-        "time":"2024-09-12 11:52:16"
-}
-}
 print(lambda_handler({'body': json.dumps(body)}, {}))
