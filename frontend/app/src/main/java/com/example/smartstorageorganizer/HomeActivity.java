@@ -77,6 +77,7 @@ public class HomeActivity extends BaseActivity  {
     NavigationView navigationView;
     ImageButton searchButton;
     MyAmplifyApp app;
+    private long startTime;
     private static final String CHANNEL_ID = "AppExitServiceChannel";
 
     private boolean isServiceRunning(Class<?> serviceClass) {
@@ -412,32 +413,79 @@ public class HomeActivity extends BaseActivity  {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        // Start the service as a foreground service with the notification
-//        Intent serviceIntent = new Intent(this, AppTerminationService.class);
         Intent serviceIntent = new Intent(this, AppTerminationService.class);
-//        startForegroundService(serviceIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent);
         }
     }
 
-//    private void updateActiveUser() {
-//        String userId = app.getEmail();
-//        Map<String, Object> activeUserData = new HashMap<>();
-//        activeUserData.put("last_active_time", Timestamp.now());
-//
-//        db.collection("active_users").document(userId)
-//                .set(activeUserData)
-//                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
-//                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
-//    }
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = getIntent().getStringExtra("email");
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-////        updateActiveUser();  // Update user activity
-////        listenForActiveUsersRealTime();  // Listen for real-time active users
-//    }
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = getIntent().getStringExtra("email");
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+
+    private void logUserFlow(String fromActivity, String toActivity, long transitionTime) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = getIntent().getStringExtra("email");
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", fromActivity);
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        logActivityView("HomeActivity");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        long sessionDuration = System.currentTimeMillis() - startTime;
+//        logSessionDuration("HomeActivity", (sessionDuration));
+//        long transitionTime = System.currentTimeMillis();
+//        logUserFlow("HomeActivity", "ReportsActivity", transitionTime);
+    }
+
 }
 

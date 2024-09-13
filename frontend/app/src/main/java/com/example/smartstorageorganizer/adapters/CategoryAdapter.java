@@ -26,6 +26,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -38,10 +39,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private List<CategoryModel> categoryModelList;
     private String organizationID;
+    private HomeFragment homeFragment;
 
-    public CategoryAdapter(Context context, List<CategoryModel> categoryModelList) {
+    public CategoryAdapter(Context context, List<CategoryModel> categoryModelList, HomeFragment homeFragment) {
         this.context = context;
         this.categoryModelList = categoryModelList;
+        this.homeFragment = homeFragment;
     }
 
     @NonNull
@@ -69,12 +72,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.itemView.setOnClickListener(view -> {
             Intent intent = null;
 
-            if (!Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")){
+            // Logging the flow
+            String currentActivity = "HomeFragment";
+            String nextActivity;
+
+            if (!Objects.equals(categoryModelList.get(position).getCategoryID(), "uncategorized")) {
+                nextActivity = "ViewItemActivity";
                 intent = new Intent(view.getContext(), ViewItemActivity.class);
-            }
-            else {
+            } else {
+                nextActivity = "UncategorizedItemsActivity";
                 intent = new Intent(view.getContext(), UncategorizedItemsActivity.class);
             }
+
+            // Log user flow using the homeFragment reference
+            homeFragment.logUserFlow(currentActivity, nextActivity);  // Pass the activity names
+
             intent.putExtra("category", categoryModelList.get(holder.getAdapterPosition()).getCategoryName());
             intent.putExtra("category_id", categoryModelList.get(holder.getAdapterPosition()).getCategoryID());
             intent.putExtra("color_code_id", "");

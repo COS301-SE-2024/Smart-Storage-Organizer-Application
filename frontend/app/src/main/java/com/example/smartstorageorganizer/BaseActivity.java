@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private static final long INACTIVITY_TIMEOUT = 60000; // 5 minutes in milliseconds (300,000)
     private Handler inactivityHandler;
