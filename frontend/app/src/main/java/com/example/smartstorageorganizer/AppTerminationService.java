@@ -46,10 +46,20 @@ public class AppTerminationService extends Service {
         Log.d("AppTerminationService", "Service started");
         app = (MyAmplifyApp) getApplicationContext();
 
-        // Call startForeground() as soon as the service starts
-        createNotificationChannel();  // Create notification channel for Android O and above
-        startForeground(1, getNotification());  // Start the service in the foreground with a notification
+        try {
+            // Ensure notification channel is created before starting foreground
+            createNotificationChannel();
+
+            // Start the service in the foreground with a valid notification
+            startForeground(1, getNotification());
+            Log.d("AppTerminationService", "Service started in the foreground");
+
+        } catch (Exception e) {
+            // Catch any exception and log it
+            Log.e("AppTerminationService", "Error starting foreground service", e);
+        }
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -75,8 +85,6 @@ public class AppTerminationService extends Service {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User removed from active users"))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error removing user", e));
 
-
-        // Stop the service after sending the API
         stopSelf();
     }
 
@@ -93,9 +101,6 @@ public class AppTerminationService extends Service {
                 + "\"time\": \"" + time + "\""
                 + "}"
                 + "}";
-
-//        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", username+" "+type));
-
 
         List<UserModel> usersList = new ArrayList<>();
 
@@ -125,13 +130,10 @@ public class AppTerminationService extends Service {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp Group", responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
-//                            JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                         }catch (JSONException e){
 

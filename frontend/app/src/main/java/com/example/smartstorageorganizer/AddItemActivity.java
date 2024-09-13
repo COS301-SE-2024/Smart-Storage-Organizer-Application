@@ -97,6 +97,8 @@ public class AddItemActivity extends BaseActivity  {
     private List<CategoryModel> categoryModelList;
     private List<CategoryModel> subcategoryModelList;
     ProgressDialog progressDialogAddingItem;
+    MyAmplifyApp app;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,9 @@ public class AddItemActivity extends BaseActivity  {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        app = (MyAmplifyApp) getApplicationContext();
+
 
         description = findViewById(R.id.inputDescription);
         name = findViewById(R.id.inputName);
@@ -501,7 +506,7 @@ public class AddItemActivity extends BaseActivity  {
 //            Log.i("progress", units.toString());
 //            String allocated=Utils.AllocateUnitToItem(units);
 //            Log.i("progress", "Allocated: "+allocated);
-        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, "ezemakau@gmail.com","unitRed", "1",this, new OperationCallback<Boolean>() {
+        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, app.getEmail(),"unitRed", app.getOrganizationID(),this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
