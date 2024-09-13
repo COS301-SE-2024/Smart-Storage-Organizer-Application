@@ -23,8 +23,10 @@ import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.SearchActivity;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
+import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.ui.home.HomeFragment;
 import com.example.smartstorageorganizer.utils.OperationCallback;
@@ -101,6 +103,17 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                     intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
                     intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
                     intent.putExtra("organization_id", organizationID);
+
+                    if (context instanceof UncategorizedItemsActivity) {
+                        ((UncategorizedItemsActivity) context).logUserFlow("ItemDetailsActivity");
+                    }
+                    else if (context instanceof HomeActivity) {
+                        ((HomeActivity) context).logUserFlow("HomeFragment", "ItemDetailsActivity");
+                    }
+                    else if (context instanceof SearchActivity) {
+                        ((SearchActivity) context).logUserFlow("ItemDetailsActivity");
+                    }
+
 
                     context.startActivity(intent);
                 }

@@ -533,15 +533,18 @@ public class HomeFragment extends Fragment {
         });
         addCategoryButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+            logUserFlow("HomeFragment", "AddCategoryActivity");
             intent.putExtra("email", currentEmail);
             startActivity(intent);
         });
         addUnitButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), UnitActivity.class);
+            logUserFlow("HomeFragment", "UnitActivity");
             startActivity(intent);
         });
         addColorButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
+            logUserFlow("HomeFragment", "AddColorCodeActivity");
             intent.putExtra("email", currentEmail);
             startActivity(intent);
         });

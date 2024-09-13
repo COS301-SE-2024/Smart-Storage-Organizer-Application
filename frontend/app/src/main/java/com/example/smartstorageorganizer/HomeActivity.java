@@ -148,11 +148,7 @@ public class HomeActivity extends BaseActivity  {
                     if (currentFragment != null) {
                         String fragmentName = currentFragment.getClass().getSimpleName();
                         Log.d("CurrentFragment", "Active Fragment: " + fragmentName);
-
-                        long sessionDuration = System.currentTimeMillis() - startTime;
-                        logSessionDuration(fragmentName, (sessionDuration));
-                        long transitionTime = System.currentTimeMillis();
-                        logUserFlow(fragmentName, "SearchActivity", transitionTime);
+                        logUserFlow(fragmentName, "SearchActivity");
                     }
                 }
 
@@ -469,7 +465,11 @@ public class HomeActivity extends BaseActivity  {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
     }
 
-    private void logUserFlow(String fromActivity, String toActivity, long transitionTime) {
+    public void logUserFlow(String fromActivity, String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration(fromActivity, (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = getIntent().getStringExtra("email");
 
