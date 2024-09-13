@@ -27,8 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -138,6 +141,22 @@ public class HomeActivity extends BaseActivity  {
         findViewById(R.id.search_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment_content_home);
+                if (navHostFragment != null) {
+                    Fragment currentFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
+                    if (currentFragment != null) {
+                        String fragmentName = currentFragment.getClass().getSimpleName();
+                        Log.d("CurrentFragment", "Active Fragment: " + fragmentName);
+
+                        long sessionDuration = System.currentTimeMillis() - startTime;
+                        logSessionDuration(fragmentName, (sessionDuration));
+                        long transitionTime = System.currentTimeMillis();
+                        logUserFlow(fragmentName, "SearchActivity", transitionTime);
+                    }
+                }
+
+
                 Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
                 startActivity(intent);
             }

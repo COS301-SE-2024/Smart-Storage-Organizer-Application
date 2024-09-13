@@ -168,17 +168,21 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="16dp"
                     android:scrollbars="vertical" />
-            </LinearLayout>
+<!--            </LinearLayout>-->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/userFlowPieChart"
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
         </LinearLayout>
 
     </ScrollView>

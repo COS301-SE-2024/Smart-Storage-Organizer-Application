@@ -23,9 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.adapters.AppReportAdapter;
 import com.example.smartstorageorganizer.model.AppReportModel;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -49,6 +55,8 @@ public class AppReportActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private AppReportAdapter appReportAdapter;
     private List<AppReportModel> appReportModelList;
+    private ListenerRegistration listenerRegistration;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,18 +234,21 @@ public class AppReportActivity extends BaseActivity {
                             return;
                         }
 
-                        // Map to hold the view counts per activity
                         HashMap<String, Integer> activityViewsMap = new HashMap<>();
                         HashSet<String> activeUsersSet = new HashSet<>();
+                        int totalViews = 0;
 
                         for (QueryDocumentSnapshot doc : value) {
                             String activityName = doc.getString("activity_name");
                             String userId = doc.getString("user_id");
 
-                            // Add user to active users set
+                            // Track unique active users
                             activeUsersSet.add(userId);
 
-                            // Increment view count for the activity
+                            // Track the total views
+                            totalViews++;
+
+                            // Increment view count per activity
                             if (activityViewsMap.containsKey(activityName)) {
                                 activityViewsMap.put(activityName, activityViewsMap.get(activityName) + 1);
                             } else {
@@ -245,13 +256,16 @@ public class AppReportActivity extends BaseActivity {
                             }
                         }
 
-                        // Now update the appReportModelList based on the activityViewsMap
-                        updateAppReportViews(activityViewsMap, activeUsersSet.size());
+                        // Calculate views per active user
+                        int viewsPerActiveUser = (activeUsersSet.size() > 0) ? totalViews / activeUsersSet.size() : 0;
+
+                        // Update the app report views with the new data
+                        updateAppReportViews(activityViewsMap, activeUsersSet.size(), viewsPerActiveUser);
                     }
                 });
     }
 
-    private void updateAppReportViews(HashMap<String, Integer> activityViewsMap, int activeUsersCount) {
+    private void updateAppReportViews(HashMap<String, Integer> activityViewsMap, int activeUsersCount, int viewsPerActiveUser) {
         appReportModelList.clear(); // Clear the list before adding updated data
 
         for (Map.Entry<String, Integer> entry : activityViewsMap.entrySet()) {
@@ -263,7 +277,7 @@ public class AppReportActivity extends BaseActivity {
                     activityName,
                     views,
                     String.valueOf(activeUsersCount),
-                    "N/A",  // Placeholder for viewsPerActiveUser
+                    String.valueOf(viewsPerActiveUser),  // Views per active user
                     "N/A",  // Placeholder for average engagement time
                     views   // Event count (assuming it's the same as views)
             );
@@ -274,6 +288,7 @@ public class AppReportActivity extends BaseActivity {
         // Notify the adapter of the data change
         appReportAdapter.notifyDataSetChanged();
     }
+
 
     private void listenForActivitySessionsRealTime() {
         db.collection("activity_sessions")
@@ -335,25 +350,59 @@ public class AppReportActivity extends BaseActivity {
     }
 
     private void listenForUserFlowRealTime() {
-        db.collection("user_flow")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("Firestore", "Listen failed.", e);
-                            return;
+        listenerRegistration = db.collection("user_flow")
+                .whereEqualTo("previous_activity", "HomeFragment")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.d("Firestore", "Error getting documents: ", error);
+                        return;
+                    }
+
+                    if (value != null && !value.isEmpty()) {
+                        HashMap<String, Integer> userFlowMap = new HashMap<>();
+
+                        for (QueryDocumentSnapshot document : value) {
+                            String nextActivity = document.getString("next_activity");
+
+                            // Count how many times each next activity occurs
+                            userFlowMap.put(nextActivity, userFlowMap.getOrDefault(nextActivity, 0) + 1);
                         }
 
-                        // Just log or track activity transitions
-                        for (QueryDocumentSnapshot doc : value) {
-                            String previousActivity = doc.getString("previous_activity");
-                            String nextActivity = doc.getString("next_activity");
-
-                            Log.d("UserFlow", "Transition from " + previousActivity + " to " + nextActivity);
-                        }
+                        // Once data is collected, display it in a chart
+                        displayUserFlowChart(userFlowMap, value.size());
                     }
                 });
     }
+
+
+    private void displayUserFlowChart(HashMap<String, Integer> userFlowMap, int size) {
+        PieChart pieChart = findViewById(R.id.userFlowPieChart);
+
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : userFlowMap.entrySet()) {
+            pieEntries.add(new PieEntry(((float) entry.getValue() /size)*100, entry.getKey()));
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "User Flow from HomeFragment");
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextSize(12f);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.setDrawSliceText(false);
+        pieChart.setDescription(null);
+
+        // Set the text in the center of the PieChart
+        pieChart.setCenterText("HomeFragment");
+        pieChart.setCenterTextSize(18f);  // Set text size
+        pieChart.setCenterTextColor(Color.BLACK); // Set text color
+        pieChart.setDrawCenterText(true); // Enable center text
+
+//        pieChart.getDescription().setEnabled(false);
+
+        pieChart.invalidate(); // refresh chart
+    }
+
 
 
 

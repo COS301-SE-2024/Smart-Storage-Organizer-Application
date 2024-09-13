@@ -15,21 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/nav_view"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        app:itemRippleColor="@color/colorSecondary"-->
-<!--        app:itemIconTint="@drawable/drawer_item_color"-->
-<!--        app:itemTextColor="@drawable/drawer_item_color"-->
-<!--        app:itemBackground="@color/background"-->
-<!--        app:itemIconSize="36dp"-->
-<!--        android:background="@color/background"-->
-<!--        app:headerLayout="@layout/nav_header_home"-->
-<!--        app:menu="@menu/activity_main_drawer" />-->
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -102,8 +87,4 @@
 
     </com.google.android.material.navigation.NavigationView>
 
-<!--    <Button-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Logout"/>-->
 </androidx.drawerlayout.widget.DrawerLayout>
