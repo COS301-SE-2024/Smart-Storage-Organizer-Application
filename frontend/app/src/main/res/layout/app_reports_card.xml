@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@color/background">
+
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="8dp"-->
+    <!--        android:elevation="4dp"-->
+    <!--        android:padding="8dp">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@drawable/filter_background"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HomeActivity"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#2196F3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/actionIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Views: "
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorSecondary"/>
+
+            <TextView
+                android:id="@+id/views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="665"
+                android:layout_marginStart="2dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#4CAF50" /> <!-- Green for "Add" -->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Users: "
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000" />
+            <TextView
+                android:id="@+id/activeUsers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#4CAF50" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Views per active user: "
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textColor="#000000" />
+            <TextView
+                android:id="@+id/viewsPerUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="55.42"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#4CAF50" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Average engagement time per active user: "
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000" />
+            <TextView
+                android:id="@+id/averageEngagement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="28s"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#4CAF50" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--    </androidx.cardview.widget.CardView>-->
+
+</LinearLayout>

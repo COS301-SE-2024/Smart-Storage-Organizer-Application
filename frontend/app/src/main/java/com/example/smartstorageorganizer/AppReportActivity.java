@@ -18,7 +18,14 @@ import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.adapters.AppReportAdapter;
+import com.example.smartstorageorganizer.adapters.LogEntryAdapter;
+import com.example.smartstorageorganizer.model.AppReportModel;
+import com.example.smartstorageorganizer.model.LogEntry;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +33,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import com.google.firebase.firestore.EventListener;
@@ -38,6 +47,12 @@ public class AppReportActivity extends BaseActivity {
     MyAmplifyApp app;
     TableLayout usersListTable;
     private ImageView arrow;
+    private RecyclerView recyclerView;
+    private AppReportAdapter appReportAdapter;
+    private List<AppReportModel> appReportModelList;
+
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,16 @@ public class AppReportActivity extends BaseActivity {
 
         arrow = findViewById(R.id.arrow);
         usersListTable = findViewById(R.id.usersListTable);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize the log entry list and the adapter
+        appReportModelList = new ArrayList<>();
+        appReportAdapter = new AppReportAdapter(appReportModelList);
+        recyclerView.setAdapter(appReportAdapter);
+
+        loadInitialData();
 
         RelativeLayout parentLayout = findViewById(R.id.parentLayout);
         LayoutTransition layoutTransition = new LayoutTransition();
@@ -184,6 +209,15 @@ public class AppReportActivity extends BaseActivity {
         rotate.setDuration(300);
         rotate.setFillAfter(true);
         arrow.startAnimation(rotate);
+    }
+
+    private void loadInitialData() {
+        appReportModelList.add(new AppReportModel("HomeActivity", "665", "12", "55.42", "23m 16s", "799"));
+        appReportModelList.add(new AppReportModel("LandingActivity", "498", "13", "38.31", "8m 02s", "562"));
+        appReportModelList.add(new AppReportModel("LoginActivity", "429", "12", "35.75", "8m 53s", "798"));
+
+        // Initially load the first page
+        appReportAdapter.notifyDataSetChanged();
     }
 
     @Override
