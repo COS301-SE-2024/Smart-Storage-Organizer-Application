@@ -1,16 +1,15 @@
 package com.example.smartstorageorganizer;
 
-import static android.app.PendingIntent.getActivity;
-
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.Context;
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,29 +35,28 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.hbb20.CountryCodePicker;
 
-//import com.amplifyframework.storage.s3.options.S3UploadFileOptions;
-import com.amplifyframework.storage.options.StorageUploadFileOptions;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class EditProfileActivity extends BaseActivity {
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private String imageFilePath;
 
     TextInputEditText name, surname, email, phone, address;
     LinearLayout content;
     LottieAnimationView loadingScreen;
     CountryCodePicker cpp;
     int PICK_IMAGE_MULTIPLE = 1;
-    private static final int GALLERY_CODE = 1;
     Uri ImageUri;
     List<String> imagesEncodedList;
-    ArrayList<Uri> ChooseImageList;
     ImageView profileImage;
 
     String currentEmail = "";
@@ -67,6 +67,7 @@ public class EditProfileActivity extends BaseActivity {
     String currentProfileUrl = "";
     String customAttribute = "";
     File file;
+    boolean isNewProfilePicture = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,38 +98,30 @@ public class EditProfileActivity extends BaseActivity {
             return insets;
         });
 
-        editProfileBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editProfileBackButton.setOnClickListener(v -> finish());
+
+        profileImage.setOnClickListener(v -> showImagePickerDialog());
+
+
+        findViewById(R.id.save_button).setOnClickListener(v -> {
+            loadingScreen.setVisibility(View.VISIBLE);
+            loadingScreen.playAnimation();
+            content.setVisibility(View.GONE);
+            upDateDetails().thenAccept(updateDetails -> {
+                loadingScreen.setVisibility(View.VISIBLE);
+                loadingScreen.playAnimation();
+                content.setVisibility(View.GONE);
+
+                // Remove the check for file.exists() to handle other updates
+                Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+                Log.i("EditProfileActivity", "Back button clicked");
+
+                Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                startActivity(intent);
                 finish();
-            }
+            });
         });
 
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenGallery();
-            }
-        });
-
-
-        findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                upDateDetails().thenAccept(updateDetails -> {
-                    loadingScreen.setVisibility(View.VISIBLE);
-                    loadingScreen.playAnimation();
-                    content.setVisibility(View.GONE);
-                    if(!file.exists()){
-                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-                        Log.i("EditProfileActivity", "Back button clicked");
-                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
-        });
     }
     private CompletableFuture<Boolean> getDetails() {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
@@ -174,7 +167,6 @@ public class EditProfileActivity extends BaseActivity {
                         String country=currentPhone.substring(1, currentPhone.length()-9);
                         cpp.setCountryForPhoneCode(Integer.parseInt(country));
                         loadingScreen.setVisibility(View.GONE);
-//                        loadingScreen.pauseAnimation();
                         content.setVisibility(View.VISIBLE);
                     });
                     future.complete(true);
@@ -191,135 +183,116 @@ public class EditProfileActivity extends BaseActivity {
         galleryIntent.setType("image/*");
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        //startActivityForResult(galleryIntent, GalleryPick);
         startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
     }
 
-    public CompletableFuture<Boolean>  upDateDetails(){
-        Log.i("We are here","We are here");
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
+    public CompletableFuture<Boolean> upDateDetails() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
         String Name = Objects.requireNonNull(name.getText()).toString().trim();
         String Surname = Objects.requireNonNull(surname.getText()).toString().trim();
         String Address = Objects.requireNonNull(address.getText()).toString().trim();
         String Phone = Objects.requireNonNull(phone.getText()).toString().trim();
-        if(!Name.equals(name)){
+
+        // Compare with current values, not input fields
+        if (!Name.equals(currentName)) {
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.name(), Name),
                     result -> Log.i("AuthDemo", "Updated name"),
                     error -> Log.e("AuthDemo", "Update failed", error)
             );
-            future.complete(true);
         }
-        if(!Surname.equals(surname)){
+        if (!Surname.equals(currentSurname)) {
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.familyName(), Surname),
                     result -> Log.i("AuthDemo", "Updated surname"),
                     error -> Log.e("AuthDemo", "Update failed", error)
             );
-            future.complete(true);
         }
-        if(!Address.equals(address)){
+        if (!Address.equals(currentAddress)) {
             Amplify.Auth.updateUserAttribute(
                     new AuthUserAttribute(AuthUserAttributeKey.address(), Address),
                     result -> Log.i("AuthDemo", "Updated address"),
                     error -> Log.e("AuthDemo", "Update failed", error)
             );
+        }
+
+        // Only handle profile picture if it was changed
+        if (isNewProfilePicture) {
+            UploadProfilePicture(file).thenRun(() -> future.complete(true));
+        } else {
             future.complete(true);
         }
-        if(true){
-            UploadProfilePicture(file);
-        }
-//        if(!Phone.equals(phone)){
-//            Amplify.Auth.updateUserAttribute(
-//                    new AuthUserAttribute(AuthUserAttributeKey.phoneNumber(), Phone),
-//                    result -> Log.i("AuthDemo", "Updated phone"),
-//                    error -> Log.e("AuthDemo", "Update failed", error)
-//
-//            );
-//            future.complete(true);
-//        }
+
         return future;
     }
 
-    @Override
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_CODE && resultCode == RESULT_OK  && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+                imagesEncodedList = new ArrayList<>();
 
-            imagesEncodedList = new ArrayList<>();
-
-//            Toast.makeText(EditProfileActivity.this, "Image URI: "+Objects.requireNonNull(data.getData()).toString(), Toast.LENGTH_LONG).show();
-
-            if (data.getData() != null) {
-                ImageUri = data.getData();
-                profileImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (data.getData() != null) {
+                    ImageUri = data.getData();
+                    profileImage.setImageURI(ImageUri);
+                    isNewProfilePicture = true;
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                } else if (data.getClipData() != null) {
+                    ImageUri = data.getClipData().getItemAt(0).getUri();
+                    profileImage.setImageURI(ImageUri);
+                    isNewProfilePicture = true;
+                    saveBitmapToFile(getBitmapFromUri(ImageUri));
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                file = new File(imageFilePath);
+                if (file.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    profileImage.setImageBitmap(myBitmap);
+                    isNewProfilePicture = true;
+                    saveBitmapToGallery(myBitmap);
+                    saveBitmapToFile(myBitmap);
                 }
             }
-
-            else if (data.getClipData() != null) {
-                ImageUri = data.getClipData().getItemAt(0).getUri();
-                profileImage.setImageURI(ImageUri);
-                BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-
-                // Create a file to save the image
-                file = new File(getCacheDir(), "image.jpeg");
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
-    //    public void GetUrl(String Path)
-//    {
-//        Amplify.Storage.getUrl(
-//                StoragePath.fromString(Path),
-//                result -> {
-//                    String url = String.valueOf(result.getUrl());
-//                    Amplify.Auth.updateUserAttribute(
-//                            new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
-//                            resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
-//                            error -> Log.e("AuthDemo", "Update failed", error)
-//                    );
-//                    Log.i("MyAmplifyApp", "Successfully generated: " + url);
-//                    runOnUiThread(() -> {
-//                        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    });
-//                },
-//                error -> {
-//                    Log.e("MyAmplifyApp", "URL generation failure", error);
-//                    loadingScreen.setVisibility(View.GONE);
-////                        loadingScreen.pauseAnimation();
-//                    content.setVisibility(View.VISIBLE);
-//                }
-//        );
-//    }
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private void saveBitmapToFile(Bitmap bitmap) {
+        file = new File(getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void saveBitmapToGallery(Bitmap bitmap) {
+        String savedImageURL = MediaStore.Images.Media.insertImage(
+                getContentResolver(),
+                bitmap,
+                "MyImage",
+                "Image of something"
+        );
+        Uri savedImageURI = Uri.parse(savedImageURL);
+
+        Toast.makeText(EditProfileActivity.this, "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
+    }
     public CompletableFuture<Boolean> UploadProfilePicture(File ProfilePicture)
     {
         CompletableFuture<Boolean> future=new CompletableFuture<>();
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
-                .contentType("image/png") // Adjust based on file type
+                .contentType("image/png")
                 .build();
         long Time = System.nanoTime();
         String key= String.valueOf(Time);
-        String Path="Public/ProfilePictures/"+key+".png";
+        String Path="public/ProfileImage/"+key+".png";
         Amplify.Storage.uploadFile(
                 StoragePath.fromString(Path),
                 ProfilePicture,
@@ -332,7 +305,8 @@ public class EditProfileActivity extends BaseActivity {
     }
     public String GetObjectUrl(String key)
     {
-        String url = "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        Log.e("AuthDemo", "GetObjectUrl inside");
+        String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ProfileImage/"+key+".png";
         Amplify.Auth.updateUserAttribute(
                 new AuthUserAttribute(AuthUserAttributeKey.picture(), url),
                 resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
@@ -343,8 +317,61 @@ public class EditProfileActivity extends BaseActivity {
         startActivity(intent);
         finish();
 
-        return "https://smart-storage-f0629f0176059-staging.s3.eu-north-1.amazonaws.com/public/ProfilePictures/"+key+".png";
+        return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ProfileImage/"+key+".png";
     }
+    private void showImagePickerDialog() {
+        String[] options = {"Take Photo", "Choose from Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Action");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                takePhoto();
+            } else if (which == 1) {
+                OpenGallery();
+            }
+        });
+        builder.show();
+    }
+    private void takePhoto() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        }
+        else
+        {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this, "com.example.smartstorageorganizer.provider", photoFile);
+                    Log.d("Photo URI", "photoURI: " + photoURI.toString());
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } else {
+                    Log.e("PhotoFile", "photoFile is null");
+                }
+            }
+        }
 
-
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
 }

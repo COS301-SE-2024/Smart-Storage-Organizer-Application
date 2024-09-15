@@ -237,14 +237,6 @@ dependencies {
 
     //firebase
     implementation ("com.google.firebase:firebase-analytics")
-//    implementation ("com.google.auth:google-auth-library-oauth2-http:0.21.1")
-//    implementation ("com.google.apis:google-api-services-analytics:v3-rev20200721-1.31.0")
-//    implementation ("com.google.api-client:google-api-client:1.31.5")
-//    implementation ("com.google.http-client:google-http-client-gson:1.39.2")
-//    implementation ("com.google.oauth-client:google-oauth-client-jetty:1.31.5")
-//    implementation ("com.google.android.gms:play-services-auth:19.2.0")
 
-
-
-
+    implementation ("com.github.CanHub:Android-Image-Cropper:4.3.0")
 }
