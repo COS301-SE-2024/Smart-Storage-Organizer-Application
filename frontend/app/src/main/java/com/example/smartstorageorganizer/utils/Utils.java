@@ -1654,10 +1654,12 @@ public class Utils
         });
     }
 
-    public static void FetchAllUnits(String authorizationToken,  Activity activity, OperationCallback<List<unitModel>> callback)
+    public static void FetchAllUnits(String organizationId,  Activity activity, OperationCallback<List<unitModel>> callback)
     {
         String json = "{"
-                + "\"Authorization\": \"" + authorizationToken + "\""
+                + "\"body\": {"
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\""
+                + "}"
                 + "}";
         List<unitModel> unitModelList = new ArrayList<>();
 
@@ -1678,7 +1680,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed", e);
+                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1687,13 +1689,13 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -1711,13 +1713,13 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "GET request failed:" + response);
+                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }

@@ -26,11 +26,15 @@ public class ViewUnitsActivity extends BaseActivity {
     private RecyclerView recyclerViewUnits;
     private UnitsAdapter unitsAdapter;
     private List<unitModel> unitList;
+    MyAmplifyApp app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_units);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         recyclerViewUnits = findViewById(R.id.recyclerViewUnits);
         recyclerViewUnits.setLayoutManager(new LinearLayoutManager(this));
@@ -49,7 +53,7 @@ public class ViewUnitsActivity extends BaseActivity {
 //        itemsLayout.setVisibility(View.GONE);
 //        sortBySpinner.setVisibility(View.GONE);
 
-        Utils.FetchAllUnits(authorizationToken, this, new OperationCallback<List<unitModel>>() {
+        Utils.FetchAllUnits(app.getOrganizationID(), this, new OperationCallback<List<unitModel>>() {
             @Override
             public void onSuccess(List<unitModel> result) {
                 unitList.clear();

@@ -388,7 +388,7 @@ public class UserUtils {
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.d("MyAmplifyApp", "POST request failed", e);
+                        Log.d("MyAmplifyApp", "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -397,27 +397,27 @@ public class UserUtils {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
+                        activity.runOnUiThread(() -> Log.e("MyAmplifyApp", responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
 
                             activity.runOnUiThread(() -> {
-//                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
-//                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
+                                Log.e("MyAmplifyApp", "POST request succeeded: " + responseData);
+                                Log.e("MyAmplifyApp", "POST request succeeded: " + bodyString);
 
                                 callback.onSuccess(true);
                             });
                         }catch (JSONException e){
                             activity.runOnUiThread(() -> {
-//                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
+                                Log.e("MyAmplifyApp", "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
+                            Log.d("MyAmplifyApp", "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }

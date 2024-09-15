@@ -24,7 +24,7 @@ public class MyAmplifyApp extends Application {
     private String name;
     private String surname;
     private String email;
-    private String userRole;
+    private String userRole = "";
     private boolean loggedIn;
     private boolean startService = false;
     @Override
