@@ -43,6 +43,7 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SearchResult;
 import com.example.smartstorageorganizer.model.TokenManager;
@@ -103,6 +104,7 @@ public class AddItemActivity extends BaseActivity  {
     ProgressDialog progressDialogAddingItem;
     MyAmplifyApp app;
     private long startTime;
+    private ArrayAdapter<String> adapterCategories;
 
 
     @Override
@@ -118,12 +120,16 @@ public class AddItemActivity extends BaseActivity  {
 
         app = (MyAmplifyApp) getApplicationContext();
 
+        progressDialogAddingItem = new ProgressDialog(this);
+        progressDialogAddingItem.setMessage("Adding Item...");
+        progressDialogAddingItem.setCancelable(false);
 
         description = findViewById(R.id.inputDescription);
         name = findViewById(R.id.inputName);
         itemDetailscardView = findViewById(R.id.itemDetailscardView);
         categorycardView = findViewById(R.id.categorycardView);
         suggestionSpinner = findViewById(R.id.categorySpinner);
+        colorSpinner = findViewById(R.id.colorcodesSpinner);
         itemImage = findViewById(R.id.item_image);
 
         categoryModelList = new ArrayList<>();
@@ -132,6 +138,8 @@ public class AddItemActivity extends BaseActivity  {
             @Override
             public void onClick(View v) {
                 getSuggestedCategory(name.getText().toString().trim(), description.getText().toString().trim());
+                assignItemToColor();
+                fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
                 showSimilarItemPopup();
             }
         });
@@ -144,6 +152,7 @@ public class AddItemActivity extends BaseActivity  {
 
         findViewById(R.id.addButton).setOnClickListener(v -> {
 //            progressDialogAddingItem.show();
+            progressDialogAddingItem.show();
             File compressedFile = compressImage(file);
             uploadItemImage(compressedFile);
         });
@@ -321,7 +330,7 @@ public class AddItemActivity extends BaseActivity  {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (categories.get(position).equals("Add Custom Category")) {
                             // Show dialog to input custom category
-//                            showCustomCategoryDialog(categories, adapter);
+                            showCustomCategoryDialog(categories, adapter);
                         }
                     }
 
@@ -555,6 +564,159 @@ public class AddItemActivity extends BaseActivity  {
         }
 
         return ""; // Return null if no category with the given name is found
+    }
+
+    public void assignItemToColor() {
+        // Fetch all available color codes
+        Utils.fetchAllColour(app.getOrganizationID(),this, new OperationCallback<List<ColorCodeModel>>() {
+            @Override
+            public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
+                // Create an array of color names to display to the user
+                String[] colorNames = new String[colorCodeModelList.size()+1];
+                colorNames[0] = "Choose a color group (optional)";
+                for (int i = 1, j = 0; i < colorCodeModelList.size()+1; i++, j++) {
+                    colorNames[i] = colorCodeModelList.get(j).getName();
+                }
+//                List<String> categories = new ArrayList<>();
+
+                // Populate the Spinner
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, colorNames);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                colorSpinner.setAdapter(adapter);
+
+                colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        if (categories.get(position).equals("Add Custom Category")) {
+//                            // Show dialog to input custom category
+////                            showCustomCategoryDialog(categories, adapter);
+//                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Handle the error (e.g., show a toast or log the error)
+                Toast.makeText(AddItemActivity.this, "Failed to fetch colors: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private Spinner parentSpinner, subcategorySpinner;
+    private List<String> parentCategories = new ArrayList<>();
+    private String currentSelectedCategory, currentSelectedSubcategory;
+
+
+    private void showCustomCategoryDialog(List<String> categories, ArrayAdapter<String> adapter2) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_custom_category_popup, null);
+
+        parentSpinner = dialogView.findViewById(R.id.ParentSpinner);
+        subcategorySpinner = dialogView.findViewById(R.id.subcategorySpinner);
+
+        builder.setView(dialogView);
+        adapterCategories = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, parentCategories);
+        adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        parentSpinner.setAdapter(adapterCategories);
+
+        parentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Get selected item
+                currentSelectedCategory = parentView.getItemAtPosition(position).toString();
+                String parentCategory = "";
+                parentCategory = findCategoryByName(currentSelectedCategory, "parent");
+                parentCategoryId = parentCategory;
+                if(!Objects.equals(parentCategory, "")){
+                    parentCategoryId = parentCategory;
+                    fetchParentCategories(Integer.parseInt(parentCategory), app.getEmail(), app.getOrganizationID());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something here if nothing is selected
+            }
+        });
+        subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                currentSelectedSubcategory = parentView.getItemAtPosition(position).toString();
+                String subCategory = findCategoryByName(currentSelectedSubcategory, "sub");
+                subcategoryId = subCategory;
+                if(!Objects.equals(subCategory, "")) {
+                    subcategoryId = subCategory;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do something here if nothing is selected
+            }
+        });
+        builder.setPositiveButton("Add", (dialog, which) ->
+        {
+            categories.add(categories.size() - 1, currentSelectedCategory+" - "+currentSelectedSubcategory); // Add before "Add Custom Category"
+            adapter2.notifyDataSetChanged();
+            suggestionSpinner.setSelection(categories.indexOf(currentSelectedCategory+" - "+currentSelectedSubcategory));
+            Toast.makeText(AddItemActivity.this, "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            suggestionSpinner.setSelection(0);
+            dialog.cancel();
+        });
+
+        builder.show();
+    }
+
+    private List<String> subCategories = new ArrayList<>();
+    private ArrayAdapter<String> subAdapter;
+    private void fetchParentCategories(int categoryId, String email, String organizationID) {
+        Utils.fetchParentCategories(categoryId, email, organizationID, this, new OperationCallback<List<CategoryModel>>() {
+            @Override
+            public void onSuccess(List<CategoryModel> result) {
+                if(categoryId != 0) {
+                    subCategories.clear();
+                    subcategoryModelList.clear();
+                    subcategoryModelList.addAll(result);
+                    for (CategoryModel category : result) {
+                        subCategories.add(category.getCategoryName());
+                    }
+                    subAdapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, subCategories);
+                    subAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    subcategorySpinner.setAdapter(subAdapter);
+                }
+                else {
+                    categoryModelList.clear();
+                    CategoryModel allCategory = new CategoryModel("All", "all", "all");
+                    CategoryModel uncategorizedCategory = new CategoryModel("Uncategorized", "uncategorized", "uncategorized");
+                    categoryModelList.add(allCategory);
+                    categoryModelList.add(uncategorizedCategory);
+                    categoryModelList.addAll(result);
+//                    categoryAdapter.notifyDataSetChanged();
+                    for (CategoryModel category : result) {
+                        parentCategories.add(category.getCategoryName());
+                    }
+                    adapterCategories = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, parentCategories);
+                    adapterCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                showToast("Failed to fetch categories: " + error);
+                Toast.makeText(AddItemActivity.this, "Category Fetching failed... ", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     private void logActivityView(String activityName) {
