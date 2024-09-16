@@ -59,7 +59,6 @@ def lambda_handler(event, context):
 
 body = {
     "body":{
-        
     "organization_id": 1
     }
     }
