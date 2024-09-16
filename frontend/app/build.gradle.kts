@@ -238,5 +238,8 @@ dependencies {
     //firebase
     implementation ("com.google.firebase:firebase-analytics")
 
-    implementation ("com.github.CanHub:Android-Image-Cropper:4.3.0")
+    //Image Crop
+    implementation ("com.github.yalantis:ucrop:2.2.8")
+//    implementation ("com.github.krokyze:ucropnedit:2.2.6-2")
+
 }

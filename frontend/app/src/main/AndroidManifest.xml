@@ -23,7 +23,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
-
     <application
         android:name=".MyAmplifyApp"
         android:allowBackup="true"
@@ -36,9 +35,11 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".CropperActivity"
+            android:exported="false" />
+        <activity
             android:name=".AppReportActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".LoginReportsActivity"
             android:exported="false" />
@@ -168,29 +169,30 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity> <!-- <service -->
+        </activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- <service -->
         <!-- android:name=".MyFirebaseMessagingService" -->
         <!-- android:exported="false"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
         <!-- </intent-filter> -->
         <!-- </service> -->
-<!--        <service-->
-<!--            android:name=".AppTerminationService"-->
-<!--            android:foregroundServiceType="dataSync"-->
-<!--            tools:ignore="ForegroundServicePermission" />-->
+        <!-- <service -->
+        <!-- android:name=".AppTerminationService" -->
+        <!-- android:foregroundServiceType="dataSync" -->
+        <!-- tools:ignore="ForegroundServicePermission" /> -->
         <service
             android:name=".AppTerminationService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-
 
         <meta-data
             android:name="preloaded_fonts"

@@ -48,6 +48,7 @@ import java.util.concurrent.CompletableFuture;
 public class EditProfileActivity extends BaseActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_CROPPER = 102;
     private String imageFilePath;
 
     TextInputEditText name, surname, email, phone, address;
@@ -55,7 +56,7 @@ public class EditProfileActivity extends BaseActivity {
     LottieAnimationView loadingScreen;
     CountryCodePicker cpp;
     int PICK_IMAGE_MULTIPLE = 1;
-    Uri ImageUri;
+    Uri imageUri;
     List<String> imagesEncodedList;
     ImageView profileImage;
 
@@ -102,7 +103,6 @@ public class EditProfileActivity extends BaseActivity {
 
         profileImage.setOnClickListener(v -> showImagePickerDialog());
 
-
         findViewById(R.id.save_button).setOnClickListener(v -> {
             loadingScreen.setVisibility(View.VISIBLE);
             loadingScreen.playAnimation();
@@ -112,7 +112,6 @@ public class EditProfileActivity extends BaseActivity {
                 loadingScreen.playAnimation();
                 content.setVisibility(View.GONE);
 
-                // Remove the check for file.exists() to handle other updates
                 Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
                 Log.i("EditProfileActivity", "Back button clicked");
 
@@ -121,6 +120,7 @@ public class EditProfileActivity extends BaseActivity {
                 finish();
             });
         });
+
 
     }
     private CompletableFuture<Boolean> getDetails() {
@@ -177,15 +177,6 @@ public class EditProfileActivity extends BaseActivity {
         return future;
     }
 
-
-    private void OpenGallery() {
-        Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(galleryIntent,"Select Picture"), PICK_IMAGE_MULTIPLE);
-    }
-
     public CompletableFuture<Boolean> upDateDetails() {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         String Name = Objects.requireNonNull(name.getText()).toString().trim();
@@ -216,7 +207,6 @@ public class EditProfileActivity extends BaseActivity {
             );
         }
 
-        // Only handle profile picture if it was changed
         if (isNewProfilePicture) {
             UploadProfilePicture(file).thenRun(() -> future.complete(true));
         } else {
@@ -224,54 +214,6 @@ public class EditProfileActivity extends BaseActivity {
         }
 
         return future;
-    }
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
-                imagesEncodedList = new ArrayList<>();
-
-                if (data.getData() != null) {
-                    ImageUri = data.getData();
-                    profileImage.setImageURI(ImageUri);
-                    isNewProfilePicture = true;
-                    saveBitmapToFile(getBitmapFromUri(ImageUri));
-                } else if (data.getClipData() != null) {
-                    ImageUri = data.getClipData().getItemAt(0).getUri();
-                    profileImage.setImageURI(ImageUri);
-                    isNewProfilePicture = true;
-                    saveBitmapToFile(getBitmapFromUri(ImageUri));
-                }
-            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                file = new File(imageFilePath);
-                if (file.exists()) {
-                    Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    profileImage.setImageBitmap(myBitmap);
-                    isNewProfilePicture = true;
-                    saveBitmapToGallery(myBitmap);
-                    saveBitmapToFile(myBitmap);
-                }
-            }
-        }
-    }
-    private Bitmap getBitmapFromUri(Uri uri) {
-        try {
-            return MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    private void saveBitmapToFile(Bitmap bitmap) {
-        file = new File(getCacheDir(), "image.jpeg");
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     private void saveBitmapToGallery(Bitmap bitmap) {
         String savedImageURL = MediaStore.Images.Media.insertImage(
@@ -332,16 +274,22 @@ public class EditProfileActivity extends BaseActivity {
         });
         builder.show();
     }
+
+    private void OpenGallery() {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), PICK_IMAGE_MULTIPLE);
+    }
+
     private void takePhoto() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     REQUEST_CAMERA_PERMISSION);
-        }
-        else
-        {
+        } else {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 File photoFile = null;
@@ -352,16 +300,13 @@ public class EditProfileActivity extends BaseActivity {
                 }
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(this, "com.example.smartstorageorganizer.provider", photoFile);
-                    Log.d("Photo URI", "photoURI: " + photoURI.toString());
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } else {
-                    Log.e("PhotoFile", "photoFile is null");
                 }
             }
         }
-
     }
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -373,5 +318,68 @@ public class EditProfileActivity extends BaseActivity {
         );
         imageFilePath = image.getAbsolutePath();
         return image;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE && data != null) {
+                imagesEncodedList = new ArrayList<>();
+
+                if (data.getData() != null) {
+                    Uri selectedImageUri = data.getData();
+                    if (selectedImageUri != null) {
+                        startCropperActivity(selectedImageUri);
+                    }
+                } else if (data.getClipData() != null) {
+                    Uri selectedImageUri = data.getClipData().getItemAt(0).getUri();
+                    if (selectedImageUri != null) {
+                        startCropperActivity(selectedImageUri);
+                    }
+                }
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                File file = new File(imageFilePath);
+                if (file.exists()) {
+                    Uri capturedImageUri = Uri.fromFile(file);
+                    startCropperActivity(capturedImageUri);
+                }
+            } else if (requestCode == REQUEST_CROPPER && data != null) {
+                String result = data.getStringExtra("RESULT");
+                Uri resultUri = null;
+                if (result != null) {
+                    resultUri = Uri.parse(result);
+                    profileImage.setImageURI(resultUri);
+                    isNewProfilePicture = true;
+                    saveBitmapToFile(getBitmapFromUri(resultUri));
+                }
+            }
+        }
+    }
+
+    private void startCropperActivity(Uri imageUri) {
+        Intent intent = new Intent(EditProfileActivity.this, CropperActivity.class);
+        intent.putExtra("DATA", imageUri.toString());
+        startActivityForResult(intent, REQUEST_CROPPER);
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            return MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void saveBitmapToFile(Bitmap bitmap) {
+        file = new File(getCacheDir(), "image.jpeg");
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

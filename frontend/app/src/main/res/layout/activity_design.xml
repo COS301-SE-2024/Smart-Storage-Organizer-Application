@@ -8,11 +8,11 @@
     android:background="@color/background"
     tools:context=".DesignActivity">
 
-    <Button
-        android:id="@+id/btn_mic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🎤"
+    <ImageView
+        android:id="@+id/iv_pick_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
