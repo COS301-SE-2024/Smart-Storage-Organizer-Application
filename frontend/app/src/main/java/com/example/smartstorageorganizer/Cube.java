@@ -26,7 +26,7 @@ public class Cube {
         vertexBuffer.position(0);
     }
 
-    public void draw() {
+    public void draw(float[] modelViewProjectionMatrix) {
         // Use OpenGL ES to draw the cube with custom dimensions
         // Similar to the previous OpenGL ES drawing method
     }
