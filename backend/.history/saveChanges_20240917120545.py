@@ -11,12 +11,12 @@ def get_db_connection():
     global con
     if con is None or con.closed:
         con = psycopg2.connect(
-            host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
-            database="postgres",
-            user="MasterUser",
-            password="MasterDb#ss1"
+        #     host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
+        #     database="postgres",
+        #     user="MasterUser",
+        #     password="MasterDb#ss1"
             
-         )
+        #  )
     return con
 
 body={
@@ -66,11 +66,7 @@ def lambda_handler(event,context):
         }
     
     type=body['changes_type']
-    if type not in ['EDIT','DELETE','ADD']:
-        return {
-            'statusCode': 400,
-            'body': json.dumps('Invalid Request')
-        }
+    if 
     con=get_db_connection()
     cur=con.cursor(cursor_factory=RealDictCursor)
     try:
