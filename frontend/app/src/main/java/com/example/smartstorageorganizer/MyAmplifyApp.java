@@ -21,6 +21,7 @@ import java.util.Date;
 public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
     private String organizationID;
+    private String organizationName;
     private String name;
     private String surname;
     private String email;
@@ -132,5 +133,13 @@ public class MyAmplifyApp extends Application {
 
     public void setStartService(boolean startService) {
         this.startService = startService;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

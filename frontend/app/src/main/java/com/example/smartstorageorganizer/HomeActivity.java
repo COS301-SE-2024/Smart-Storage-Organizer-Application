@@ -368,6 +368,7 @@ public class HomeActivity extends BaseActivity  {
             @Override
             public void onSuccess(OrganizationModel result) {
                 organizationName.setText(result.getOrganizationName().toUpperCase());
+                app.setOrganizationName(result.getOrganizationName().toUpperCase());
                 Toast.makeText(HomeActivity.this, "organization fetched successfully", Toast.LENGTH_SHORT).show();
             }
 

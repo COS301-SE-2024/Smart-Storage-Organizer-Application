@@ -38,12 +38,18 @@ public class ProfileManagementActivity extends BaseActivity {
     private String currentName;
     private String currentSurname;
     private String currentProfileImage;
+    MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile_management);
+
+        app = (MyAmplifyApp) getApplicationContext();
+
+        TextView organizationName = findViewById(R.id.organizationName);
+        organizationName.setText(app.getOrganizationName());
 
         initializeViews();
         setupWindowInsets();
