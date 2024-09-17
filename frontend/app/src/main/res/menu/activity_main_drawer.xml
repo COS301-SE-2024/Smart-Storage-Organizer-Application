@@ -46,9 +46,9 @@
             android:title="Scan QR Code"
             android:textColor="@color/colorPrimary"/>
         <item
-            android:id="@+id/nav_help"
+            android:id="@+id/nav_reports"
             android:icon="@drawable/help"
-            android:title="Help"
+            android:title="Reports"
             android:textColor="@color/colorPrimary"/>
 
 <!--        <item-->

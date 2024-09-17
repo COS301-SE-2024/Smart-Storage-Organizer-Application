@@ -147,7 +147,7 @@ public class HomeActivity extends BaseActivity  {
         });
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_settings, R.id.nav_notifications, R.id.nav_help, R.id.nav_grouping, R.id.nav_units, R.id.nav_requests, R.id.nav_users)
+                R.id.nav_home, R.id.nav_settings, R.id.nav_notifications, R.id.nav_reports, R.id.nav_grouping, R.id.nav_units, R.id.nav_requests, R.id.nav_users)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);

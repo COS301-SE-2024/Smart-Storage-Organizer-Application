@@ -11,12 +11,12 @@
         android:label=""
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.example.smartstorageorganizer.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings" >
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/nav_settings"-->
+<!--        android:name="com.example.smartstorageorganizer.ui.settings.SettingsFragment"-->
+<!--        android:label="Settings"-->
+<!--        tools:layout="@layout/fragment_settings" >-->
+<!--    </fragment>-->
 
 
     <fragment
@@ -37,11 +37,6 @@
         android:label="Units"
         tools:layout="@layout/fragment_units" />
 
-    <fragment
-        android:id="@+id/nav_help"
-        android:name="com.example.smartstorageorganizer.ui.help.HelpFragment"
-        android:label="Help"
-        tools:layout="@layout/fragment_help" />
     <activity
         android:id="@+id/nav_code_scanner"
         android:name="com.example.smartstorageorganizer.CodeScannerActivity"
@@ -57,7 +52,17 @@
         android:name="com.example.smartstorageorganizer.UsersActivity"
         android:label="activity_users"
         tools:layout="@layout/activity_users" />
-<!--    <activity-->
+    <activity
+        android:id="@+id/nav_reports"
+        android:name="com.example.smartstorageorganizer.ReportsActivity"
+        android:label="activity_reports"
+        tools:layout="@layout/activity_reports" />
+    <activity
+        android:id="@+id/nav_settings"
+        android:name="com.example.smartstorageorganizer.ProfileManagementActivity"
+        android:label="activity_profile_management"
+        tools:layout="@layout/activity_profile_management" />
+    <!--    <activity-->
 <!--        android:id="@+id/nav_units"-->
 <!--        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"-->
 <!--        android:label="activity_view_units"-->
