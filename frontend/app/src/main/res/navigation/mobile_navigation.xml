@@ -26,6 +26,18 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
+        android:id="@+id/nav_grouping"
+        android:name="com.example.smartstorageorganizer.ui.grouping.ColorGroupingFragment"
+        android:label="Grouping"
+        tools:layout="@layout/fragment_color_grouping" />
+
+    <fragment
+        android:id="@+id/nav_units"
+        android:name="com.example.smartstorageorganizer.ui.Units.UnitsFragment"
+        android:label="Grouping"
+        tools:layout="@layout/fragment_units" />
+
+    <fragment
         android:id="@+id/nav_help"
         android:name="com.example.smartstorageorganizer.ui.help.HelpFragment"
         android:label="Help"
@@ -50,9 +62,9 @@
         android:name="com.example.smartstorageorganizer.UsersActivity"
         android:label="activity_users"
         tools:layout="@layout/activity_users" />
-    <activity
-        android:id="@+id/nav_units"
-        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"
-        android:label="activity_view_units"
-        tools:layout="@layout/activity_view_units" />
+<!--    <activity-->
+<!--        android:id="@+id/nav_units"-->
+<!--        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"-->
+<!--        android:label="activity_view_units"-->
+<!--        tools:layout="@layout/activity_view_units" />-->
 </navigation>
