@@ -16,6 +16,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private List<Object> items = new ArrayList<>(); // Placeholder for items
     private Object container = new Object(); // Placeholder for container
 
+    public MyGLRenderer(Context context) {
+    }
+
+//    public MyGLRenderer(Context context) {
+//    }
+
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
