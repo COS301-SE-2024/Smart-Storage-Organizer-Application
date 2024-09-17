@@ -239,4 +239,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-analytics")
 
     implementation ("com.github.CanHub:Android-Image-Cropper:4.3.0")
+
+    // for OpenGl
+//    implementation("androidx.gl:gl-core:1.0.0")
 }
