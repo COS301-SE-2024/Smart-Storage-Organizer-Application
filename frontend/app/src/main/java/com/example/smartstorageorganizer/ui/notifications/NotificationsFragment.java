@@ -9,21 +9,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.adapters.NotificationAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentNotificationsBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
     private FragmentNotificationsBinding binding;
     private TextView notificationTextView;
     private NotificationReceiver notificationReceiver;
+    private RecyclerView recyclerView;
+    private NotificationAdapter notificationsAdapter;
+    private List<String> notificationList = new ArrayList<>();
 
     @SuppressLint("NewApi")
     @Override
@@ -33,6 +40,13 @@ public class NotificationsFragment extends Fragment {
         View root = binding.getRoot();
 
         notificationTextView = root.findViewById(R.id.notification_text);
+
+        recyclerView = root.findViewById(R.id.recycler_view_notifications);
+
+        // Set up RecyclerView with LayoutManager and Adapter
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        notificationsAdapter = new NotificationAdapter(notificationList);
+        recyclerView.setAdapter(notificationsAdapter);
 
         // Register the receiver to listen for notifications
         notificationReceiver = new NotificationReceiver();

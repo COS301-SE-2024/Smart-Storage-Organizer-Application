@@ -2,39 +2,51 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_transactions"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:text="Transactions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"/>
+    <RelativeLayout
+        android:id="@+id/searchTop"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bgthree">
 
-    <Button
-        android:id="@+id/button_messages"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_transactions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="73dp"
-        android:text="Messages" />
+        <TextView
+            android:id="@+id/text_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:text="Notifications"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/button_offers"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/button_messages"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
-        android:text="Offers for you" />
+        <TextView
+            android:id="@+id/textView_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:padding="16dp"
+            android:text="Message will appear here"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/notification_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No notifications yet"
+        android:layout_gravity="center_horizontal"
         android:textSize="18sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
 </LinearLayout>
