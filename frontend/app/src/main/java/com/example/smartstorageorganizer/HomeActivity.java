@@ -47,6 +47,7 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.OrganizationUtils;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
@@ -125,7 +126,13 @@ public class HomeActivity extends BaseActivity  {
         fullName = header.findViewById(R.id.fullName);
         organizationName = header.findViewById(R.id.organizationName);
         profileImage = header.findViewById(R.id.profileImage);
-//        fullName.setText("Ezekiel Makau");
+
+        // Drawer Navigation Setup
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // Bottom Navigation Setup
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
 
         logout.setOnClickListener(v -> {
             buttonLoader.setVisibility(View.VISIBLE);
@@ -166,6 +173,10 @@ public class HomeActivity extends BaseActivity  {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Connect BottomNavigationView with NavController
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         if(Objects.equals(app.getUserRole(), "")){

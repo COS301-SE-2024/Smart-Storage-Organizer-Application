@@ -374,12 +374,23 @@ public class EditProfileActivity extends BaseActivity {
     }
 
     private void saveBitmapToFile(Bitmap bitmap) {
-        file = new File(getCacheDir(), "image.jpeg");
+        // Step 1: Resize the Bitmap to a smaller resolution (e.g., 400x400)
+        Bitmap resizedBitmap = resizeBitmap(bitmap, 400, 400);
+
+        // Step 2: Create a file in the cache directory to store the compressed image
+        file = new File(getCacheDir(), "compressed_image.jpeg");
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            // Step 3: Compress the image to JPEG format with 75% quality to reduce file size
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 25, fos);
             fos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    // Helper method to resize the bitmap
+    private Bitmap resizeBitmap(Bitmap bitmap, int newWidth, int newHeight) {
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+    }
+
 }
