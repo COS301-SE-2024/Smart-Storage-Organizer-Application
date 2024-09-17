@@ -33,7 +33,7 @@ public class SettingsFragment extends Fragment {
 //        glSurfaceView = new MyGLSurfaceView(getActivity());
 
         glSurfaceView = root.findViewById(R.id.glSurfaceView);
-        renderer = new MyGLRenderer();
+        renderer = new MyGLRenderer(getActivity());
 
         // Use OpenGL ES 2.0 and set the renderer
         glSurfaceView.setEGLContextClientVersion(2); // Use OpenGL ES 2.0
