@@ -117,6 +117,7 @@ public class HomeActivity extends BaseActivity  {
 
         DrawerLayout drawer = binding.drawerLayout;
         navigationView = binding.navView;
+        navigationView.bringToFront();
         ConstraintLayout logout = binding.logoutButton;
         LottieAnimationView buttonLoader = binding.buttonLoader;
         TextView logoutButtonText = binding.logOutButtonText;
@@ -129,10 +130,10 @@ public class HomeActivity extends BaseActivity  {
 
         // Drawer Navigation Setup
 //        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+//        NavigationView navigationView = findViewById(R.id.nav_view);
 
         // Bottom Navigation Setup
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        BottomNavigationView bottomNavigationView = binding.bottomNavView;
 
         logout.setOnClickListener(v -> {
             buttonLoader.setVisibility(View.VISIBLE);
@@ -144,7 +145,30 @@ public class HomeActivity extends BaseActivity  {
 //                        .setAction("Action", null)
 //                        .setAnchorView(R.id.fab).show();
         });
-        
+
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_settings, R.id.nav_notifications, R.id.nav_help, R.id.nav_grouping, R.id.nav_units, R.id.nav_requests, R.id.nav_users)
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Connect BottomNavigationView with NavController
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+
+        if(Objects.equals(app.getUserRole(), "")){
+            getUserRole(getIntent().getStringExtra("email"), "");
+        }
+        else {
+            if (Objects.equals(app.getUserRole(), "Manager")) {
+                showAdminMenuItems(navigationView.getMenu());
+            }
+            else {
+                hideAdminMenuItems(navigationView.getMenu());
+            }
+        }
         findViewById(R.id.search_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,48 +188,6 @@ public class HomeActivity extends BaseActivity  {
                 startActivity(intent);
             }
         });
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_profile_management, R.id.nav_notifications, R.id.nav_help, R.id.nav_grouping, R.id.nav_units)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        // Connect BottomNavigationView with NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        if(Objects.equals(app.getUserRole(), "")){
-            getUserRole(getIntent().getStringExtra("email"), "");
-        }
-        else {
-            if (Objects.equals(app.getUserRole(), "Manager")) {
-                showAdminMenuItems(navigationView.getMenu());
-            }
-            else {
-                hideAdminMenuItems(navigationView.getMenu());
-            }
-        }
-//        FirebaseApp.initializeApp(this);
-//
-//        FirebaseMessaging.getInstance().getToken()
-//                .addOnCompleteListener(task -> {
-//                    if (!task.isSuccessful()) {
-//                        Log.w("HomeActivity", "Fetching FCM registration token failed", task.getException());
-//                        return;
-//                    }
-//
-//                    String token = task.getResult();
-//                    Log.d("HomeActivity", "FCM Registration Token: " + token);
-//                });
-
-//        if (!isAdmin()) {
-//            hideAdminMenuItems(navigationView.getMenu());
-//        }
         handleIntent(getIntent());
     }
 

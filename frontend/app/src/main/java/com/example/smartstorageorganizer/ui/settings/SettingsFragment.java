@@ -36,7 +36,7 @@ public class SettingsFragment extends Fragment {
         });
 
         color.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DesignActivity.class);
+            Intent intent = new Intent(getActivity(), ReportsActivity.class);
             startActivity(intent);
         });
 
