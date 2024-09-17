@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.smartstorageorganizer.MyGLRenderer;
-import com.example.smartstorageorganizer.MyGLSurfaceView;
 import com.example.smartstorageorganizer.ProfileManagementActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.ReportsActivity;
@@ -32,10 +31,11 @@ public class SettingsFragment extends Fragment {
 
         // Initialize GLSurfaceView
 //        glSurfaceView = new MyGLSurfaceView(getActivity());
-//
 
         glSurfaceView = root.findViewById(R.id.glSurfaceView);
         renderer = new MyGLRenderer();
+
+        // Use OpenGL ES 2.0 and set the renderer
         glSurfaceView.setEGLContextClientVersion(2); // Use OpenGL ES 2.0
         glSurfaceView.setRenderer(renderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
