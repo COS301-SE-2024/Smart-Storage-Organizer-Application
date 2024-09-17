@@ -7,13 +7,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.model.AppNotification;
+
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     private final List<String> notifications;
 
-    public NotificationAdapter(List<String> notifications) {
+    public NotificationAdapter(List<AppNotification> notifications) {
         this.notifications = notifications;
     }
 

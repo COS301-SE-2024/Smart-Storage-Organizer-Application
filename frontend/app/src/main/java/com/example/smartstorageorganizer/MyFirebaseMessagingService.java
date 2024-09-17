@@ -25,6 +25,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    public static final String ACTION_NEW_NOTIFICATION = "com.example.smartstorageorganizer.NEW_NOTIFICATION";
+
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // Handle FCM messages here.
         Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());
