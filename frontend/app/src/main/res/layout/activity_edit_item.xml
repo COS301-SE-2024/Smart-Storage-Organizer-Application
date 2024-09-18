@@ -18,9 +18,49 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"/>
 
-    <ScrollView android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:paddingTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@drawable/bgthree"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/editItemBackButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/arrow_back"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="M O D I F Y   I T E M"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        android:layout_marginTop="120dp">
         <LinearLayout android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,21 +68,6 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="24dp"
             android:visibility="visible">
-
-            <ImageView android:id="@+id/editItemBackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/baseline_arrow_back_ios_24"/>
-
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Item Image Info"
-                android:textColor="@color/colorSecondary"
-                android:textSize="18dp" android:textStyle="bold"/>
-
 
             <ImageView android:id="@+id/itemImage"
                 android:layout_width="wrap_content"
@@ -132,8 +157,135 @@
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/spinner_background" />
 
+            <TextView
+                android:id="@+id/moreText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="more fields"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_below="@id/inputColorCode"/>
+
+            <RelativeLayout
+                android:id="@+id/moreOptionsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moreText"
+                android:visibility="gone">
+
+                <!-- GridLayout for 2-column layout -->
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="16dp"
+                    android:columnCount="2"
+                    android:rowCount="3"
+                    android:orientation="horizontal">
+
+                    <!-- Width -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/width"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputWidth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Width"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Height -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/height"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputHeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Height"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Depth -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/depth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputDepth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Depth"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Weight -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/weight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="16dp"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Weight"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Loadbear -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/loadbear"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputLoadbear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Loadbear"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Updown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/updown"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="16dp"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputUpdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Updown"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </GridLayout>
+
+            </RelativeLayout>
+
             <Button android:id="@+id/save_button"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
@@ -142,7 +294,8 @@
                 android:focusable="true"
                 android:enabled="false"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:fontFamily="sans-serif"
                 android:text="Save"
                 android:textColor="@color/white"
