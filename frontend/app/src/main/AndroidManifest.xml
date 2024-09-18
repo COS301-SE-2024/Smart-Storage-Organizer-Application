@@ -35,11 +35,18 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".ThemeSwitcherActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ThemesActivity"
+            android:configChanges="uiMode"
+            android:exported="false" />
+        <activity
             android:name=".CropperActivity"
             android:exported="false" />
         <activity
             android:name=".AppReportActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".LoginReportsActivity"
             android:exported="false" />

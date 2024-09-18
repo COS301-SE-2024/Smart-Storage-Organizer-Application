@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
@@ -39,12 +41,18 @@ public class ProfileManagementActivity extends BaseActivity {
     private String currentSurname;
     private String currentProfileImage;
     MyAmplifyApp app;
+    private static final String PREFS_NAME = "theme_prefs";
+    private static final String KEY_THEME = "selected_theme";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile_management);
+
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedTheme = preferences.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        AppCompatDelegate.setDefaultNightMode(savedTheme);
 
         app = (MyAmplifyApp) getApplicationContext();
 
@@ -136,6 +144,14 @@ public class ProfileManagementActivity extends BaseActivity {
     private void setupButtons() {
         AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
         ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
+
+        findViewById(R.id.themeLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileManagementActivity.this, ThemeSwitcherActivity.class);
+                startActivity(intent);
+            }
+        });
 
         editProfileButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);

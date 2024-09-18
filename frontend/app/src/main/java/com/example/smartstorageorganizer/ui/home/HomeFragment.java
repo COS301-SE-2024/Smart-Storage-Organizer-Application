@@ -47,6 +47,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
@@ -143,6 +144,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         app = (MyAmplifyApp) requireActivity().getApplicationContext();
+
 
         getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
