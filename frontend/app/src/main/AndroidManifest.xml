@@ -38,10 +38,6 @@
             android:name=".ThemeSwitcherActivity"
             android:exported="false" />
         <activity
-            android:name=".ThemesActivity"
-            android:configChanges="uiMode"
-            android:exported="false" />
-        <activity
             android:name=".CropperActivity"
             android:exported="false" />
         <activity
