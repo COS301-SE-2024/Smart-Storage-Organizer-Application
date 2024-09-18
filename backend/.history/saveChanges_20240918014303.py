@@ -11,27 +11,26 @@ def get_db_connection():
     global con
     if con is None or con.closed:
         con = psycopg2.connect(
-            host=os.environ.get('Host_address'),
-            database=os.environ.get('DB_Name'),
-            user=os.environ.get('Username'),
-            password=os.environ.get('Password')
+            host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
+            database="postgres",
+            user="MasterUser",
+            password="MasterDb#ss1"
+            
          )
     return con
 def check_access(username):
     try:
-        client = boto3.client('cognito-idp',region_name='us-east-1')
+        client = boto3.client('cognito-idp',region_name='eu-north-1')
         response=client.admin_list_groups_for_user(
-                UserPoolId=os.getenv('USER_POOL_ID'),
+                UserPoolId=us-east-1_EPbgIUMEQ,
                 Username=username
             )
     except client.exceptions.UserNotFoundException as error:
-        print(error)
         return {
             "statusCode": 404,
             "body": 'User not found'
         }
     except client.exceptions.ClientError as error:
-        print(error)
         return {
             "statusCode": 500,
             "body": 'Internal Server Error'
@@ -59,42 +58,42 @@ def check_access(username):
         }
     }
 
-# body={
-#     # "body":{
-#     #     "previous":{
-#     #         "item_id":29,
-#     #         "item_name":"IPHONE 15",
-#     #         "item_description":"IPHONE 15 256GB",
-#     #         "item_price":1200.0,
-#     #         "item_quantity":10,
-#     #         "item_category":"ELECTRONICS",
-#     #         "item_subcategory":"MOBILE",
-#     #         "item_brand":"APPLE",
-#     #         "item_model":"IPHONE 15",
-#     #         "item_color":"BLACK",
-#     #         "item_size":"6.1 INCH",
-#     #         "item_weight":"200G",
-#     #         "item_material":"ALUMINIUM"
-#     #     },
-#     #     "current":{"item_id":29,"item_name":"IPHONE 15","item_description":"IPHONE 15 256GB","item_price":1200.0,"item_quantity":10,"item_category":"ELECTRONICS","item_subcategory":"MOBILE","item_brand":"APPLE","item_model":"IPHONE 15","item_color":"BLACK","item_size":"6.1 INCH","item_weight":"200G","item_material":"ALUMINIUM"},
-#     #     "changes":"",
-#     #     "changed_by":"victor",
-#     #     "changes_date_and_time":"2024-09-12 11:52:16",
-#     #     "related_record_id":29,
+body={
+    "body":{
+        "previous":{
+            "item_id":29,
+            "item_name":"IPHONE 15",
+            "item_description":"IPHONE 15 256GB",
+            "item_price":1200.0,
+            "item_quantity":10,
+            "item_category":"ELECTRONICS",
+            "item_subcategory":"MOBILE",
+            "item_brand":"APPLE",
+            "item_model":"IPHONE 15",
+            "item_color":"BLACK",
+            "item_size":"6.1 INCH",
+            "item_weight":"200G",
+            "item_material":"ALUMINIUM"
+        },
+        "current":{"item_id":29,"item_name":"IPHONE 15","item_description":"IPHONE 15 256GB","item_price":1200.0,"item_quantity":10,"item_category":"ELECTRONICS","item_subcategory":"MOBILE","item_brand":"APPLE","item_model":"IPHONE 15","item_color":"BLACK","item_size":"6.1 INCH","item_weight":"200G","item_material":"ALUMINIUM"},
+        "changes":"",
+        "changed_by":"victor",
+        "changes_date_and_time":"2024-09-12 11:52:16",
+        "related_record_id":29,
    
-#     #     "related_record_name":"IPHONE 15",
-#     #     "changes_type":"EDIT",
-#     #     "Reason_for_change":"WRONG SPELLING IN ITEM DESCRIPTION",
-#     #     "organization_id":1,
-#     #     "changes_for":"ITEM",
-#     #     "comments":"",
-#     #     "username":"zhouvel@gmail.com",
+        "related_record_name":"IPHONE 15",
+        "changes_type":"EDIT",
+        "Reason_for_change":"WRONG SPELLING IN ITEM DESCRIPTION",
+        "organization_id":1,
+        "changes_for":"ITEM",
+        "comments":"",
+        "username":"zhouvel7@gmail.com",
         
 
 
 
-#     # }
-# }
+    }
+}
 
 def lambda_handler(event,context):
     body=event['body']
@@ -106,7 +105,7 @@ def lambda_handler(event,context):
             'body': json.dumps('Invalid Request')
         }
     role=check_access(body['username'])
-    if role['statusCode']!=200:
+    if role['body']['statusCode']!=200:
         return role
     user_role=role['body']['role']
     if user_role not in ['Admin','Manager','normalUser']:

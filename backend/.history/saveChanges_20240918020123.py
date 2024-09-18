@@ -11,17 +11,14 @@ def get_db_connection():
     global con
     if con is None or con.closed:
         con = psycopg2.connect(
-            host=os.environ.get('Host_address'),
-            database=os.environ.get('DB_Name'),
-            user=os.environ.get('Username'),
-            password=os.environ.get('Password')
+           
          )
     return con
 def check_access(username):
     try:
         client = boto3.client('cognito-idp',region_name='us-east-1')
         response=client.admin_list_groups_for_user(
-                UserPoolId=os.getenv('USER_POOL_ID'),
+                UserPoolId='us-east-1_EPbgIUMEQ',
                 Username=username
             )
     except client.exceptions.UserNotFoundException as error:
