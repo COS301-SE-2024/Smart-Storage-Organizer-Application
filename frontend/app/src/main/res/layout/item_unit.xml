@@ -75,13 +75,26 @@
             android:textSize="16sp"
             android:visibility="gone" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_below="@id/categories"
             android:background="@android:color/white"
             >
+            <TextView
+                android:id="@+id/modifyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_alignParentStart="true"
+                android:text="modify unit details"
+                android:textSize="13dp"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="0dp"
+                android:layout_marginStart="16dp"
+                />
 
             <ImageView
                 android:id="@+id/viewItemsButton"
@@ -94,7 +107,6 @@
                 android:background="@android:color/white"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"/>
-
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

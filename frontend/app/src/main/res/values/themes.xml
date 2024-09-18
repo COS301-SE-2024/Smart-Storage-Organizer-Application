@@ -31,6 +31,16 @@
         <item name="boxStrokeErrorColor">@color/red</item>
     </style>
 
+    <style name="CustomTextInputFilledBox.Black" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/white
+        </item> <!-- Set the box background color to white -->
+        <item name="boxStrokeColor">@color/colorPrimary
+        </item> <!-- Optional: Set the stroke color -->
+        <item name="hintTextColor">@color/colorPrimary
+        </item> <!-- Optional: Set the hint text color -->
+        <item name="boxStrokeErrorColor">@color/red</item>
+    </style>
+
     <style name="RoundedCorners">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">60dp</item> <!-- Adjust the radius as needed -->

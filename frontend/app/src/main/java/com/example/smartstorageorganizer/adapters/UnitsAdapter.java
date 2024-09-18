@@ -1,15 +1,21 @@
 package com.example.smartstorageorganizer.adapters;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,14 +24,21 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.AddCategoryActivity;
+import com.example.smartstorageorganizer.AddColorCodeActivity;
+import com.example.smartstorageorganizer.AddItemActivity;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
+
+import kotlin.Unit;
 
 public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHolder> {
 
@@ -56,6 +69,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.categories.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.viewItemsButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.modifyText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
         if (isExpanded && !unit.hasCategories()) {
@@ -74,6 +88,8 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             intent.putExtra("unit_name", unitList.get(holder.getAdapterPosition()).getUnitName());
             context.startActivity(intent);
         });
+
+        holder.modifyText.setOnClickListener(v -> showBottomDialog(unit.getUnitName(), unit.getCapacity()));
     }
 
 
@@ -83,7 +99,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
     }
 
     public static class UnitViewHolder extends RecyclerView.ViewHolder {
-        TextView unitName, capacity, capacityUsed, categories;
+        TextView unitName, capacity, capacityUsed, categories, modifyText;
         ImageView arrow, viewItemsButton;
         CardView cardViewDescription;
 
@@ -96,6 +112,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             arrow = itemView.findViewById(R.id.arrow);
             viewItemsButton = itemView.findViewById(R.id.viewItemsButton);
             cardViewDescription = itemView.findViewById(R.id.cardViewDescription);
+            modifyText = itemView.findViewById(R.id.modifyText);
         }
     }
 
@@ -112,6 +129,76 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
                 Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showBottomDialog(String name, int unitCapacity) {
+//        unitModel unit = unitList.get(position);
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheet_layout_unit);
+
+        TextInputEditText unitName = dialog.findViewById(R.id.unitName);
+        TextInputEditText capacity = dialog.findViewById(R.id.capacity);
+////        LinearLayout unitLayout = dialog.findViewById(R.id.layoutUnit);
+////        LinearLayout groupingLayout = dialog.findViewById(R.id.layoutGrouping);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+//
+        unitName.setText(name);
+        capacity.setText(String.valueOf(unitCapacity));
+
+//        itemLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), AddItemActivity.class);
+//                logUserFlow("HomeFragment", "AddItemActivity");
+//                intent.putExtra("email", currentEmail);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        categoryLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), AddCategoryActivity.class);
+//                logUserFlow("HomeFragment", "AddCategoryActivity");
+//                intent.putExtra("email", currentEmail);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        unitLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), UnitActivity.class);
+//                logUserFlow("HomeFragment", "UnitActivity");
+//                startActivity(intent);
+//            }
+//        });
+//
+//        groupingLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getActivity(), AddColorCodeActivity.class);
+//                logUserFlow("HomeFragment", "AddColorCodeActivity");
+//                intent.putExtra("email", currentEmail);
+//                startActivity(intent);
+//            }
+//        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
     }
 
 }
