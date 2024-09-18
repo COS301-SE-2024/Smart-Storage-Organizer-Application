@@ -173,8 +173,6 @@
 
     </RelativeLayout>
 
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
     <ScrollView
         android:id="@+id/moreLayout"
         android:layout_width="match_parent"
@@ -193,6 +191,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!-- Your category and color code spinners go here -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputCategory"
                 android:layout_width="match_parent"
@@ -257,107 +256,115 @@
                 android:layout_below="@id/moreText"
                 android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/width"
+                <!-- GridLayout for 2-column layout -->
+                <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputWidth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Item Width"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="16dp"
+                    android:columnCount="2"
+                    android:rowCount="3"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/height"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_below="@id/width"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputHeight"
-                        android:layout_width="match_parent"
+                    <!-- Width -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/width"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Item Height"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputWidth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Width"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/depth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_below="@id/height"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputDepth"
-                        android:layout_width="match_parent"
+                    <!-- Height -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/height"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Item Depth"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="16dp"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputHeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Height"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_below="@id/depth"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputWeight"
-                        android:layout_width="match_parent"
+                    <!-- Depth -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/depth"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Item Weight"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loadbear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_below="@id/weight"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputLoadbear"
-                        android:layout_width="match_parent"
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputDepth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Depth"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Weight -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/weight"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Item Loadbear"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/updown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_below="@id/loadbear"
-                    style="@style/CustomTextInputOutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/inputUpdown"
-                        android:layout_width="match_parent"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="16dp"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Weight"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Loadbear -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/loadbear"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Item Updown"
-                        android:inputType="text"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_columnWeight="1"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputLoadbear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Loadbear"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Updown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/updown"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="16dp"
+                        style="@style/CustomTextInputFilledBox.White">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputUpdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Item Updown"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </GridLayout>
 
             </RelativeLayout>
 
+            <!-- Your Add Button goes here -->
             <RelativeLayout
                 android:id="@+id/addButton"
                 android:layout_width="match_parent"
@@ -421,5 +428,6 @@
         </RelativeLayout>
 
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
