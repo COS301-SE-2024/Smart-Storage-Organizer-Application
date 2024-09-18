@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.model.CategoryModel;
 
 import com.example.smartstorageorganizer.model.TokenManager;
@@ -61,6 +64,8 @@ public class UnitActivity extends BaseActivity {
     TextInputEditText unitCap;
     private MyAmplifyApp app;
     private long startTime;
+    private LottieAnimationView loadingScreen;
+    private ScrollView mainLayout;
 
 
     @Override
@@ -75,6 +80,8 @@ public class UnitActivity extends BaseActivity {
             addButton = findViewById(R.id.addButton);
             unitName = findViewById(R.id.unitName);
             unitCap = findViewById(R.id.capacity);
+        loadingScreen = findViewById(R.id.loadingScreen);
+        mainLayout = findViewById(R.id.mainLayout);
 
             if (flag) {
                 fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
@@ -196,10 +203,12 @@ public class UnitActivity extends BaseActivity {
         Utils.fetchParentCategories(categoryId, email, organizationID, this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
+                loadingScreen.setVisibility(View.GONE);
+                mainLayout.setVisibility(View.VISIBLE);
                 categoryModelList.addAll(result);
                 parentCategories.add("");
                 for (CategoryModel category: result) {
-                    Log.i("Category Image Url", category.getCategoryName());
+//                    Log.i("Category Image Url", category.getCategoryName());
                     parentCategories.add(category.getCategoryName());
                 }
 
