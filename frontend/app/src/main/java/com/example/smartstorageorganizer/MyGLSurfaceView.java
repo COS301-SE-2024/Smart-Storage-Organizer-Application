@@ -66,6 +66,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
             Log.d("EGL", "Result: " + results + ", Number of Configs: " + numConfigs[0]);
 
 
+
             if (results && numConfigs[0] > 0) {
                 return configs[0];
             } else {
