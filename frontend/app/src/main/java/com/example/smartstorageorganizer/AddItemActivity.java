@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -109,9 +110,10 @@ public class AddItemActivity extends BaseActivity  {
     private long startTime;
     private ArrayAdapter<String> adapterCategories;
     private ScrollView moreLayout;
-    private ConstraintLayout mainLayout;
+    private RelativeLayout mainLayout;
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
+    private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
 
 
     @Override
@@ -119,11 +121,11 @@ public class AddItemActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_item);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
 
         app = (MyAmplifyApp) getApplicationContext();
 
@@ -133,7 +135,7 @@ public class AddItemActivity extends BaseActivity  {
 
         description = findViewById(R.id.inputDescription);
         name = findViewById(R.id.inputName);
-        itemDetailscardView = findViewById(R.id.itemDetailscardView);
+//        itemDetailscardView = findViewById(R.id.itemDetailscardView);
         categorycardView = findViewById(R.id.categorycardView);
         suggestionSpinner = findViewById(R.id.categorySpinner);
         colorSpinner = findViewById(R.id.colorcodesSpinner);
@@ -142,6 +144,12 @@ public class AddItemActivity extends BaseActivity  {
         mainLayout = findViewById(R.id.mainLayout);
         moreText = findViewById(R.id.moreText);
         moreOptionsLayout = findViewById(R.id.moreOptionsLayout);
+        inputWidth = findViewById(R.id.inputWidth);
+        inputHeight = findViewById(R.id.inputHeight);
+        inputDepth = findViewById(R.id.inputDepth);
+        inputWeight = findViewById(R.id.inputWeight);
+        inputLoadbear = findViewById(R.id.inputLoadbear);
+        inputUpdown = findViewById(R.id.inputUpdown);
 
 
         categoryModelList = new ArrayList<>();
@@ -179,10 +187,14 @@ public class AddItemActivity extends BaseActivity  {
 //        progressDialog.setCancelable(false);
 
         findViewById(R.id.addButton).setOnClickListener(v -> {
-//            progressDialogAddingItem.show();
-            progressDialogAddingItem.show();
-            File compressedFile = compressImage(file);
-            uploadItemImage(compressedFile);
+            if (shouldFillAllFields()) {
+                // At least one field is filled but not all, show an error or prompt to fill all fields
+                Toast.makeText(AddItemActivity.this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
+            } else {
+                progressDialogAddingItem.show();
+                File compressedFile = compressImage(file);
+                uploadItemImage(compressedFile);
+            }
         });
 
 
@@ -745,6 +757,54 @@ public class AddItemActivity extends BaseActivity  {
 
             }
         });
+    }
+
+    // Function to check if user should fill all fields
+    private boolean shouldFillAllFields() {
+        boolean isAnyFieldFilled = !TextUtils.isEmpty(inputWidth.getText().toString().trim()) ||
+                !TextUtils.isEmpty(inputHeight.getText().toString().trim()) ||
+                !TextUtils.isEmpty(inputDepth.getText().toString().trim()) ||
+                !TextUtils.isEmpty(inputWeight.getText().toString().trim()) ||
+                !TextUtils.isEmpty(inputLoadbear.getText().toString().trim()) ||
+                !TextUtils.isEmpty(inputUpdown.getText().toString().trim());
+
+        if (isAnyFieldFilled) {
+            // Check if each field is empty and show an error if so
+            if (TextUtils.isEmpty(inputWidth.getText().toString().trim())) {
+                inputWidth.setError("Field required");
+                inputWidth.requestFocus(); // Request focus to the empty field
+                return true;
+            } else if (TextUtils.isEmpty(inputHeight.getText().toString().trim())) {
+                inputHeight.setError("Field required");
+                inputHeight.requestFocus();
+                return true;
+            } else if (TextUtils.isEmpty(inputDepth.getText().toString().trim())) {
+                inputDepth.setError("Field required");
+                inputDepth.requestFocus();
+                return true;
+            } else if (TextUtils.isEmpty(inputWeight.getText().toString().trim())) {
+                inputWeight.setError("Field required");
+                inputWeight.requestFocus();
+                return true;
+            } else if (TextUtils.isEmpty(inputLoadbear.getText().toString().trim())) {
+                inputLoadbear.setError("Field required");
+                inputLoadbear.requestFocus();
+                return true;
+            } else if (TextUtils.isEmpty(inputUpdown.getText().toString().trim())) {
+                inputUpdown.setError("Field required");
+                inputUpdown.requestFocus();
+                return true;
+            }
+        }
+
+        // If no field is filled, return false (allow the user to proceed)
+        return false;
+    }
+
+
+    // This is the function to proceed when no fields are filled
+    private void proceedWithNextStep() {
+        // Your action here when no fields are filled and the user is allowed to proceed
     }
 
     private void logActivityView(String activityName) {
