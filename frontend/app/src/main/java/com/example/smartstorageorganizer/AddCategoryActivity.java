@@ -87,7 +87,7 @@ public class AddCategoryActivity extends BaseActivity  {
         app = (MyAmplifyApp) getApplicationContext();
 
         initViews();
-        setupWindowInsets();
+//        setupWindowInsets();
         getDetails();
         fetchParentCategories();
         setupUploadButton();

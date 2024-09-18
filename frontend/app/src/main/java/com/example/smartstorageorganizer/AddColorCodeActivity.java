@@ -50,7 +50,7 @@ public class AddColorCodeActivity extends BaseActivity  {
 
         app = (MyAmplifyApp) getApplicationContext();
 
-        TextView gfgTextView = findViewById(R.id.gfg_heading);
+//        TextView gfgTextView = findViewById(R.id.gfg_heading);
         Button mPickColorButton = findViewById(R.id.pick_color_button);
         Button addColorCodeButton = findViewById(R.id.add_colorcode_button);
         mColorPreview = findViewById(R.id.preview_selected_color);
@@ -63,7 +63,7 @@ public class AddColorCodeActivity extends BaseActivity  {
 
         mPickColorButton.setOnClickListener(v -> openColorPickerDialogue());
         addColorCodeButton.setOnClickListener(v -> {
-            gfgTextView.setTextColor(mDefaultColor);
+//            gfgTextView.setTextColor(mDefaultColor);
             String color = convertIntToHexColor(mDefaultColor);
             String titleInput = titleEditText.getText().toString().trim();
             String descriptionInput = descriptionEditText.getText().toString().trim();
@@ -71,12 +71,6 @@ public class AddColorCodeActivity extends BaseActivity  {
             if (validateForm(titleInput, descriptionInput)) {
                 addNewColorCode(color, titleInput, descriptionInput, app.getOrganizationID());
             }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
         });
     }
 
