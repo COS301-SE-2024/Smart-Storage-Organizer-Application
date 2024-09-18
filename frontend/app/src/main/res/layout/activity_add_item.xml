@@ -9,9 +9,10 @@
     tools:context=".AddItemActivity">
     
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -168,9 +169,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
+        android:id="@+id/moreLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/categorycardView"
@@ -228,111 +230,131 @@
                     android:background="@color/gray" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/width"
+            <TextView
+                android:id="@+id/moreText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="more fields"
+                android:textStyle="bold"
+                android:textSize="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/inputColorCode"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputWidth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Item Width (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="32dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_below="@id/inputColorCode"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/height"
+            <RelativeLayout
+                android:id="@+id/moreOptionsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/width"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Item Height (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_below="@id/moreText"
+                android:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/depth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/height"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputDepth"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/width"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Item Depth (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputWidth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Width (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/depth"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputWeight"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Item Weight (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/loadbear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/weight"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputLoadbear"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_below="@id/width"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Height (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/depth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Item Loadbear (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/updown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="44dp"
-                android:layout_below="@id/loadbear"
-                style="@style/CustomTextInputFilledBox.White">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputUpdown"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_below="@id/height"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputDepth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Depth (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Item Updown (optional)"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_below="@id/depth"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Weight (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/loadbear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_below="@id/weight"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputLoadbear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Loadbear (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/updown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="44dp"
+                    android:layout_below="@id/loadbear"
+                    style="@style/CustomTextInputFilledBox.White">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputUpdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Item Updown (optional)"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/addButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/updown"
+                android:layout_below="@id/moreOptionsLayout"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="56dp"
                 android:layout_marginTop="32dp"

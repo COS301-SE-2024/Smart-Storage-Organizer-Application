@@ -22,12 +22,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -105,6 +108,10 @@ public class AddItemActivity extends BaseActivity  {
     MyAmplifyApp app;
     private long startTime;
     private ArrayAdapter<String> adapterCategories;
+    private ScrollView moreLayout;
+    private ConstraintLayout mainLayout;
+    private RelativeLayout moreOptionsLayout;
+    private TextView moreText;
 
 
     @Override
@@ -131,6 +138,11 @@ public class AddItemActivity extends BaseActivity  {
         suggestionSpinner = findViewById(R.id.categorySpinner);
         colorSpinner = findViewById(R.id.colorcodesSpinner);
         itemImage = findViewById(R.id.item_image);
+        moreLayout = findViewById(R.id.moreLayout);
+        mainLayout = findViewById(R.id.mainLayout);
+        moreText = findViewById(R.id.moreText);
+        moreOptionsLayout = findViewById(R.id.moreOptionsLayout);
+
 
         categoryModelList = new ArrayList<>();
         subcategoryModelList = new ArrayList<>();
@@ -143,6 +155,22 @@ public class AddItemActivity extends BaseActivity  {
                 showSimilarItemPopup();
             }
         });
+
+        moreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (moreOptionsLayout.getVisibility() == View.VISIBLE) {
+                    // If the layout is visible, hide it
+                    moreOptionsLayout.setVisibility(View.GONE);
+                    moreText.setText("Show Fields"); // Change text to "Show Fields"
+                } else {
+                    // If the layout is hidden, show it
+                    moreOptionsLayout.setVisibility(View.VISIBLE);
+                    moreText.setText("Hide Fields"); // Change text to "Hide Fields"
+                }
+            }
+        });
+
 
         itemImage.setOnClickListener(v -> showImagePickerDialog());
 
@@ -200,9 +228,9 @@ public class AddItemActivity extends BaseActivity  {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                itemDetailscardView.setVisibility(View.GONE);
-                itemImage.setVisibility(View.GONE);
-                categorycardView.setVisibility(View.VISIBLE);
+                mainLayout.setVisibility(View.GONE);
+//                itemImage.setVisibility(View.GONE);
+                moreLayout.setVisibility(View.VISIBLE);
             }
         });
 
