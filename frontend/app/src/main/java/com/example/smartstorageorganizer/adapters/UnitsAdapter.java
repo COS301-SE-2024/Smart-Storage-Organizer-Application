@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +92,12 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         });
 
         holder.modifyText.setOnClickListener(v -> showBottomDialog(unit.getUnitName(), unit.getCapacity()));
+        holder.viewText.setOnClickListener(v -> {
+            Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+            sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/testscript.glb"));
+            sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+            context.startActivity(sceneViewerIntent);
+        });
     }
 
 

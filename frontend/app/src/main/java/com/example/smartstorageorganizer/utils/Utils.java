@@ -1064,7 +1064,7 @@ public class Utils
         });
     }
 
-    public static void postAddItem(String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
+    public static void postAddItem(String username, String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, String width, String height, String depth, String weight, String loadbear, String updown, Activity activity, OperationCallback<Boolean> callback) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
@@ -1090,6 +1090,13 @@ public class Utils
             jsonObject.put("quanity", quantity);
             jsonObject.put("location", location);
             jsonObject.put("email", email);
+            jsonObject.put("username", username);
+            jsonObject.put("width", width);
+            jsonObject.put("height", height);
+            jsonObject.put("depth", depth);
+            jsonObject.put("weight", weight);
+            jsonObject.put("loadbear", loadbear);
+            jsonObject.put("updown", updown);
             jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();

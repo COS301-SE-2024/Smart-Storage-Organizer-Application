@@ -416,7 +416,7 @@ public class AddItemActivity extends BaseActivity  {
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
+        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -553,14 +553,14 @@ public class AddItemActivity extends BaseActivity  {
         Toast.makeText(AddItemActivity.this, "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
     }
 
-    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
+    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
 //        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
 //            units.addAll(unitModels);
 //            Log.i("progress", units.toString());
 //            String allocated=Utils.AllocateUnitToItem(units);
 //            Log.i("progress", "Allocated: "+allocated);
-        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, app.getEmail(),"unitRed", app.getOrganizationID(),this, new OperationCallback<Boolean>() {
+        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),"unitRed", app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();

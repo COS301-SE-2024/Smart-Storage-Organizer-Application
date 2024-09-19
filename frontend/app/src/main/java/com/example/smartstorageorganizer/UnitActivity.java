@@ -66,6 +66,7 @@ public class UnitActivity extends BaseActivity {
     private long startTime;
     private LottieAnimationView loadingScreen;
     private ScrollView mainLayout;
+    private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
 
 
     @Override
@@ -74,14 +75,20 @@ public class UnitActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_unit);
 
-            app = (MyAmplifyApp) getApplicationContext();
+        app = (MyAmplifyApp) getApplicationContext();
 
-            checkboxContainer = findViewById(R.id.checkbox_container);
-            addButton = findViewById(R.id.addButton);
-            unitName = findViewById(R.id.unitName);
-            unitCap = findViewById(R.id.capacity);
+        checkboxContainer = findViewById(R.id.checkbox_container);
+        addButton = findViewById(R.id.addButton);
+        unitName = findViewById(R.id.unitName);
+        unitCap = findViewById(R.id.capacity);
         loadingScreen = findViewById(R.id.loadingScreen);
         mainLayout = findViewById(R.id.mainLayout);
+        inputWidth = findViewById(R.id.inputWidth);
+        inputHeight = findViewById(R.id.inputHeight);
+        inputDepth = findViewById(R.id.inputDepth);
+        inputWeight = findViewById(R.id.inputWeight);
+//        inputLoadbear = findViewById(R.id.inputLoadbear);
+//        inputUpdown = findViewById(R.id.inputUpdown);
 
             if (flag) {
                 fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
@@ -118,9 +125,13 @@ public class UnitActivity extends BaseActivity {
 
                 String capacity;
                 capacity = unitCap.getText().toString();
+                String width = inputWidth.getText().toString();
+                String height = inputHeight.getText().toString();
+                String depth = inputDepth.getText().toString();
+                String weight = inputWeight.getText().toString();
                 Log.i("Constraints", categoryModelList.toString());
                 Log.i("unit", unit);
-                createUnit(unit, capacity, constraints.toString()).thenAccept(result -> {
+                createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
                     Log.i("Response", "Unit created successfully");
                     if (result) {
                         Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
@@ -137,9 +148,9 @@ public class UnitActivity extends BaseActivity {
           });
     }
 
-    public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints) {
+    public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\" }";
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\""+width+"\", \"height\":\""+height+"\", \"depth\":\""+depth+"\", \"maxweight\":\""+maxweight+"\", \"username\":\""+app.getEmail()+"\", \"organization_id\":\""+app.getOrganizationID()+"\", \"Unit_QR\":\""+"QR1"+"\"}";
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.AddUnitEndpoint;
@@ -149,7 +160,7 @@ public class UnitActivity extends BaseActivity {
             Log.i("token",token);
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    .header("Authorization", "Bearer"+token)
+                    .header("Authorization", token)
                     .post(body)
                     .build();
             Log.i("Unit Request", request.toString());
