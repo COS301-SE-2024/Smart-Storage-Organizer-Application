@@ -70,6 +70,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.categories.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.viewItemsButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.modifyText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.viewText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
         if (isExpanded && !unit.hasCategories()) {
@@ -99,8 +100,8 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
     }
 
     public static class UnitViewHolder extends RecyclerView.ViewHolder {
-        TextView unitName, capacity, capacityUsed, categories, modifyText;
-        ImageView arrow, viewItemsButton;
+        TextView unitName, capacity, capacityUsed, categories, modifyText, viewText, viewItemsButton;
+        ImageView arrow;
         CardView cardViewDescription;
 
         public UnitViewHolder(@NonNull View itemView) {
@@ -113,6 +114,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
             viewItemsButton = itemView.findViewById(R.id.viewItemsButton);
             cardViewDescription = itemView.findViewById(R.id.cardViewDescription);
             modifyText = itemView.findViewById(R.id.modifyText);
+            viewText = itemView.findViewById(R.id.viewText);
         }
     }
 
