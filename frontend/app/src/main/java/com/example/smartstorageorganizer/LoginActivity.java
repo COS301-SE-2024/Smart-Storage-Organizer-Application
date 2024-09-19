@@ -218,6 +218,7 @@ public class LoginActivity extends AppCompatActivity {
                 session -> {
                     AWSCognitoAuthSession cognitoSession = (AWSCognitoAuthSession) session;
                     String token = cognitoSession.getUserPoolTokensResult().getValue().getIdToken();
+                    Log.i("TOKEN", token);
                     fetchUserAttributes();
                     makeApiRequest(token);
                 },
