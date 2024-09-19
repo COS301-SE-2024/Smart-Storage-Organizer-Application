@@ -1,6 +1,5 @@
 package com.example.smartstorageorganizer;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,19 +11,39 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.results.Tokens;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.onesignal.Continue;
+import com.onesignal.OneSignal;
+import com.onesignal.debug.LogLevel;
 
-import org.json.JSONObject;
-
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    private static final String ONESIGNAL_APP_ID = "";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        initOneSignal();
+    }
+
+    public void initOneSignal() {
+        try {
+            // OneSignal Initialization
+            OneSignal.getDebug().setAlertLevel(LogLevel.VERBOSE);
+            OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
+            OneSignal.getNotifications().requestPermission(false, Continue.none());
+
+
+
+        } catch (Exception e) {
+            // Log the error to avoid crashing
+            e.printStackTrace();
+        }
+    }
+
+
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // Handle FCM messages here.
         Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());

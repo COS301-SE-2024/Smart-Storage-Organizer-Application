@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.MyFirebaseMessagingService;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.NotificationAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentNotificationsBinding;
@@ -27,10 +28,11 @@ public class NotificationsFragment extends Fragment {
 
     private FragmentNotificationsBinding binding;
     private TextView notificationTextView;
-    private NotificationReceiver notificationReceiver;
+    private BroadcastReceiver notificationReceiver;
     private RecyclerView recyclerView;
     private NotificationAdapter notificationsAdapter;
     private List<String> notificationList = new ArrayList<>();
+    private MyFirebaseMessagingService messagingService;
 
     @SuppressLint("NewApi")
     @Override
@@ -48,8 +50,19 @@ public class NotificationsFragment extends Fragment {
         notificationsAdapter = new NotificationAdapter(notificationList);
         recyclerView.setAdapter(notificationsAdapter);
 
-        // Register the receiver to listen for notifications
-        notificationReceiver = new NotificationReceiver();
+        messagingService = new MyFirebaseMessagingService();
+        messagingService.initOneSignal();
+
+        notificationReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String message = intent.getStringExtra("message");
+                if (message != null) {
+                    notificationList.add(message);
+                    notificationsAdapter.notifyDataSetChanged();
+                }
+            }
+        };
         requireContext().registerReceiver(notificationReceiver, new IntentFilter("com.example.smartstorageorganizer.NOTIFICATION"), Context.RECEIVER_NOT_EXPORTED);
 
         return root;

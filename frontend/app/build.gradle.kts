@@ -230,4 +230,5 @@ dependencies {
 
     // oneSignal
     implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+    implementation("com.onesignal:OneSignal:4.0.0")
 }
