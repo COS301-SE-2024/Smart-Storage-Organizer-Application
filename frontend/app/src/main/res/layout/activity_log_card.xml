@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@color/white">
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="8dp"-->
+<!--        android:elevation="4dp"-->
+<!--        android:padding="8dp">-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@drawable/filter_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="start"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/actionIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Action: "
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorSecondary"/>
+
+                <TextView
+                    android:id="@+id/actionDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Added"
+                    android:layout_marginStart="2dp"
+                    android:textSize="16sp"
+                    android:textColor="#4CAF50" /> <!-- Green for "Add" -->
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/itemActedUpon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item: Laptop"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Role: Admin | 2 hours ago"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp"
+                android:textColor="#757575" />
+
+            <LinearLayout
+                android:id="@+id/expandableSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/previousDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Previous: Dell XPS 13"
+                    android:textSize="14sp"
+                    android:textColor="#757575" />
+
+                <TextView
+                    android:id="@+id/newDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New: MacBook Pro"
+                    android:textSize="14sp"
+                    android:textColor="#757575" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/expandCollapseText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Change History"
+                android:textColor="#2196F3"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:onClick="toggleExpand"/>
+
+        </LinearLayout>
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+</LinearLayout>

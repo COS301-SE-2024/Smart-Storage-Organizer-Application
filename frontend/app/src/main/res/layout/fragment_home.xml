@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="76dp"
     android:background="@color/background"
     tools:context=".ui.home.HomeFragment">
 
@@ -138,53 +139,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/category_rec"/>
 
-    <LinearLayout
-        android:id="@+id/noInternet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:paddingLeft="22dp"
-        android:paddingRight="22dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/recentText">
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/no_internet"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Oops!"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorSecondary"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Slow or no internet connection."
-            android:textColor="@color/gray"
-            android:textSize="14dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Please check your internet settings and try again."
-            android:textColor="@color/gray"
-            android:textSize="14dp"/>
-
-        <Button
-            android:id="@+id/tryAgainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="try again"
-            android:layout_marginTop="16dp"/>
-
-    </LinearLayout>
-
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container_recent"
         android:layout_width="match_parent"
@@ -267,6 +221,62 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
                     android:overScrollMode="never" />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/addButton"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/addloader"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="150dp"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"/>
+                <LinearLayout
+                    android:id="@+id/noInternet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:paddingLeft="22dp"
+                    android:paddingRight="22dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/recentText">
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/no_internet"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Oops!"
+                        android:textSize="24dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorSecondary"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Slow or no internet connection."
+                        android:textColor="@color/gray"
+                        android:textSize="14dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Please check your internet settings and try again."
+                        android:textColor="@color/gray"
+                        android:textSize="14dp"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/tryAgainButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="try again"
+                        android:layout_marginTop="16dp"/>
+
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ValidateUserActivity extends AppCompatActivity {
+public class ValidateUserActivity extends BaseActivity {
     private TextInputEditText inputEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

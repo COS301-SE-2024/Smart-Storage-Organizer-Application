@@ -11,12 +11,12 @@
         android:label=""
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/nav_profile_management"
-        android:name="com.example.smartstorageorganizer.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings" >
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/nav_settings"-->
+<!--        android:name="com.example.smartstorageorganizer.ui.settings.SettingsFragment"-->
+<!--        android:label="Settings"-->
+<!--        tools:layout="@layout/fragment_settings" >-->
+<!--    </fragment>-->
 
 
     <fragment
@@ -26,15 +26,17 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/nav_help"
-        android:name="com.example.smartstorageorganizer.ui.help.HelpFragment"
-        android:label="Help"
-        tools:layout="@layout/fragment_help" />
-    <activity
-        android:id="@+id/nav_color_code"
-        android:name="com.example.smartstorageorganizer.ViewColorCodesActivity"
-        android:label="activity_view_color_codes"
-        tools:layout="@layout/activity_view_color_codes" />
+        android:id="@+id/nav_grouping"
+        android:name="com.example.smartstorageorganizer.ui.grouping.ColorGroupingFragment"
+        android:label="Grouping"
+        tools:layout="@layout/fragment_color_grouping" />
+
+    <fragment
+        android:id="@+id/nav_units"
+        android:name="com.example.smartstorageorganizer.ui.Units.UnitsFragment"
+        android:label="Units"
+        tools:layout="@layout/fragment_units" />
+
     <activity
         android:id="@+id/nav_code_scanner"
         android:name="com.example.smartstorageorganizer.CodeScannerActivity"
@@ -51,8 +53,18 @@
         android:label="activity_users"
         tools:layout="@layout/activity_users" />
     <activity
-        android:id="@+id/nav_units"
-        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"
-        android:label="activity_view_units"
-        tools:layout="@layout/activity_view_units" />
+        android:id="@+id/nav_reports"
+        android:name="com.example.smartstorageorganizer.ReportsActivity"
+        android:label="activity_reports"
+        tools:layout="@layout/activity_reports" />
+    <activity
+        android:id="@+id/nav_settings"
+        android:name="com.example.smartstorageorganizer.ProfileManagementActivity"
+        android:label="activity_profile_management"
+        tools:layout="@layout/activity_profile_management" />
+    <!--    <activity-->
+<!--        android:id="@+id/nav_units"-->
+<!--        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"-->
+<!--        android:label="activity_view_units"-->
+<!--        tools:layout="@layout/activity_view_units" />-->
 </navigation>

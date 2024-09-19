@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/home_icon"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/nav_units"
+        android:icon="@drawable/units_icon"
+        android:title="Units" />
+    <item
+        android:id="@+id/nav_grouping"
+        android:icon="@drawable/group_icon"
+        android:title="Grouping" />
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/notifications_icon"
+        android:title="Notifications" />
+</menu>

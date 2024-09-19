@@ -16,7 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -56,7 +58,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class EditItemActivity extends AppCompatActivity {
+public class EditItemActivity extends BaseActivity {
 
     private ImageView ItemImage;
     private LinearLayout content;
@@ -88,6 +90,8 @@ public class EditItemActivity extends AppCompatActivity {
     private boolean isFirstTimeParentApi = true;
     private boolean isFirstTimeSubApi = true;
     ProgressDialog progressDialog;
+    private RelativeLayout moreOptionsLayout;
+    private TextView moreText;
 
 
     @Override
@@ -98,7 +102,7 @@ public class EditItemActivity extends AppCompatActivity {
 
         initializeUI();
         GetDetail();
-        configureInsets();
+//        configureInsets();
         configureButtons();
     }
 
@@ -112,10 +116,27 @@ public class EditItemActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
         subcategorySpinner = findViewById(R.id.subcategorySpinner);
         Save=findViewById(R.id.save_button);
+        moreText = findViewById(R.id.moreText);
+        moreOptionsLayout = findViewById(R.id.moreOptionsLayout);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating details...");
         progressDialog.setCancelable(false);
+
+        moreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (moreOptionsLayout.getVisibility() == View.VISIBLE) {
+                    // If the layout is visible, hide it
+                    moreOptionsLayout.setVisibility(View.GONE);
+                    moreText.setText("Show Fields"); // Change text to "Show Fields"
+                } else {
+                    // If the layout is hidden, show it
+                    moreOptionsLayout.setVisibility(View.VISIBLE);
+                    moreText.setText("Hide Fields"); // Change text to "Hide Fields"
+                }
+            }
+        });
 
         fetchCategories(0);
         fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));

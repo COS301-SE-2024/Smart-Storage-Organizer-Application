@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class ViewColorCodesActivity extends AppCompatActivity {
+public class ViewColorCodesActivity extends BaseActivity {
     private RecyclerView colorCodeRecyclerView;
     private List<ColorCodeModel> colorCodeModelList;
     private ColorCodeAdapter colorCodeAdapter;
@@ -177,7 +177,7 @@ public class ViewColorCodesActivity extends AppCompatActivity {
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.deleteColour(Integer.parseInt(colorCodeId), this, new OperationCallback<Boolean>() {
+        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(),this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

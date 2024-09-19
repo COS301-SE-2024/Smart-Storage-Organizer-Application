@@ -1,7 +1,10 @@
 package com.example.smartstorageorganizer;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,6 +45,9 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,13 +60,21 @@ public class LoginActivity extends AppCompatActivity {
     public LottieAnimationView buttonLoader;
     public TextView resetPasswordLink;
     RelativeLayout registerButton;
+    MyAmplifyApp app;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     public static final String API_REQUEST = "API Request";
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
+        app = (MyAmplifyApp) getApplicationContext();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         initializeUI();
 //        checkIfSignedIn();
@@ -308,23 +322,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void navigateToHome(String email) {
+        app.setLoggedIn(true);
+        updateActiveUser(email);
+        logUserFlow("HomeActivity");
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
     }
 
+    private void updateActiveUser(String email) {
+//        String userId = app.getEmail();
+        Map<String, Object> activeUserData = new HashMap<>();
+        activeUserData.put("last_active_time", Timestamp.now());
+//        activeUserData.put("email", email);
+
+        db.collection("active_users").document(email)
+                .set(activeUserData)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
+    }
+
     public void navigateToRegistration() {
+        logUserFlow("SearchOrganizationActivity");
         Intent intent = new Intent(LoginActivity.this, SearchOrganizationActivity.class);
         startActivity(intent);
     }
 
     public void navigateToResetPassword() {
+        logUserFlow("ResetPasswordActivity");
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 
     public void navigateToEmailVerification(String email) {
+        logUserFlow("EmailVerificationActivity");
         Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
@@ -393,5 +425,73 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login Failed! please try again", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("LoginActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "LoginActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("LoginActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

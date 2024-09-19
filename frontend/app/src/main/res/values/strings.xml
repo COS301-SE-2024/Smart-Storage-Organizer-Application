@@ -102,4 +102,32 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string-array name="date_array">
+        <item>All Time</item>
+        <item>Last 30 Days</item>
+        <item>Last 14 Days</item>
+        <item>Last 7 Days</item>
+    </string-array>
+
+    <string-array name="date_range_options">
+        <item>Next 7 Days</item>
+        <item>Next 30 Days</item>
+        <item>Custom Range</item>
+    </string-array>
+
+
+    <string-array name="action_type_options">
+        <item>Action Type</item>
+        <item>Added</item>
+        <item>Modified</item>
+        <item>Deleted</item>
+    </string-array>
+
+    <string-array name="user_roles_options">
+        <item>User Role</item>
+        <item>Admin</item>
+        <item>Manager</item>
+        <item>Normal User</item>
+    </string-array>
+
 </resources>

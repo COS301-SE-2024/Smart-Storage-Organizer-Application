@@ -217,18 +217,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-            <!--            <com.airbnb.lottie.LottieAnimationView-->
-            <!--                android:id="@+id/button_animation"-->
-            <!--                app:lottie_rawRes="@raw/loader"-->
-            <!--                android:layout_width="80dp"-->
-            <!--                android:layout_height="80dp"-->
-            <!--                android:layout_centerInParent="true"-->
-            <!--                app:lottie_autoPlay="false"-->
-            <!--                app:lottie_loop="true"-->
-            <!--                android:visibility="gone"/>-->
-
         </RelativeLayout>
 
         <LinearLayout
