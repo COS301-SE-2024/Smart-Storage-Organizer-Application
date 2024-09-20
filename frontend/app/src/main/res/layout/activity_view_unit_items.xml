@@ -81,17 +81,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-    <Spinner
-        android:id="@+id/category_filter"
-        android:layout_width="120dp"
-        android:visibility="gone"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/spinner_background"
+    <LinearLayout
+        android:id="@+id/generateArrangementButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/category_filter"
+            android:layout_width="wrap_content"
+            android:visibility="visible"
+            android:layout_height="50dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="16dp"
+            android:text="Generate Arrangement"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/room_icon"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/notFoundText"
@@ -103,7 +122,7 @@
         android:textColor="@color/colorSecondary"
         android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/category_filter"
+        app:layout_constraintTop_toBottomOf="@id/sort_by_filter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -119,7 +138,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category_filter">
+        app:layout_constraintTop_toBottomOf="@+id/sort_by_filter">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -133,13 +152,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-            <View
-                android:layout_width="120dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/skeleton_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+<!--            <View-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:background="@color/skeleton_color"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -164,7 +183,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category_filter">
+        app:layout_constraintTop_toBottomOf="@+id/sort_by_filter">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/view_all_rec"

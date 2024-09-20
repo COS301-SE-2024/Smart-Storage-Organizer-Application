@@ -1,7 +1,10 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -30,6 +33,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
+import com.example.smartstorageorganizer.adapters.UnitsAdapter;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
@@ -81,6 +85,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
     ProgressDialog progressDialog;
     private MyAmplifyApp app;
     private long startTime;
+    private LinearLayout generateArrangementButton;
 
 
     @Override
@@ -126,11 +131,19 @@ public class ViewUnitItemsActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_view);
         itemsLayout = findViewById(R.id.newstedScrollview);
         TextView category = findViewById(R.id.category_text);
+        generateArrangementButton = findViewById(R.id.generateArrangementButton);
         category.setText(getIntent().getStringExtra("unit_name"));
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Suggesting Categories...");
         progressDialog.setCancelable(false);
+
+        generateArrangementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateProcess(getIntent().getStringExtra("unit_id"), getIntent().getStringExtra("unit_name"));
+            }
+        });
 
     }
 
@@ -461,6 +474,24 @@ public class ViewUnitItemsActivity extends BaseActivity {
                     progressDialog.dismiss();
                     runOnUiThread(() -> Toast.makeText(ViewUnitItemsActivity.this, "Failed to Assign Color Code to item(s)", Toast.LENGTH_SHORT).show());
                 }
+            }
+        });
+    }
+
+    private void generateProcess(String unit_id, String unit_name) {
+        Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Toast.makeText(ViewUnitItemsActivity.this, result, Toast.LENGTH_LONG).show();
+                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result));
+                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                startActivity(sceneViewerIntent);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -89,6 +89,8 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.viewItemsButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ViewUnitItemsActivity.class);
             intent.putExtra("unit_name", unitList.get(holder.getAdapterPosition()).getUnitName());
+            intent.putExtra("unit_id", unitList.get(holder.getAdapterPosition()).getId());
+
             context.startActivity(intent);
         });
 
