@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.model;
 
+import com.google.gson.Gson;
+
 public class ItemModel {
     private String itemId;
     private String itemName;
@@ -21,6 +23,20 @@ public class ItemModel {
     public ItemModel() {
 
     }
+    public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt,String parentCategoryId,String subCategoryId,String expiryDate) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.description = description;
+        this.colourCoding = colourCoding;
+        this.barcode = barcode;
+        this.qrcode = qrcode;
+        this.quantity = quantity;
+        this.location = location;
+        this.email = email;
+        this.itemImage = itemImage;
+        this.createdAt = createdAt;
+    }
+
 
     public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt) {
         this.itemId = itemId;
@@ -163,5 +179,9 @@ public class ItemModel {
 
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public  String toJson(){
+        return new Gson().toJson(this);
     }
 }

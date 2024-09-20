@@ -282,6 +282,8 @@ public class HomeFragment extends Fragment {
                             String formattedDate = dateFormat.format(currentDate);
                             loginActivities(currentEmail, currentName, currentSurname, "sign_in", organizationID, formattedDate);
                         }
+                        app.setName(currentName);
+                        app.setSurname(currentSurname);
                         name.setText("Hi "+currentName);
                         categoryAdapter.setOrganizationId(organizationID);
                         recentAdapter.setOrganizationId(organizationID);

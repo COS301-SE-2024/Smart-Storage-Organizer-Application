@@ -118,6 +118,8 @@ android {
         buildConfigField("String", "GetAllCategories", "\"${localProperties["GetAllCategories"]}\"");
         buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
         buildConfigField("String", "GetLoginReports", "\"${localProperties["GetLoginReports"]}\"");
+        buildConfigField("String", "changesReports", "\"${localProperties["changesReports"]}\"");
+        buildConfigField("String", "modifyAPI", "\"${localProperties["modifyAPI"]}\"");
     }
 
     buildTypes {
