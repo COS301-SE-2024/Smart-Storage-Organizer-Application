@@ -7,11 +7,13 @@ buildscript {
     }
     dependencies {
         classpath("com.google.gms:google-services:4.3.10")
+
     }
 }
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 apply(plugin = "com.google.gms.google-services") // Apply Google Services plugin here
 
@@ -161,6 +163,9 @@ dependencies {
 
     implementation ("com.google.firebase:firebase-messaging:23.0.0")
     implementation("com.google.firebase:firebase-core:21.1.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
 
 
 

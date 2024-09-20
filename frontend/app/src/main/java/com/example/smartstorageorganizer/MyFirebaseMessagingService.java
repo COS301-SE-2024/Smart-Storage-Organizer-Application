@@ -1,39 +1,47 @@
 package com.example.smartstorageorganizer;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-import com.amazonaws.mobile.client.Callback;
-import com.amazonaws.mobile.client.results.Tokens;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONObject;
-
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String ACTION_NEW_NOTIFICATION = "com.example.smartstorageorganizer.NEW_NOTIFICATION";
 
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        // Handle FCM messages here.
-        Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());
-        if (remoteMessage.getNotification() != null) {
-            // Display the notification message if it exists
-            getFirebaseMessage(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());        }
+
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        // Prepare the Looper and create a new Handler to post a Toast message
+        Looper.prepare();
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                // Show the notification title in a Toast
+                Toast.makeText(getBaseContext(), remoteMessage.getNotification().getTitle(), Toast.LENGTH_LONG).show();
+            }
+        });
+        // Start the Looper
+        Looper.loop();
     }
+
+
+//    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+//        // Handle FCM messages here.
+//        Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());
+//        if (remoteMessage.getNotification() != null) {
+//            // Display the notification message if it exists
+//            getFirebaseMessage(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());        }
+//    }
 
     private void getFirebaseMessage(String messageTitle, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
