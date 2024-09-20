@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
-    private final List<String> notifications;
+    private final List<AppNotification> notifications;
 
     public NotificationAdapter(List<AppNotification> notifications) {
         this.notifications = notifications;
@@ -28,7 +28,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        holder.notificationTextView.setText(notifications.get(position));
+        holder.notificationTextView.setText((CharSequence) notifications.get(position));
     }
 
     @Override
