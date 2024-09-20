@@ -64,6 +64,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.unitName.setText(unit.getUnitName());
         holder.capacity.setText(unit.getCapacityAsString());
         holder.capacityUsed.setText(unit.getCapacityUsedAsString());
+        holder.categories.setText(String.join(", ", unit.getCategories()));
 
         boolean isExpanded = unit.isExpanded();
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -74,11 +75,11 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.viewText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
-        if (isExpanded && !unit.hasCategories()) {
-            loadCategoriesOfUnits(unit.getId(), holder, unit);
-        } else if (unit.hasCategories()) {
-            holder.categories.setText(String.join(", ", unit.getCategories()));
-        }
+//        if (isExpanded && !unit.hasCategories()) {
+//            loadCategoriesOfUnits(unit.getId(), holder, unit);
+//        } else if (unit.hasCategories()) {
+//            holder.categories.setText(String.join(", ", unit.getCategories()));
+//        }
 
         holder.cardViewDescription.setOnClickListener(v -> {
             unit.setExpanded(!unit.isExpanded());
@@ -125,20 +126,20 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         }
     }
 
-    private void loadCategoriesOfUnits(String unit_id, UnitViewHolder holder, unitModel unit) {
-        Utils.FetchCategoriesOfUnits(unit_id, (Activity) context, new OperationCallback<List<String>>() {
-            @Override
-            public void onSuccess(List<String> result) {
-                unit.setCategories(result);
-                holder.categories.setText(String.join(", ", result));
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void loadCategoriesOfUnits(String unit_id, UnitViewHolder holder, unitModel unit) {
+//        Utils.FetchCategoriesOfUnits(unit_id, (Activity) context, new OperationCallback<List<String>>() {
+//            @Override
+//            public void onSuccess(List<String> result) {
+//                unit.setCategories(result);
+//                holder.categories.setText(String.join(", ", result));
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void showBottomDialog(String name, int unitCapacity) {
 //        unitModel unit = unitList.get(position);

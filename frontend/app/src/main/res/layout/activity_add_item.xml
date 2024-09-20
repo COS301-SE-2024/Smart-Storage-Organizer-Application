@@ -237,6 +237,28 @@
                     android:background="@color/gray" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputUnits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_below="@id/inputColorCode"
+                style="@style/CustomTextInputOutlinedBox">
+                <Spinner
+                    android:id="@+id/unitsSpinner"
+                    android:layout_width="match_parent"
+                    android:minHeight="55dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="-4dp"
+                    android:background="@color/gray" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/moreText"
                 android:layout_width="match_parent"
@@ -247,7 +269,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="32dp"
                 android:textColor="@color/colorPrimary"
-                android:layout_below="@id/inputColorCode"/>
+                android:layout_below="@id/inputUnits"/>
 
             <RelativeLayout
                 android:id="@+id/moreOptionsLayout"

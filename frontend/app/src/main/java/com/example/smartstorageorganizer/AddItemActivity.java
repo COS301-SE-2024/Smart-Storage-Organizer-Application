@@ -46,6 +46,7 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
+import com.example.smartstorageorganizer.adapters.UnitsAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -97,7 +98,7 @@ public class AddItemActivity extends BaseActivity  {
     AlertDialog alertDialog;
     ProgressDialog progressDialog;
     private LottieAnimationView loader;
-    Spinner suggestionSpinner, colorSpinner;
+    Spinner suggestionSpinner, colorSpinner, unitsSpinner;
     List<CategoryModel> suggestedCategory = new ArrayList<>();
     private String parentCategoryId, subcategoryId;
     private RelativeLayout categorycardView, itemDetailscardView;
@@ -114,6 +115,7 @@ public class AddItemActivity extends BaseActivity  {
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
     private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
+    private List<unitModel> unitList;
 
 
     @Override
@@ -139,6 +141,7 @@ public class AddItemActivity extends BaseActivity  {
         categorycardView = findViewById(R.id.categorycardView);
         suggestionSpinner = findViewById(R.id.categorySpinner);
         colorSpinner = findViewById(R.id.colorcodesSpinner);
+        unitsSpinner = findViewById(R.id.unitsSpinner);
         itemImage = findViewById(R.id.item_image);
         moreLayout = findViewById(R.id.moreLayout);
         mainLayout = findViewById(R.id.mainLayout);
@@ -154,6 +157,8 @@ public class AddItemActivity extends BaseActivity  {
 
         categoryModelList = new ArrayList<>();
         subcategoryModelList = new ArrayList<>();
+        unitList = new ArrayList<>();
+
         findViewById(R.id.nextLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -349,7 +354,7 @@ public class AddItemActivity extends BaseActivity  {
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription) {
-        Utils.fetchCategorySuggestions(itemName, itemDescription, "ezemakau@gmail.com", "1", this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchCategorySuggestions(itemName, itemDescription, app.getEmail(), "1", this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 suggestedCategory.clear();
@@ -357,6 +362,7 @@ public class AddItemActivity extends BaseActivity  {
                 parentCategoryId = suggestedCategory.get(0).getCategoryID();
                 subcategoryId = suggestedCategory.get(1).getCategoryID();
                 List<String> categories = new ArrayList<>();
+                loadUnits(suggestedCategory.get(0).getCategoryName());
                 categories.add(suggestedCategory.get(0).getCategoryName() + " - " + suggestedCategory.get(1).getCategoryName());
                 categories.add("Add Custom Category");
 
@@ -416,7 +422,7 @@ public class AddItemActivity extends BaseActivity  {
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -553,14 +559,14 @@ public class AddItemActivity extends BaseActivity  {
         Toast.makeText(AddItemActivity.this, "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
     }
 
-    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String width, String height, String depth, String weight, String loadbear, String updown) {
+    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String unitName, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
 //        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
 //            units.addAll(unitModels);
 //            Log.i("progress", units.toString());
 //            String allocated=Utils.AllocateUnitToItem(units);
 //            Log.i("progress", "Allocated: "+allocated);
-        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),"unitRed", app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<Boolean>() {
+        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),unitName, app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
@@ -805,6 +811,33 @@ public class AddItemActivity extends BaseActivity  {
     // This is the function to proceed when no fields are filled
     private void proceedWithNextStep() {
         // Your action here when no fields are filled and the user is allowed to proceed
+    }
+    private void loadUnits(String parentCategory) {
+        Utils.FetchAllUnits(app.getOrganizationID(), this, new OperationCallback<List<unitModel>>() {
+            @Override
+            public void onSuccess(List<unitModel> result) {
+                if(!result.isEmpty()){
+                    unitList.clear();
+                    unitList.addAll(result);
+                    List<String> unitsNames = new ArrayList<>();
+
+                    for(unitModel unit : result) {
+                        if(unit.getCategories().contains(parentCategory)){
+                            unitsNames.add(unit.getUnitName());
+                        }
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void logActivityView(String activityName) {
