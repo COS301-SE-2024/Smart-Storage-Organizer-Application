@@ -94,13 +94,9 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
         holder.modifyText.setOnClickListener(v -> showBottomDialog(unit.getUnitName(), unit.getCapacity()));
         holder.viewText.setOnClickListener(v -> {
-            Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-            sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/testscript.glb"));
-            sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
-            context.startActivity(sceneViewerIntent);
+            generateProcess(unit.getId(), unit.getUnitName(), holder);
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -126,20 +122,23 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         }
     }
 
-//    private void loadCategoriesOfUnits(String unit_id, UnitViewHolder holder, unitModel unit) {
-//        Utils.FetchCategoriesOfUnits(unit_id, (Activity) context, new OperationCallback<List<String>>() {
-//            @Override
-//            public void onSuccess(List<String> result) {
-//                unit.setCategories(result);
-//                holder.categories.setText(String.join(", ", result));
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-//                Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder) {
+        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result));
+                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                context.startActivity(sceneViewerIntent);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private void showBottomDialog(String name, int unitCapacity) {
 //        unitModel unit = unitList.get(position);

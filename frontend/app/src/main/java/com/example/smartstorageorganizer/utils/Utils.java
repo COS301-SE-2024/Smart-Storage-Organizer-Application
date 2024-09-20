@@ -2173,4 +2173,74 @@ public class Utils
             return null;
         });
     }
+
+    public static void generateProcess(String unitId, String unitName, Activity activity, OperationCallback<String> callback)
+    {
+        String json = "{\"unit_id\":\""+Integer.parseInt(unitId)+"\", \"unit_name\":\"" + unitName + "\" }";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.GenerateProcess;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    Log.e("View Response Results Body Array", "GET request failed", e);
+                    callback.onFailure(e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    final String responseData = response.body().string();
+                    activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        String bodyString = jsonObject.getString("response");
+//                        JSONArray bodyArray = new JSONArray(bodyString);
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
+                        JSONObject jsonObject1 = new JSONObject(bodyString);
+                        String imageUrl = jsonObject1.getString("path");
+                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", imageUrl));
+
+
+//                        for (int i = 0; i < bodyArray.length(); i++) {
+//                            JSONObject itemObject = bodyArray.getJSONObject(i);
+//
+//                            ColorCodeModel colorCode = new ColorCodeModel();
+//                            colorCode.setColor(itemObject.getString("colourcode"));
+//                            colorCode.setName(itemObject.getString("title"));
+//                            colorCode.setDescription(itemObject.getString("description"));
+//                            colorCode.setId(itemObject.getString("id"));
+//
+//                            colorCodeModelList.add(colorCode);
+//                        }
+
+                        activity.runOnUiThread(() -> callback.onSuccess(imageUrl));
+                    } catch (JSONException e) {
+                        activity.runOnUiThread(() -> {
+                            Log.e("View Response Results Body Array", "JSON parsing error: " + e.getMessage());
+                            callback.onFailure(e.getMessage());
+                        });
+                    }
+                } else {
+                    activity.runOnUiThread(() -> {
+//                        Log.e(message, "GET request failed:" + response);
+                        callback.onFailure("Response code:" + response.code());
+                    });
+                }
+            }
+        });
+
+    }
 }

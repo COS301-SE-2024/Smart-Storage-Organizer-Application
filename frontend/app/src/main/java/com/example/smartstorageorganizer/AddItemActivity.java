@@ -170,7 +170,7 @@ public class AddItemActivity extends BaseActivity  {
                 } else if (TextUtils.isEmpty(itemDescription)) {
                     description.setError("Item description is required");
                     description.requestFocus();
-                } else if (itemImage.getDrawable() == null) {  // Check if image has been uploaded
+                } else if (itemImage.getDrawable() == null || !file.exists()) {  // Check if image has been uploaded
                     Toast.makeText(AddItemActivity.this, "Please upload an item image", Toast.LENGTH_SHORT).show();
                 } else {
                     // If all fields are valid, proceed with the actions
