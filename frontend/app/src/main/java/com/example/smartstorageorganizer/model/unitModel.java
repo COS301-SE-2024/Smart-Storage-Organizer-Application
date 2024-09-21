@@ -9,13 +9,15 @@ public class unitModel {
     int currentCapacity;
     boolean isExpanded;
     List<String> categories;
+    String categoriesString;
 
-    public unitModel(String unitName, String id, int capacity, int currentCapacity) {
+    public unitModel(String unitName, String id, int capacity, int currentCapacity, String categoriesString) {
         this.unitName = unitName;
         this.id = id;
         this.capacity = capacity;
         this.currentCapacity = currentCapacity;
         this.isExpanded = false;
+        this.categoriesString = categoriesString;
     }
     public String getUnitName() {
         return unitName;
@@ -56,5 +58,13 @@ public class unitModel {
 
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
+    }
+
+    public String getCategoriesString() {
+        return categoriesString;
+    }
+
+    public void setCategoriesString(String categoriesString) {
+        this.categoriesString = categoriesString;
     }
 }
