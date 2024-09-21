@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
@@ -16,6 +18,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -489,20 +493,91 @@ public class ViewUnitItemsActivity extends BaseActivity {
         Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<ArrangementModel>() {
             @Override
             public void onSuccess(ArrangementModel result) {
-                Toast.makeText(ViewUnitItemsActivity.this, result.getImageUrl(), Toast.LENGTH_LONG).show();
+                mainLayout.setVisibility(View.VISIBLE);
+                arrangementLoader.setVisibility(View.GONE);
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ViewUnitItemsActivity.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_items_list, null);
+                dialogBuilder.setView(dialogView);
+
+                TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
+
+                TableRow headerRow = new TableRow(ViewUnitItemsActivity.this);
+                TextView headerName = new TextView(ViewUnitItemsActivity.this);
+                TextView headerColor = new TextView(ViewUnitItemsActivity.this);
+
+                headerName.setText("Name");
+                headerName.setPadding(8, 8, 8, 8);
+                headerName.setTypeface(null, Typeface.BOLD);
+                headerColor.setText("Color");
+                headerColor.setPadding(8, 8, 8, 8);
+                headerColor.setTypeface(null, Typeface.BOLD);
+
+                headerRow.addView(headerName);
+                headerRow.addView(headerColor);
+
+                tableLayout.addView(headerRow);
+
                 List<BinItemModel> items = result.getItems();
-                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
-                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
-                startActivity(sceneViewerIntent);
+
+                for (BinItemModel item : items) {
+                    TableRow row = new TableRow(ViewUnitItemsActivity.this);
+
+                    TextView nameView = new TextView(ViewUnitItemsActivity.this);
+                    nameView.setText(item.getName());
+                    nameView.setPadding(8, 8, 8, 8);
+
+                    View colorView = new View(ViewUnitItemsActivity.this);
+                    colorView.setBackgroundColor(parseColor(item.getColor()));
+
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(50, 50);
+                    params.setMargins(8, 8, 8, 8);
+                    colorView.setLayoutParams(params);
+
+                    row.addView(nameView);
+                    row.addView(colorView);
+
+                    tableLayout.addView(row);
+                }
+
+                Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
+                view3DButton.setOnClickListener(v -> {
+                    Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                    sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=" + result.getImageUrl()));
+                    sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                    startActivity(sceneViewerIntent);
+                });
+
+                // Show the dialog
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
             }
+
+
 
             @Override
             public void onFailure(String error) {
+                generateProcess(unit_id, unit_name);
                 Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }
+
+    public int parseColor(String colorString) {
+        // Remove the square brackets and split the string by commas
+        String[] rgbValues = colorString.replaceAll("[\\[\\]]", "").split(",");
+
+        // Parse the RGB values and alpha channel
+        int red = Integer.parseInt(rgbValues[0].trim());
+        int green = Integer.parseInt(rgbValues[1].trim());
+        int blue = Integer.parseInt(rgbValues[2].trim());
+        int alpha = Integer.parseInt(rgbValues[3].trim());
+
+        // Return the color as an int
+        return Color.argb(alpha, red, green, blue);
+    }
+
 
     private void logActivityView(String activityName) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
