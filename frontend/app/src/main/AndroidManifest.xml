@@ -35,6 +35,9 @@
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
         <activity
+            android:name=".ARActivity"
+            android:exported="false" />
+        <activity
             android:name=".ThemeSwitcherActivity"
             android:exported="false" />
         <activity

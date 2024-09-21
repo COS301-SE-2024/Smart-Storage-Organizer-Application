@@ -32,6 +32,7 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
+import com.example.smartstorageorganizer.model.ArrangementModel;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -125,12 +126,12 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
     }
 
     private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder) {
-        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<String>() {
+        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
             @Override
-            public void onSuccess(String result) {
-                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+            public void onSuccess(ArrangementModel result) {
+                Toast.makeText(context, result.getImageUrl(), Toast.LENGTH_LONG).show();
                 Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result));
+                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
                 sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
                 context.startActivity(sceneViewerIntent);
             }

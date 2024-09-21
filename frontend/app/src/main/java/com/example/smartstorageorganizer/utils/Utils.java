@@ -23,6 +23,8 @@ import com.amplifyframework.auth.options.AuthFetchSessionOptions;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.model.ArrangementModel;
+import com.example.smartstorageorganizer.model.BinItemModel;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
@@ -2174,7 +2176,7 @@ public class Utils
         });
     }
 
-    public static void generateProcess(String unitId, String unitName, Activity activity, OperationCallback<String> callback)
+    public static void generateProcess(String unitId, String unitName, Activity activity, OperationCallback<ArrangementModel> callback)
     {
         String json = "{\"unit_id\":\""+Integer.parseInt(unitId)+"\", \"unit_name\":\"" + unitName + "\" }";
 
@@ -2211,22 +2213,25 @@ public class Utils
                         activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
                         JSONObject jsonObject1 = new JSONObject(bodyString);
                         String imageUrl = jsonObject1.getString("path");
+                        String items = jsonObject1.getString("items");
                         activity.runOnUiThread(() -> Log.e("View Response Results Body Array", imageUrl));
 
+                        JSONArray itemsArray = new JSONArray(items);
+                        List<BinItemModel> itemsList = new ArrayList<>();
 
-//                        for (int i = 0; i < bodyArray.length(); i++) {
-//                            JSONObject itemObject = bodyArray.getJSONObject(i);
-//
-//                            ColorCodeModel colorCode = new ColorCodeModel();
-//                            colorCode.setColor(itemObject.getString("colourcode"));
-//                            colorCode.setName(itemObject.getString("title"));
-//                            colorCode.setDescription(itemObject.getString("description"));
-//                            colorCode.setId(itemObject.getString("id"));
-//
-//                            colorCodeModelList.add(colorCode);
-//                        }
+                        for (int i = 0; i < itemsArray.length(); i++) {
+                            JSONObject itemObject = itemsArray.getJSONObject(i);
 
-                        activity.runOnUiThread(() -> callback.onSuccess(imageUrl));
+                            String name = itemObject.getString("name");
+                            String color = itemObject.getString("color");
+
+                            BinItemModel item = new BinItemModel(name, color);
+                            itemsList.add(item);
+                        }
+
+                        ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
+
+                        activity.runOnUiThread(() -> callback.onSuccess(obj));
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
                             Log.e("View Response Results Body Array", "JSON parsing error: " + e.getMessage());

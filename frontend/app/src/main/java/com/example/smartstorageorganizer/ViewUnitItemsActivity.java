@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,6 +35,8 @@ import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.adapters.UnitsAdapter;
+import com.example.smartstorageorganizer.model.ArrangementModel;
+import com.example.smartstorageorganizer.model.BinItemModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
@@ -86,7 +89,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
     private MyAmplifyApp app;
     private long startTime;
     private LinearLayout generateArrangementButton;
-
+    private ConstraintLayout mainLayout, arrangementLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,8 @@ public class ViewUnitItemsActivity extends BaseActivity {
         itemsLayout = findViewById(R.id.newstedScrollview);
         TextView category = findViewById(R.id.category_text);
         generateArrangementButton = findViewById(R.id.generateArrangementButton);
+        arrangementLoader = findViewById(R.id.arrangementLoader);
+        mainLayout = findViewById(R.id.mainLayout);
         category.setText(getIntent().getStringExtra("unit_name"));
 
         progressDialog = new ProgressDialog(this);
@@ -141,6 +146,8 @@ public class ViewUnitItemsActivity extends BaseActivity {
         generateArrangementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mainLayout.setVisibility(View.GONE);
+                arrangementLoader.setVisibility(View.VISIBLE);
                 generateProcess(getIntent().getStringExtra("unit_id"), getIntent().getStringExtra("unit_name"));
             }
         });
@@ -479,12 +486,13 @@ public class ViewUnitItemsActivity extends BaseActivity {
     }
 
     private void generateProcess(String unit_id, String unit_name) {
-        Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<String>() {
+        Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<ArrangementModel>() {
             @Override
-            public void onSuccess(String result) {
-                Toast.makeText(ViewUnitItemsActivity.this, result, Toast.LENGTH_LONG).show();
+            public void onSuccess(ArrangementModel result) {
+                Toast.makeText(ViewUnitItemsActivity.this, result.getImageUrl(), Toast.LENGTH_LONG).show();
+                List<BinItemModel> items = result.getItems();
                 Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result));
+                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
                 sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
                 startActivity(sceneViewerIntent);
             }
