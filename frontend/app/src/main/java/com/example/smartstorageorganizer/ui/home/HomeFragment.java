@@ -276,6 +276,8 @@ public class HomeFragment extends Fragment {
                     }
                     Log.i("progress","User attributes fetched successfully");
                     requireActivity().runOnUiThread(() -> {
+                        app.setSurname(currentSurname);
+                        app.setName(currentName);
                         if(app.isLoggedIn()){
                             Date currentDate = new Date();
                             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
+import com.example.smartstorageorganizer.model.ArrangementModel;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -63,6 +65,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.unitName.setText(unit.getUnitName());
         holder.capacity.setText(unit.getCapacityAsString());
         holder.capacityUsed.setText(unit.getCapacityUsedAsString());
+        holder.categories.setText(String.join(", ", unit.getCategories()));
 
         boolean isExpanded = unit.isExpanded();
         holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -73,11 +76,11 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.viewText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.arrow.setRotation(isExpanded ? 180 : 0);
 
-        if (isExpanded && !unit.hasCategories()) {
-            loadCategoriesOfUnits(unit.getId(), holder, unit);
-        } else if (unit.hasCategories()) {
-            holder.categories.setText(String.join(", ", unit.getCategories()));
-        }
+//        if (isExpanded && !unit.hasCategories()) {
+//            loadCategoriesOfUnits(unit.getId(), holder, unit);
+//        } else if (unit.hasCategories()) {
+//            holder.categories.setText(String.join(", ", unit.getCategories()));
+//        }
 
         holder.cardViewDescription.setOnClickListener(v -> {
             unit.setExpanded(!unit.isExpanded());
@@ -87,12 +90,16 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.viewItemsButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ViewUnitItemsActivity.class);
             intent.putExtra("unit_name", unitList.get(holder.getAdapterPosition()).getUnitName());
+            intent.putExtra("unit_id", unitList.get(holder.getAdapterPosition()).getId());
+
             context.startActivity(intent);
         });
 
         holder.modifyText.setOnClickListener(v -> showBottomDialog(unit.getUnitName(), unit.getCapacity()));
+        holder.viewText.setOnClickListener(v -> {
+            generateProcess(unit.getId(), unit.getUnitName(), holder);
+        });
     }
-
 
     @Override
     public int getItemCount() {
@@ -118,17 +125,20 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         }
     }
 
-    private void loadCategoriesOfUnits(String unit_id, UnitViewHolder holder, unitModel unit) {
-        Utils.FetchCategoriesOfUnits(unit_id, (Activity) context, new OperationCallback<List<String>>() {
+    private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder) {
+        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
             @Override
-            public void onSuccess(List<String> result) {
-                unit.setCategories(result);
-                holder.categories.setText(String.join(", ", result));
+            public void onSuccess(ArrangementModel result) {
+                Toast.makeText(context, result.getImageUrl(), Toast.LENGTH_LONG).show();
+                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
+                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                context.startActivity(sceneViewerIntent);
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(context, "Failed to fetch categories: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }

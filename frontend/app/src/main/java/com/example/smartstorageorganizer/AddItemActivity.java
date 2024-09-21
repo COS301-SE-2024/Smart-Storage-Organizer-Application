@@ -46,6 +46,7 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
+import com.example.smartstorageorganizer.adapters.UnitsAdapter;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
@@ -97,7 +98,7 @@ public class AddItemActivity extends BaseActivity  {
     AlertDialog alertDialog;
     ProgressDialog progressDialog;
     private LottieAnimationView loader;
-    Spinner suggestionSpinner, colorSpinner;
+    Spinner suggestionSpinner, colorSpinner, unitsSpinner;
     List<CategoryModel> suggestedCategory = new ArrayList<>();
     private String parentCategoryId, subcategoryId;
     private RelativeLayout categorycardView, itemDetailscardView;
@@ -114,6 +115,8 @@ public class AddItemActivity extends BaseActivity  {
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
     private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
+    private List<unitModel> unitList;
+    private LottieAnimationView buttonLoader;
 
 
     @Override
@@ -121,11 +124,6 @@ public class AddItemActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_item);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         app = (MyAmplifyApp) getApplicationContext();
 
@@ -139,6 +137,7 @@ public class AddItemActivity extends BaseActivity  {
         categorycardView = findViewById(R.id.categorycardView);
         suggestionSpinner = findViewById(R.id.categorySpinner);
         colorSpinner = findViewById(R.id.colorcodesSpinner);
+        unitsSpinner = findViewById(R.id.unitsSpinner);
         itemImage = findViewById(R.id.item_image);
         moreLayout = findViewById(R.id.moreLayout);
         mainLayout = findViewById(R.id.mainLayout);
@@ -150,31 +149,50 @@ public class AddItemActivity extends BaseActivity  {
         inputWeight = findViewById(R.id.inputWeight);
         inputLoadbear = findViewById(R.id.inputLoadbear);
         inputUpdown = findViewById(R.id.inputUpdown);
+        buttonLoader = findViewById(R.id.buttonLoader);
 
 
         categoryModelList = new ArrayList<>();
         subcategoryModelList = new ArrayList<>();
-        findViewById(R.id.nextLogin).setOnClickListener(new View.OnClickListener() {
+        unitList = new ArrayList<>();
+
+        findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSuggestedCategory(name.getText().toString().trim(), description.getText().toString().trim());
-                assignItemToColor();
-                fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
-                showSimilarItemPopup();
+                // Get values from input fields
+                String itemName = name.getText().toString().trim();
+                String itemDescription = description.getText().toString().trim();
+
+                // Check if the name, description, and image are provided
+                if (TextUtils.isEmpty(itemName)) {
+                    name.setError("Item name is required");
+                    name.requestFocus();
+                } else if (TextUtils.isEmpty(itemDescription)) {
+                    description.setError("Item description is required");
+                    description.requestFocus();
+                } else if (itemImage.getDrawable() == null || !file.exists()) {  // Check if image has been uploaded
+                    Toast.makeText(AddItemActivity.this, "Please upload an item image", Toast.LENGTH_SHORT).show();
+                } else {
+                    // If all fields are valid, proceed with the actions
+                    buttonLoader.setVisibility(View.VISIBLE);
+                    getSuggestedCategory(itemName, itemDescription);
+                    assignItemToColor();
+                    fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
+                    showSimilarItemPopup();
+                }
             }
         });
+
 
         moreText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (moreOptionsLayout.getVisibility() == View.VISIBLE) {
-                    // If the layout is visible, hide it
                     moreOptionsLayout.setVisibility(View.GONE);
-                    moreText.setText("Show Fields"); // Change text to "Show Fields"
+                    moreText.setText("Show Fields");
                 } else {
-                    // If the layout is hidden, show it
                     moreOptionsLayout.setVisibility(View.VISIBLE);
-                    moreText.setText("Hide Fields"); // Change text to "Hide Fields"
+                    moreText.setText("Hide Fields");
                 }
             }
         });
@@ -182,13 +200,8 @@ public class AddItemActivity extends BaseActivity  {
 
         itemImage.setOnClickListener(v -> showImagePickerDialog());
 
-//        progressDialogAddingItem = new ProgressDialog(this);
-//        progressDialogAddingItem.setMessage("Adding Item...");
-//        progressDialog.setCancelable(false);
-
         findViewById(R.id.addButton).setOnClickListener(v -> {
             if (shouldFillAllFields()) {
-                // At least one field is filled but not all, show an error or prompt to fill all fields
                 Toast.makeText(AddItemActivity.this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
             } else {
                 progressDialogAddingItem.show();
@@ -227,6 +240,7 @@ public class AddItemActivity extends BaseActivity  {
 
         loader.setVisibility(View.VISIBLE);
         noButton.setVisibility(View.GONE);
+        buttonLoader.setVisibility(View.VISIBLE);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchResults = new ArrayList<>();
@@ -241,7 +255,6 @@ public class AddItemActivity extends BaseActivity  {
             public void onClick(View v) {
                 alertDialog.dismiss();
                 mainLayout.setVisibility(View.GONE);
-//                itemImage.setVisibility(View.GONE);
                 moreLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -252,8 +265,6 @@ public class AddItemActivity extends BaseActivity  {
 
     public CompletableFuture<List<SearchResult>> SearchForItem(String target, String parentcategoryid, String subcategoryid) {
         CompletableFuture<List<SearchResult>> future = new CompletableFuture<>();
-//        resultsNotFound.setVisibility(View.GONE);
-//        loader.setVisibility(View.VISIBLE);
         searchResults.clear();
         adapter.notifyDataSetChanged();
 
@@ -312,35 +323,34 @@ public class AddItemActivity extends BaseActivity  {
                             }
                             runOnUiThread(() -> {
                                 adapter.notifyDataSetChanged();
-//                                progressDialog.dismiss();
                                 loader.setVisibility(View.GONE);
                                 noButton.setVisibility(View.VISIBLE);
-//                                sortBySpinner.setVisibility(View.VISIBLE);
-//                                loader.setVisibility(View.GONE);
+                                buttonLoader.setVisibility(View.GONE);
+
                                 if(searchResults.isEmpty()){
-//                                    resultsNotFound.setVisibility(View.VISIBLE);
+                                    alertDialog.dismiss();
+                                    mainLayout.setVisibility(View.GONE);
+                                    moreLayout.setVisibility(View.VISIBLE);
+                                    buttonLoader.setVisibility(View.GONE);
                                 }
                             });
 
                         }catch (JSONException e) {
-                            if(searchResults.isEmpty()){
-                                loader.setVisibility(View.GONE);
-                                noButton.setVisibility(View.VISIBLE);
-//                                progressDialog.dismiss();
-//                                resultsNotFound.setVisibility(View.VISIBLE);
-                            }
+                            alertDialog.dismiss();
+                            mainLayout.setVisibility(View.GONE);
+                            moreLayout.setVisibility(View.VISIBLE);
+                            buttonLoader.setVisibility(View.GONE);
                             throw new RuntimeException(e);
                         }
 
                     } else {
-//                        loader.setVisibility(View.GONE);
+                        SearchForItem(target, parentcategoryid, subcategoryid);
                         future.completeExceptionally(new IOException("Search request failed: " + response.code()));
                     }
                 }
             });
 
         }).exceptionally(ex -> {
-//            loader.setVisibility(View.GONE);
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
@@ -349,7 +359,7 @@ public class AddItemActivity extends BaseActivity  {
     }
 
     private void getSuggestedCategory(String itemName, String itemDescription) {
-        Utils.fetchCategorySuggestions(itemName, itemDescription, "ezemakau@gmail.com", "1", this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchCategorySuggestions(itemName, itemDescription, app.getEmail(), "1", this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 suggestedCategory.clear();
@@ -357,6 +367,7 @@ public class AddItemActivity extends BaseActivity  {
                 parentCategoryId = suggestedCategory.get(0).getCategoryID();
                 subcategoryId = suggestedCategory.get(1).getCategoryID();
                 List<String> categories = new ArrayList<>();
+                loadUnits(suggestedCategory.get(0).getCategoryName());
                 categories.add(suggestedCategory.get(0).getCategoryName() + " - " + suggestedCategory.get(1).getCategoryName());
                 categories.add("Add Custom Category");
 
@@ -378,19 +389,11 @@ public class AddItemActivity extends BaseActivity  {
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
-
-                // Hide the loading dialog and reload button after suggestions are fetched
-//                progressDialog.dismiss();
-//                reloadButton.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(String error) {
                 Toast.makeText(AddItemActivity.this, "Category Fetching failed... ", Toast.LENGTH_LONG).show();
-
-                // Hide the loading dialog and show the reload button in case of failure
-//                progressDialog.dismiss();
-//                reloadButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -398,7 +401,7 @@ public class AddItemActivity extends BaseActivity  {
     public void uploadItemImage(File parentCategoryImage)
     {
         StorageUploadFileOptions options = StorageUploadFileOptions.builder()
-                .contentType("image/png") // Adjust based on file type
+                .contentType("image/png")
                 .build();
         long time = System.nanoTime();
         String key= String.valueOf(time);
@@ -416,7 +419,7 @@ public class AddItemActivity extends BaseActivity  {
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId));
+        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -459,7 +462,6 @@ public class AddItemActivity extends BaseActivity  {
                     Uri photoURI = FileProvider.getUriForFile(this, "com.example.smartstorageorganizer.provider", photoFile);
                     Log.d("Photo URI", "photoURI: " + photoURI.toString());
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                    Toast.makeText(context, "PhotoFile not null", Toast.LENGTH_SHORT).show();
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 } else {
                     Log.e("PhotoFile", "photoFile is null");
@@ -553,14 +555,9 @@ public class AddItemActivity extends BaseActivity  {
         Toast.makeText(AddItemActivity.this, "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
     }
 
-    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory) {
+    private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String unitName, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
-//        Utils.getAllUnitsForCategory(parentCategory).thenAccept(unitModels -> {
-//            units.addAll(unitModels);
-//            Log.i("progress", units.toString());
-//            String allocated=Utils.AllocateUnitToItem(units);
-//            Log.i("progress", "Allocated: "+allocated);
-        Utils.postAddItem(itemImage, itemName, description, category, parentCategory, app.getEmail(),"unitRed", app.getOrganizationID(),this, new OperationCallback<Boolean>() {
+        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),unitName, app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
@@ -574,7 +571,7 @@ public class AddItemActivity extends BaseActivity  {
             @Override
             public void onFailure(String error) {
                 Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
-//                progressDialogAddingItem.hide();
+                progressDialogAddingItem.hide();
             }
         });
 //        });
@@ -603,23 +600,19 @@ public class AddItemActivity extends BaseActivity  {
             }
         }
 
-        return ""; // Return null if no category with the given name is found
+        return "";
     }
 
     public void assignItemToColor() {
-        // Fetch all available color codes
         Utils.fetchAllColour(app.getOrganizationID(),this, new OperationCallback<List<ColorCodeModel>>() {
             @Override
             public void onSuccess(List<ColorCodeModel> colorCodeModelList) {
-                // Create an array of color names to display to the user
                 String[] colorNames = new String[colorCodeModelList.size()+1];
                 colorNames[0] = "Choose a color group (optional)";
                 for (int i = 1, j = 0; i < colorCodeModelList.size()+1; i++, j++) {
                     colorNames[i] = colorCodeModelList.get(j).getName();
                 }
-//                List<String> categories = new ArrayList<>();
 
-                // Populate the Spinner
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, colorNames);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 colorSpinner.setAdapter(adapter);
@@ -627,10 +620,7 @@ public class AddItemActivity extends BaseActivity  {
                 colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                        if (categories.get(position).equals("Add Custom Category")) {
-//                            // Show dialog to input custom category
-////                            showCustomCategoryDialog(categories, adapter);
-//                        }
+
                     }
 
                     @Override
@@ -641,7 +631,6 @@ public class AddItemActivity extends BaseActivity  {
 
             @Override
             public void onFailure(String errorMessage) {
-                // Handle the error (e.g., show a toast or log the error)
                 Toast.makeText(AddItemActivity.this, "Failed to fetch colors: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
@@ -801,10 +790,32 @@ public class AddItemActivity extends BaseActivity  {
         return false;
     }
 
+    private void loadUnits(String parentCategory) {
+        Utils.FetchAllUnits(app.getOrganizationID(), this, new OperationCallback<List<unitModel>>() {
+            @Override
+            public void onSuccess(List<unitModel> result) {
+                if(!result.isEmpty()){
+                    unitList.clear();
+                    unitList.addAll(result);
+                    List<String> unitsNames = new ArrayList<>();
 
-    // This is the function to proceed when no fields are filled
-    private void proceedWithNextStep() {
-        // Your action here when no fields are filled and the user is allowed to proceed
+                    for(unitModel unit : result) {
+                        if(unit.getCategories().contains(parentCategory)){
+                            unitsNames.add(unit.getUnitName());
+                        }
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void logActivityView(String activityName) {
