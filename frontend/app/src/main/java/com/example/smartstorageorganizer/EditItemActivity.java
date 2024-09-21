@@ -426,7 +426,11 @@ public class EditItemActivity extends BaseActivity {
         String API_URL = BuildConfig.EditItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
         afterChanges=new ItemModel(String.valueOf(itemId),itemname,description,colourcoding,barcode,qrcode,String.valueOf(quantity),location,getIntent().getStringExtra("email"),itemimage,getIntent().getStringExtra("createdAt"),String.valueOf(parentcategory),String.valueOf(subcategory),getIntent().getStringExtra("expiry_date"));
-        editItemActivity(beforeChanges,afterChanges,getIntent().getStringExtra("email"),getIntent().getStringExtra("organization_id"),"Edit Item","Item Updated","zhouvel7@gmail.com");
+        String nameAndSurname=app.getName()+" "+app.getSurname();
+        String username=app.getName();
+        String organization_id=app.getOrganizationID();
+        String  email=app.getEmail();
+        Utils.editItemActivity(beforeChanges,afterChanges,app.getOrganizationID(),"Edit Item","Item Updated",app.getEmail(),nameAndSurname,"ITEM","EDIT");
 
 
 //        TokenManager.getToken().thenAccept(results-> {
@@ -579,84 +583,6 @@ public class EditItemActivity extends BaseActivity {
         isFirstTimeSubApi = false;
     }
 
-    public CompletableFuture<Boolean> editItemActivity(ItemModel previous,ItemModel current,String email,String organizationId,String reason_for_change,String commments,String username){
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        JSONObject body = new JSONObject();
-        Log.i("Hello","hello");
-        Date date = new Date();
-
-        try {
-            body.put("current", afterChanges.toJson());
-            body.put("previous", beforeChanges.toJson());
-            body.put("username", username);
-            body.put("changes", " "); // Consider making this dynamic
-            body.put("changed_by", app.getName()+" "+app.getSurname()); // Consider making this dynamic
-            body.put("organization_id", organizationId);
-            body.put("Reason_for_change", reason_for_change);
-            body.put("comments", commments);
-            body.put("changes_for", "ITEM");
-            body.put("changes_type", "EDIT");
-            body.put("changes_date_and_time", date.toString());
-            body.put("related_record_id", beforeChanges.getItemId());
-            body.put("related_record_name", beforeChanges.getItemName());
-        } catch (JSONException e) {
-            Log.e("EditItemActivity", "JSON Exception", e);
-        }
-        JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put("body", body);
-        }
-        catch (JSONException e){
-            runOnUiThread(() ->
-                    Log.i("EditItemActivity", "JSON Exception", e));
-        }
-
-        runOnUiThread(() -> {
-            Log.i("username",username);
-            Log.i("EditItemActivity", "editItemActivity: "+jsonObject.toString());
-        });
-        OkHttpClient client=new OkHttpClient();
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
-        TokenManager.getToken().thenAccept(token->{
-
-
-                Request request = new Request.Builder()
-                .url(BuildConfig.modifyAPI)
-                .addHeader("Authorization", token)
-                .post(requestBody)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    runOnUiThread(() -> {
-                        Log.i("Request Method", "POST request succeeded: " + responseData);
-                        showUpdateSuccessMessage();
-
-                    });
-                } else {
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                    progressDialog.dismiss();
-                }
-            }
-        });
-
-    }).exceptionally(ex -> {
-        Log.e("TokenError", "Failed to get user token", ex);
-        return null;
-    });
-        return future;
-    }
 
 
 }

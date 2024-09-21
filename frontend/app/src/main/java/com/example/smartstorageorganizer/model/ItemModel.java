@@ -21,6 +21,21 @@ public class ItemModel {
     private String expiryDate;
 
     public ItemModel() {
+        this.itemImage="";
+        this.itemImage="";
+        this.description="";
+        this.colourCoding="";
+        this.barcode="";
+        this.qrcode="";
+        this.quantity="";
+        this.location="";
+        this.email="";
+        this.createdAt="";
+        this.parentCategoryId="";
+        this.subCategoryId="";
+        this.parentCategoryName="";
+        this.subcategoryName="";
+        this.expiryDate="";
 
     }
     public ItemModel(String itemId, String itemName, String description, String colourCoding, String barcode, String qrcode, String quantity, String location, String email, String itemImage, String createdAt,String parentCategoryId,String subCategoryId,String expiryDate) {

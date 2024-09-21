@@ -285,6 +285,8 @@ public class HomeFragment extends Fragment {
                         app.setName(currentName);
                         app.setSurname(currentSurname);
                         name.setText("Hi "+currentName);
+                        app.setEmail(currentEmail);
+
                         categoryAdapter.setOrganizationId(organizationID);
                         recentAdapter.setOrganizationId(organizationID);
                         loadRecentItems(currentEmail, organizationID);

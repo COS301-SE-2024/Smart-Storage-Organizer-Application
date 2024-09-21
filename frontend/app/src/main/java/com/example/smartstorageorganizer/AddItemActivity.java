@@ -565,6 +565,10 @@ public class AddItemActivity extends BaseActivity  {
             public void onSuccess(Boolean result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 //                progressDialogAddingItem.hide();
+                Date date=new Date();
+                ItemModel prev=new ItemModel();
+                ItemModel current=new ItemModel(itemName,description,"null","null","null","null","1","unitRed",app.getEmail(),itemImage,date.toString(),parentCategoryId,subcategoryId,date.toString());
+                Utils.editItemActivity(prev,current,app.getOrganizationID(),"Adding new Item","Added new Item",app.getEmail(),app.getName()+" "+app.getSurname(),"ITEM","ADD");
                 Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
                 logUserFlow("HomeFragment");
                 startActivity(intent);

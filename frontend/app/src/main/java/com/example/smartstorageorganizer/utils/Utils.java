@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.utils;
 
+import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import com.amplifyframework.auth.options.AuthFetchSessionOptions;
 
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryReportModel;
@@ -39,6 +42,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +59,7 @@ import okhttp3.Response;
 
 public class Utils
 {
+    private MyAmplifyApp app;
     private static String type = "application/json; charset=utf-8";
     private static String message = "Request Method";
 
@@ -2154,4 +2159,83 @@ public class Utils
             return null;
         });
     }
+    static public CompletableFuture<Boolean> editItemActivity(ItemModel previous,ItemModel current,String organizationId,String reason_for_change,String commments,String username,String nameAndSurname,String record_type,String action){
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        JSONObject body = new JSONObject();
+        Log.i("Hello","hello");
+        Date date = new Date();
+
+        try {
+            body.put("current", current.toJson());
+            body.put("previous", previous.toJson());
+            body.put("username", username);
+            body.put("changes", " "); // Consider making this dynamic
+            body.put("changed_by", nameAndSurname); // Consider making this dynamic
+            body.put("organization_id", organizationId);
+            body.put("Reason_for_change", reason_for_change);
+            body.put("comments", commments);
+            body.put("changes_for", record_type);
+            body.put("changes_type", action);
+            body.put("changes_date_and_time", date.toString());
+            body.put("related_record_id", previous.getItemId());
+            body.put("related_record_name", current.getItemName());
+        } catch (JSONException e) {
+            Log.e("EditItemActivity", "JSON Exception", e);
+        }
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("body", body);
+        }
+        catch (JSONException e){
+            runOnUiThread(() ->
+                    Log.i("EditItemActivity", "JSON Exception", e));
+        }
+
+        runOnUiThread(() -> {
+            Log.i("username",username);
+            Log.i("EditItemActivity", "editItemActivity: "+jsonObject.toString());
+        });
+        OkHttpClient client=new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
+        TokenManager.getToken().thenAccept(token->{
+
+
+            Request request = new Request.Builder()
+                    .url(BuildConfig.modifyAPI)
+                    .addHeader("Authorization", token)
+                    .post(requestBody)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            Log.i("Request Method", "POST request succeeded: " + responseData);
+                           ;
+
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+        return future;
+    }
+
 }
