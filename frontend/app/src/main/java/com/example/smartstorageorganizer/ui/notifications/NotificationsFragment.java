@@ -1,21 +1,14 @@
 package com.example.smartstorageorganizer.ui.notifications;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,24 +21,12 @@ import com.example.smartstorageorganizer.MyFirebaseMessagingService;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.NotificationAdapter;
 import com.example.smartstorageorganizer.model.AppNotification;
-import com.example.smartstorageorganizer.model.TokenManager;
-import com.example.smartstorageorganizer.utils.OperationCallback;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class NotificationsFragment extends Fragment {
 
@@ -96,12 +77,12 @@ public class NotificationsFragment extends Fragment {
             String token = task.getResult();
 
             // Show the token in a Toast message
-            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), token, Toast.LENGTH_LONG).show();
 
             // Copy the token to the clipboard
-            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText("text", token);
-            clipboardManager.setPrimaryClip(clipData);
+//            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//            ClipData clipData = ClipData.newPlainText("text", token);
+//            clipboardManager.setPrimaryClip(clipData);
         }));
         setupBroadcastReceiver();
         return root;
@@ -146,54 +127,54 @@ public class NotificationsFragment extends Fragment {
 
 
 
-    public static void SendNotification(String body, String title, Activity activity, OperationCallback<String> callback) {
-        // Create JSON payload
-        String json = "{"
-                + "\"title\": \"" + title + "\","
-                + "\"body\": \"" + body + "\""
-                + "}";
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.SendNotification;
-        RequestBody requestBody = RequestBody.create(json, JSON);
-
-        // Get Authorization Token
-        TokenManager.getToken().thenAccept(token -> {
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(requestBody)
-                    .addHeader("Authorization", token)  // Add Authorization Header
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    activity.runOnUiThread(() -> {
-                        callback.onFailure(e.getMessage());  // Notify failure
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String responseData = response.body().string();
-                        activity.runOnUiThread(() -> callback.onSuccess(responseData));  // Notify success
-                    } else {
-                        activity.runOnUiThread(() -> {
-                            callback.onFailure("Response failed with code: " + response.code());  // Notify failure with response code
-                        });
-                    }
-                }
-            });
-        }).exceptionally(ex -> {
-            activity.runOnUiThread(() -> {
-                callback.onFailure("Failed to get Authorization Token: " + ex.getMessage());
-            });
-            return null;
-        });
-    }
+//    public static void SendNotification(String body, String title, Activity activity, OperationCallback<String> callback) {
+//        // Create JSON payload
+//        String json = "{"
+//                + "\"title\": \"" + title + "\","
+//                + "\"body\": \"" + body + "\""
+//                + "}";
+//
+//        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//        OkHttpClient client = new OkHttpClient();
+//        String API_URL = BuildConfig.SendNotification;
+//        RequestBody requestBody = RequestBody.create(json, JSON);
+//
+//        // Get Authorization Token
+//        TokenManager.getToken().thenAccept(token -> {
+//            Request request = new Request.Builder()
+//                    .url(API_URL)
+//                    .post(requestBody)
+//                    .addHeader("Authorization", token)  // Add Authorization Header
+//                    .build();
+//
+//            client.newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                    activity.runOnUiThread(() -> {
+//                        callback.onFailure(e.getMessage());  // Notify failure
+//                    });
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    if (response.isSuccessful()) {
+//                        String responseData = response.body().string();
+//                        activity.runOnUiThread(() -> callback.onSuccess(responseData));  // Notify success
+//                    } else {
+//                        activity.runOnUiThread(() -> {
+//                            callback.onFailure("Response failed with code: " + response.code());  // Notify failure with response code
+//                        });
+//                    }
+//                }
+//            });
+//        }).exceptionally(ex -> {
+//            activity.runOnUiThread(() -> {
+//                callback.onFailure("Failed to get Authorization Token: " + ex.getMessage());
+//            });
+//            return null;
+//        });
+//    }
 
 
 
