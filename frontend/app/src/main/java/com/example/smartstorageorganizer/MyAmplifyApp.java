@@ -41,17 +41,38 @@ public class MyAmplifyApp extends Application {
 
         // Notification click handler
         OneSignal.setNotificationOpenedHandler(new OneSignal.OSNotificationOpenedHandler() {
-            @Override
+//            @Override
+//            public void notificationOpened(OSNotificationOpenedResult result) {
+//                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//
+//                // Pass additional data from the notification to the activity
+//                String additionalData = result.getNotification().getAdditionalData().toString();
+//                intent.putExtra("data_key", additionalData);
+//
+//                startActivity(intent);
+//            }
             public void notificationOpened(OSNotificationOpenedResult result) {
-                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                // Pass additional data from the notification to the activity
-                String additionalData = result.getNotification().getAdditionalData().toString();
-                intent.putExtra("data_key", additionalData);
-
-                startActivity(intent);
+                Amplify.Auth.fetchAuthSession(
+                        authResult -> {
+                            if (authResult.isSignedIn()) {
+                                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.putExtra("data_key", result.getNotification().getAdditionalData().toString());
+                                startActivity(intent);
+                            } else {
+                                // If not signed in, redirect to login
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        },
+                        error -> {
+                            Log.e("AuthSession", "Session check failed: " + error);
+                            // Optional: Handle session check failure (e.g., show an error)
+                        }
+                );
             }
+
         });
 
         // Handle notification when app is in the foreground (in-app notifications)
