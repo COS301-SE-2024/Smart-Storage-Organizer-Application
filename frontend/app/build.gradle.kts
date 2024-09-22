@@ -119,6 +119,10 @@ android {
         buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
         buildConfigField("String", "GetLoginReports", "\"${localProperties["GetLoginReports"]}\"");
         buildConfigField("String", "GenerateProcess", "\"${localProperties["GenerateProcess"]}\"");
+        buildConfigField("String", "OpenSearchInsert", "\"${localProperties["OpenSearchInsert"]}\"");
+        buildConfigField("String", "AddItemSynchronous", "\"${localProperties["AddItemSynchronous"]}\"");
+        buildConfigField("String", "GenerateQRCodeAsync", "\"${localProperties["GenerateQRCodeAsync"]}\"");
+        buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
     }
 
     buildTypes {

@@ -557,9 +557,9 @@ public class AddItemActivity extends BaseActivity  {
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String unitName, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),unitName, app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<Boolean>() {
+        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),unitName, app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<String>() {
             @Override
-            public void onSuccess(Boolean result) {
+            public void onSuccess(String result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 //                progressDialogAddingItem.hide();
                 Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
@@ -574,8 +574,51 @@ public class AddItemActivity extends BaseActivity  {
                 progressDialogAddingItem.hide();
             }
         });
-//        });
+    }
 
+    private void generateQRCodeAsync(String itemId, String organizationId, String username) {
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.GenerateQRCodeAsync(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                //returns true when successful
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void openSearchInsert(String itemId, String organizationId, String username) {
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.OpenSearchInsert(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                //returns true when successful
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void generateBarCodeAsync(String itemId, String organizationId, String username) {
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.GenerateBarCodeAsync(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                //returns true when successful
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private String findCategoryByName(String categoryName, String type) {
