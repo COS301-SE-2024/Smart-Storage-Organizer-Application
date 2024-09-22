@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,32 +12,15 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-//        Button transactions = findViewById(R.id.button_transactions);
-//        Button messages = findViewById(R.id.button_messages);
-//        Button offers = findViewById(R.id.button_offers);
+        // Receiving intent data (if any)
+        String data = getIntent().getStringExtra("data_key");  // "data_key" should match the key used in the sending activity
 
-//        transactions.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(NotificationsActivity.this, "Transactions clicked", Toast.LENGTH_SHORT).show();
-//                // Handle transactions click
-//            }
-//        });
+        // Display the data in a TextView
+        TextView textView = findViewById(R.id.textView_message);
+        if (data != null) {
+            textView.setText(data);
+        }
 
-//        messages.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(NotificationsActivity.this, "Messages clicked", Toast.LENGTH_SHORT).show();
-//                // Handle messages click
-//            }
-//        });
 
-//        offers.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(NotificationsActivity.this, "Offers for you clicked", Toast.LENGTH_SHORT).show();
-//                // Handle offers click
-//            }
-//        });
     }
 }
