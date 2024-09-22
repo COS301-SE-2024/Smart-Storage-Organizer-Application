@@ -247,4 +247,7 @@ dependencies {
     implementation ("com.github.yalantis:ucrop:2.2.8")
 //    implementation ("com.github.krokyze:ucropnedit:2.2.6-2")
 
+    implementation ("androidx.work:work-runtime:2.7.1")
+    implementation ("com.google.guava:guava:31.1-android")
+
 }

@@ -1119,7 +1119,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed Add", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1144,13 +1144,13 @@ public class Utils
 
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: Add" + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -2294,7 +2294,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp Group", "POST request failed", e);
+                        Log.d(message, "POST request failed QR", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -2309,7 +2309,7 @@ public class Utils
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed QR: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -2352,7 +2352,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.d("MyAmplifyApp Group", "POST request failed", e);
+                        Log.d(message, "POST request failed BAR", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -2367,7 +2367,7 @@ public class Utils
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: BAR" + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -2425,7 +2425,7 @@ public class Utils
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: Search" + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }

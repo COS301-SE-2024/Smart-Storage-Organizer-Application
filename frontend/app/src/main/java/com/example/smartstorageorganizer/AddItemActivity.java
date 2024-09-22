@@ -40,6 +40,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.core.Amplify;
@@ -74,6 +78,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -555,17 +560,40 @@ public class AddItemActivity extends BaseActivity  {
         Toast.makeText(AddItemActivity.this, "Image saved to gallery!\n" + savedImageURI.toString(), Toast.LENGTH_LONG).show();
     }
 
+//    import java.util.concurrent.CountDownLatch;
+
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String unitName, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(),unitName, app.getOrganizationID(),width, height, depth, weight, loadbear, updown,this, new OperationCallback<String>() {
+        Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(), unitName, app.getOrganizationID(), width, height, depth, weight, loadbear, updown, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
-//                progressDialogAddingItem.hide();
+
+                // Create CountDownLatch with count 2 for two async operations
+                CountDownLatch latch = new CountDownLatch(2);
+
+                // Trigger QR code generation
+                generateQRCodeAsync(result, latch);
+
+                // Trigger Barcode generation
+                generateBarCodeAsync(result, latch);
+
+                // Start HomeActivity immediately
                 Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
                 logUserFlow("HomeFragment");
                 startActivity(intent);
                 finish();
+
+                // Run this in a background thread to wait for latch to finish
+                new Thread(() -> {
+                    try {
+                        // Wait until both async tasks complete
+                        latch.await();
+                        runOnUiThread(() -> openSearchInsert(result)); // Call openSearchInsert after both tasks
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
 
             @Override
@@ -576,50 +604,69 @@ public class AddItemActivity extends BaseActivity  {
         });
     }
 
-    private void generateQRCodeAsync(String itemId, String organizationId, String username) {
+    // Updated QR code generation to use CountDownLatch
+    private void generateQRCodeAsync(String itemId, CountDownLatch latch) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.GenerateQRCodeAsync(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+        Utils.GenerateQRCodeAsync(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                //returns true when successful
+                if (result) {
+                    // Do whatever you need after successful generation
+                }
+                // Decrement latch count
+                latch.countDown();
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddItemActivity.this, "QR Code generation failed...", Toast.LENGTH_LONG).show();
+                generateQRCodeAsync(itemId, latch);
+//                latch.countDown(); // Ensure latch is decremented even in case of failure
             }
         });
     }
 
-    private void openSearchInsert(String itemId, String organizationId, String username) {
+    // Updated Barcode generation to use CountDownLatch
+    private void generateBarCodeAsync(String itemId, CountDownLatch latch) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.OpenSearchInsert(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+        Utils.GenerateBarCodeAsync(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                //returns true when successful
+                if (result) {
+                    // Do whatever you need after successful generation
+                }
+                // Decrement latch count
+                latch.countDown();
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddItemActivity.this, "Barcode generation failed...", Toast.LENGTH_LONG).show();
+                generateBarCodeAsync(itemId, latch);
+//                latch.countDown(); // Ensure latch is decremented even in case of failure
             }
         });
     }
 
-    private void generateBarCodeAsync(String itemId, String organizationId, String username) {
+    // Open search insert as a final step after both QR and Barcode are generated
+    private void openSearchInsert(String itemId) {
         ArrayList<unitModel> units = new ArrayList<>();
-        Utils.GenerateBarCodeAsync(itemId, app.getOrganizationID(), app.getEmail(),this, new OperationCallback<Boolean>() {
+        Utils.OpenSearchInsert(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                //returns true when successful
+                if (result) {
+                    // Successfully opened search insert
+                }
             }
 
             @Override
             public void onFailure(String error) {
-                Toast.makeText(AddItemActivity.this, "Adding item failed... ", Toast.LENGTH_LONG).show();
+                openSearchInsert(itemId);
+                Toast.makeText(AddItemActivity.this, "Open search insert failed...", Toast.LENGTH_LONG).show();
             }
         });
     }
+
 
     private String findCategoryByName(String categoryName, String type) {
         if(Objects.equals(type, "parent")){
