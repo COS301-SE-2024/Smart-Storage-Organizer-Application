@@ -27,18 +27,18 @@ public class ApprovedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.fragment_approved, container, false);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-
-        List<RequestModel> cardItemList = new ArrayList<>();
-        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
-        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
-        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
-        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
-        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
-
-        RequestCardAdapter requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
-        recyclerView.setAdapter(requestAdapter);
+//        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+//
+//        List<RequestModel> cardItemList = new ArrayList<>();
+//        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
+//        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
+//        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
+//        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
+//        cardItemList.add(new RequestModel("12/07/2024", "Asus Vivobook", "Ryzen 5 5500U Processor 8GB GDDR 6 RAM.", "Approved"));
+//
+//        RequestCardAdapter requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
+//        recyclerView.setAdapter(requestAdapter);
 
         return root;
     }

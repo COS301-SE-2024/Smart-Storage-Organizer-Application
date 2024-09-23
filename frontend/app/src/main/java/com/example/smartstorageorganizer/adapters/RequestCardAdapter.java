@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.RequestModel;
+import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.Objects;
 public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.CardViewHolder> {
 
     private Context context;
-    private List<RequestModel> cardItemList;
+    private List<UnitRequestModel> cardItemList;
 
-    public RequestCardAdapter(Context context, List<RequestModel> cardItemList) {
+    public RequestCardAdapter(Context context, List<UnitRequestModel> cardItemList) {
         this.context = context;
         this.cardItemList = cardItemList;
     }
@@ -37,13 +38,13 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        RequestModel cardItem = cardItemList.get(position);
-        holder.date.setText(cardItem.getDate());
-        holder.name.setText(cardItem.getName());
-        holder.description.setText(cardItem.getDescription());
+        UnitRequestModel cardItem = cardItemList.get(position);
+        holder.date.setText((cardItem.getRequestDate()).toString());
+        holder.name.setText(cardItem.getUnitName());
+        holder.description.setText(cardItem.getUserEmail());
         holder.status.setText(cardItem.getStatus());
         int color;
-        if(Objects.equals(cardItem.getStatus(), "Pending")) {
+        if(Objects.equals(cardItem.getStatus(), "pending")) {
             color = Color.parseColor("#CC0000");
         }
         else {
@@ -83,44 +84,12 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
         View dialogView = inflater.inflate(R.layout.pending_popup, null);
         builder.setView(dialogView);
 
-        // Example data, replace this with actual data from your request list
-//        String requestType = "Edit Item Name and Description";
-//        String date = "12/07/2024";
-//        String currentItemName = "Old Item Name"; // Replace with actual data
-//        String currentDescription = "Old Description"; // Replace with actual data
-//        String newName = "Eco-Friendly Notebooks";
-//        String newDescription = "Notebooks made from recycled materials.";
-//        String status = "Pending";
-
-        // Initialize dialog views
-//        TextView requestTypeTextView = dialogView.findViewById(R.id.requestType);
-//        TextView dateTextView = dialogView.findViewById(R.id.date);
-//        TextView currentItemNameTextView = dialogView.findViewById(R.id.currentOne);
-//        TextView currentDescriptionTextView = dialogView.findViewById(R.id.currentTwo);
-//        TextView newNameTextView = dialogView.findViewById(R.id.changeOne);
-//        TextView newDescriptionTextView = dialogView.findViewById(R.id.changeTwo);
-//        TextView statusTextView = dialogView.findViewById(R.id.status);
-
         Button closeButton = dialogView.findViewById(R.id.closeButton);
-//        Button rejectButton = dialogView.findViewById(R.id.reject_button);
 
         AlertDialog dialog = builder.create();
 
-        // Set data to dialog views
-//        requestTypeTextView.setText(requestType);
-//        dateTextView.setText(date);
-//        currentItemNameTextView.setText(currentItemName);
-//        currentDescriptionTextView.setText(currentDescription);
-//        newNameTextView.setText(newName);
-//        newDescriptionTextView.setText(newDescription);
-//        statusTextView.setText(status);
-
-        // Set button click listeners
         closeButton.setOnClickListener(v -> {
-            // Handle approve action
-            // Update the item details and change the status to Approved
-            // Example: requestList.get(position).setStatus("Approved");
-            // notifyDataSetChanged();
+
             dialog.dismiss();
         });
 //
