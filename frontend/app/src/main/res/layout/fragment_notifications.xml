@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".NotificationsActivity">
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Message will appear here"
+            android:text="Message will ap56565656565pear here"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
@@ -49,31 +48,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="5dp">
-        <TextView
-            android:id="@+id/text_slideshow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:src="@drawable/baseline_add_24"
-            app:tint="@android:color/white"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_notifications"
+            android:id="@+id/recycler_view_messages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp" />
@@ -81,14 +58,14 @@
 
     </LinearLayout>
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_unread_count"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Unread: 0"-->
-    <!--        android:textSize="16sp"-->
-    <!--        android:textColor="#FF0000"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:layout_marginTop="8dp" />-->
+    <!--        <TextView-->
+    <!--            android:id="@+id/text_unread_count"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Unread: 0"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textColor="#FF0000"-->
+    <!--            android:layout_gravity="center_horizontal"-->
+    <!--            android:layout_marginTop="8dp" />-->
 
 </LinearLayout>
