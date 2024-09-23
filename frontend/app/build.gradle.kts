@@ -123,6 +123,8 @@ android {
         buildConfigField("String", "AddItemSynchronous", "\"${localProperties["AddItemSynchronous"]}\"");
         buildConfigField("String", "GenerateQRCodeAsync", "\"${localProperties["GenerateQRCodeAsync"]}\"");
         buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
+        buildConfigField("String", "ModifyItemDimension", "\"${localProperties["ModifyItemDimension"]}\"");
+
     }
 
     buildTypes {

@@ -2437,4 +2437,64 @@ public class Utils
             return null;
         });
     }
+
+    public static void ModifyItemDimension(String item_id, String width, String height, String depth, String weight, String loadbear, String updown, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{"
+                + "\"itemid\": \"" + Integer.parseInt(item_id) + "\","
+                + "\"width\": \"" + Integer.parseInt(width) + "\","
+                + "\"height\": \"" + Integer.parseInt(height) + "\","
+                + "\"depth\": \"" + Integer.parseInt(depth) + "\","
+                + "\"weight\": \"" + Integer.parseInt(weight) + "\","
+                + "\"loadbear\": \"" + Integer.parseInt(loadbear) + "\","
+                + "\"updown\": \"" + "TRUE" + "\""
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.ModifyItemDimension;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.d(message, "POST request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: Modify " + response);
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
 }

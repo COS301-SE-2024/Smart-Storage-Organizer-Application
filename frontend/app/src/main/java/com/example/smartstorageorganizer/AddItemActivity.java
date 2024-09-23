@@ -569,16 +569,12 @@ public class AddItemActivity extends BaseActivity  {
             public void onSuccess(String result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 
-                // Create CountDownLatch with count 2 for two async operations
-                CountDownLatch latch = new CountDownLatch(2);
-
-                // Trigger QR code generation
+                // Create CountDownLatch with count 3 for two async operations
+                CountDownLatch latch = new CountDownLatch(3);
+                ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
                 generateQRCodeAsync(result, latch);
-
-                // Trigger Barcode generation
                 generateBarCodeAsync(result, latch);
 
-                // Start HomeActivity immediately
                 Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
                 logUserFlow("HomeFragment");
                 startActivity(intent);
@@ -643,6 +639,27 @@ public class AddItemActivity extends BaseActivity  {
             public void onFailure(String error) {
                 Toast.makeText(AddItemActivity.this, "Barcode generation failed...", Toast.LENGTH_LONG).show();
                 generateBarCodeAsync(itemId, latch);
+//                latch.countDown(); // Ensure latch is decremented even in case of failure
+            }
+        });
+    }
+
+    private void ModifyItemDimension(String itemId, String width, String height, String depth, String weight, String loadbear, String updown, CountDownLatch latch) {
+        ArrayList<unitModel> units = new ArrayList<>();
+        Utils.ModifyItemDimension(itemId, width, height, depth, weight, loadbear, updown, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
+                    // Do whatever you need after successful generation
+                }
+                // Decrement latch count
+                latch.countDown();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Modify Item Dimension failed: "+error, Toast.LENGTH_LONG).show();
+                ModifyItemDimension(itemId, width, height, depth, weight, loadbear, updown, latch);
 //                latch.countDown(); // Ensure latch is decremented even in case of failure
             }
         });
