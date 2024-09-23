@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Message will appear here"
+            android:text="Message will ap56565656565pear here"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
@@ -49,23 +49,23 @@
         android:orientation="vertical"
         android:paddingTop="5dp">
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/recycler_view_messages"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp" />-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
 
 
     </LinearLayout>
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/text_unread_count"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Unread: 0"-->
-    <!--        android:textSize="16sp"-->
-    <!--        android:textColor="#FF0000"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:layout_marginTop="8dp" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/text_unread_count"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Unread: 0"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textColor="#FF0000"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="8dp" />-->
 
 </LinearLayout>
