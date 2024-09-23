@@ -40,6 +40,7 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">54dp</item> <!-- Adjust the radius as needed -->
     </style>
+
     <style name="RoundedCornersLogin">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">44dp</item> <!-- Adjust the radius as needed -->
