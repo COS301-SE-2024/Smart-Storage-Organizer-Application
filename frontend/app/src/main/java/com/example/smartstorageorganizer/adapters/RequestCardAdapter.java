@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +11,39 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.CardViewHolder> {
 
     private Context context;
     private List<UnitRequestModel> cardItemList;
+    private MyAmplifyApp app;
 
     public RequestCardAdapter(Context context, List<UnitRequestModel> cardItemList) {
         this.context = context;
         this.cardItemList = cardItemList;
+        app = (MyAmplifyApp) context.getApplicationContext();
+
     }
 
     @NonNull
@@ -79,6 +96,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     }
 
     private void showRequestSentDialog(int position) {
+        UnitRequestModel cardItem = cardItemList.get(position);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.pending_popup, null);
@@ -89,7 +108,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
         AlertDialog dialog = builder.create();
 
         closeButton.setOnClickListener(v -> {
-
+            approveRequest(cardItem.getRequestId(), position);
             dialog.dismiss();
         });
 //
@@ -102,6 +121,63 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
 //        });
 
         dialog.show();
+    }
+
+    // Function to approve the unit request
+    public void approveRequest(String documentId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        UnitRequestModel cardItem = cardItemList.get(position);
+
+        // Update the request's status to "approved"
+        db.collection("unit_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+                    // Now you can call your API to create the unit
+                    // Optionally trigger the unit creation logic here
+                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                });
+    }
+
+    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
+
+        MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = BuildConfig.AddUnitEndpoint;
+        RequestBody body = RequestBody.create(json, jsonObject);
+
+        Utils.getUserToken().thenAccept(token -> {
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .header("Authorization", token)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    Log.e("Unit Request Method", "POST request failed", e);
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        Log.i("Unit Response", "Unit created successfully");
+                    } else {
+                        Log.e("Unit Request Method", "POST request failed: " + response);
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
     }
 
 }

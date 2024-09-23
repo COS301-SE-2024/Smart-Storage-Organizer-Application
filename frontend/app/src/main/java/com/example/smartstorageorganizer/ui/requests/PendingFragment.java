@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.LoginActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
@@ -25,19 +27,31 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class PendingFragment extends Fragment {
     View root;
     List<UnitRequestModel> cardItemList;
     RequestCardAdapter requestAdapter;
+    private MyAmplifyApp app;
 
 
     @Nullable
@@ -45,6 +59,8 @@ public class PendingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         root =  inflater.inflate(R.layout.fragment_pending, container, false);
+        app = (MyAmplifyApp) requireActivity().getApplicationContext();
+
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
@@ -113,6 +129,19 @@ public class PendingFragment extends Fragment {
 
         // Format the date to the desired string
         return dateFormat.format(date);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
+    private void refreshData() {
+        cardItemList.clear();
+        requestAdapter.notifyDataSetChanged();
+
+        fetchPendingRequests();
     }
 
 }
