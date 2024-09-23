@@ -36,6 +36,7 @@ public class NotificationsFragment extends Fragment {
     private NotificationsViewModel notificationsViewModel;
     private BroadcastReceiver notificationReceiver;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,6 +68,8 @@ public class NotificationsFragment extends Fragment {
 //        processNotification("New notification after the test.");
 //        simulateFirebaseMessage();
 
+
+
         FloatingActionButton fab = root.findViewById(R.id.fab);
         fab.setOnClickListener(view -> FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -92,6 +95,7 @@ public class NotificationsFragment extends Fragment {
 //        MyFirebaseMessagingService messagingService = new MyFirebaseMessagingService();
 //        messagingService.simulateMessageReceived("Test Title", "This is a test message.");
 //    }
+
 
     private void setupBroadcastReceiver() {
         notificationReceiver = new BroadcastReceiver() {

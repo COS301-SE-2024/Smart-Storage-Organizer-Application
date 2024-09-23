@@ -1,21 +1,22 @@
 package com.example.smartstorageorganizer;
 
 import android.app.Application;
-import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
+
+import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.AmplifyException;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.example.smartstorageorganizer.databinding.ActivityMainBinding;
 import com.onesignal.Continue;
 import com.onesignal.OneSignal;
 import com.onesignal.debug.LogLevel;
-//import com.onesignal.OSNotificationOpenedResult;
-//import com.onesignal.OSNotification;
 
 public class MyAmplifyApp extends Application {
+    private ActivityMainBinding binding;
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
     //f53cb2d5-e439-4641-8b9c-a27f6d4b57bb
 
@@ -23,9 +24,15 @@ public class MyAmplifyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
         // OneSignal Initialization
         OneSignal.initWithContext(this);
 //        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+
 
         // Set notification opened handler
 //        OneSignal.setNotificationOpenedHandler(new OneSignal.NotificationOpenedHandler() {
@@ -38,6 +45,13 @@ public class MyAmplifyApp extends Application {
 //                startActivity(intent);
 //            }
 //        });
+        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OneSignal.getInAppMessages().addTrigger("push_prompt", "1");
+            }
+        });
+
 
         // Request permissions if necessary
         // Note: This line is not always required; adjust based on your needs and SDK version
@@ -48,9 +62,13 @@ public class MyAmplifyApp extends Application {
         // OneSignal Initialization
         OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
 
+
+
         // requestPermission will show the native Android notification permission prompt.
         // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
         OneSignal.getNotifications().requestPermission(false, Continue.none());
+
+
 
         try {
             Amplify.addPlugin(new AWSApiPlugin());
