@@ -1,13 +1,15 @@
 package com.example.smartstorageorganizer;
+
 import android.app.Application;
 import android.util.Log;
 
-
+import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.AmplifyException;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.onesignal.Continue;
+import com.onesignal.OneSignal;
 //import com.onesignal.Continue;
 //import com.onesignal.OneSignal;
 //import com.onesignal.debug.LogLevel;
@@ -22,13 +24,13 @@ public class MyAmplifyApp extends Application {
 
         // Verbose Logging set to help debug issues, remove before releasing your app.
 //
-////        //   OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
+//        OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
 // OneSignal Initialization
-//        OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
+        OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
 //
 //        // requestPermission will show the native Android notification permission prompt.
 //        // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
-//        OneSignal.getNotifications().requestPermission(false, Continue.none());
+        OneSignal.getNotifications().requestPermission(false, Continue.none());
 
         try {
 

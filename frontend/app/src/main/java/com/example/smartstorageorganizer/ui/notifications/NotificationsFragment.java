@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.MyFirebaseMessagingService;
+import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.NotificationAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentNotificationsBinding;
@@ -49,6 +51,13 @@ public class NotificationsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         notificationsAdapter = new NotificationAdapter(notificationList);
         recyclerView.setAdapter(notificationsAdapter);
+
+        Button openNotificationsButton = root.findViewById(R.id.button_open_notifications);
+        openNotificationsButton.setOnClickListener(v -> {
+            // Start NotificationsActivity when the button is clicked
+            Intent intent = new Intent(getContext(), NotificationsActivity.class);
+            startActivity(intent);
+        });
 
         messagingService = new MyFirebaseMessagingService();
         messagingService.initOneSignal();
