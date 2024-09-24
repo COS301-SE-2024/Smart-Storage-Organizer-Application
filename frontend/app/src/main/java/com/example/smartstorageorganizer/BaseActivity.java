@@ -1,11 +1,25 @@
 package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -66,6 +80,90 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .show();
     }
 
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public boolean hasInternetAccess() {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection)
+                    (new URL("https://www.google.com").openConnection());
+            urlConnection.setRequestProperty("User-Agent", "ConnectionTest");
+            urlConnection.setRequestProperty("Connection", "close");
+            urlConnection.setConnectTimeout(1500); // Timeout if no internet
+            urlConnection.connect();
+            return (urlConnection.getResponseCode() == 200);
+        } catch (IOException e) {
+//            Log.e(TAG, "Error checking internet connection", e);
+            return false;
+        }
+    }
+
+
+    private AlertDialog noInternetDialog;
+
+    public void showNoInternetDialog() {
+        if (noInternetDialog == null || !noInternetDialog.isShowing()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Connect to a network")
+                    .setMessage("To use Smart Storage Organizer, turn on mobile data or connect to Wi-Fi.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        finish();
+                    });
+            noInternetDialog = builder.create();
+            noInternetDialog.show();
+        }
+    }
+
+
+    public void dismissNoInternetDialog() {
+        if (noInternetDialog != null && noInternetDialog.isShowing()) {
+            noInternetDialog.dismiss();
+        }
+    }
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isNetworkConnected()) {
+                dismissNoInternetDialog();  // If connected to the internet, dismiss the popup
+            } else {
+                showNoInternetDialog();  // If not connected to the internet, show the popup
+            }
+        }
+    };
+
+    public void checkInternetAccessInBackground() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            boolean hasInternet = hasInternetAccess();  // Run this on a background thread
+            runOnUiThread(() -> {
+                // Update the UI based on the result
+                if (hasInternet) {
+//                    Log.i(TAG, "Internet connection available");
+                    dismissNoInternetDialog();
+                } else {
+                    showNoInternetDialog();
+                }
+            });
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        logActivityView("LoginActivity");
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
+        checkInternetAccessInBackground();  // Call this to run the check off the main thread
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -83,6 +181,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         resetInactivityTimer(); // Restart the timer when the app comes back to the foreground
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(networkChangeReceiver);
     }
 }
 

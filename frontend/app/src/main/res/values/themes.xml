@@ -22,7 +22,7 @@
     </style>
 
     <style name="CustomTextInputFilledBox.White" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="boxBackgroundColor">@color/background
+        <item name="boxBackgroundColor">#f2f2f2
         </item> <!-- Set the box background color to white -->
         <item name="boxStrokeColor">@color/colorPrimary
         </item> <!-- Optional: Set the stroke color -->

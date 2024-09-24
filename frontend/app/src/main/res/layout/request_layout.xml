@@ -73,6 +73,30 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Request Type: "
+                    android:textStyle="bold"
+                    android:textSize="14dp"
+                    android:textColor="@color/colorSecondary"/>
+
+                <TextView
+                    android:id="@+id/requestType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:textColor="@color/gray" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
@@ -83,7 +107,8 @@
                 android:text="Pending"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="14sp"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:layout_marginTop="-24dp"/>
 
         </LinearLayout>
 

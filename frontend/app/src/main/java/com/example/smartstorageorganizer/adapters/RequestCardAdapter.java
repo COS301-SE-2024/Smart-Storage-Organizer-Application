@@ -1,138 +1,369 @@
 package com.example.smartstorageorganizer.adapters;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
+import com.example.smartstorageorganizer.model.UnitRequestModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.CardViewHolder> {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<RequestModel> cardItemList;
+    private List<Object> mixedList;
+    private static final int UNIT_REQUEST = 0;
+    private static final int CATEGORY_REQUEST = 1;
+    private String type;
+    private MyAmplifyApp app;
 
-    public RequestCardAdapter(Context context, List<RequestModel> cardItemList) {
+    public RequestCardAdapter(Context context, List<Object> mixedList, String type) {
         this.context = context;
-        this.cardItemList = cardItemList;
+        this.mixedList = mixedList;
+        this.type = type;
+        app = (MyAmplifyApp) context.getApplicationContext();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mixedList.get(position) instanceof UnitRequestModel) {
+            return UNIT_REQUEST;
+        } else if (mixedList.get(position) instanceof CategoryRequestModel) {
+            return CATEGORY_REQUEST;
+        }
+        return -1;
     }
 
     @NonNull
     @Override
-    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_layout, parent, false);
-        return new CardViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == UNIT_REQUEST) {
+            View view = LayoutInflater.from(context).inflate(R.layout.unit_request_card, parent, false);
+            return new UnitRequestViewHolder(view);
+        } else if (viewType == CATEGORY_REQUEST) {
+            View view = LayoutInflater.from(context).inflate(R.layout.category_request_card, parent, false);
+            return new CategoryRequestViewHolder(view);
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        RequestModel cardItem = cardItemList.get(position);
-        holder.date.setText(cardItem.getDate());
-        holder.name.setText(cardItem.getName());
-        holder.description.setText(cardItem.getDescription());
-        holder.status.setText(cardItem.getStatus());
-        int color;
-        if(Objects.equals(cardItem.getStatus(), "Pending")) {
-            color = Color.parseColor("#CC0000");
-        }
-        else {
-            color = Color.parseColor("#00DC32");
-            holder.status.setBackgroundColor(Color.parseColor("#D3F8D3"));
-        }
-        holder.status.setTextColor(color);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == UNIT_REQUEST) {
+            UnitRequestModel request = (UnitRequestModel) mixedList.get(position);
+            UnitRequestViewHolder unitHolder = (UnitRequestViewHolder) holder;
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRequestSentDialog(holder.getAdapterPosition());
+            // Set visible fields
+            unitHolder.unitName.setText("Unit Name: " + request.getUnitName());
+            unitHolder.requestType.setText("Request Type: " + request.getRequestType());
+            unitHolder.capacity.setText("Capacity: " + request.getCapacity());
+            unitHolder.userEmail.setText("Requested by: " + request.getUserEmail());
+
+            // Set hidden fields
+            unitHolder.constraints.setText("Constraints: " + request.getConstraints());
+            unitHolder.dimensions.setText("Dimensions: " + request.getWidth() + " x " + request.getHeight() + " x " + request.getDepth());
+            unitHolder.maxWeight.setText("Max Weight: " + request.getMaxWeight());
+            unitHolder.organizationId.setText("Organization ID: " + request.getOrganizationId());
+            unitHolder.requestDate.setText("Request Date: " + request.getRequestDate());
+            unitHolder.status.setText("Status: " + request.getStatus());
+
+            if(Objects.equals(type, "approved")){
+                unitHolder.approveButton.setVisibility(View.GONE);
+                unitHolder.rejectButton.setVisibility(View.GONE);
             }
-        });
+            else {
+                unitHolder.approveButton.setVisibility(View.VISIBLE);
+                unitHolder.rejectButton.setVisibility(View.VISIBLE);
+            }
+
+            setStatusBackgroundColor(unitHolder.status, request.getStatus());
+
+            toggleButtonVisibility(unitHolder.buttonsLayout, type);
+
+            // Initially hide details
+            unitHolder.detailsLayout.setVisibility(View.GONE);
+
+            // Toggle "View More Details"
+            unitHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(unitHolder.detailsLayout, unitHolder.viewMoreLink));
+
+            unitHolder.approveButton.setOnClickListener(v -> {
+                // Handle Approve action
+                approveRequest(request.getRequestId(), holder.getAdapterPosition());
+            });
+
+            unitHolder.rejectButton.setOnClickListener(v -> {
+                // Handle Reject action
+            });
+
+        } else if (holder.getItemViewType() == CATEGORY_REQUEST) {
+            CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
+            CategoryRequestViewHolder categoryHolder = (CategoryRequestViewHolder) holder;
+
+            // Set visible fields
+            categoryHolder.categoryName.setText("Category Name: " + request.getCategoryName());
+            categoryHolder.requestType.setText("Request Type: " + request.getRequestType());
+            categoryHolder.categoryType.setText("Category Type: Parent Category");
+            categoryHolder.userEmail.setText("Requested by: " + request.getUserEmail());
+            categoryHolder.organizationId.setText("Organization ID: " + request.getOrganizationId());
+            categoryHolder.requestDate.setText("Request Date: " + request.getRequestDate());
+            categoryHolder.status.setText("Status: " + request.getStatus());
+
+            setStatusBackgroundColor(categoryHolder.status, request.getStatus());
+
+            toggleButtonVisibility(categoryHolder.buttonsLayout, type);
+            if(Objects.equals(type, "approved")){
+                categoryHolder.approveButton.setVisibility(View.GONE);
+                categoryHolder.rejectButton.setVisibility(View.GONE);
+            }
+            else {
+                categoryHolder.approveButton.setVisibility(View.VISIBLE);
+                categoryHolder.rejectButton.setVisibility(View.VISIBLE);
+            }
+
+            // Initially hide details
+            categoryHolder.detailsLayout.setVisibility(View.GONE);
+
+            // Toggle "View More Details"
+            categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
+
+            categoryHolder.approveButton.setOnClickListener(v -> {
+                approveCategoryRequest(request.getRequestId(), holder.getAdapterPosition());
+                // Handle Approve action
+            });
+
+            categoryHolder.rejectButton.setOnClickListener(v -> {
+                // Handle Reject action
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return cardItemList.size();
+        return mixedList.size();
     }
 
-    static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView date, name, description, status;
-
-        public CardViewHolder(@NonNull View itemView) {
-            super(itemView);
-            date = itemView.findViewById(R.id.date);
-            name = itemView.findViewById(R.id.name);
-            description = itemView.findViewById(R.id.description);
-            status = itemView.findViewById(R.id.status);
+    // Helper to toggle button visibility based on the request type (approved/pending)
+    private void toggleButtonVisibility(LinearLayout buttonsLayout, String type) {
+        if ("approved".equals(type)) {
+            buttonsLayout.setVisibility(View.GONE);
+        } else {
+            buttonsLayout.setVisibility(View.VISIBLE);
         }
     }
 
-    private void showRequestSentDialog(int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.pending_popup, null);
-        builder.setView(dialogView);
+    // Helper to toggle details visibility
+    private void toggleDetailsVisibility(View detailsLayout, TextView viewMoreLink) {
+        if (detailsLayout.getVisibility() == View.GONE) {
+            detailsLayout.setVisibility(View.VISIBLE);
+            viewMoreLink.setText("View Less Details");
+        } else {
+            detailsLayout.setVisibility(View.GONE);
+            viewMoreLink.setText("View More Details");
+        }
+    }
 
-        // Example data, replace this with actual data from your request list
-//        String requestType = "Edit Item Name and Description";
-//        String date = "12/07/2024";
-//        String currentItemName = "Old Item Name"; // Replace with actual data
-//        String currentDescription = "Old Description"; // Replace with actual data
-//        String newName = "Eco-Friendly Notebooks";
-//        String newDescription = "Notebooks made from recycled materials.";
-//        String status = "Pending";
+    // Helper to set status background color
+    private void setStatusBackgroundColor(TextView statusView, String status) {
+        int color;
+        if ("pending".equals(status)) {
+            color = Color.parseColor("#CC0000");
+        } else {
+            color = Color.parseColor("#00DC32");
+            statusView.setBackgroundColor(Color.parseColor("#D3F8D3"));
+        }
+        statusView.setTextColor(color);
+    }
 
-        // Initialize dialog views
-//        TextView requestTypeTextView = dialogView.findViewById(R.id.requestType);
-//        TextView dateTextView = dialogView.findViewById(R.id.date);
-//        TextView currentItemNameTextView = dialogView.findViewById(R.id.currentOne);
-//        TextView currentDescriptionTextView = dialogView.findViewById(R.id.currentTwo);
-//        TextView newNameTextView = dialogView.findViewById(R.id.changeOne);
-//        TextView newDescriptionTextView = dialogView.findViewById(R.id.changeTwo);
-//        TextView statusTextView = dialogView.findViewById(R.id.status);
+    // ViewHolder for Unit Requests
+    static class UnitRequestViewHolder extends RecyclerView.ViewHolder {
+        TextView unitName, requestType, capacity, userEmail, constraints, dimensions, maxWeight, organizationId, requestDate, status, viewMoreLink;
+        LinearLayout detailsLayout, buttonsLayout;
+        Button approveButton, rejectButton;
 
-        Button closeButton = dialogView.findViewById(R.id.closeButton);
-//        Button rejectButton = dialogView.findViewById(R.id.reject_button);
+        UnitRequestViewHolder(View itemView) {
+            super(itemView);
+            unitName = itemView.findViewById(R.id.unitName);
+            capacity = itemView.findViewById(R.id.capacity);
+            userEmail = itemView.findViewById(R.id.userEmail);
+            constraints = itemView.findViewById(R.id.constraints);
+            dimensions = itemView.findViewById(R.id.dimensions);
+            maxWeight = itemView.findViewById(R.id.maxWeight);
+            organizationId = itemView.findViewById(R.id.organizationId);
+            requestDate = itemView.findViewById(R.id.requestDate);
+            requestType = itemView.findViewById(R.id.requestType);
+            status = itemView.findViewById(R.id.status);
+            viewMoreLink = itemView.findViewById(R.id.viewMoreLink);
+            detailsLayout = itemView.findViewById(R.id.detailsLayout);
+            approveButton = itemView.findViewById(R.id.approveButton);
+            rejectButton = itemView.findViewById(R.id.rejectButton);
+            buttonsLayout = itemView.findViewById(R.id.buttonsLayout);
+        }
+    }
 
-        AlertDialog dialog = builder.create();
+    // ViewHolder for Category Requests
+    static class CategoryRequestViewHolder extends RecyclerView.ViewHolder {
+        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType;
+        LinearLayout detailsLayout, buttonsLayout;
+        Button approveButton, rejectButton;
 
-        // Set data to dialog views
-//        requestTypeTextView.setText(requestType);
-//        dateTextView.setText(date);
-//        currentItemNameTextView.setText(currentItemName);
-//        currentDescriptionTextView.setText(currentDescription);
-//        newNameTextView.setText(newName);
-//        newDescriptionTextView.setText(newDescription);
-//        statusTextView.setText(status);
+        CategoryRequestViewHolder(View itemView) {
+            super(itemView);
+            categoryName = itemView.findViewById(R.id.categoryName);
+            categoryType = itemView.findViewById(R.id.categoryType);
+            userEmail = itemView.findViewById(R.id.userEmail);
+            organizationId = itemView.findViewById(R.id.organizationId);
+            requestDate = itemView.findViewById(R.id.requestDate);
+            requestType = itemView.findViewById(R.id.requestType);
+            status = itemView.findViewById(R.id.status);
+            viewMoreLink = itemView.findViewById(R.id.viewMoreLink);
+            detailsLayout = itemView.findViewById(R.id.detailsLayout);
+            approveButton = itemView.findViewById(R.id.approveButton);
+            rejectButton = itemView.findViewById(R.id.rejectButton);
+            buttonsLayout = itemView.findViewById(R.id.buttonsLayout);
+        }
+    }
 
-        // Set button click listeners
-        closeButton.setOnClickListener(v -> {
-            // Handle approve action
-            // Update the item details and change the status to Approved
-            // Example: requestList.get(position).setStatus("Approved");
-            // notifyDataSetChanged();
-            dialog.dismiss();
+    // Function to approve the unit request
+    public void approveRequest(String documentId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        UnitRequestModel cardItem = (UnitRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog); // Inflate the custom layout
+        progressDialog.setCancelable(false); // Make dialog non-cancellable
+        progressDialog.show();
+
+        // Update the request's status to "approved"
+        db.collection("unit_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+                    // Now dismiss the progress dialog
+//                    progressDialog.dismiss();
+
+                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
+                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                    // Dismiss the progress dialog on failure too
+                    progressDialog.dismiss();
+                });
+    }
+
+
+    public void approveCategoryRequest(String documentId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        // Update the request's status to "approved"
+        db.collection("category_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+
+                    addNewCategory(request.getParentCategory(), request.getCategoryName(),
+                            request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                    progressDialog.dismiss();
+                });
+    }
+
+    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog) {
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
+
+        MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = BuildConfig.AddUnitEndpoint;
+        RequestBody body = RequestBody.create(json, jsonObject);
+
+        Utils.getUserToken().thenAccept(token -> {
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .header("Authorization", token)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+                    Log.e("Unit Request Method", "POST request failed", e);
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        progressDialog.dismiss();
+                        Log.i("Unit Response", "Unit created successfully");
+                    } else {
+                        progressDialog.dismiss();
+                        Log.e("Unit Request Method", "POST request failed: " + response);
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
-//
-//        rejectButton.setOnClickListener(v -> {
-//            // Handle reject action
-//            // Change the status to Rejected
-//            // Example: requestList.get(position).setStatus("Rejected");
-//            // notifyDataSetChanged();
-//            dialog.dismiss();
-//        });
+    }
 
-        dialog.show();
+    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId, Dialog progressDialog) {
+        Utils.addCategory(parentCategory, categoryName, email, url, organizationId, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+            }
+        });
     }
 
 }
