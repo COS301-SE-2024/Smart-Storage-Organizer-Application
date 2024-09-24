@@ -147,6 +147,7 @@
             android:exported="false" />
         <activity
             android:name=".NotificationsActivity"
+            android:label="Smart Storage Organizer"
             android:exported="true">
 
             <intent-filter>
