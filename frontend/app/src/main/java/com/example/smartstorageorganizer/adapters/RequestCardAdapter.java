@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,32 +50,50 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.unit_request_card, parent, false);
         return new CardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        UnitRequestModel cardItem = cardItemList.get(position);
-        holder.date.setText((cardItem.getRequestDate()).toString());
-        holder.name.setText(cardItem.getUnitName());
-        holder.description.setText(cardItem.getUserEmail());
-        holder.status.setText(cardItem.getStatus());
-        int color;
-        if(Objects.equals(cardItem.getStatus(), "pending")) {
-            color = Color.parseColor("#CC0000");
-        }
-        else {
-            color = Color.parseColor("#00DC32");
-            holder.status.setBackgroundColor(Color.parseColor("#D3F8D3"));
-        }
-        holder.status.setTextColor(color);
+        UnitRequestModel request = cardItemList.get(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRequestSentDialog(holder.getAdapterPosition());
+        // Set the text for visible fields
+        holder.unitName.setText("Unit Name: " + request.getUnitName());
+        holder.requestType.setText("Request Type: " + request.getRequestType());
+        holder.capacity.setText("Capacity: " + request.getCapacity());
+        holder.userEmail.setText("Requested by: " + request.getUserEmail());
+
+        // Set the text for hidden fields
+        holder.constraints.setText("Constraints: " + request.getConstraints());
+        holder.dimensions.setText("Dimensions: " + request.getWidth() + " x " + request.getHeight() + " x " + request.getDepth());
+        holder.maxWeight.setText("Max Weight: " + request.getMaxWeight());
+        holder.organizationId.setText("Organization ID: " + request.getOrganizationId());
+        holder.requestDate.setText("Request Date: " + (request.getRequestDate()));
+        holder.status.setText("Status: " + request.getStatus());
+
+        // Initially, the detailsLayout is hidden
+        holder.detailsLayout.setVisibility(View.GONE);
+
+        // Toggle "View More Details" and "View Less Details"
+        holder.viewMoreLink.setOnClickListener(v -> {
+            if (holder.detailsLayout.getVisibility() == View.GONE) {
+                holder.detailsLayout.setVisibility(View.VISIBLE);
+                holder.viewMoreLink.setText("View Less Details");
+            } else {
+                holder.detailsLayout.setVisibility(View.GONE);
+                holder.viewMoreLink.setText("View More Details");
             }
+        });
+
+        // Approve Button Click
+        holder.approveButton.setOnClickListener(v -> {
+//            approveRequest(request.getDocumentId());  // Use the document ID for Firestore update
+        });
+
+        // Reject Button Click
+        holder.rejectButton.setOnClickListener(v -> {
+//            rejectRequest(request.getDocumentId());  // Use the document ID for Firestore update
         });
     }
 
@@ -84,44 +103,56 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     }
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView date, name, description, status;
+        TextView unitName, capacity, userEmail, constraints, dimensions, maxWeight, organizationId, requestDate, status, viewMoreLink, requestType;
+        LinearLayout detailsLayout;
+        Button approveButton, rejectButton;
 
-        public CardViewHolder(@NonNull View itemView) {
+        public CardViewHolder(View itemView) {
             super(itemView);
-            date = itemView.findViewById(R.id.date);
-            name = itemView.findViewById(R.id.name);
-            description = itemView.findViewById(R.id.description);
+            unitName = itemView.findViewById(R.id.unitName);
+            capacity = itemView.findViewById(R.id.capacity);
+            userEmail = itemView.findViewById(R.id.userEmail);
+            constraints = itemView.findViewById(R.id.constraints);
+            dimensions = itemView.findViewById(R.id.dimensions);
+            maxWeight = itemView.findViewById(R.id.maxWeight);
+            organizationId = itemView.findViewById(R.id.organizationId);
+            requestDate = itemView.findViewById(R.id.requestDate);
+            requestType = itemView.findViewById(R.id.requestType);
             status = itemView.findViewById(R.id.status);
+            viewMoreLink = itemView.findViewById(R.id.viewMoreLink);
+            detailsLayout = itemView.findViewById(R.id.detailsLayout);
+            approveButton = itemView.findViewById(R.id.approveButton);
+            rejectButton = itemView.findViewById(R.id.rejectButton);
         }
     }
 
-    private void showRequestSentDialog(int position) {
-        UnitRequestModel cardItem = cardItemList.get(position);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.pending_popup, null);
-        builder.setView(dialogView);
-
-        Button closeButton = dialogView.findViewById(R.id.closeButton);
-
-        AlertDialog dialog = builder.create();
-
-        closeButton.setOnClickListener(v -> {
-            approveRequest(cardItem.getRequestId(), position);
-            dialog.dismiss();
-        });
+//    private void showRequestSentDialog(int position) {
+//        UnitRequestModel cardItem = cardItemList.get(position);
 //
-//        rejectButton.setOnClickListener(v -> {
-//            // Handle reject action
-//            // Change the status to Rejected
-//            // Example: requestList.get(position).setStatus("Rejected");
-//            // notifyDataSetChanged();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        LayoutInflater inflater = LayoutInflater.from(context);
+//        View dialogView = inflater.inflate(R.layout.pending_popup, null);
+//        builder.setView(dialogView);
+//
+//        Button closeButton = dialogView.findViewById(R.id.closeButton);
+//
+//        AlertDialog dialog = builder.create();
+//
+//        closeButton.setOnClickListener(v -> {
+//            approveRequest(cardItem.getRequestId(), position);
 //            dialog.dismiss();
 //        });
-
-        dialog.show();
-    }
+////
+////        rejectButton.setOnClickListener(v -> {
+////            // Handle reject action
+////            // Change the status to Rejected
+////            // Example: requestList.get(position).setStatus("Rejected");
+////            // notifyDataSetChanged();
+////            dialog.dismiss();
+////        });
+//
+//        dialog.show();
+//    }
 
     // Function to approve the unit request
     public void approveRequest(String documentId, int position) {

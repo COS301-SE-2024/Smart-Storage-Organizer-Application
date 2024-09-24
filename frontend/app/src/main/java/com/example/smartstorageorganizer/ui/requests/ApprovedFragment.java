@@ -61,7 +61,7 @@ public class ApprovedFragment extends Fragment {
         requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
         recyclerView.setAdapter(requestAdapter);
 
-        fetchApprovedRequests();
+//        fetchApprovedRequests();
 
         return root;
     }
@@ -86,6 +86,7 @@ public class ApprovedFragment extends Fragment {
                             String maxWeight = document.getString("maxweight");
                             String userEmail = document.getString("userEmail");
                             String organizationId = document.getString("organizationId");
+                            String requestType = document.getString("requestType");
                             Timestamp requestDate = document.getTimestamp("requestDate");
                             assert requestDate != null;
                             String formattedDate = convertTimestampToDate(requestDate);
@@ -93,7 +94,7 @@ public class ApprovedFragment extends Fragment {
 
                             // Create a UnitRequestModel object
                             UnitRequestModel unitRequest = new UnitRequestModel(
-                                    unitName, capacity, constraints, width, height, depth, maxWeight, userEmail, organizationId, status, formattedDate, documentId
+                                    unitName, capacity, constraints, width, height, depth, maxWeight, userEmail, organizationId, status, formattedDate, documentId, requestType
                             );
 
                             // Add to cardItemList

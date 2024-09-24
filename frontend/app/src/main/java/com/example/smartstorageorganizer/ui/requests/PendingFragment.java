@@ -70,7 +70,7 @@ public class PendingFragment extends Fragment {
         requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
         recyclerView.setAdapter(requestAdapter);
 
-        fetchPendingRequests();
+//        fetchPendingRequests();
 
         return root;
     }
@@ -97,13 +97,14 @@ public class PendingFragment extends Fragment {
                             String userEmail = document.getString("userEmail");
                             String organizationId = document.getString("organizationId");
                             Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
                             assert requestDate != null;
                             String formattedDate = convertTimestampToDate(requestDate);
                             String status = document.getString("status");
 
                             // Create a UnitRequestModel object
                             UnitRequestModel unitRequest = new UnitRequestModel(
-                                    unitName, capacity, constraints, width, height, depth, maxWeight, userEmail, organizationId, status, formattedDate, documentId
+                                    unitName, capacity, constraints, width, height, depth, maxWeight, userEmail, organizationId, status, formattedDate, documentId, requestType
                             );
 
                             // Add to cardItemList

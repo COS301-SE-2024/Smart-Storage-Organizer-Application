@@ -15,8 +15,9 @@ public class UnitRequestModel {
     String organizationId;
     String status;
     String requestDate;
+    String requestType;
 
-    public UnitRequestModel(String unitName, String capacity, String constraints, String width, String height, String depth, String maxWeight, String userEmail, String organizationId, String status, String requestDate, String requestId) {
+    public UnitRequestModel(String unitName, String capacity, String constraints, String width, String height, String depth, String maxWeight, String userEmail, String organizationId, String status, String requestDate, String requestId, String requestType) {
         this.unitName = unitName;
         this.capacity = capacity;
         this.constraints = constraints;
@@ -29,6 +30,7 @@ public class UnitRequestModel {
         this.status = status;
         this.requestDate = requestDate;
         this.requestId = requestId;
+        this.requestType = requestType;
     }
 
     public String getUnitName() {
@@ -125,5 +127,13 @@ public class UnitRequestModel {
 
     public void setRequestId(String requestId) {
         this.requestId = requestId;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
     }
 }
