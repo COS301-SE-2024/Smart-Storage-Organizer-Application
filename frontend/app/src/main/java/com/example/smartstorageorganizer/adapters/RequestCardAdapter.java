@@ -1,4 +1,5 @@
 package com.example.smartstorageorganizer.adapters;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -106,6 +108,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             unitHolder.approveButton.setOnClickListener(v -> {
                 // Handle Approve action
+                approveRequest(request.getRequestId(), holder.getAdapterPosition());
             });
 
             unitHolder.rejectButton.setOnClickListener(v -> {
@@ -136,6 +139,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
 
             categoryHolder.approveButton.setOnClickListener(v -> {
+                approveCategoryRequest(request.getRequestId(), holder.getAdapterPosition());
                 // Handle Approve action
             });
 
@@ -263,7 +267,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Function to approve the unit request
     public void approveRequest(String documentId, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        UnitRequestModel cardItem = cardItemList.get(position);
+        UnitRequestModel cardItem = (UnitRequestModel) mixedList.get(position);
 
         // Update the request's status to "approved"
         db.collection("unit_requests")
@@ -273,7 +277,26 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     Log.i("Firestore", "Request approved successfully.");
                     // Now you can call your API to create the unit
                     // Optionally trigger the unit creation logic here
-//                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
+                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                });
+    }
+
+    public void approveCategoryRequest(String documentId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
+
+        // Update the request's status to "approved"
+        db.collection("category_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+                    // Now you can call your API to create the unit
+                    // Optionally trigger the unit creation logic here
+                    addNewCategory(request.getParentCategory(), request.getCategoryName(), request.getUrl(), request.getUserEmail(), request.getOrganizationId());
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -314,6 +337,26 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }).exceptionally(ex -> {
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
+        });
+    }
+
+    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId) {
+        Utils.addCategory(parentCategory, categoryName, email, url, organizationId, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+//                    showToast("Category added successfully");
+//                    navigateToHome();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                showToast("Failed to add category: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+//                addCategoryLayout.setVisibility(View.VISIBLE);
+//                addButton.setVisibility(View.VISIBLE);
+            }
         });
     }
 
