@@ -135,7 +135,15 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             CategoryRequestViewHolder categoryHolder = (CategoryRequestViewHolder) holder;
 
             // Set visible fields
-            categoryHolder.categoryName.setText("Category Name: " + request.getCategoryName());
+            if(Objects.equals(request.getRequestType(), "Modify Category")){
+                categoryHolder.categoryName.setText("Current Category Name: " + request.getCategoryName());
+                categoryHolder.newCategoryName.setVisibility(View.VISIBLE);
+                categoryHolder.newCategoryName.setText("New Category Name: "+ request.getUrl());
+            }
+            else {
+                categoryHolder.categoryName.setText("Category Name: " + request.getCategoryName());
+                categoryHolder.newCategoryName.setVisibility(View.GONE);
+            }
             categoryHolder.requestType.setText("Request Type: " + request.getRequestType());
             categoryHolder.categoryType.setText("Category Type: Parent Category");
             categoryHolder.userEmail.setText("Requested by: " + request.getUserEmail());
@@ -237,7 +245,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // ViewHolder for Category Requests
     static class CategoryRequestViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType;
+        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType, newCategoryName;
         LinearLayout detailsLayout, buttonsLayout;
         Button approveButton, rejectButton;
 
@@ -255,6 +263,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             approveButton = itemView.findViewById(R.id.approveButton);
             rejectButton = itemView.findViewById(R.id.rejectButton);
             buttonsLayout = itemView.findViewById(R.id.buttonsLayout);
+            newCategoryName = itemView.findViewById(R.id.newCategoryName);
         }
     }
 
@@ -313,6 +322,10 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     else if(Objects.equals(requestType, "Delete Category")){
                         progressDialog.dismiss();
                         deleteCategory(request.getParentCategory(), position);
+                    }
+                    else {
+                        progressDialog.dismiss();
+                        updateCategoryName(request.getParentCategory(), request.getUrl(), position);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -425,6 +438,29 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onFailure(String error) {
                 progressDialog.dismiss();
                 Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateCategoryName(int categoryId, String newName, int position) {
+        ProgressDialog progressDialogModify = new ProgressDialog(context);
+        progressDialogModify.setMessage("Updating category name...");
+        progressDialogModify.setCancelable(false);
+        progressDialogModify.show();
+        Utils.modifyCategoryName(categoryId, newName, app.getEmail(), app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialogModify.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    mixedList.remove(position);
+                    notifyDataSetChanged();
+                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(String error) {
+                progressDialogModify.dismiss();
+                Toast.makeText(context, "Failed to Modify Category Name.", Toast.LENGTH_SHORT).show();
             }
         });
     }

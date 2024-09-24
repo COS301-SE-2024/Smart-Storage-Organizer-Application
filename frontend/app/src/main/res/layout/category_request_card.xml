@@ -23,6 +23,14 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/newCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Category Name: [New Category Name]"
+            android:visibility="gone"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/requestType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

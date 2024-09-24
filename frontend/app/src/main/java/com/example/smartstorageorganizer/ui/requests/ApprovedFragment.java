@@ -194,7 +194,7 @@ public class ApprovedFragment extends Fragment {
                             // Extract data from Firestore document
                             String documentId = document.getString("documentId");
                             String categoryName = document.getString("categoryName");
-                            Object parentCategoryObj = document.get("parentCategory");
+                            Object parentCategoryObj = document.get("id");
 
                             String parentCategory;
                             if (parentCategoryObj instanceof Number) {

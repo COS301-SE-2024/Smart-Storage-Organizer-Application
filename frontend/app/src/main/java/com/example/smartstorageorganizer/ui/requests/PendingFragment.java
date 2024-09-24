@@ -55,6 +55,7 @@ public class PendingFragment extends Fragment {
     List<UnitRequestModel> cardItemList;
     List<CategoryRequestModel> cardCategoryList;
     List<CategoryRequestModel> cardDeleteCategoryList;
+    List<CategoryRequestModel> cardModifyCategoryList;
     RequestCardAdapter requestAdapter;
     RequestCardAdapter adapter;
     private MyAmplifyApp app;
@@ -75,6 +76,7 @@ public class PendingFragment extends Fragment {
         cardItemList = new ArrayList<>();
         cardCategoryList = new ArrayList<>();
         cardDeleteCategoryList = new ArrayList<>();
+        cardModifyCategoryList = new ArrayList<>();
 
         adapter = new RequestCardAdapter(getContext(), mixedList, "pending");
         recyclerView.setAdapter(adapter);
@@ -228,6 +230,54 @@ public class PendingFragment extends Fragment {
                 });
     }
 
+    public void fetchModifyCategoryPendingRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("category_requests")
+                .whereEqualTo("status", "pending")
+                .whereEqualTo("requestType", "Modify Category")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String categoryName = document.getString("currentCategoryName");
+                            String newCategoryName = document.getString("newCategoryName");
+                            Object parentCategoryObj = document.get("id");
+
+                            String parentCategory;
+                            if (parentCategoryObj instanceof Number) {
+                                parentCategory = String.valueOf(parentCategoryObj);
+                            } else {
+                                parentCategory = (String) parentCategoryObj;
+                            }
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            CategoryRequestModel categoryRequest = new CategoryRequestModel(categoryName, Integer.parseInt(parentCategory), formattedDate, status, userEmail, newCategoryName, documentId, organizationId, requestType);
+
+                            // Add to cardItemList
+                            cardModifyCategoryList.add(categoryRequest);
+                        }
+                        mixedList.addAll(cardModifyCategoryList);  // Add all category requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardModifyCategoryList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
     public String convertTimestampToDate(Timestamp timestamp) {
         // Convert the Timestamp to a Date object
         Date date = timestamp.toDate();
@@ -250,11 +300,13 @@ public class PendingFragment extends Fragment {
         cardItemList.clear();
         cardCategoryList.clear();
         cardDeleteCategoryList.clear();
+        cardModifyCategoryList.clear();
         adapter.notifyDataSetChanged();
 
         fetchPendingRequests();
         fetchCategoryPendingRequests();
         fetchDeleteCategoryPendingRequests();
+        fetchModifyCategoryPendingRequests();
     }
 
 }

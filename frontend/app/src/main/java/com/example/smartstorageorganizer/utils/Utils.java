@@ -398,9 +398,9 @@ public class Utils
         });
     }
 
-    public static void modifyCategoryName(int id, String newCategoryName, Activity activity, OperationCallback<Boolean> callback)
+    public static void modifyCategoryName(int id, String newCategoryName, String username, String organizationid, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+newCategoryName+"\" }";
+        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+newCategoryName+"\", \"username\":\""+username+"\", \"organizationid\":\""+organizationid+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -418,7 +418,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -428,12 +428,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
