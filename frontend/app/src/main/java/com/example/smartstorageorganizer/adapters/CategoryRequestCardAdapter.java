@@ -16,6 +16,7 @@ import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -34,18 +35,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.CardViewHolder> {
+public class CategoryRequestCardAdapter extends RecyclerView.Adapter<CategoryRequestCardAdapter.CardViewHolder> {
 
     private Context context;
-    private List<UnitRequestModel> cardItemList;
-    private static final int UNIT_REQUEST = 0;
-    private static final int CATEGORY_REQUEST = 1;
-
-    private List<Object> mixedList;
+    private List<CategoryRequestModel> cardItemList;
     private MyAmplifyApp app;
     private String type;
 
-    public RequestCardAdapter(Context context, List<UnitRequestModel> cardItemList, String type) {
+    public CategoryRequestCardAdapter(Context context, List<CategoryRequestModel> cardItemList, String type) {
         this.context = context;
         this.cardItemList = cardItemList;
         this.type = type;
@@ -56,24 +53,20 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.unit_request_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_request_card, parent, false);
         return new CardViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        UnitRequestModel request = cardItemList.get(position);
+        CategoryRequestModel request = cardItemList.get(position);
 
         // Set the text for visible fields
-        holder.unitName.setText("Unit Name: " + request.getUnitName());
+        holder.categoryName.setText("Category Name: " + request.getCategoryName());
         holder.requestType.setText("Request Type: " + request.getRequestType());
-        holder.capacity.setText("Capacity: " + request.getCapacity());
+        holder.categoryType.setText("Category Type: " + "Parent Category");
         holder.userEmail.setText("Requested by: " + request.getUserEmail());
 
-        // Set the text for hidden fields
-        holder.constraints.setText("Constraints: " + request.getConstraints());
-        holder.dimensions.setText("Dimensions: " + request.getWidth() + " x " + request.getHeight() + " x " + request.getDepth());
-        holder.maxWeight.setText("Max Weight: " + request.getMaxWeight());
         holder.organizationId.setText("Organization ID: " + request.getOrganizationId());
         holder.requestDate.setText("Request Date: " + (request.getRequestDate()));
         holder.status.setText("Status: " + request.getStatus());
@@ -125,18 +118,15 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     }
 
     static class CardViewHolder extends RecyclerView.ViewHolder {
-        TextView unitName, capacity, userEmail, constraints, dimensions, maxWeight, organizationId, requestDate, status, viewMoreLink, requestType;
+        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType;
         LinearLayout detailsLayout, buttonsLayout;
         Button approveButton, rejectButton;
 
         public CardViewHolder(View itemView) {
             super(itemView);
-            unitName = itemView.findViewById(R.id.unitName);
-            capacity = itemView.findViewById(R.id.capacity);
+            categoryName = itemView.findViewById(R.id.categoryName);
+            categoryType = itemView.findViewById(R.id.categoryType);
             userEmail = itemView.findViewById(R.id.userEmail);
-            constraints = itemView.findViewById(R.id.constraints);
-            dimensions = itemView.findViewById(R.id.dimensions);
-            maxWeight = itemView.findViewById(R.id.maxWeight);
             organizationId = itemView.findViewById(R.id.organizationId);
             requestDate = itemView.findViewById(R.id.requestDate);
             requestType = itemView.findViewById(R.id.requestType);
@@ -180,7 +170,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
     // Function to approve the unit request
     public void approveRequest(String documentId, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        UnitRequestModel cardItem = cardItemList.get(position);
+        CategoryRequestModel cardItem = cardItemList.get(position);
 
         // Update the request's status to "approved"
         db.collection("unit_requests")
@@ -190,7 +180,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RequestCardAdapter.
                     Log.i("Firestore", "Request approved successfully.");
                     // Now you can call your API to create the unit
                     // Optionally trigger the unit creation logic here
-                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
+//                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);

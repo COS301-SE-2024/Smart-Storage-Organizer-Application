@@ -17,9 +17,11 @@ import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.LoginActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.adapters.CategoryRequestCardAdapter;
 import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -50,7 +52,9 @@ import okhttp3.Response;
 public class PendingFragment extends Fragment {
     View root;
     List<UnitRequestModel> cardItemList;
+    List<CategoryRequestModel> cardCategoryList;
     RequestCardAdapter requestAdapter;
+    CategoryRequestCardAdapter categoryRequestAdapter;
     private MyAmplifyApp app;
 
 
@@ -66,8 +70,11 @@ public class PendingFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         cardItemList = new ArrayList<>();
+        cardCategoryList = new ArrayList<>();
 
-        requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
+        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "pending");
+        categoryRequestAdapter = new CategoryRequestCardAdapter(getContext(), cardCategoryList, "pending");
+
         recyclerView.setAdapter(requestAdapter);
 
 //        fetchPendingRequests();
@@ -109,6 +116,45 @@ public class PendingFragment extends Fragment {
 
                             // Add to cardItemList
                             cardItemList.add(unitRequest);
+                        }
+                        requestAdapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
+    public void fetchCategoryPendingRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("category_requests")
+                .whereEqualTo("status", "pending")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String categoryName = document.getString("categoryName");
+                            String parentCategory = document.getString("parentCategory");
+                            String url = document.getString("url");
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            CategoryRequestModel categoryRequest = new CategoryRequestModel(categoryName, Integer.parseInt(parentCategory), formattedDate, status, userEmail, url, documentId, organizationId, requestType);
+
+                            // Add to cardItemList
+                            cardCategoryList.add(categoryRequest);
                         }
                         requestAdapter.notifyDataSetChanged();
 

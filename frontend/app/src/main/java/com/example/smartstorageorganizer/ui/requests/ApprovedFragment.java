@@ -58,7 +58,7 @@ public class ApprovedFragment extends Fragment {
 
         cardItemList = new ArrayList<>();
 
-        requestAdapter = new RequestCardAdapter(getContext(), cardItemList);
+        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "approved");
         recyclerView.setAdapter(requestAdapter);
 
 //        fetchApprovedRequests();

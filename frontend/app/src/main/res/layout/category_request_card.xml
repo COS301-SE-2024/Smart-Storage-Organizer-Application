@@ -16,10 +16,10 @@
 
         <!-- Always Visible -->
         <TextView
-            android:id="@+id/unitName"
+            android:id="@+id/categoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unit Name: [Unit Name]"
+            android:text="Category Name: [Category Name]"
             android:textStyle="bold" />
 
         <TextView
@@ -43,22 +43,10 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/constraints"
+                android:id="@+id/categoryType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Constraints: [Constraints]" />
-
-            <TextView
-                android:id="@+id/dimensions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dimensions: [Width] x [Height] x [Depth]" />
-
-            <TextView
-                android:id="@+id/maxWeight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Max Weight: [Max Weight]" />
+                android:text="Category Type: [Type]" />
 
             <TextView
                 android:id="@+id/organizationId"
@@ -71,12 +59,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Request Date: [Request Date]" />
-
-            <TextView
-                android:id="@+id/capacity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Capacity: [Capacity]" />
 
             <TextView
                 android:id="@+id/status"
