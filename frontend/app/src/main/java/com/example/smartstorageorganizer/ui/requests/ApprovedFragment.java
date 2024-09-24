@@ -53,13 +53,13 @@ public class ApprovedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.fragment_approved, container, false);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-
-        cardItemList = new ArrayList<>();
-
-        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "approved");
-        recyclerView.setAdapter(requestAdapter);
+//        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+//
+//        cardItemList = new ArrayList<>();
+//
+//        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "approved");
+//        recyclerView.setAdapter(requestAdapter);
 
 //        fetchApprovedRequests();
 
@@ -129,10 +129,10 @@ public class ApprovedFragment extends Fragment {
     }
 
     private void refreshData() {
-        cardItemList.clear();
-        requestAdapter.notifyDataSetChanged();
-
-        fetchApprovedRequests();
+//        cardItemList.clear();
+//        requestAdapter.notifyDataSetChanged();
+//
+//        fetchApprovedRequests();
     }
 
 }

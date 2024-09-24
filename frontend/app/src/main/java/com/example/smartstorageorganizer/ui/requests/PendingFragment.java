@@ -51,10 +51,11 @@ import okhttp3.Response;
 
 public class PendingFragment extends Fragment {
     View root;
+    List<Object> mixedList;
     List<UnitRequestModel> cardItemList;
     List<CategoryRequestModel> cardCategoryList;
     RequestCardAdapter requestAdapter;
-    CategoryRequestCardAdapter categoryRequestAdapter;
+    RequestCardAdapter adapter;
     private MyAmplifyApp app;
 
 
@@ -69,13 +70,13 @@ public class PendingFragment extends Fragment {
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
+        mixedList = new ArrayList<>();
         cardItemList = new ArrayList<>();
         cardCategoryList = new ArrayList<>();
 
-        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "pending");
-        categoryRequestAdapter = new CategoryRequestCardAdapter(getContext(), cardCategoryList, "pending");
+        adapter = new RequestCardAdapter(getContext(), mixedList, "pending");
+        recyclerView.setAdapter(adapter);
 
-        recyclerView.setAdapter(requestAdapter);
 
 //        fetchPendingRequests();
 
@@ -117,7 +118,8 @@ public class PendingFragment extends Fragment {
                             // Add to cardItemList
                             cardItemList.add(unitRequest);
                         }
-                        requestAdapter.notifyDataSetChanged();
+                        mixedList.addAll(cardItemList);  // Add all unit requests
+                        adapter.notifyDataSetChanged();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -140,7 +142,15 @@ public class PendingFragment extends Fragment {
                             // Extract data from Firestore document
                             String documentId = document.getString("documentId");
                             String categoryName = document.getString("categoryName");
-                            String parentCategory = document.getString("parentCategory");
+                            Object parentCategoryObj = document.get("parentCategory");
+
+                            String parentCategory;
+                            if (parentCategoryObj instanceof Number) {
+                                parentCategory = String.valueOf(parentCategoryObj);
+                            } else {
+                                parentCategory = (String) parentCategoryObj;
+                            }
+
                             String url = document.getString("url");
                             String userEmail = document.getString("userEmail");
                             String organizationId = document.getString("organizationId");
@@ -156,7 +166,8 @@ public class PendingFragment extends Fragment {
                             // Add to cardItemList
                             cardCategoryList.add(categoryRequest);
                         }
-                        requestAdapter.notifyDataSetChanged();
+                        mixedList.addAll(cardCategoryList);  // Add all category requests
+                        adapter.notifyDataSetChanged();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -185,10 +196,11 @@ public class PendingFragment extends Fragment {
     }
 
     private void refreshData() {
-        cardItemList.clear();
-        requestAdapter.notifyDataSetChanged();
+        mixedList.clear();
+        adapter.notifyDataSetChanged();
 
         fetchPendingRequests();
+        fetchCategoryPendingRequests();
     }
 
 }
