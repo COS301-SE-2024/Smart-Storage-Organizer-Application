@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.utils;
 
+import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -2230,7 +2232,7 @@ public class Utils
 
 
             Request request = new Request.Builder()
-                    .url(BuildConfig.modifyAPI)
+                    .url(BuildConfig.SaveReportApi)
                     .addHeader("Authorization", token)
                     .post(requestBody)
                     .build();
@@ -2238,6 +2240,7 @@ public class Utils
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    editItemActivity(previous,current,organizationId,reason_for_change,commments,username,nameAndSurname,record_type,action);
                     e.printStackTrace();
                     runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
 

@@ -122,7 +122,8 @@ public class AddItemActivity extends BaseActivity  {
     private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
     private List<unitModel> unitList;
     private LottieAnimationView buttonLoader;
-
+    private ItemModel currItem;
+    private ItemModel newItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -673,6 +674,14 @@ public class AddItemActivity extends BaseActivity  {
             public void onSuccess(Boolean result) {
                 if (result) {
                     // Successfully opened search insert
+                    new Thread(() -> {
+                        try {
+
+                            Utils.editItemActivity()
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
             }
 

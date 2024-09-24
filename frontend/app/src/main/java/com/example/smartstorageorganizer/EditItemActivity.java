@@ -33,6 +33,7 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -93,6 +94,8 @@ public class EditItemActivity extends BaseActivity {
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
     MyAmplifyApp app;
+    ItemModel currItem;
+    ItemModel  newItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +174,9 @@ public class EditItemActivity extends BaseActivity {
         ItemName.setText(getIntent().getStringExtra("item_name"));
         ItemDescription.setText(getIntent().getStringExtra("item_description"));
         ItemQuantity.setText(getIntent().getStringExtra("quantity"));
+
+
+        currItem=new ItemModel(getIntent().getStringExtra("item_id"),getIntent().getStringExtra("item_name"),getIntent().getStringExtra("item_description"),getIntent().getStringExtra("color_code"),getIntent().getStringExtra("item_barcode"),getIntent().getStringExtra("item_qrcode"),getIntent().getStringExtra("quantity"),getIntent().getStringExtra("location"),app.getEmail(),getIntent().getStringExtra("item_image"),getIntent().getStringExtra("createdAt"),getIntent().getStringExtra("parentcategory_id"),getIntent().getStringExtra("subcategory_id"),getIntent().getStringExtra("expiry_date"));
 
         loadingScreen.setVisibility(View.GONE);
 
@@ -373,7 +379,24 @@ public class EditItemActivity extends BaseActivity {
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
 
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory).thenAccept(result->{
+                if (result ==null){
+                    Log.i("Post didnt open", " whats the error");
+                }
+                else if (result){
+                    if (currItem != null && newItem != null) {
+                        new Thread(()->{
+                            runOnUiThread(()->{
+                                Utils.editItemActivity(currItem, newItem,app.getOrganizationID(),"name was wrong","",app.getEmail(),app.getName()+" "+app.getSurname(),"ITEM","MODIFY");
+
+                            });
+                        });
+                    }
+                }
+                else if(!result){
+                    Log.i("Post didnt open", " whats the error");
+                }
+            });
             Log.i("2Before Post didnt open", " whats the error");
             currentItemName=itemName;
             currentItemDescription=description;
@@ -407,9 +430,10 @@ public class EditItemActivity extends BaseActivity {
         return 0;
     }
 
-    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
+    private CompletableFuture<Boolean> postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
         progressDialog.show();
-
+        CompletableFuture<Boolean> future=new CompletableFuture<>();
+        newItem=new ItemModel(String.valueOf(itemId),itemname,description,colourcoding,barcode,qrcode,String.valueOf(quantity),location,app.getEmail(),itemimage,"",String.valueOf(parentcategory),String.valueOf(subcategory),"");;
         String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\", \"username\": \""+app.getEmail()+"\", \"organizationid\":\""+app.getOrganizationID()+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -435,12 +459,14 @@ public class EditItemActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        future.complete(true);
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
                             showUpdateSuccessMessage();
                         });
                     } else {
+                        future.complete(false);
                         runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
                         progressDialog.dismiss();
                     }
@@ -449,8 +475,11 @@ public class EditItemActivity extends BaseActivity {
 
                 }).exceptionally(ex -> {
             Log.e("TokenError", "Failed to get user token", ex);
+            future.complete(false);
+
             return null;
         });
+        return future;
     }
 
     CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {
