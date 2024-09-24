@@ -274,7 +274,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //                    progressDialog.dismiss();
 
                     createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
-                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog);
+                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog, position);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -302,7 +302,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     Log.i("Firestore", "Request approved successfully.");
 
                     addNewCategory(request.getParentCategory(), request.getCategoryName(),
-                            request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog);
+                            request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog, position);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -310,7 +310,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
     }
 
-    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog) {
+    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog, int position) {
         String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
 
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
@@ -336,6 +336,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        mixedList.remove(position);
+                        notifyDataSetChanged();
                         progressDialog.dismiss();
                         Log.i("Unit Response", "Unit created successfully");
                     } else {
@@ -350,11 +352,13 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         });
     }
 
-    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId, Dialog progressDialog) {
+    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId, Dialog progressDialog, int position) {
         Utils.addCategory(parentCategory, categoryName, email, url, organizationId, (Activity) context, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
+                    mixedList.remove(position);
+                    notifyDataSetChanged();
                     progressDialog.dismiss();
                 }
             }
