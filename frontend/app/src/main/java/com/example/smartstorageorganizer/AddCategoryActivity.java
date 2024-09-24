@@ -416,6 +416,7 @@ public class AddCategoryActivity extends BaseActivity  {
         Map<String, Object> unitRequest = new HashMap<>();
         unitRequest.put("parentCategory", parentCategory);
         unitRequest.put("categoryName", categoryName);
+        unitRequest.put("requestType", "Add Category");
         unitRequest.put("url", url);
         unitRequest.put("userEmail", app.getEmail());
         unitRequest.put("organizationId", app.getOrganizationID());

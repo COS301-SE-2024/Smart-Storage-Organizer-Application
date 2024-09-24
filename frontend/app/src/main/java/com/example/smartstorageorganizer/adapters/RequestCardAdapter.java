@@ -2,7 +2,9 @@ package com.example.smartstorageorganizer.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
@@ -157,7 +162,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
 
             categoryHolder.approveButton.setOnClickListener(v -> {
-                approveCategoryRequest(request.getRequestId(), holder.getAdapterPosition());
+                approveCategoryRequest(request.getRequestId(), holder.getAdapterPosition(), request.getRequestType());
                 // Handle Approve action
             });
 
@@ -284,7 +289,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public void approveCategoryRequest(String documentId, int position) {
+    public void approveCategoryRequest(String documentId, int position, String requestType) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
 
@@ -301,8 +306,14 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
 
-                    addNewCategory(request.getParentCategory(), request.getCategoryName(),
-                            request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog, position);
+                    if(Objects.equals(requestType, "Add Category")){
+                        addNewCategory(request.getParentCategory(), request.getCategoryName(),
+                                request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog, position);
+                    }
+                    else if(Objects.equals(requestType, "Delete Category")){
+                        progressDialog.dismiss();
+                        deleteCategory(request.getParentCategory(), position);
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -366,6 +377,54 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onFailure(String error) {
                 progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void deleteCategory(int id, int position) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.deleteCategory(id, "NULL", app.getEmail(), (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    moveItemsUnderTheDeletedCategory(id, position);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void moveItemsUnderTheDeletedCategory(int id, int position) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.categoryToUncategorized(id, (Activity) context, new OperationCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialog.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    mixedList.remove(position);
+                    notifyDataSetChanged();
+                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(context, HomeActivity.class);
+//                    context.startActivity(intent);
+//                    ((Activity) context).finish();
+                }
+            }
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
             }
         });
     }
