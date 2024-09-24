@@ -5,12 +5,12 @@ import os
 import boto3
 
 client = boto3.client('cognito-idp')
-user_pool_id = 'us-east-1_EPbgIUMEQ'
+user_pool_id=os.getenv('UserPoolId')
 
-username='MasterUser'
-passcode='MasterDb#ss1'
-hostadress='Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com'
-DBname='postgres'
+hostadress = os.getenv('DBHost')
+DBname = os.getenv('DBName')
+username = os.getenv('DBUsername')
+password = os.getenv('DBPassword')
 
 con = None
 
@@ -48,6 +48,9 @@ def get_db_connection():
     return con
 
 def lambda_handler(event, context):
+    if 'body' not in event:
+        event = {'body': event}
+    
     user_role = get_user_role(event)
     if user_role == None:
         return {
@@ -91,18 +94,6 @@ def lambda_handler(event, context):
         
          }
 
-event={
-    'body':json.dumps({
-        'username':'DaCoda@gmail.com',
-        'categoryname':'Dijo Tsaka',
-        'parentcategory':0,
-        'useremail':'DaCoda@gmail.com',
-        'organizationid':1,
-        'icon':'https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Category/46203231897337.png'
-    })
-    
-}
 
-print(lambda_handler(event, ""))
 
 
