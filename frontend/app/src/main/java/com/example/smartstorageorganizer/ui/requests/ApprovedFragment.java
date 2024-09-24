@@ -11,13 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.LoginActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.adapters.CategoryRequestCardAdapter;
 import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
+import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
+import com.example.smartstorageorganizer.model.CategoryModel;
+import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
+import com.example.smartstorageorganizer.model.UserModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
@@ -41,32 +50,41 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ApprovedFragment extends Fragment {
-
     View root;
-    private MyAmplifyApp app;
-    RequestCardAdapter requestAdapter;
+    List<Object> mixedList;
     List<UnitRequestModel> cardItemList;
+    List<CategoryRequestModel> cardCategoryList;
+    RequestCardAdapter requestAdapter;
+    RequestCardAdapter adapter;
+    private MyAmplifyApp app;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         root =  inflater.inflate(R.layout.fragment_approved, container, false);
+        app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
-//        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-//
-//        cardItemList = new ArrayList<>();
-//
-//        requestAdapter = new RequestCardAdapter(getContext(), cardItemList, "approved");
-//        recyclerView.setAdapter(requestAdapter);
 
-//        fetchApprovedRequests();
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+
+        mixedList = new ArrayList<>();
+        cardItemList = new ArrayList<>();
+        cardCategoryList = new ArrayList<>();
+
+        adapter = new RequestCardAdapter(getContext(), mixedList, "approved");
+        recyclerView.setAdapter(adapter);
+
+
+//        fetchPendingRequests();
 
         return root;
     }
 
-    public void fetchApprovedRequests() {
+    // Fetch all pending unit requests from Firestore and add them to the list
+    public void fetchPendingRequests() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("unit_requests")
@@ -86,8 +104,8 @@ public class ApprovedFragment extends Fragment {
                             String maxWeight = document.getString("maxweight");
                             String userEmail = document.getString("userEmail");
                             String organizationId = document.getString("organizationId");
-                            String requestType = document.getString("requestType");
                             Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
                             assert requestDate != null;
                             String formattedDate = convertTimestampToDate(requestDate);
                             String status = document.getString("status");
@@ -100,7 +118,56 @@ public class ApprovedFragment extends Fragment {
                             // Add to cardItemList
                             cardItemList.add(unitRequest);
                         }
-                        requestAdapter.notifyDataSetChanged();
+                        mixedList.addAll(cardItemList);  // Add all unit requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
+    public void fetchCategoryPendingRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("category_requests")
+                .whereEqualTo("status", "approved")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String categoryName = document.getString("categoryName");
+                            Object parentCategoryObj = document.get("parentCategory");
+
+                            String parentCategory;
+                            if (parentCategoryObj instanceof Number) {
+                                parentCategory = String.valueOf(parentCategoryObj);
+                            } else {
+                                parentCategory = (String) parentCategoryObj;
+                            }
+
+                            String url = document.getString("url");
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            CategoryRequestModel categoryRequest = new CategoryRequestModel(categoryName, Integer.parseInt(parentCategory), formattedDate, status, userEmail, url, documentId, organizationId, requestType);
+
+                            // Add to cardItemList
+                            cardCategoryList.add(categoryRequest);
+                        }
+                        mixedList.addAll(cardCategoryList);  // Add all category requests
+                        adapter.notifyDataSetChanged();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -129,10 +196,13 @@ public class ApprovedFragment extends Fragment {
     }
 
     private void refreshData() {
-//        cardItemList.clear();
-//        requestAdapter.notifyDataSetChanged();
-//
-//        fetchApprovedRequests();
+        mixedList.clear();
+        cardItemList.clear();
+        cardCategoryList.clear();
+        adapter.notifyDataSetChanged();
+
+        fetchPendingRequests();
+        fetchCategoryPendingRequests();
     }
 
 }

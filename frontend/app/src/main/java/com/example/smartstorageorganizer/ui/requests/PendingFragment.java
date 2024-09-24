@@ -197,6 +197,8 @@ public class PendingFragment extends Fragment {
 
     private void refreshData() {
         mixedList.clear();
+        cardItemList.clear();
+        cardCategoryList.clear();
         adapter.notifyDataSetChanged();
 
         fetchPendingRequests();

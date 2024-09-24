@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -96,6 +97,15 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             unitHolder.requestDate.setText("Request Date: " + request.getRequestDate());
             unitHolder.status.setText("Status: " + request.getStatus());
 
+            if(Objects.equals(type, "approved")){
+                unitHolder.approveButton.setVisibility(View.GONE);
+                unitHolder.rejectButton.setVisibility(View.GONE);
+            }
+            else {
+                unitHolder.approveButton.setVisibility(View.VISIBLE);
+                unitHolder.rejectButton.setVisibility(View.VISIBLE);
+            }
+
             setStatusBackgroundColor(unitHolder.status, request.getStatus());
 
             toggleButtonVisibility(unitHolder.buttonsLayout, type);
@@ -131,6 +141,14 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             setStatusBackgroundColor(categoryHolder.status, request.getStatus());
 
             toggleButtonVisibility(categoryHolder.buttonsLayout, type);
+            if(Objects.equals(type, "approved")){
+                categoryHolder.approveButton.setVisibility(View.GONE);
+                categoryHolder.rejectButton.setVisibility(View.GONE);
+            }
+            else {
+                categoryHolder.approveButton.setVisibility(View.VISIBLE);
+                categoryHolder.rejectButton.setVisibility(View.VISIBLE);
+            }
 
             // Initially hide details
             categoryHolder.detailsLayout.setVisibility(View.GONE);
@@ -235,39 +253,16 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-
-//    private void showRequestSentDialog(int position) {
-//        UnitRequestModel cardItem = cardItemList.get(position);
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        LayoutInflater inflater = LayoutInflater.from(context);
-//        View dialogView = inflater.inflate(R.layout.pending_popup, null);
-//        builder.setView(dialogView);
-//
-//        Button closeButton = dialogView.findViewById(R.id.closeButton);
-//
-//        AlertDialog dialog = builder.create();
-//
-//        closeButton.setOnClickListener(v -> {
-//            approveRequest(cardItem.getRequestId(), position);
-//            dialog.dismiss();
-//        });
-////
-////        rejectButton.setOnClickListener(v -> {
-////            // Handle reject action
-////            // Change the status to Rejected
-////            // Example: requestList.get(position).setStatus("Rejected");
-////            // notifyDataSetChanged();
-////            dialog.dismiss();
-////        });
-//
-//        dialog.show();
-//    }
-
     // Function to approve the unit request
     public void approveRequest(String documentId, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UnitRequestModel cardItem = (UnitRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog); // Inflate the custom layout
+        progressDialog.setCancelable(false); // Make dialog non-cancellable
+        progressDialog.show();
 
         // Update the request's status to "approved"
         db.collection("unit_requests")
@@ -275,18 +270,29 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .update("status", "approved")
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
-                    // Now you can call your API to create the unit
-                    // Optionally trigger the unit creation logic here
-                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(), cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight());
+                    // Now dismiss the progress dialog
+//                    progressDialog.dismiss();
+
+                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
+                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
+                    // Dismiss the progress dialog on failure too
+                    progressDialog.dismiss();
                 });
     }
+
 
     public void approveCategoryRequest(String documentId, int position) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         // Update the request's status to "approved"
         db.collection("category_requests")
@@ -294,16 +300,17 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .update("status", "approved")
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
-                    // Now you can call your API to create the unit
-                    // Optionally trigger the unit creation logic here
-                    addNewCategory(request.getParentCategory(), request.getCategoryName(), request.getUrl(), request.getUserEmail(), request.getOrganizationId());
+
+                    addNewCategory(request.getParentCategory(), request.getCategoryName(),
+                            request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
+                    progressDialog.dismiss();
                 });
     }
 
-    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
+    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog) {
         String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
 
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
@@ -322,14 +329,17 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     e.printStackTrace();
+                    progressDialog.dismiss();
                     Log.e("Unit Request Method", "POST request failed", e);
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        progressDialog.dismiss();
                         Log.i("Unit Response", "Unit created successfully");
                     } else {
+                        progressDialog.dismiss();
                         Log.e("Unit Request Method", "POST request failed: " + response);
                     }
                 }
@@ -340,22 +350,18 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         });
     }
 
-    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId) {
+    public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId, Dialog progressDialog) {
         Utils.addCategory(parentCategory, categoryName, email, url, organizationId, (Activity) context, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-//                    showToast("Category added successfully");
-//                    navigateToHome();
+                    progressDialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(String error) {
-//                showToast("Failed to add category: " + error);
-//                loadingScreen.setVisibility(View.GONE);
-//                addCategoryLayout.setVisibility(View.VISIBLE);
-//                addButton.setVisibility(View.VISIBLE);
+                progressDialog.dismiss();
             }
         });
     }
