@@ -37,6 +37,7 @@ import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
@@ -140,10 +141,6 @@ public class AddCategoryActivity extends BaseActivity  {
                                 break;
                             default:
                         }
-
-
-
-
                     }
 //                    Log.i("progress","User attributes fetched successfully");
                     future.complete(true);
@@ -199,7 +196,22 @@ public class AddCategoryActivity extends BaseActivity  {
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
             CategoryModel parent = findCategoryByName(currentSelectedParent);
             if (parent != null) {
-                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
+                sendRequestToAddCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "").thenAccept(result -> {
+                    Log.i("Response", "Unit created successfully");
+                    if (result) {
+                        runOnUiThread(() -> {
+                            showToast("Category added successfully");
+                            navigateToHome();
+                        });
+                    }
+                    else {
+                        showToast("Failed to add category");
+                        loadingScreen.setVisibility(View.GONE);
+                        addCategoryLayout.setVisibility(View.VISIBLE);
+                        addButton.setVisibility(View.VISIBLE);
+                    }
+                });
+//                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
             }
         }
     }
@@ -354,7 +366,22 @@ public class AddCategoryActivity extends BaseActivity  {
 
     public void handleImageUploadSuccess(String key) {
         String url = String.format(STORAGE_URL_FORMAT, key);
-        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
+        sendRequestToAddCategory(0, parentCategoryEditText.getText().toString(), url).thenAccept(result -> {
+            Log.i("Response", "Unit created successfully");
+            if (result) {
+                runOnUiThread(() -> {
+                    showToast("Category added successfully");
+                    navigateToHome();
+                });
+            }
+            else {
+                showToast("Failed to add category");
+                loadingScreen.setVisibility(View.GONE);
+                addCategoryLayout.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
+            }
+        });
+//        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
@@ -379,6 +406,48 @@ public class AddCategoryActivity extends BaseActivity  {
 
     public void showToast(String message) {
         Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public CompletableFuture<Boolean> sendRequestToAddCategory(int parentCategory, String categoryName, String url) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("parentCategory", parentCategory);
+        unitRequest.put("categoryName", categoryName);
+        unitRequest.put("url", url);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("category_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("category_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
+        return future;
     }
 
     private void logActivityView(String activityName) {

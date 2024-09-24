@@ -1070,7 +1070,7 @@ public class Utils
         });
     }
 
-    public static void postAddItem(String username, String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, String width, String height, String depth, String weight, String loadbear, String updown, Activity activity, OperationCallback<Boolean> callback) {
+    public static void postAddItem(String username, String item_image, String item_name, String description, int category, int parentCategory, String userEmail,String location, String organizationId, String width, String height, String depth, String weight, String loadbear, String updown, Activity activity, OperationCallback<String> callback) {
         // Provide default values for the remaining attributes
         int subCategory = 0;
         String colourcoding = "default";
@@ -1081,7 +1081,7 @@ public class Utils
         String email = userEmail;
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.AddItemEndPoint;
+        String API_URL = BuildConfig.AddItemSynchronous;
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -1115,7 +1115,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed Add", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1124,14 +1124,30 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> {
-                            Log.i(message, "POST request succeeded: " + responseData);
-                            callback.onSuccess(true);
-                        });
+                        activity.runOnUiThread(() -> {Log.i(message, "POST request succeeded: " + responseData);});
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(responseData);
+                            String bodyString = jsonObject.getString("body");
+
+                            JSONObject itemIdObject = new JSONObject(bodyString);
+                            String insertedItemId = itemIdObject.getString("inserted_item_id");
+
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "JSON parsing error: " + insertedItemId);
+                                callback.onSuccess(insertedItemId);
+                            });
+
+                        } catch (JSONException e) {
+                            activity.runOnUiThread(() -> {
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                callback.onFailure(e.getMessage());
+                            });
+                        }
                     } else {
                         activity.runOnUiThread(() -> {
-                            Log.e(message, "POST request failed: " + response.code());
-//                            callback.onFailure("Response code" + response.code());
+                            Log.e(message, "POST request failed: Add" + response.code());
+                            callback.onFailure("Response code" + response.code());
                         });
                     }
                 }
@@ -2321,6 +2337,239 @@ public class Utils
                 }
             }
         });
+    }
 
+    public static void GenerateQRCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{"
+                + "\"body\": {"
+                + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\","
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.GenerateQRCodeAsync;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.d(message, "POST request failed QR", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed QR: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void GenerateBarCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{"
+                + "\"body\": {"
+                + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\","
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.GenerateBarCodeAsync;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.d(message, "POST request failed BAR", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: BAR" + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void OpenSearchInsert(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{"
+                + "\"body\": {"
+                + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\","
+                + "\"username\": \"" + username + "\""
+                + "}"
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.OpenSearchInsert;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.d("MyAmplifyApp Group", "POST request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: Search" + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void ModifyItemDimension(String item_id, String width, String height, String depth, String weight, String loadbear, String updown, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{"
+                + "\"itemid\": \"" + Integer.parseInt(item_id) + "\","
+                + "\"width\": \"" + Integer.parseInt(width) + "\","
+                + "\"height\": \"" + Integer.parseInt(height) + "\","
+                + "\"depth\": \"" + Integer.parseInt(depth) + "\","
+                + "\"weight\": \"" + Integer.parseInt(weight) + "\","
+                + "\"loadbear\": \"" + Integer.parseInt(loadbear) + "\","
+                + "\"updown\": \"" + "TRUE" + "\""
+                + "}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+        OkHttpClient client = new OkHttpClient();
+
+        String API_URL = BuildConfig.ModifyItemDimension;
+
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.d(message, "POST request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: Modify " + response);
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
     }
 }

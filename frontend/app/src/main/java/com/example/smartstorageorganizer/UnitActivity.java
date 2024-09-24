@@ -28,6 +28,7 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
@@ -131,7 +132,7 @@ public class UnitActivity extends BaseActivity {
                 String weight = inputWeight.getText().toString();
                 Log.i("Constraints", categoryModelList.toString());
                 Log.i("unit", unit);
-                createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
                     Log.i("Response", "Unit created successfully");
                     if (result) {
                         Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
@@ -279,6 +280,54 @@ public class UnitActivity extends BaseActivity {
             }
         });
     }
+
+    public CompletableFuture<Boolean> sendRequestToAddUnit(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("unitName", unitName);
+        unitRequest.put("capacity", capacity);
+        unitRequest.put("constraints", constraints);
+        unitRequest.put("width", width);
+        unitRequest.put("height", height);
+        unitRequest.put("depth", depth);
+        unitRequest.put("maxweight", maxweight);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("unit_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("unit_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
+        return future;
+    }
+
+
 
 
     private void logActivityView(String activityName) {

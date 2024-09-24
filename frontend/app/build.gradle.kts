@@ -118,8 +118,13 @@ android {
         buildConfigField("String", "GetAllCategories", "\"${localProperties["GetAllCategories"]}\"");
         buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
         buildConfigField("String", "GetLoginReports", "\"${localProperties["GetLoginReports"]}\"");
-        buildConfigField("String", "changesReports", "\"${localProperties["changesReports"]}\"");
-        buildConfigField("String", "modifyAPI", "\"${localProperties["modifyAPI"]}\"");
+        buildConfigField("String", "GenerateProcess", "\"${localProperties["GenerateProcess"]}\"");
+        buildConfigField("String", "OpenSearchInsert", "\"${localProperties["OpenSearchInsert"]}\"");
+        buildConfigField("String", "AddItemSynchronous", "\"${localProperties["AddItemSynchronous"]}\"");
+        buildConfigField("String", "GenerateQRCodeAsync", "\"${localProperties["GenerateQRCodeAsync"]}\"");
+        buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
+        buildConfigField("String", "ModifyItemDimension", "\"${localProperties["ModifyItemDimension"]}\"");
+
     }
 
     buildTypes {
@@ -243,5 +248,8 @@ dependencies {
     //Image Crop
     implementation ("com.github.yalantis:ucrop:2.2.8")
 //    implementation ("com.github.krokyze:ucropnedit:2.2.6-2")
+
+    implementation ("androidx.work:work-runtime:2.7.1")
+    implementation ("com.google.guava:guava:31.1-android")
 
 }

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,23 +33,20 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
-import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
+import com.example.smartstorageorganizer.model.CategoryModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -94,16 +92,16 @@ public class EditItemActivity extends BaseActivity {
     ProgressDialog progressDialog;
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
-    private MyAmplifyApp app;
-    ItemModel  beforeChanges;
-    ItemModel afterChanges;
+    MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_item);
+
         app = (MyAmplifyApp) getApplicationContext();
+
         initializeUI();
         GetDetail();
 //        configureInsets();
@@ -173,9 +171,6 @@ public class EditItemActivity extends BaseActivity {
         ItemName.setText(getIntent().getStringExtra("item_name"));
         ItemDescription.setText(getIntent().getStringExtra("item_description"));
         ItemQuantity.setText(getIntent().getStringExtra("quantity"));
-
-        String id=getIntent().getStringExtra("item_id");
-        beforeChanges=new ItemModel(id,getIntent().getStringExtra("item_name"),getIntent().getStringExtra("item_description"),getIntent().getStringExtra("color_code"),getIntent().getStringExtra("item_barcode"),getIntent().getStringExtra("item_qrcode"),getIntent().getStringExtra("quantity"),getIntent().getStringExtra("location"),getIntent().getStringExtra("email"),getIntent().getStringExtra("itemImage"),getIntent().getStringExtra("createdAt"),getIntent().getStringExtra("parentcategory_id"),getIntent().getStringExtra("subcategory_id"),getIntent().getStringExtra("expiry_date"));
 
         loadingScreen.setVisibility(View.GONE);
 
@@ -376,6 +371,8 @@ public class EditItemActivity extends BaseActivity {
 
             int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+
+
             postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             Log.i("2Before Post didnt open", " whats the error");
             currentItemName=itemName;
@@ -384,14 +381,7 @@ public class EditItemActivity extends BaseActivity {
 //            showUpdateSuccessMessage();
         }
         else {
-            uploadProfilePicture(ImageFile).thenAccept(result -> {
-                if (result) {
-                    Log.i("ImageUpload", "Image uploaded successfully");
-                    afterChanges.setItemImage(ImageUrl);
-                } else {
-                    Log.e("ImageUpload", "Image upload failed");
-                }
-            });
+            uploadProfilePicture(ImageFile);
             ClosedGallery();
             DisableSaveButton();
         }
@@ -420,58 +410,47 @@ public class EditItemActivity extends BaseActivity {
     private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
         progressDialog.show();
 
-        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\" }";
+        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\", \"username\": \""+app.getEmail()+"\", \"organizationid\":\""+app.getOrganizationID()+"\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.EditItemEndPoint;
         RequestBody body = RequestBody.create(json, JSON);
-        afterChanges=new ItemModel(String.valueOf(itemId),itemname,description,colourcoding,barcode,qrcode,String.valueOf(quantity),location,getIntent().getStringExtra("email"),itemimage,getIntent().getStringExtra("createdAt"),String.valueOf(parentcategory),String.valueOf(subcategory),getIntent().getStringExtra("expiry_date"));
-        String nameAndSurname=app.getName()+" "+app.getSurname();
-        String username=app.getName();
-        String organization_id=app.getOrganizationID();
-        String  email=app.getEmail();
-        Utils.editItemActivity(beforeChanges,afterChanges,app.getOrganizationID(),"Edit Item","Item Updated",app.getEmail(),nameAndSurname,"ITEM","EDIT");
 
+        TokenManager.getToken().thenAccept(results-> {
 
-//        TokenManager.getToken().thenAccept(results-> {
-//
-//                    Request request = new Request.Builder()
-//                            .url(API_URL)
-//                            .addHeader("Authorization", results)
-//                            .post(body)
-//                            .build();
-//
-//            client.newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    e.printStackTrace();
-//                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-//                    progressDialog.dismiss();
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    if (response.isSuccessful()) {
-//                        final String responseData = response.body().string();
-//                        runOnUiThread(() -> {
-//                            Log.i("Request Method", "POST request succeeded: " + responseData);
-//                            showUpdateSuccessMessage();
-//                            afterChanges=new ItemModel(String.valueOf(itemId),itemname,description,colourcoding,barcode,qrcode,String.valueOf(quantity),location,getIntent().getStringExtra("email"),itemimage,getIntent().getStringExtra("createdAt"),String.valueOf(parentcategory),String.valueOf(subcategory),getIntent().getStringExtra("expiry_date"));
-//
-//                        });
-//                    } else {
-//                        editItemActivity(beforeChanges,afterChanges,getIntent().getStringExtra("email"),getIntent().getStringExtra("organization_id"),"Edit Item","Item Updated",getIntent().getStringExtra("username"));
-//
-//                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-//                        progressDialog.dismiss();
-//                    }
-//                }
-//            });
-//
-//                }).exceptionally(ex -> {
-//            Log.e("TokenError", "Failed to get user token", ex);
-//            return null;
-//        });
+                    Request request = new Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Authorization", results)
+                            .post(body)
+                            .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            Log.i("Request Method", "POST request succeeded: " + responseData);
+                            showUpdateSuccessMessage();
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        progressDialog.dismiss();
+                    }
+                }
+            });
+
+                }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
     }
 
     CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {
@@ -495,7 +474,6 @@ public class EditItemActivity extends BaseActivity {
                     future.complete(false);
                 }
         );
-
         return future;
     }
 
@@ -510,7 +488,6 @@ public class EditItemActivity extends BaseActivity {
         String location=getIntent().getStringExtra("location");
         String itemid=getIntent().getStringExtra("item_id");
         String colourcoding=getIntent().getStringExtra("colour_code");
-        String name = getIntent().getStringExtra("first_name") + " " + getIntent().getStringExtra("last_name");
 
         String parentcategory=getIntent().getStringExtra("parentcategory_id");
         String subcategory=getIntent().getStringExtra("subcategory_id");
@@ -582,7 +559,5 @@ public class EditItemActivity extends BaseActivity {
         subcategorySpinner.setAdapter(adapter);
         isFirstTimeSubApi = false;
     }
-
-
 
 }
