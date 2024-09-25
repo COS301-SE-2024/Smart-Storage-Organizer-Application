@@ -1,0 +1,183 @@
+<androidx.cardview.widget.CardView
+    android:id="@+id/unitRequestCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Item Name: [Current Item Name]"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/requestType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Type: [Type]" />
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Requested by: [User Email]" />
+
+        <!-- Hidden by Default -->
+        <LinearLayout
+            android:id="@+id/detailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Description: [Description]" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Location: [Location]" />
+
+            <TextView
+                android:id="@+id/colorGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color Group: [Color Group]" />
+
+            <TextView
+                android:id="@+id/organizationId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Organization ID: [Organization ID]" />
+
+            <TextView
+                android:id="@+id/requestDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Date: [Request Date]" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: [Status]"
+                android:textColor="#CC0000" />
+
+            <TextView
+                android:id="@+id/changes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Changes"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/newItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Item Name: [New Item Name]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/oldItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Old Item Name: [Old Item Name]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/newDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Description: [New Description]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/oldDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Old Description: [Old Description]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/newCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Category: [New Category]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/oldCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Old Category: [Old Category]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/newQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Quantity: [New Quantity]"
+                android:textColor="#CC0000" />
+            <TextView
+                android:id="@+id/oldQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Old Quantity: [Old Quantity]"
+                android:textColor="#CC0000" />
+
+        </LinearLayout>
+
+        <!-- View More/Less Link -->
+        <TextView
+            android:id="@+id/viewMoreLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View More Details"
+            android:layout_marginBottom="16dp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <!-- Approve/Reject Buttons -->
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/approveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Approve"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:textColor="@android:color/white"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/button_background"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/rejectButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Reject"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/reject_button_background"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
