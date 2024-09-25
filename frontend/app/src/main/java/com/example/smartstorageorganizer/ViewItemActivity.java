@@ -561,7 +561,7 @@ public class ViewItemActivity extends BaseActivity {
                         for(String itemId: selectedItemIds){
                             ItemModel item = findItem(itemId);
                             sendRequestToDeleteItem(item.getItemId(), item.getItemName(), item.getDescription(), item.getLocation(), item.getParentCategoryName(), item.getColourCoding(), item.getSubcategoryName());
-                            deleteItem(itemId);
+//                            deleteItem(itemId);
                         }
 //                        for(String itemId: selectedItemIds){
 //                            deleteItem(itemId);

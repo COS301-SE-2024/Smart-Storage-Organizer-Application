@@ -226,7 +226,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
 
             categoryHolder.approveButton.setOnClickListener(v -> {
-                approveCategoryRequest(request.getRequestId(), holder.getAdapterPosition(), request.getRequestType());
+                approveItemRequest(request.getRequestId(), holder.getAdapterPosition());
                 // Handle Approve action
             });
 
@@ -413,6 +413,31 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
     }
 
+    public void approveItemRequest(String documentId, int position) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        ItemRequestModel cardItem = (ItemRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog); // Inflate the custom layout
+        progressDialog.setCancelable(false); // Make dialog non-cancellable
+        progressDialog.show();
+
+        // Update the request's status to "approved"
+        db.collection("item_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+                    deleteItem(cardItem.getItemId(), progressDialog, position);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                    // Dismiss the progress dialog on failure too
+                    progressDialog.dismiss();
+                });
+    }
+
     public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog, int position) {
         String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
 
@@ -543,6 +568,22 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         });
     }
+    private void deleteItem(String itemId, Dialog progressDialog, int position) {
+        Utils.deleteItem(itemId, app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialog.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    mixedList.remove(position);
+                    notifyDataSetChanged();
+                }
+            }
 
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+    }
 }
 

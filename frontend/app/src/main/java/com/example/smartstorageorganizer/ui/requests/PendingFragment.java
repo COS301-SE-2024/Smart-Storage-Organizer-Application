@@ -309,7 +309,7 @@ public class PendingFragment extends Fragment {
 
                             // Create a UnitRequestModel object
                             ItemRequestModel itemRequest = new ItemRequestModel(
-                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status
+                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status, itemId
                             );
 
                             // Add to cardItemList

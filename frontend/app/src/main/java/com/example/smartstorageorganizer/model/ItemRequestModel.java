@@ -13,8 +13,9 @@ public class ItemRequestModel {
     String requestDate;
     String requestType;
     String status;
+    String itemId;
 
-    public ItemRequestModel(String requestId, String itemName, String itemDescription, String location, String parentCategory, String subcategory, String colorCode, String userEmail, String organizationId, String requestDate, String requestType, String status) {
+    public ItemRequestModel(String requestId, String itemName, String itemDescription, String location, String parentCategory, String subcategory, String colorCode, String userEmail, String organizationId, String requestDate, String requestType, String status, String itemId) {
         this.requestId = requestId;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
@@ -27,6 +28,7 @@ public class ItemRequestModel {
         this.requestDate = requestDate;
         this.requestType = requestType;
         this.status = status;
+        this.itemId = itemId;
     }
 
     public String getRequestId() {
@@ -123,5 +125,13 @@ public class ItemRequestModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }
