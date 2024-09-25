@@ -2,9 +2,9 @@ package com.example.smartstorageorganizer;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,6 +45,8 @@ public class NotificationsActivity extends AppCompatActivity {
                 sendNotificationFromPhone(message, title);
             } else {
                 Log.e("Notification", "Title or message is empty");
+                Toast.makeText(this, "Please enter both title and message", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -62,6 +64,8 @@ public class NotificationsActivity extends AppCompatActivity {
             jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Error creating JSON payload", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // Create request body with JSON payload
@@ -83,14 +87,18 @@ public class NotificationsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("OneSignal", "Failed to send notification", e);
+                runOnUiThread(() -> Toast.makeText(NotificationsActivity.this, "Failed to send notification", Toast.LENGTH_SHORT).show());
+
             }
 
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     Log.d("OneSignal", "Notification sent successfully");
+                    runOnUiThread(() -> Toast.makeText(NotificationsActivity.this, "Notification sent successfully", Toast.LENGTH_SHORT).show());
                 } else {
                     Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
+                    runOnUiThread(() -> Toast.makeText(NotificationsActivity.this, "Failed to send notification", Toast.LENGTH_SHORT).show());
                 }
             }
         });
