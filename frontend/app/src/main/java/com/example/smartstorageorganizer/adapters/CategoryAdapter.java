@@ -260,6 +260,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
                     Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                    Utils.changes()
                     Intent intent = new Intent(context, HomeActivity.class);
                     context.startActivity(intent);
                     ((Activity) context).finish();
