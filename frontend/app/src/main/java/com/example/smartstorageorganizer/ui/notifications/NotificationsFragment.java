@@ -62,16 +62,19 @@ public class NotificationsFragment extends Fragment {
         adapter = new NotificationsAdapter(requireContext(), notificationList);
         recyclerView.setAdapter(adapter);
 
+
+
+        // Check if the user is signed in before showing notifications
+        checkSessionState();
+
         // Initialize the send notification button
         sendNotificationButton = view.findViewById(R.id.send_notification_button);
         sendNotificationButton.setOnClickListener(v -> {
+            Toast.makeText(requireContext(), "Button Clicked!", Toast.LENGTH_SHORT).show();
             // Start NotificationActivity
             Intent intent = new Intent(requireContext(), NotificationsActivity.class);
             startActivity(intent);
         });
-
-        // Check if the user is signed in before showing notifications
-        checkSessionState();
 
         // Load notifications (from OneSignal)
         loadNotifications(); // The method will fetch from OneSignal
@@ -125,10 +128,13 @@ public class NotificationsFragment extends Fragment {
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
+
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                // Handle failure (optional: show a message to the user)
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Failed to load notifications", Toast.LENGTH_SHORT).show();
+                });
             }
 
             @Override
@@ -165,6 +171,11 @@ public class NotificationsFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    // Handle non-successful responses
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
         });
