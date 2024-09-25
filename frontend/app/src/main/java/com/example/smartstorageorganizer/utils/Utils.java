@@ -2581,7 +2581,7 @@ public class Utils
             return null;
         });
     }
-    static public CompletableFuture<Boolean> changes(String organizationId,String email , String username,String related_record_type, String related_record_name, String action,String details ){
+    static public CompletableFuture<Boolean> changes(String organizationId,String email , String username,String related_record_type, String related_record_name,String related_record_id, String action,String details ){
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         JSONObject body = new JSONObject();
         Date date = new Date();
@@ -2590,10 +2590,14 @@ public class Utils
             body.put("organization_id", organizationId);
             body.put("email", email);
             body.put("username", username);
-            body.put("related_record_type", related_record_type);
             body.put("related_record_name", related_record_name);
+            body.put("related_record_id",related_record_id);
             body.put("action", action);
             body.put("details", details);
+            body.put("record_type", related_record_type);
+            body.put("organization_id", organizationId);
+
+
 
         } catch (JSONException e) {
             Log.e("EditItemActivity", "JSON Exception", e);
@@ -2639,12 +2643,13 @@ public class Utils
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
-                            changes(organizationId,email,username,related_record_type,related_record_name,action,details);
+
                             future.complete(true);
 
                         });
                     } else {
                         runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        changes(organizationId,email,username,related_record_type,related_record_name," ",action,details);
                         future.complete(false);
 
                     }

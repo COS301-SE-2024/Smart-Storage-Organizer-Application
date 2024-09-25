@@ -355,7 +355,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    Utils.changes(organizationId,email,app.getName()+" "+app.getSurname(),"Category",categoryName,"Add","Category added with name: "+categoryName);
+                    Utils.changes(organizationId,email,app.getName()+" "+app.getSurname(),"Category",categoryName,"-1","Add","Category added with name: "+categoryName);
                     progressDialog.dismiss();
                 }
             }
