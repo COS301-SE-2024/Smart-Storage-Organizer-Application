@@ -1,90 +1,99 @@
 package com.example.smartstorageorganizer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.core.Amplify;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NotificationsActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private NotificationsAdapter adapter;
-    private List<NotificationModel> notificationList;
+
+    private EditText notificationTitle;
+    private EditText notificationMessage;
+    private Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recycler_view_messages);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        notificationTitle = findViewById(R.id.notificationTitle);
+        notificationMessage = findViewById(R.id.notificationMessage);
+        sendButton = findViewById(R.id.sendButton);
 
-        // Initialize the notification list and adapter
-        notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(this, notificationList);
-        recyclerView.setAdapter(adapter);
+        sendButton.setOnClickListener(v -> {
+            String title = notificationTitle.getText().toString();
+            String message = notificationMessage.getText().toString();
 
-        // Check if the user is signed in before showing notifications
-        checkSessionState();
+            if (!title.isEmpty() && !message.isEmpty()) {
+                sendNotificationFromPhone(message, title);
+            } else {
+                Log.e("Notification", "Title or message is empty");
+            }
+        });
+    }
 
-        // Load notifications (from OneSignal or any other source)
-        loadNotifications();
+    private void sendNotificationFromPhone(String message, String title) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://onesignal.com/api/v1/notifications";
 
-        // Receiving intent data (if any)
-        String data = getIntent().getStringExtra("data_key");  // "data_key" should match the key used in the sending activity
-
-        if (data != null && !data.isEmpty()) {
-            // Optionally handle this incoming data
-            notificationList.add(new NotificationModel("New Notification", data, "Now"));
-            adapter.notifyDataSetChanged(); // Refresh the RecyclerView to show new data
-        } else {
-            // You can still show a placeholder message or load more data
-//             textView.setText("No new notifications");
+        // Build JSON payload for the notification
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("app_id", "152f0f5c-d21d-4e43-89b1-5e02acc42abe");
+            jsonBody.put("included_segments", new JSONArray().put("All"));  // Target audience (e.g., All users)
+            jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
+            jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Check session state when resuming the activity
-        checkSessionState();
-    }
-
-    private void checkSessionState() {
-        Amplify.Auth.fetchAuthSession(
-                result -> {
-                    if (!result.isSignedIn()) {
-                        // Redirect to login if the user is not signed in
-                        Intent intent = new Intent(NotificationsActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish(); // Ensure the NotificationsActivity is finished so the user can't go back to it
-                    }
-                },
-                error -> {
-                    Log.e("AuthSession", "Failed to check auth session: " + error);
-                    Toast.makeText(NotificationsActivity.this, "Unable to verify session. Please try again.", Toast.LENGTH_LONG).show();
-                }
+        // Create request body with JSON payload
+        RequestBody body = RequestBody.create(
+                jsonBody.toString(),
+                MediaType.parse("application/json; charset=utf-8")
         );
-    }
 
-    // Load notifications from OneSignal or any other data source
-    private void loadNotifications() {
-        // Add notifications to the list (You can fetch this from OneSignal or any data source)
-        notificationList.add(new NotificationModel("Title 1", "Message 1", "Date 1"));
-        notificationList.add(new NotificationModel("Title 2", "Message 2", "Date 2"));
-        notificationList.add(new NotificationModel("Title 3", "Message 3", "Date 3"));
+        // Build the request with headers (including Authorization with your REST API key)
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Authorization", "Basic ZGFlMzY3MjktOGIyOC00ZDI4LTg1MzQtMWE5NjY2ZDJkOGZh")  // Replace with your REST API key
+                .addHeader("Content-Type", "application/json")
+                .build();
 
-        // Notify the adapter that the data has changed
-        adapter.notifyDataSetChanged();
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("OneSignal", "Failed to send notification", e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    Log.d("OneSignal", "Notification sent successfully");
+                } else {
+                    Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
+                }
+            }
+        });
     }
 }
+
