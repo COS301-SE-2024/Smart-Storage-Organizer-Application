@@ -112,14 +112,6 @@ public class AddCategoryActivity extends BaseActivity  {
         loadingScreen = findViewById(R.id.loadingScreen);
     }
 
-    public void setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
-
     public void navigateToHome() {
         Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
         logUserFlow("HomeFragment");
@@ -199,7 +191,7 @@ public class AddCategoryActivity extends BaseActivity  {
                     Log.i("Response", "Unit created successfully");
                     if (result) {
                         runOnUiThread(() -> {
-                            showToast("Category added successfully");
+//                            showToast("Category added successfully");
                             navigateToHome();
                         });
                     }
@@ -268,6 +260,7 @@ public class AddCategoryActivity extends BaseActivity  {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (isFirstTime) {
+                    currentSelectedParent = parentView.getItemAtPosition(position).toString();
                     isFirstTime = false;
                     return;
                 }
