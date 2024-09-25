@@ -39,6 +39,9 @@ import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import com.example.smartstorageorganizer.model.CategoryModel;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,7 +49,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -59,7 +64,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class EditItemActivity extends BaseActivity {
-
     private ImageView ItemImage;
     private LinearLayout content;
     private LottieAnimationView loadingScreen;
@@ -93,6 +97,8 @@ public class EditItemActivity extends BaseActivity {
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
     MyAmplifyApp app;
+//    private Map<String, Object> changedFields = new HashMap<>();
+    private Map<String, Map<String, String>> changedFields = new HashMap<>(); // Track changed fields
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +110,106 @@ public class EditItemActivity extends BaseActivity {
 
         initializeUI();
         GetDetail();
-//        configureInsets();
         configureButtons();
+        trackFieldChanges();
+    }
+
+    private void trackFieldChanges() {
+        // Track changes for item name
+        ItemName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newName = s.toString().trim();
+                if (!newName.equals(currentItemName)) {
+                    changedFields.put("ItemName", new HashMap<String, String>() {{
+                        put("oldValue", currentItemName);
+                        put("newValue", newName);
+                    }});
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Track changes for item description
+        ItemDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newDescription = s.toString().trim();
+                if (!newDescription.equals(currentItemDescription)) {
+                    changedFields.put("ItemDescription", new HashMap<String, String>() {{
+                        put("oldValue", currentItemDescription);
+                        put("newValue", newDescription);
+                    }});
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Track changes for quantity
+        ItemQuantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newQuantity = s.toString().trim();
+                if (!newQuantity.equals(currentQuantity)) {
+                    changedFields.put("ItemQuantity", new HashMap<String, String>() {{
+                        put("oldValue", currentQuantity);
+                        put("newValue", newQuantity);
+                    }});
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Track changes for category
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String newCategory = categorySpinner.getSelectedItem().toString();
+                String oldCategory = getIntent().getStringExtra("parentCategoryName");
+                if (!newCategory.equals(oldCategory)) {
+                    changedFields.put("Category", new HashMap<String, String>() {{
+                        put("oldValue", oldCategory);
+                        put("newValue", newCategory);
+                    }});
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Track changes for subcategory
+        subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String newSubCategory = subcategorySpinner.getSelectedItem().toString();
+                String oldSubCategory = getIntent().getStringExtra("subCategoryName");
+                if (!newSubCategory.equals(oldSubCategory)) {
+                    changedFields.put("Subcategory", new HashMap<String, String>() {{
+                        put("oldValue", oldSubCategory);
+                        put("newValue", newSubCategory);
+                    }});
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     private void initializeUI() {
@@ -166,6 +270,11 @@ public class EditItemActivity extends BaseActivity {
     public void GetDetail()
     {
 
+        // Set current item details for tracking
+        currentItemName = getIntent().getStringExtra("item_name");
+        currentItemDescription = getIntent().getStringExtra("item_description");
+        currentQuantity = getIntent().getStringExtra("quantity");
+
         ImageUrl=(getIntent().getStringExtra("item_image"));
         Glide.with(this).load(ImageUrl).placeholder(R.drawable.no_photo).error(R.drawable.no_photo).into(ItemImage);
         ItemName.setText(getIntent().getStringExtra("item_name"));
@@ -176,23 +285,16 @@ public class EditItemActivity extends BaseActivity {
 
         content.setVisibility(View.VISIBLE);
 
-        currentItemDescription= Objects.requireNonNull(ItemDescription.getText()).toString().trim();
-
-        currentItemName= Objects.requireNonNull(ItemName.getText()).toString().trim();
-
-        currentQuantity=  Objects.requireNonNull(ItemQuantity.getText()).toString().trim();
+//        currentItemDescription= Objects.requireNonNull(ItemDescription.getText()).toString().trim();
+//
+//        currentItemName= Objects.requireNonNull(ItemName.getText()).toString().trim();
+//
+//        currentQuantity=  Objects.requireNonNull(ItemQuantity.getText()).toString().trim();
 
         currentDraw= ItemImage.getDrawable();
 
     }
 
-    private void configureInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
     private void openGallery() {
         Intent galleryIntent = new Intent();
         galleryIntent.setType("image/*");
@@ -340,16 +442,13 @@ public class EditItemActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.save_button).setOnClickListener(v  -> {
+        findViewById(R.id.save_button).setOnClickListener(v -> {
             loadingScreen.setVisibility(View.VISIBLE);
             loadingScreen.playAnimation();
 
-            UpdateDetails();
+            UpdateDetails();  // Save changes and upload
             loadingScreen.setVisibility(View.GONE);
             loadingScreen.cancelAnimation();
-
-            Save.setEnabled(false);
-
         });
     }
 
@@ -372,8 +471,8 @@ public class EditItemActivity extends BaseActivity {
             int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
-
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            sendRequestToModifyItem();
+//            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             Log.i("2Before Post didnt open", " whats the error");
             currentItemName=itemName;
             currentItemDescription=description;
@@ -558,6 +657,54 @@ public class EditItemActivity extends BaseActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subcategorySpinner.setAdapter(adapter);
         isFirstTimeSubApi = false;
+    }
+
+    public void sendRequestToModifyItem() {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("itemId", getIntent().getStringExtra("item_id"));
+        unitRequest.put("itemName", getIntent().getStringExtra("item_name"));
+        unitRequest.put("itemDescription", getIntent().getStringExtra("item_description"));
+        unitRequest.put("location", getIntent().getStringExtra("location"));
+        unitRequest.put("parentCategory", getIntent().getStringExtra("parentCategoryName"));
+        unitRequest.put("colorCode", getIntent().getStringExtra("color_code"));
+        unitRequest.put("subcategory", getIntent().getStringExtra("subCategoryName"));
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("requestType", "Delete Item");
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        unitRequest.put("changedFields", changedFields);
+
+        // Store the request in Firestore
+        db.collection("item_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("item_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
     }
 
 }
