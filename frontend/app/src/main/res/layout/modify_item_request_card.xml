@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:text="New Item Name: [New Item Name]"
-                android:textColor="#CC0000" />
+                android:textColor="#00DC32" />
             <TextView
                 android:id="@+id/oldItemName"
                 android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:text="New Description: [New Description]"
-                android:textColor="#CC0000" />
+                android:textColor="#00DC32" />
             <TextView
                 android:id="@+id/oldDescription"
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:text="New Category: [New Category]"
-                android:textColor="#CC0000" />
+                android:textColor="#00DC32" />
             <TextView
                 android:id="@+id/oldCategory"
                 android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:text="New Quantity: [New Quantity]"
-                android:textColor="#CC0000" />
+                android:textColor="#00DC32" />
             <TextView
                 android:id="@+id/oldQuantity"
                 android:layout_width="wrap_content"
