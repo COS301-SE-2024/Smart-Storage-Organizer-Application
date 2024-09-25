@@ -40,6 +40,10 @@
             android:exported="false"
             android:theme="@style/Theme.SmartStorageOrganizer" />
         <activity
+            android:name=".NotificationsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SmartStorageOrganizer" />
+        <activity
             android:name=".GetStartedActivity"
             android:exported="false" />
         <activity
