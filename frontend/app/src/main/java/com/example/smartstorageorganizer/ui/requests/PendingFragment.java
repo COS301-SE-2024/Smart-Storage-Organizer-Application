@@ -23,6 +23,7 @@ import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.ItemRequestModel;
+import com.example.smartstorageorganizer.model.ModifyItemRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -41,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -58,6 +61,7 @@ public class PendingFragment extends Fragment {
     List<CategoryRequestModel> cardDeleteCategoryList;
     List<CategoryRequestModel> cardModifyCategoryList;
     List<ItemRequestModel> cardDeleteItemList;
+    List<ModifyItemRequestModel> cardModifyItemList;
     RequestCardAdapter requestAdapter;
     RequestCardAdapter adapter;
     private MyAmplifyApp app;
@@ -80,6 +84,7 @@ public class PendingFragment extends Fragment {
         cardDeleteCategoryList = new ArrayList<>();
         cardModifyCategoryList = new ArrayList<>();
         cardDeleteItemList = new ArrayList<>();
+        cardModifyItemList = new ArrayList<>();
 
         adapter = new RequestCardAdapter(getContext(), mixedList, "pending");
         recyclerView.setAdapter(adapter);
@@ -286,6 +291,7 @@ public class PendingFragment extends Fragment {
 
         db.collection("item_requests")
                 .whereEqualTo("status", "pending")
+                .whereEqualTo("requestType", "Delete Item")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -327,6 +333,90 @@ public class PendingFragment extends Fragment {
                 });
     }
 
+    public void fetchPendingModifyItemRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("item_requests")
+                .whereEqualTo("status", "pending")
+                .whereEqualTo("requestType", "Modify Item")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String itemId = document.getString("itemId");
+                            String itemName = document.getString("itemName");
+                            String itemDescription = document.getString("itemDescription");
+                            String location = document.getString("location");
+                            String parentCategory = document.getString("parentCategory");
+                            String colorCode = document.getString("colorCode");
+                            String subcategory = document.getString("subcategory");
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            ModifyItemRequestModel itemRequest = new ModifyItemRequestModel(
+                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status, itemId
+                            );
+
+                            Map<String, Map<String, String>> changedFields = (Map<String, Map<String, String>>) document.get("changedFields");
+
+                            // Now you can use the 'changedFields' map
+                            if (changedFields != null) {
+                                // Example: Fetch old and new values for Subcategory
+                                if(changedFields.get("Subcategory") != null){
+                                    String oldSubcategory = Objects.requireNonNull(changedFields.get("Subcategory")).get("oldValue");
+                                    String newSubcategory = Objects.requireNonNull(changedFields.get("Subcategory")).get("newValue");
+                                    itemRequest.setNewSubcategory(newSubcategory);
+                                    itemRequest.setOldSubcategory(oldSubcategory);
+                                }
+                                if(changedFields.get("ItemName") != null){
+                                    String oldItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("oldValue");
+                                    String newItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("newValue");
+                                    itemRequest.setNewSubcategory(newItemName);
+                                    itemRequest.setOldSubcategory(oldItemName);
+                                }
+                                if(changedFields.get("Category") != null){
+                                    String oldCategory = Objects.requireNonNull(changedFields.get("Category")).get("oldValue");
+                                    String newCategory = Objects.requireNonNull(changedFields.get("Category")).get("newValue");
+                                    itemRequest.setNewSubcategory(newCategory);
+                                    itemRequest.setOldSubcategory(oldCategory);
+                                }
+                                if(changedFields.get("ItemDescription") != null){
+                                    String oldItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("oldValue");
+                                    String newItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("newValue");
+                                    itemRequest.setNewSubcategory(newItemDescription);
+                                    itemRequest.setOldSubcategory(oldItemDescription);
+                                }
+                                if(changedFields.get("ItemQuantity") != null){
+                                    String oldItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("oldValue");
+                                    String newItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("newValue");
+                                    itemRequest.setNewSubcategory(newItemQuantity);
+                                    itemRequest.setOldSubcategory(oldItemQuantity);
+                                }
+                            }
+
+                            // Add to cardItemList
+                            cardModifyItemList.add(itemRequest);
+                        }
+                        mixedList.addAll(cardModifyItemList);  // Add all unit requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardModifyItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
     public String convertTimestampToDate(Timestamp timestamp) {
         // Convert the Timestamp to a Date object
         Date date = timestamp.toDate();
@@ -351,6 +441,7 @@ public class PendingFragment extends Fragment {
         cardDeleteCategoryList.clear();
         cardModifyCategoryList.clear();
         cardDeleteItemList.clear();
+        cardModifyItemList.clear();
         adapter.notifyDataSetChanged();
 
         fetchPendingRequests();
@@ -358,6 +449,7 @@ public class PendingFragment extends Fragment {
         fetchDeleteCategoryPendingRequests();
         fetchModifyCategoryPendingRequests();
         fetchPendingDeleteItemRequests();
+        fetchPendingModifyItemRequests();
     }
 
 }

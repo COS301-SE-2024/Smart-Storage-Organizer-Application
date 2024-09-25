@@ -25,6 +25,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.ItemRequestModel;
+import com.example.smartstorageorganizer.model.ModifyItemRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
@@ -51,6 +52,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int UNIT_REQUEST = 0;
     private static final int CATEGORY_REQUEST = 1;
     private static final int ITEM_REQUEST = 2;
+    private static final int MODIFY_ITEM_REQUEST = 3;
     private String type;
     private MyAmplifyApp app;
 
@@ -71,6 +73,9 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         else if (mixedList.get(position) instanceof ItemRequestModel) {
             return ITEM_REQUEST;
         }
+        else if (mixedList.get(position) instanceof ModifyItemRequestModel) {
+            return MODIFY_ITEM_REQUEST;
+        }
         return -1;
     }
 
@@ -86,6 +91,10 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else if (viewType == ITEM_REQUEST) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_request_card, parent, false);
             return new ItemRequestViewHolder(view);
+        }
+        else if (viewType == MODIFY_ITEM_REQUEST) {
+            View view = LayoutInflater.from(context).inflate(R.layout.modify_item_request_card, parent, false);
+            return new ModifyItemRequestViewHolder(view);
         }
         return null;
     }
@@ -234,6 +243,47 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 // Handle Reject action
             });
         }
+        else if (holder.getItemViewType() == MODIFY_ITEM_REQUEST) {
+            ModifyItemRequestModel request = (ModifyItemRequestModel) mixedList.get(position);
+            ModifyItemRequestViewHolder categoryHolder = (ModifyItemRequestViewHolder) holder;
+
+            categoryHolder.itemName.setText("Item Name: " + request.getItemName());
+            categoryHolder.requestType.setText("Request Type: " + request.getRequestType());
+            categoryHolder.itemDescription.setText("Description: "+request.getItemDescription());
+            categoryHolder.location.setText("Location: " + request.getLocation());
+            categoryHolder.colorGroup.setText("Color Group: " + request.getColorCode());
+            categoryHolder.userEmail.setText("Requested by: " + request.getUserEmail());
+            categoryHolder.organizationId.setText("Organization ID: " + request.getOrganizationId());
+            categoryHolder.requestDate.setText("Request Date: " + request.getRequestDate());
+            categoryHolder.status.setText("Status: " + request.getStatus());
+
+            setStatusBackgroundColor(categoryHolder.status, request.getStatus());
+
+            toggleButtonVisibility(categoryHolder.buttonsLayout, type);
+            if(Objects.equals(type, "approved")){
+                categoryHolder.approveButton.setVisibility(View.GONE);
+                categoryHolder.rejectButton.setVisibility(View.GONE);
+            }
+            else {
+                categoryHolder.approveButton.setVisibility(View.VISIBLE);
+                categoryHolder.rejectButton.setVisibility(View.VISIBLE);
+            }
+
+            // Initially hide details
+            categoryHolder.detailsLayout.setVisibility(View.GONE);
+
+            // Toggle "View More Details"
+            categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
+
+            categoryHolder.approveButton.setOnClickListener(v -> {
+                approveItemRequest(request.getRequestId(), holder.getAdapterPosition());
+                // Handle Approve action
+            });
+
+            categoryHolder.rejectButton.setOnClickListener(v -> {
+                // Handle Reject action
+            });
+        }
     }
 
     @Override
@@ -343,6 +393,39 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             buttonsLayout = itemView.findViewById(R.id.buttonsLayout);
             location = itemView.findViewById(R.id.location);
             colorGroup = itemView.findViewById(R.id.colorGroup);
+        }
+    }
+
+    static class ModifyItemRequestViewHolder extends RecyclerView.ViewHolder {
+        TextView itemName, itemDescription, location, colorGroup, userEmail, organizationId, requestDate, status, viewMoreLink, requestType;
+        TextView newItemName, oldItemName, newDescription, oldDescription, newCategory, oldCategory, newQuantity, oldQuantity;
+        LinearLayout detailsLayout, buttonsLayout;
+        Button approveButton, rejectButton;
+
+        ModifyItemRequestViewHolder(View itemView) {
+            super(itemView);
+            itemName = itemView.findViewById(R.id.itemName);
+            itemDescription = itemView.findViewById(R.id.description);
+            userEmail = itemView.findViewById(R.id.userEmail);
+            organizationId = itemView.findViewById(R.id.organizationId);
+            requestDate = itemView.findViewById(R.id.requestDate);
+            requestType = itemView.findViewById(R.id.requestType);
+            status = itemView.findViewById(R.id.status);
+            viewMoreLink = itemView.findViewById(R.id.viewMoreLink);
+            detailsLayout = itemView.findViewById(R.id.detailsLayout);
+            approveButton = itemView.findViewById(R.id.approveButton);
+            rejectButton = itemView.findViewById(R.id.rejectButton);
+            buttonsLayout = itemView.findViewById(R.id.buttonsLayout);
+            location = itemView.findViewById(R.id.location);
+            colorGroup = itemView.findViewById(R.id.colorGroup);
+            newItemName = itemView.findViewById(R.id.newItemName);
+            oldItemName = itemView.findViewById(R.id.oldItemName);
+            newDescription = itemView.findViewById(R.id.newDescription);
+            oldDescription = itemView.findViewById(R.id.oldDescription);
+            newCategory = itemView.findViewById(R.id.newCategory);
+            oldCategory = itemView.findViewById(R.id.oldCategory);
+            newQuantity = itemView.findViewById(R.id.newQuantity);
+            oldQuantity = itemView.findViewById(R.id.oldQuantity);
         }
     }
 

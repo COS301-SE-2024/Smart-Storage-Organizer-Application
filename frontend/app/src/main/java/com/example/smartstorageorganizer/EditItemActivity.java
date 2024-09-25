@@ -674,7 +674,7 @@ public class EditItemActivity extends BaseActivity {
         unitRequest.put("colorCode", getIntent().getStringExtra("color_code"));
         unitRequest.put("subcategory", getIntent().getStringExtra("subCategoryName"));
         unitRequest.put("userEmail", app.getEmail());
-        unitRequest.put("requestType", "Delete Item");
+        unitRequest.put("requestType", "Modify Item");
         unitRequest.put("organizationId", app.getOrganizationID());
         unitRequest.put("status", "pending");  // Initially set to pending
         unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
