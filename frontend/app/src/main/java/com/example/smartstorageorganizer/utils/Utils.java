@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 //import android.util.Log;
+import android.net.http.QuicException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -2342,7 +2343,8 @@ public class Utils
         });
     }
 
-    public static void GenerateQRCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+    public static String GenerateQRCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+        String QRCode="";
         String json = "{"
                 + "\"body\": {"
                 + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
@@ -2383,7 +2385,9 @@ public class Utils
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
                             Log.i(message, "POST request succeeded: " + responseData);
+
                             callback.onSuccess(true);
+
                         });
                     } else {
                         activity.runOnUiThread(() -> {
@@ -2398,6 +2402,7 @@ public class Utils
 //            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
+        return  QRCode;
     }
 
     public static void GenerateBarCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
@@ -2440,6 +2445,7 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
+                            Log.i("BAR", "POST request succeeded: " + responseData);
                             Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
@@ -2575,4 +2581,85 @@ public class Utils
             return null;
         });
     }
+    static public CompletableFuture<Boolean> changes(String organizationId,String email , String username,String related_record_type, String related_record_name, String action,String details ){
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        JSONObject body = new JSONObject();
+        Date date = new Date();
+
+        try {
+            body.put("organization_id", organizationId);
+            body.put("email", email);
+            body.put("username", username);
+            body.put("related_record_type", related_record_type);
+            body.put("related_record_name", related_record_name);
+            body.put("action", action);
+            body.put("details", details);
+
+        } catch (JSONException e) {
+            Log.e("EditItemActivity", "JSON Exception", e);
+        }
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("body", body);
+        }
+        catch (JSONException e){
+            runOnUiThread(() ->
+                    Log.i("EditItemActivity", "JSON Exception", e));
+        }
+
+        runOnUiThread(() -> {
+            Log.i("username",username);
+            Log.i("EditItemActivity", "editItemActivity: "+jsonObject.toString());
+        });
+        OkHttpClient client=new OkHttpClient();
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
+        TokenManager.getToken().thenAccept(token->{
+
+
+            Request request = new Request.Builder()
+                    .url(BuildConfig.changes)
+                    .addHeader("Authorization", token)
+                    .post(requestBody)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                    future.complete(false);
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            Log.i("Request Method", "POST request succeeded: " + responseData);
+                            changes(organizationId,email,username,related_record_type,related_record_name,action,details);
+                            future.complete(true);
+
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        future.complete(false);
+
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+        return future;
+
+    }
+
+
+
 }
+

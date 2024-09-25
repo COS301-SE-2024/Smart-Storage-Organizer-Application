@@ -124,7 +124,10 @@ public class AddItemActivity extends BaseActivity  {
     private LottieAnimationView buttonLoader;
     private ItemModel currItem;
     private ItemModel newItem;
-
+    String ImgUrl;
+    String BarCode;
+    String QrCode;
+    ItemModel Item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -423,9 +426,9 @@ public class AddItemActivity extends BaseActivity  {
 
     public String getObjectUrl(String key)
     {
-        String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
+         ImgUrl = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        addItem(ImgUrl, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -569,7 +572,7 @@ public class AddItemActivity extends BaseActivity  {
             @Override
             public void onSuccess(String result) {
                 Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
-
+                Item=new ItemModel(result,itemName,description,"default"," "," ","1",unitName,app.getEmail(),itemImage," ",parentCategoryId,subcategoryId,"");
                 // Create CountDownLatch with count 3 for two async operations
                 CountDownLatch latch = new CountDownLatch(3);
                 ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
@@ -675,12 +678,12 @@ public class AddItemActivity extends BaseActivity  {
                 if (result) {
                     // Successfully opened search insert
                     new Thread(() -> {
-                        try {
 
-                            Utils.editItemActivity()
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                            currItem=new ItemModel(" "," "," "," "," "," "," "," ",app.getEmail()," "," "," "," "," ");
+                           // newItem=new ItemModel(itemId,)
+                            addItem(ImgUrl, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+
+
                     }).start();
                 }
             }

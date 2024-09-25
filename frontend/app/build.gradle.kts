@@ -125,6 +125,7 @@ android {
         buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
         buildConfigField("String", "ModifyItemDimension", "\"${localProperties["ModifyItemDimension"]}\"");
         buildConfigField("String", "SaveReportApi", "\"${localProperties["SaveReportApi"]}\"");
+        buildConfigField("String", "changes", "\"${localProperties["changes"]}\"");
     }
 
     buildTypes {

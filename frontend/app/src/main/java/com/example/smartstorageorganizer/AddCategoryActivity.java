@@ -385,23 +385,38 @@ public class AddCategoryActivity extends BaseActivity  {
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
-        Utils.addCategory(parentCategory, categoryName, currentEmail, url, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
+        Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getName(),"Category",categoryName,"Add","Added new Category").thenAccept(result -> {
+            if (result) {
+                Log.i("Response", "Category created successfully");
+                runOnUiThread(() -> {
                     showToast("Category added successfully");
                     navigateToHome();
-                }
+                });
             }
-
-            @Override
-            public void onFailure(String error) {
-                showToast("Failed to add category: " + error);
+            else {
+                showToast("Failed to add category");
                 loadingScreen.setVisibility(View.GONE);
                 addCategoryLayout.setVisibility(View.VISIBLE);
                 addButton.setVisibility(View.VISIBLE);
             }
         });
+//        Utils.addCategory(parentCategory, categoryName, currentEmail, url, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
+//            @Override
+//            public void onSuccess(Boolean result) {
+//                if (Boolean.TRUE.equals(result)) {
+//                    showToast("Category added successfully");
+//                    navigateToHome();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                showToast("Failed to add category: " + error);
+//                loadingScreen.setVisibility(View.GONE);
+//                addCategoryLayout.setVisibility(View.VISIBLE);
+//                addButton.setVisibility(View.VISIBLE);
+//            }
+//        });
     }
 
     public void showToast(String message) {
