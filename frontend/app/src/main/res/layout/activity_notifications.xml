@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Message will ap56565656565pear here"
+            android:text="Send a message"
             android:textSize="18sp"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
@@ -49,12 +49,28 @@
         android:orientation="vertical"
         android:paddingTop="5dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_messages"
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/recycler_view_messages"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp" />-->
+        <EditText
+            android:id="@+id/notificationTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:hint="Enter notification title" />
 
+        <EditText
+            android:id="@+id/notificationMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter notification message" />
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Notification" />
 
     </LinearLayout>
 
