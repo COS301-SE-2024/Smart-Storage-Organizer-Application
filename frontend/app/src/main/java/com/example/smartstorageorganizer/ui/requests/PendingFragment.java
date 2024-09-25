@@ -22,6 +22,7 @@ import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryRequestModel;
+import com.example.smartstorageorganizer.model.ItemRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -56,6 +57,7 @@ public class PendingFragment extends Fragment {
     List<CategoryRequestModel> cardCategoryList;
     List<CategoryRequestModel> cardDeleteCategoryList;
     List<CategoryRequestModel> cardModifyCategoryList;
+    List<ItemRequestModel> cardDeleteItemList;
     RequestCardAdapter requestAdapter;
     RequestCardAdapter adapter;
     private MyAmplifyApp app;
@@ -77,6 +79,7 @@ public class PendingFragment extends Fragment {
         cardCategoryList = new ArrayList<>();
         cardDeleteCategoryList = new ArrayList<>();
         cardModifyCategoryList = new ArrayList<>();
+        cardDeleteItemList = new ArrayList<>();
 
         adapter = new RequestCardAdapter(getContext(), mixedList, "pending");
         recyclerView.setAdapter(adapter);
@@ -278,6 +281,52 @@ public class PendingFragment extends Fragment {
                 });
     }
 
+    public void fetchPendingDeleteItemRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("item_requests")
+                .whereEqualTo("status", "pending")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String itemId = document.getString("itemId");
+                            String itemName = document.getString("itemName");
+                            String itemDescription = document.getString("itemDescription");
+                            String location = document.getString("location");
+                            String parentCategory = document.getString("parentCategory");
+                            String colorCode = document.getString("colorCode");
+                            String subcategory = document.getString("subcategory");
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            ItemRequestModel itemRequest = new ItemRequestModel(
+                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status
+                            );
+
+                            // Add to cardItemList
+                            cardDeleteItemList.add(itemRequest);
+                        }
+                        mixedList.addAll(cardDeleteItemList);  // Add all unit requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardDeleteItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
     public String convertTimestampToDate(Timestamp timestamp) {
         // Convert the Timestamp to a Date object
         Date date = timestamp.toDate();
@@ -301,12 +350,14 @@ public class PendingFragment extends Fragment {
         cardCategoryList.clear();
         cardDeleteCategoryList.clear();
         cardModifyCategoryList.clear();
+        cardDeleteItemList.clear();
         adapter.notifyDataSetChanged();
 
         fetchPendingRequests();
         fetchCategoryPendingRequests();
         fetchDeleteCategoryPendingRequests();
         fetchModifyCategoryPendingRequests();
+        fetchPendingDeleteItemRequests();
     }
 
 }
