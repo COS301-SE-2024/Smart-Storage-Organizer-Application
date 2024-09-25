@@ -14,6 +14,7 @@ public class ModifyItemRequestModel {
     String requestType;
     String status;
     String itemId;
+    String quantity;
     String newItem = "";
     String oldItem = "";
     String newDescription = "";
@@ -26,6 +27,11 @@ public class ModifyItemRequestModel {
     String oldSubcategory = "";
     String newQuantity = "";
     String oldQuantity = "";
+    String parentCategoryId;
+    String subCategoryId;
+    String barcode;
+    String qrcode;
+    String image;
 
     public ModifyItemRequestModel(String requestId, String itemName, String itemDescription, String location, String parentCategory, String subcategory, String colorCode, String userEmail, String organizationId, String requestDate, String requestType, String status, String itemId) {
         this.requestId = requestId;
@@ -241,5 +247,53 @@ public class ModifyItemRequestModel {
 
     public void setNewSubcategory(String newSubcategory) {
         this.newSubcategory = newSubcategory;
+    }
+
+    public String getParentCategoryId() {
+        return parentCategoryId;
+    }
+
+    public void setParentCategoryId(String parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
+    }
+
+    public String getSubCategoryId() {
+        return subCategoryId;
+    }
+
+    public void setSubCategoryId(String subCategoryId) {
+        this.subCategoryId = subCategoryId;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getQrcode() {
+        return qrcode;
+    }
+
+    public void setQrcode(String qrcode) {
+        this.qrcode = qrcode;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

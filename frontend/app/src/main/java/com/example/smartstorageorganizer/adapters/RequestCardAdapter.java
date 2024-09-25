@@ -1,4 +1,6 @@
 package com.example.smartstorageorganizer.adapters;
+import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,6 +29,7 @@ import com.example.smartstorageorganizer.model.CategoryRequestModel;
 import com.example.smartstorageorganizer.model.ItemRequestModel;
 import com.example.smartstorageorganizer.model.ModifyItemRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
+import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
@@ -36,6 +39,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -247,6 +252,22 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ModifyItemRequestModel request = (ModifyItemRequestModel) mixedList.get(position);
             ModifyItemRequestViewHolder categoryHolder = (ModifyItemRequestViewHolder) holder;
 
+//            String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId,
+//            int parentcategory, int subcategory
+
+            String itemName = request.getItemName();
+            String description = request.getItemDescription();
+            String colorCode = request.getColorCode();
+            String barcode = request.getBarcode();
+            String qrcode = request.getQrcode();
+            int quantity = Integer.parseInt(request.getQuantity());
+            String location = request.getLocation();
+            String image = request.getImage();
+            String itemId = request.getItemId();
+            int parentCategoryId = Integer.parseInt(request.getParentCategoryId());
+            int subcategoryId = Integer.parseInt(request.getSubCategoryId());
+
+
             categoryHolder.itemName.setText("Item Name: " + request.getItemName());
             categoryHolder.requestType.setText("Request Type: " + request.getRequestType());
             categoryHolder.itemDescription.setText("Description: "+request.getItemDescription());
@@ -258,6 +279,74 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             categoryHolder.status.setText("Status: " + request.getStatus());
 
             setStatusBackgroundColor(categoryHolder.status, request.getStatus());
+
+            if(!Objects.equals(request.getOldItem(), "")){
+                categoryHolder.oldItemName.setVisibility(View.VISIBLE);
+                categoryHolder.newItemName.setVisibility(View.VISIBLE);
+                categoryHolder.oldItemName.setText("Old Item Name: "+request.getOldItem());
+                categoryHolder.newItemName.setText("New Item Name: "+request.getNewItem());
+                itemName = request.getNewItem();
+            }
+            if(!Objects.equals(request.getOldDescription(), "")){
+                categoryHolder.oldDescription.setVisibility(View.VISIBLE);
+                categoryHolder.newDescription.setVisibility(View.VISIBLE);
+                categoryHolder.oldDescription.setText("Old Description: "+request.getOldDescription());
+                categoryHolder.newDescription.setText("New Description: "+request.getNewDescription());
+                description = request.getNewDescription();
+            }
+            if(!Objects.equals(request.getParentCategory(), "")){
+                categoryHolder.oldCategory.setVisibility(View.VISIBLE);
+                categoryHolder.newCategory.setVisibility(View.VISIBLE);
+                categoryHolder.oldCategory.setText("Old Category: "+request.getParentCategory()+" - "+request.getSubcategory());
+                String newCategory = "";
+                String newSubcategory = "";
+                if(!Objects.equals(request.getNewParentCategory(), "")){
+                    String word = "";
+                    String number = "";
+
+// Regular expression to match a word followed by a number
+                    Pattern pattern = Pattern.compile("(\\w+),\\s*(\\d+)");
+                    Matcher matcher = pattern.matcher(request.getNewParentCategory());
+
+                    if (matcher.find()) {
+                        word = matcher.group(1);    // Extract the word (e.g., "Device")
+                        number = matcher.group(2);  // Extract the number (e.g., "45")
+                    }
+
+                    newCategory += word;
+                }
+                else {
+                    newCategory += request.getParentCategory();
+                }
+                if(!Objects.equals(request.getNewSubcategory(), "")) {
+                    String word = "";
+                    String number = "";
+
+// Regular expression to match a word followed by a number
+                    Pattern pattern = Pattern.compile("(\\w+),\\s*(\\d+)");
+                    Matcher matcher = pattern.matcher(request.getNewSubcategory());
+
+                    if (matcher.find()) {
+                        word = matcher.group(1);    // Extract the word (e.g., "Device")
+                        number = matcher.group(2);  // Extract the number (e.g., "45")
+
+                    }
+
+                    newCategory +=  " - " + word;
+                    subcategoryId = Integer.parseInt(number);
+                }
+                else {
+                    newCategory += " - " + request.getSubcategory();
+                }
+                categoryHolder.newCategory.setText("New Category: "+newCategory);
+            }
+            if(!Objects.equals(request.getOldQuantity(), "")){
+                categoryHolder.oldQuantity.setVisibility(View.VISIBLE);
+                categoryHolder.newQuantity.setVisibility(View.VISIBLE);
+                categoryHolder.oldQuantity.setText("Old Quantity: "+request.getOldQuantity());
+                categoryHolder.newQuantity.setText("New Quantity: "+request.getNewQuantity());
+                quantity = Integer.parseInt(request.getNewQuantity());
+            }
 
             toggleButtonVisibility(categoryHolder.buttonsLayout, type);
             if(Objects.equals(type, "approved")){
@@ -275,8 +364,12 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             // Toggle "View More Details"
             categoryHolder.viewMoreLink.setOnClickListener(v -> toggleDetailsVisibility(categoryHolder.detailsLayout, categoryHolder.viewMoreLink));
 
+            String finalItemName = itemName;
+            String finalDescription = description;
+            int finalQuantity = quantity;
+            int finalSubcategoryId = subcategoryId;
             categoryHolder.approveButton.setOnClickListener(v -> {
-                approveItemRequest(request.getRequestId(), holder.getAdapterPosition());
+                approveModifyItemRequest(request.getRequestId(), holder.getAdapterPosition(), finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, Integer.parseInt(itemId), parentCategoryId, finalSubcategoryId);
                 // Handle Approve action
             });
 
@@ -521,6 +614,31 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
     }
 
+    public void approveModifyItemRequest(String documentId, int position, String finalItemName, String finalDescription, String colorCode, String qrcode, String barcode, int finalQuantity, String location, String image, int itemId, int parentCategoryId, int finalSubcategoryId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        ModifyItemRequestModel cardItem = (ModifyItemRequestModel) mixedList.get(position);
+
+        // Show the progress dialog
+        Dialog progressDialog = new Dialog(context);
+        progressDialog.setContentView(R.layout.progress_dialog); // Inflate the custom layout
+        progressDialog.setCancelable(false); // Make dialog non-cancellable
+        progressDialog.show();
+
+        // Update the request's status to "approved"
+        db.collection("item_requests")
+                .document(documentId)
+                .update("status", "approved")
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("Firestore", "Request approved successfully.");
+                    postEditItem(finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, itemId, parentCategoryId, finalSubcategoryId, progressDialog, position);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error approving request", e);
+                    // Dismiss the progress dialog on failure too
+                    progressDialog.dismiss();
+                });
+    }
+
     public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog, int position) {
         String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
 
@@ -666,6 +784,54 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onFailure(String error) {
 
             }
+        });
+    }
+
+    private void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory, Dialog progressDialog, int position) {
+
+        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\", \"username\": \""+app.getEmail()+"\", \"organizationid\":\""+app.getOrganizationID()+"\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.EditItemEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        runOnUiThread(() -> {
+                            Log.i("Request Method", "POST request succeeded: " + responseData);
+                            mixedList.remove(position);
+                            notifyDataSetChanged();
+                            progressDialog.dismiss();
+//                            showUpdateSuccessMessage();
+                        });
+                    } else {
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response));
+                        progressDialog.dismiss();
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 }

@@ -349,10 +349,16 @@ public class PendingFragment extends Fragment {
                             String itemName = document.getString("itemName");
                             String itemDescription = document.getString("itemDescription");
                             String location = document.getString("location");
+                            String quantity = document.getString("quantity");
+                            String qrcode = document.getString("qrcode");
+                            String barcode = document.getString("barcode");
                             String parentCategory = document.getString("parentCategory");
+                            String parentCategoryId = document.getString("parentCategoryId");
                             String colorCode = document.getString("colorCode");
                             String subcategory = document.getString("subcategory");
+                            String subcategoryId = document.getString("subcategoryId");
                             String userEmail = document.getString("userEmail");
+                            String image = document.getString("image");
                             String organizationId = document.getString("organizationId");
                             Timestamp requestDate = document.getTimestamp("requestDate");
                             String requestType = document.getString("requestType");
@@ -364,6 +370,13 @@ public class PendingFragment extends Fragment {
                             ModifyItemRequestModel itemRequest = new ModifyItemRequestModel(
                                     documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status, itemId
                             );
+
+                            itemRequest.setParentCategoryId(parentCategoryId);
+                            itemRequest.setSubCategoryId(subcategoryId);
+                            itemRequest.setQrcode(qrcode);
+                            itemRequest.setBarcode(barcode);
+                            itemRequest.setQuantity(quantity);
+                            itemRequest.setImage(image);
 
                             Map<String, Map<String, String>> changedFields = (Map<String, Map<String, String>>) document.get("changedFields");
 
@@ -379,26 +392,26 @@ public class PendingFragment extends Fragment {
                                 if(changedFields.get("ItemName") != null){
                                     String oldItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("oldValue");
                                     String newItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("newValue");
-                                    itemRequest.setNewSubcategory(newItemName);
-                                    itemRequest.setOldSubcategory(oldItemName);
+                                    itemRequest.setNewItem(newItemName);
+                                    itemRequest.setOldItem(oldItemName);
                                 }
                                 if(changedFields.get("Category") != null){
                                     String oldCategory = Objects.requireNonNull(changedFields.get("Category")).get("oldValue");
                                     String newCategory = Objects.requireNonNull(changedFields.get("Category")).get("newValue");
-                                    itemRequest.setNewSubcategory(newCategory);
-                                    itemRequest.setOldSubcategory(oldCategory);
+                                    itemRequest.setNewParentCategory(newCategory);
+                                    itemRequest.setOldParentCategory(oldCategory);
                                 }
                                 if(changedFields.get("ItemDescription") != null){
                                     String oldItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("oldValue");
                                     String newItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("newValue");
-                                    itemRequest.setNewSubcategory(newItemDescription);
-                                    itemRequest.setOldSubcategory(oldItemDescription);
+                                    itemRequest.setNewDescription(newItemDescription);
+                                    itemRequest.setOldDescription(oldItemDescription);
                                 }
                                 if(changedFields.get("ItemQuantity") != null){
                                     String oldItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("oldValue");
                                     String newItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("newValue");
-                                    itemRequest.setNewSubcategory(newItemQuantity);
-                                    itemRequest.setOldSubcategory(oldItemQuantity);
+                                    itemRequest.setNewQuantity(newItemQuantity);
+                                    itemRequest.setOldQuantity(oldItemQuantity);
                                 }
                             }
 

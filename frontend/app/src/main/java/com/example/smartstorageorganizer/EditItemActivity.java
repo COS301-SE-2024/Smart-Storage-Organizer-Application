@@ -182,9 +182,10 @@ public class EditItemActivity extends BaseActivity {
                 String newCategory = categorySpinner.getSelectedItem().toString();
                 String oldCategory = getIntent().getStringExtra("parentCategoryName");
                 if (!newCategory.equals(oldCategory)) {
+                    int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
                     changedFields.put("Category", new HashMap<String, String>() {{
                         put("oldValue", oldCategory);
-                        put("newValue", newCategory);
+                        put("newValue", newCategory +", "+selectedParentCategory);
                     }});
                 }
             }
@@ -200,9 +201,10 @@ public class EditItemActivity extends BaseActivity {
                 String newSubCategory = subcategorySpinner.getSelectedItem().toString();
                 String oldSubCategory = getIntent().getStringExtra("subCategoryName");
                 if (!newSubCategory.equals(oldSubCategory)) {
+                    int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
                     changedFields.put("Subcategory", new HashMap<String, String>() {{
                         put("oldValue", oldSubCategory);
-                        put("newValue", newSubCategory);
+                        put("newValue", newSubCategory +", "+selectedSubCategory);
                     }});
                 }
             }
@@ -471,9 +473,8 @@ public class EditItemActivity extends BaseActivity {
             int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
-            sendRequestToModifyItem();
-//            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
-            Log.i("2Before Post didnt open", " whats the error");
+//            sendRequestToModifyItem();
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             currentItemName=itemName;
             currentItemDescription=description;
             currentQuantity=quantity;
@@ -670,9 +671,15 @@ public class EditItemActivity extends BaseActivity {
         unitRequest.put("itemName", getIntent().getStringExtra("item_name"));
         unitRequest.put("itemDescription", getIntent().getStringExtra("item_description"));
         unitRequest.put("location", getIntent().getStringExtra("location"));
+        unitRequest.put("image", getIntent().getStringExtra("item_image"));
         unitRequest.put("parentCategory", getIntent().getStringExtra("parentCategoryName"));
+        unitRequest.put("parentCategoryId", getIntent().getStringExtra("parentcategory_id"));
         unitRequest.put("colorCode", getIntent().getStringExtra("color_code"));
         unitRequest.put("subcategory", getIntent().getStringExtra("subCategoryName"));
+        unitRequest.put("subcategoryId", getIntent().getStringExtra("subcategory_id"));
+        unitRequest.put("qrcode", getIntent().getStringExtra("item_qrcode"));
+        unitRequest.put("barcode", getIntent().getStringExtra("item_barcode"));
+        unitRequest.put("quantity", getIntent().getStringExtra("quantity"));
         unitRequest.put("userEmail", app.getEmail());
         unitRequest.put("requestType", "Modify Item");
         unitRequest.put("organizationId", app.getOrganizationID());
