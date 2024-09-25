@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:src="@drawable/baseline_login_24"
+                android:src="@drawable/login_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/login_button_text"
                 app:layout_constraintTop_toTopOf="parent" />

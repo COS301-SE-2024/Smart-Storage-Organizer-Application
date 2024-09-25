@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,8 +120,6 @@ public class UnitActivity extends BaseActivity {
 
                     }
                 }
-                Log.i("Constraints", constraints.toString());
-                Log.i("Checkbox count", String.valueOf(checkboxContainer.getChildCount()));
                 String unit;
                 unit = Objects.requireNonNull(unitName.getText()).toString();
 
@@ -130,22 +129,45 @@ public class UnitActivity extends BaseActivity {
                 String height = inputHeight.getText().toString();
                 String depth = inputDepth.getText().toString();
                 String weight = inputWeight.getText().toString();
-                Log.i("Constraints", categoryModelList.toString());
-                Log.i("unit", unit);
-                sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
-                    Log.i("Response", "Unit created successfully");
-                    if (result) {
-                        Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
-                        runOnUiThread(() -> {
-                            unitName.setText("");
-                            unitCap.setText("");
-                            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
-                   }
-              });
 
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Sending Request To Add a New Unit...");
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                if(Objects.equals(app.getUserRole(), "normalUser")) {
+                    sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                        if (result) {
+                            runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                unitName.setText("");
+                                unitCap.setText("");
+                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        }
+                    });
+
+                }
+                else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                    createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                        Log.i("Response", "Unit created successfully");
+                        if (result) {
+                            Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
+                            runOnUiThread(() -> {
+                                unitName.setText("");
+                                unitCap.setText("");
+                                progressDialog.dismiss();
+                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        }
+                    });
+                }
           });
     }
 

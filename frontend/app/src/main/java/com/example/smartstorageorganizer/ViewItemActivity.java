@@ -35,6 +35,7 @@ import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -530,6 +532,15 @@ public class ViewItemActivity extends BaseActivity {
         }
     }
 
+    private ItemModel findItem(String itemId){
+        for(ItemModel item : itemModelList){
+            if(Objects.equals(item.getItemId(), itemId)){
+                return item;
+            }
+        }
+        return null;
+    }
+
     private void setupBottomNavigationBar() {
         LinearLayout deleteButton = findViewById(R.id.delete);
         LinearLayout colorButton = findViewById(R.id.color);
@@ -548,7 +559,9 @@ public class ViewItemActivity extends BaseActivity {
                         List<String> selectedItemIds = itemAdapter.getSelectedItemsIdsArray();
                         size = selectedItemIds.size();
                         for(String itemId: selectedItemIds){
-                            deleteItem(itemId);
+                            ItemModel item = findItem(itemId);
+                            sendRequestToDeleteItem(item.getItemId(), item.getItemName(), item.getDescription(), item.getLocation(), item.getParentCategoryName(), item.getColourCoding(), item.getSubcategoryName());
+//                            deleteItem(itemId);
                         }
 //                        for(String itemId: selectedItemIds){
 //                            deleteItem(itemId);
@@ -719,6 +732,57 @@ public class ViewItemActivity extends BaseActivity {
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+    }
+
+    public void sendRequestToDeleteItem(String id, String itemName, String itemDescription, String location, String parentCategory, String colorCode, String subcategory) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("itemId", id);
+        unitRequest.put("itemName", itemName);
+        unitRequest.put("itemDescription", itemDescription);
+        unitRequest.put("location", location);
+        unitRequest.put("parentCategory", parentCategory);
+        unitRequest.put("colorCode", colorCode);
+        unitRequest.put("subcategory", subcategory);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("requestType", "Delete Item");
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("item_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("item_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                ++count;
+                                if(count == size){
+                                    progressDialog.dismiss();
+                                    itemAdapter.unselect();
+                                }
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
     }
 
     private void logActivityView(String activityName) {

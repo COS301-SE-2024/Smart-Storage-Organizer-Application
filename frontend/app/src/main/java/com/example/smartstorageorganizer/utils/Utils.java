@@ -355,89 +355,10 @@ public class Utils
             return null;
         });
     }
-//    public static CompletableFuture<Boolean> getAllUnits (String categoriesId)  {
-//        CompletableFuture<Boolean> future = new CompletableFuture<>();
-//        JSONObject jsonObject=new JSONObject();
-//        try {
-//            jsonObject.put("categories_id", Integer.parseInt(categoriesId));
-//            jsonObject.put("type", "GetCategoryConstraints");
-//        }
-//        catch (JSONException e){
-//            future.completeExceptionally(e);
-//            return future;
-//        }
-//
-//        OkHttpClient client = new OkHttpClient();
-//
-//
-//        RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.get(type));
-//        TokenManager.getToken().thenAccept(results->{
-//            Request request = new Request.Builder()
-//                    .url(BuildConfig.AddUnitEndPoint)
-//                    .addHeader("Authorization", results)
-//                    .post(body)
-//                    .build();
-//            client.newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-//                    future.completeExceptionally(e);
-////                    Log.i("Error","Error in fetching data");
-//
-//                }
-//
-//                @Override
-//                public void onResponse(@NonNull Call call, @NonNull Response response)  {
-//                    if(response.isSuccessful()){
-//                        try {
-//
-//                            final String jsonBody = response.body().toString();
-//                            JSONObject jsonObject = new JSONObject(jsonBody);
-//                            final String body= jsonObject.getString("body");
-//                            JSONArray bodyArray = new JSONArray(body);
-//                            List<unitModel> unitList=new ArrayList<>();
-//                            for(int i=0;i<bodyArray.length();i++){
-//                                JSONObject unitObject=bodyArray.getJSONObject(i);
-//                                String unitName=unitObject.getString("unit_name");
-//                                String unitId=unitObject.getString("unit_id");
-//                                int capacity=Integer.parseInt(unitObject.getString("capacity"));
-//                                int currentCapacity=Integer.parseInt(unitObject.getString("current_capacity"));
-//                                unitModel unit=new unitModel(unitName,unitId,capacity,currentCapacity);
-//                                unitList.add(unit);
-//                            }
-//                        }
-//                        catch (Exception e){
-//                            future.completeExceptionally(e);
-////                            Log.i("Error: ","Error in parsing json");
-//                        }
-//
-//                    }
-//                    else{
-//
-////                        Log.i("Error","Error in fetching data");
-//                        future.complete(false);
-//                    }
-//                }
-//            });
-//        }).exceptionally(ex -> {
-////            Log.e("TokenError", "Failed to get user token", ex);
-//            return null;
-//        });
-//        return future;
-//    }
-//    public unitModel getUnitAvailable(List<unitModel> unitList){
-//        unitModel units=new unitModel("","",0,0);
-//        for(unitModel unit:unitList){
-//            if(units.getFreeCapacity()>unit.getFreeCapacity()){
-//                units=unit;
-//            }
-//        }
-//        return units;
-//
-//    }
 
-    public static void deleteCategory(int id, String email, Activity activity, OperationCallback<Boolean> callback)
+    public static void deleteCategory(int id, String email, String username, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\" }";
+        String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\", \"username\" :\""+username+"\"}";
 //        Log.d("Delete Item Payload Cc", "JSON Payload: " + json);  // Log the JSON payload
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -456,7 +377,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -466,12 +387,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
@@ -483,9 +404,9 @@ public class Utils
         });
     }
 
-    public static void modifyCategoryName(int id, String newCategoryName, Activity activity, OperationCallback<Boolean> callback)
+    public static void modifyCategoryName(int id, String newCategoryName, String username, String organizationid, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+newCategoryName+"\" }";
+        String json = "{\"id\":\""+Integer.toString(id)+"\", \"categoryname\":\""+newCategoryName+"\", \"username\":\""+username+"\", \"organizationid\":\""+organizationid+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -503,7 +424,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "POST request failed", e);
+                        Log.e(message, "POST request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -513,12 +434,12 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-//                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "POST request failed: " + response.code());
+                            Log.e(message, "POST request failed: " + response.code());
                             callback.onFailure("Response code" + response.code());
                         });
                     }
