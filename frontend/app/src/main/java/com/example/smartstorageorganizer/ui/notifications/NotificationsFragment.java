@@ -1,10 +1,12 @@
 package com.example.smartstorageorganizer.ui.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.NotificationModel;
+import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.NotificationsAdapter;
 import com.example.smartstorageorganizer.R;
 
@@ -40,6 +43,8 @@ public class NotificationsFragment extends Fragment {
     private RecyclerView recyclerView;
     private NotificationsAdapter adapter;
     private List<NotificationModel> notificationList;
+    private Button sendNotificationButton; // Declare the button
+
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
 
     @Nullable
@@ -56,6 +61,14 @@ public class NotificationsFragment extends Fragment {
         notificationList = new ArrayList<>();
         adapter = new NotificationsAdapter(requireContext(), notificationList);
         recyclerView.setAdapter(adapter);
+
+        // Initialize the send notification button
+        sendNotificationButton = view.findViewById(R.id.send_notification_button);
+        sendNotificationButton.setOnClickListener(v -> {
+            // Start NotificationActivity
+            Intent intent = new Intent(requireContext(), NotificationsActivity.class);
+            startActivity(intent);
+        });
 
         // Check if the user is signed in before showing notifications
         checkSessionState();
