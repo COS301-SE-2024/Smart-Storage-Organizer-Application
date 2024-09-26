@@ -166,6 +166,5 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={"Unit_Name":"Unit 51","username":"zhouvel7@gmail.com","Unit_Capacity":100,"organization_id":1,"Unit_QR":"QR1","constraints":"1,2,3,4", "unit_capacity_used":0}
+
 context={}
-print(lambda_handler(event, context))
