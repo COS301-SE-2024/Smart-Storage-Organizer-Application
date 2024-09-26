@@ -323,7 +323,7 @@ public class ItemDetailsActivity extends BaseActivity {
     }
 
     private void fetchItemDetails(int itemId) {
-        Utils.fetchByID(itemId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByID(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());

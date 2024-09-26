@@ -116,12 +116,7 @@ public class ColorCodeAdapter extends RecyclerView.Adapter<ColorCodeAdapter.View
             toggleSelection(holder, position, model);
             return true;
         });
-        holder.qrcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showQRCodeDialog(model.getQrCode());
-            }
-        });
+        holder.qrcode.setOnClickListener(v -> showQRCodeDialog(model.getQrCode()));
     }
 
     private void toggleSelection(ViewHolder holder, int position, ColorCodeModel model) {

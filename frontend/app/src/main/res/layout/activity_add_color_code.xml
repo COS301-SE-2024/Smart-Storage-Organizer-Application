@@ -47,86 +47,92 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/colorCodeNameInputLayout"
-        style="CustomTextInputOutlinedBox"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingScreen"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/loading"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/colorCodeName"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/colorCodeNameInputLayout"
+            style="CustomTextInputOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:inputType="textAutoComplete" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/colorCodeDescriptionInputLayout"
-        style="CustomTextInputOutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/colorCodeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:inputType="textAutoComplete" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/colorCodeDescription"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/colorCodeDescriptionInputLayout"
+            style="CustomTextInputOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"
-            android:inputType="textAutoComplete" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp">
 
-    <Button
-        android:id="@+id/pick_color_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Pick Color" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/colorCodeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description"
+                android:inputType="textAutoComplete" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:textSize="18sp"
-        android:text="Your picked color is:" />
+        <Button
+            android:id="@+id/pick_color_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:text="Pick Color" />
 
-    <View
-        android:id="@+id/preview_selected_color"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:text="Your picked color is:" />
 
-    <Button
-        android:id="@+id/add_colorcode_button"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Finish" />
+        <View
+            android:id="@+id/preview_selected_color"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="8dp" />
 
-<!--    <Button-->
-<!--        android:id="@+id/set_color_button"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:text="Set Color" />-->
-
-
-
+        <Button
+            android:id="@+id/add_colorcode_button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:text="Finish" />
+    </LinearLayout>
+    
 </LinearLayout>

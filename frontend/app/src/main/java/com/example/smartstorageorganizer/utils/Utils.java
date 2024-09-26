@@ -739,8 +739,8 @@ public class Utils
         });
     }
 
-    public static void fetchByColour(int colourId, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback) {
-        String json = "{\"colourid\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\"" + Integer.parseInt(organizationId)+"\"}";
+    public static void fetchByColour(int colourId, String organizationId, String username, Activity activity, OperationCallback<List<ItemModel>> callback) {
+        String json = "{\"colourid\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\"" + Integer.parseInt(organizationId)+"\", \"username\":\"" + username + "\"}";
         List<ItemModel> itemModelList = new ArrayList<>();
 
 
@@ -769,45 +769,48 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e(message, responseData));
 
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
-                            JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            if(new JSONArray(bodyString) != null){
+                                JSONArray bodyArray = new JSONArray(bodyString);
+                                activity.runOnUiThread(() -> Log.e(message, responseData));
 
-                            for (int i = 0; i < bodyArray.length(); i++) {
-                                JSONObject itemObject = bodyArray.getJSONObject(i);
+                                for (int i = 0; i < bodyArray.length(); i++) {
+                                    JSONObject itemObject = bodyArray.getJSONObject(i);
 
-                                ItemModel item = new ItemModel();
-                                item.setItemId(itemObject.getString("item_id"));
-                                item.setItemName(itemObject.getString("item_name"));
-                                item.setDescription(itemObject.getString("description"));
-                                item.setColourCoding(itemObject.getString("colourcoding"));
-                                item.setBarcode(itemObject.getString("barcode"));
-                                item.setQrcode(itemObject.getString("qrcode"));
-                                item.setQuantity(itemObject.getString("quanity"));
-                                item.setLocation(itemObject.getString("location"));
-                                item.setEmail(itemObject.getString("email"));
-                                item.setItemImage(itemObject.getString("item_image"));
-                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
+                                    ItemModel item = new ItemModel();
+                                    item.setItemId(itemObject.getString("item_id"));
+                                    item.setItemName(itemObject.getString("item_name"));
+                                    item.setDescription(itemObject.getString("description"));
+                                    item.setColourCoding(itemObject.getString("colourcoding"));
+                                    item.setBarcode(itemObject.getString("barcode"));
+                                    item.setQrcode(itemObject.getString("qrcode"));
+                                    item.setQuantity(itemObject.getString("quanity"));
+                                    item.setLocation(itemObject.getString("location"));
+                                    item.setEmail(itemObject.getString("email"));
+                                    item.setItemImage(itemObject.getString("item_image"));
+                                    item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                                    item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
-                                itemModelList.add(item);
+                                    itemModelList.add(item);
+                                }
                             }
+
 
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "GET request failed:" + response);
+                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
@@ -1086,9 +1089,9 @@ public class Utils
         });
     }
 
-    public static void fetchByID(int id, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void fetchByID(int id, String organizationId, String username, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
-        String json = "{\"item_id\":\""+Integer.toString(id)+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
+        String json = "{\"item_id\":\""+Integer.toString(id)+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\", \"username\" : \""+username+"\"}";
 
         List<ItemModel> itemModelList = new ArrayList<>();
 
@@ -1123,29 +1126,30 @@ public class Utils
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
-                            JSONArray bodyArray = new JSONArray(bodyString);
-                            activity.runOnUiThread(() -> Log.e("QR Code", bodyArray.toString()));
+//                            JSONArray bodyArray = new JSONArray(bodyString);
+                            JSONObject results = new JSONObject(bodyString);
+                            activity.runOnUiThread(() -> Log.e("QR Code", results.toString()));
 
-                            for (int i = 0; i < bodyArray.length(); i++) {
-                                JSONObject itemObject = bodyArray.getJSONObject(i);
+//                            for (int i = 0; i < bodyArray.length(); i++) {
+//                                JSONObject itemObject = bodyString.getJSONObject(i);
 
                                 ItemModel item = new ItemModel();
-                                item.setItemId(itemObject.getString("item_id"));
-                                item.setItemName(itemObject.getString("item_name"));
-                                item.setDescription(itemObject.getString("description"));
-                                item.setColourCoding(itemObject.getString("colourcoding"));
-                                item.setBarcode(itemObject.getString("barcode"));
-                                item.setQrcode(itemObject.getString("qrcode"));
-                                item.setQuantity(itemObject.getString("quanity"));
-                                item.setLocation(itemObject.getString("location"));
-                                item.setEmail(itemObject.getString("email"));
-                                item.setItemImage(itemObject.getString("item_image"));
-                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
+                                item.setItemId(results.getString("item_id"));
+                                item.setItemName(results.getString("item_name"));
+                                item.setDescription(results.getString("description"));
+                                item.setColourCoding(results.getString("colourcoding"));
+                                item.setBarcode(results.getString("barcode"));
+                                item.setQrcode(results.getString("qrcode"));
+                                item.setQuantity(results.getString("quanity"));
+                                item.setLocation(results.getString("location"));
+                                item.setEmail(results.getString("email"));
+                                item.setItemImage(results.getString("item_image"));
+                                item.setParentCategoryId(results.getString("parentcategoryid"));
+                                item.setSubCategoryId(results.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
                                 itemModelList.add(item);
-                            }
+//                            }
 
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
                         } catch (JSONException e) {
