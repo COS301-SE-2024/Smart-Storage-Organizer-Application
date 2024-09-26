@@ -198,22 +198,3 @@ def lambda_handler(event, context):
         if conn:
             conn.close()
         
-    
-       
-event={
-      "username": "musician.pianist23@gmail.com",
-      "item_name": "TestDilo3",
-      "description": "Television no2",
-      "colourcoding": "blue",
-      "qrcode": "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Qrcode/qrcodes/2ded7eb8-e1e4-45cc-8a55-3b234939c99b.png",
-      "barcode": "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Barcode/barcodes/bb09d5dd-ceb8-45fb-b45c-16042a5a90b4.svg",
-      "quanity": 1,
-      "location": "UnitRed",
-      "item_id": 191,
-      "organizationid": 1,
-      "item_image": "default",
-      "parentcategoryid": -1,
-      "subcategoryid": -1
-}
-context = {}
-print(lambda_handler(event, None))
