@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -740,6 +741,26 @@ public class ViewItemActivity extends BaseActivity {
         bottomSheetDialog.show();
     }
 
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+//            Intent intent = new Intent(ViewItemActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     public void sendRequestToDeleteItem(String id, String itemName, String itemDescription, String location, String parentCategory, String colorCode, String subcategory) {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Sending Request To Delete an Item...");
@@ -778,6 +799,7 @@ public class ViewItemActivity extends BaseActivity {
                                 ++count;
                                 if(count == size){
                                     progressDialog.dismiss();
+                                    showRequestDialog();
                                     itemAdapter.unselect();
                                 }
                                 progressDialog.dismiss();
