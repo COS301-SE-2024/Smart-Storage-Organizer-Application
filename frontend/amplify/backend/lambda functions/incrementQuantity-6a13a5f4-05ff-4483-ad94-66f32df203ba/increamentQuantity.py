@@ -104,13 +104,4 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={
-    
-        'username':'Tshegofatso.Mapheto7@gmail.com',
-        'item_id':118,
-        'quantity':5
-    
-}
-
-print(lambda_handler(event, None))
 
