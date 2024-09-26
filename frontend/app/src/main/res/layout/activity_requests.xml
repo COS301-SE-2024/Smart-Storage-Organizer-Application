@@ -13,16 +13,34 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@drawable/wave">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alata"
-            android:text="R E Q U E S T S"
-            android:textColor="@color/background"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:textSize="32dp"
-            android:textStyle="bold" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alata"
+                android:text="R E Q U E S T S"
+                android:textColor="@color/background"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:textSize="32dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/arrow_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 
     <LinearLayout

@@ -10,6 +10,7 @@ import androidx.activity.EdgeToEdge;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private int numPages = 6;
     private ImageView[] dots;
+    private TextView nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,19 @@ public class MainActivity extends AppCompatActivity {
 //        setupWindowInsets();
 
         // Check if onboarding is already completed
-//        if (isOnboardingCompleted()) {
-//            // If completed, go directly to the HomeActivity
-//            navigateToHome();
-//            return;
-//        }
+        if (isOnboardingCompleted()) {
+            // If completed, go directly to the HomeActivity
+            Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         setContentView(R.layout.activity_main);
 //
         viewPager = findViewById(R.id.viewPager);
         dotsLayout = findViewById(R.id.dots_layout);
+        nextButton = findViewById(R.id.next);
 //
         SlidePagerAdapter pagerAdapter = new SlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
@@ -79,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 addDotsIndicator(position);
+
+                // Change "Next" button text on the last page
+                if (position == numPages - 1) {
+                    nextButton.setText("Get Started");
+                } else {
+                    nextButton.setText("Next");
+                }
             }
         });
 
@@ -86,6 +98,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onGetStartedClicked();
+            }
+        });
+
+        // Set the listener for the "Next" button
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentItem = viewPager.getCurrentItem();
+                if (currentItem < numPages - 1) {
+                    // Move to the next page
+                    viewPager.setCurrentItem(currentItem + 1);
+                } else {
+                    // If on the last page, proceed to GetStartedActivity
+                    onGetStartedClicked();
+                }
             }
         });
     }
@@ -127,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
         setOnboardingCompleted();
 
         // Navigate to the HomeActivity
-        navigateToHome();
+        Intent intent = new Intent(MainActivity.this, GetStartedActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void navigateToHome() {
@@ -142,14 +171,5 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, false);
         editor.apply();
     }
-//
-//
-//    private void setupWindowInsets() {
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-//    }
 }
 

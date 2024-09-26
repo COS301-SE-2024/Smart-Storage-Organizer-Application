@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import com.example.smartstorageorganizer.ItemDetailsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
+import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -47,11 +49,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final Set<Integer> selectedItems = new HashSet<>();
     private boolean selectAllFlag = true;
     private String organizationID;
+    private Activity activity;
 
 
-    public ItemAdapter(Context context, List<ItemModel> itemModelList) {
+    public ItemAdapter(Context context, List<ItemModel> itemModelList, Activity activity) {
         this.context = context;
         this.itemModelList = itemModelList;
+        this.activity = activity;
         new OkHttpClient();
     }
 
@@ -86,6 +90,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 intent.putExtra("item_barcode", itemModelList.get(holder.getAdapterPosition()).getBarcode());
                 intent.putExtra("quantity", itemModelList.get(holder.getAdapterPosition()).getQuantity());
                 intent.putExtra("organization_id", organizationID);
+
+                if (context instanceof ViewItemActivity) {
+                    ((ViewItemActivity) context).logUserFlow("ItemDetailsActivity");
+                }
+                else if (context instanceof ViewUnitItemsActivity) {
+                    ((ViewUnitItemsActivity) context).logUserFlow("ItemDetailsActivity");
+                }
 
                 context.startActivity(intent);
             } else {

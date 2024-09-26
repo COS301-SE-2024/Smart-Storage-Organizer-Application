@@ -4,12 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Picture;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -35,18 +38,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.caverock.androidsvg.SVG;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-public class ItemDetailsActivity extends AppCompatActivity {
+public class ItemDetailsActivity extends BaseActivity {
     float v = 0;
     private TextView itemName, itemDescription, itemUnit, itemCategory, itemColorCode;
     private ImageView arrow, arrowUnit, arrowCategory, arrowColorCode, share;
@@ -58,6 +69,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private ConstraintLayout detailedLayout;
     private String parentCategory, subcategory;
+    private MyAmplifyApp app;
+    private long startTime;
+
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -65,6 +79,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_item_details);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         ImageView backButton = findViewById(R.id.backButton);
 
@@ -164,6 +180,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 intent.putExtra("subCategoryName", subcategory);
                 intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
 
+                logUserFlow("EditItemActivity");
+
                 startActivity(intent);
             }
         });
@@ -252,9 +270,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
         itemCategory = findViewById(R.id.itemCategory);
         arrowCategory = findViewById(R.id.arrowCategory);
 
-        getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "");
-
-        itemCategory.setText(parentCategory+" - "+subcategory);
+        if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+            getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
+            itemCategory.setText(parentCategory+" - "+subcategory);
+        }
 
         cardViewCategory.setTranslationX(800);
         cardViewCategory.setAlpha(v);
@@ -304,9 +323,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
     }
 
     private void fetchItemDetails(int itemId) {
-        Utils.fetchByID(itemId,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByID(itemId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
+                getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
                 Glide.with(ItemDetailsActivity.this)
                         .load(result.get(0).getItemImage())
                         .placeholder(R.drawable.no_image)
@@ -376,7 +396,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             if (Objects.equals(type, "qrcode")) {
                 shareImage(qrCodeUrl);
             } else {
-                shareImage(barcodeUrl);
+                shareSvgImage(barcodeUrl);
             }
         });
 
@@ -398,18 +418,29 @@ public class ItemDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                         try {
-                            File file = new File(getExternalCacheDir(), "shared_image.png");
+                            // Use the external directory as defined in file_paths.xml
+                            File imagesDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "shared_images");
+
+                            if (!imagesDir.exists()) {
+                                imagesDir.mkdirs();  // Create the directory if it doesn't exist
+                            }
+
+                            File file = new File(imagesDir, "shared_image.png");
                             FileOutputStream fOut = new FileOutputStream(file);
                             resource.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                             fOut.flush();
                             fOut.close();
                             file.setReadable(true, false);
 
+                            // Get URI using FileProvider
                             Uri uri = FileProvider.getUriForFile(ItemDetailsActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                            // Share image intent
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra(Intent.EXTRA_STREAM, uri);
                             intent.setType("image/png");
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             startActivity(Intent.createChooser(intent, "Share image via"));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -419,9 +450,62 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Handle cleanup if necessary
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        Toast.makeText(ItemDetailsActivity.this, "Failed to load image", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    private void shareSvgImage(String imageUrl) {
+        new Thread(() -> {
+            try {
+                // Step 1: Download the SVG from the URL
+                URL url = new URL(imageUrl);
+                InputStream inputStream = (InputStream) url.getContent();
+
+                // Step 2: Load the SVG using AndroidSVG
+                SVG svg = SVG.getFromInputStream(inputStream);
+
+                // Step 3: Render the SVG to a Bitmap
+                Picture picture = svg.renderToPicture();
+                Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                canvas.drawPicture(picture);
+
+                // Step 4: Save the Bitmap to a file
+                File cacheDir = getExternalCacheDir();
+                if (cacheDir != null) {
+                    File file = new File(cacheDir, "shared_svg_image.png");
+                    FileOutputStream fOut = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                    fOut.flush();
+                    fOut.close();
+                    file.setReadable(true, false);
+
+                    // Step 5: Share the image using FileProvider
+                    Uri uri = FileProvider.getUriForFile(ItemDetailsActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    intent.setType("image/png");
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(intent, "Share image via"));
+                } else {
+                    runOnUiThread(() -> Toast.makeText(ItemDetailsActivity.this, "Unable to access cache directory", Toast.LENGTH_SHORT).show());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(ItemDetailsActivity.this, "Failed to share image", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+
 
     private void downloadImage(String imageUrl) {
         Glide.with(this)
@@ -461,13 +545,18 @@ public class ItemDetailsActivity extends AppCompatActivity {
                 });
     }
 
-    private void getParentCategoryName(String categoryId, String authorization) {
+    private void getParentCategoryName(String categoryId, String authorization, String subcategoryId) {
 //        hideAdminMenuItems(navigationView.getMenu());
         Utils.getCategory(categoryId, authorization, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 parentCategory = result;
-                getSubCategoryName(getIntent().getStringExtra("subcategory_id"), "");
+                if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+                    getSubCategoryName(getIntent().getStringExtra("subcategory_id"), "");
+                }
+                else {
+                    getSubCategoryName(subcategoryId, "");
+                }
 
             }
 
@@ -475,7 +564,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onFailure(String error) {
 //                progressDialog.dismiss();
 //                hideAdminMenuItems(navigationView.getMenu());
-                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(ItemDetailsActivity.this, "Getting category failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -493,8 +582,76 @@ public class ItemDetailsActivity extends AppCompatActivity {
             public void onFailure(String error) {
 //                progressDialog.dismiss();
 //                hideAdminMenuItems(navigationView.getMenu());
-                Toast.makeText(ItemDetailsActivity.this, "Getting user category failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(ItemDetailsActivity.this, "Getting category failed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("ItemDetailsActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "ItemDetailsActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("ItemDetailsActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

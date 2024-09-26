@@ -4,6 +4,7 @@ public class CategoryModel {
     private String categoryName;
     private String categoryID;
     private String imageUrl;
+    private String parentCategoryId;
 
     public CategoryModel() {
 
@@ -37,5 +38,13 @@ public class CategoryModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getParentCategoryId() {
+        return parentCategoryId;
+    }
+
+    public void setParentCategoryId(String parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
     }
 }

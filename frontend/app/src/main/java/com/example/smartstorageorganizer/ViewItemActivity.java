@@ -2,12 +2,9 @@ package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,8 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -38,16 +33,18 @@ import com.example.smartstorageorganizer.model.TokenManager;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -58,7 +55,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ViewItemActivity extends AppCompatActivity {
+
+public class ViewItemActivity extends BaseActivity {
     private static final int PAGE_SIZE = 10;
     private int currentPage = 1;
     private TextView notFoundText;
@@ -85,12 +83,16 @@ public class ViewItemActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private int count;
     private int size;
+    private MyAmplifyApp app;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_item);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -180,7 +182,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemRecyclerView.setHasFixedSize(true);
         itemRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         itemModelList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(this, itemModelList);
+        itemAdapter = new ItemAdapter(this, itemModelList, this);
         itemRecyclerView.setAdapter(itemAdapter);
         itemAdapter.setOrganizationId(getIntent().getStringExtra("organization_id"));
     }
@@ -218,7 +220,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchAllItems(PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchAllItems(PAGE_SIZE, currentPage, app.getOrganizationID(),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -255,7 +257,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchByColour(colorCodeId,this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByColour(colorCodeId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -292,7 +294,7 @@ public class ViewItemActivity extends AppCompatActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, getIntent().getStringExtra("organization_id"),this, new OperationCallback<List<ItemModel>>() {
+        Utils.filterByCategory(categoryId, PAGE_SIZE, currentPage, app.getOrganizationID(),this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -630,7 +632,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     public void AssignColour(String colourid, String itemid) {
-        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\"}";
+        String json = "{\"colourid\":\"" + colourid + "\", \"itemid\":\"" + itemid + "\", \"organizationid\":\""+app.getOrganizationID()+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -672,7 +674,7 @@ public class ViewItemActivity extends AppCompatActivity {
     }
 
     private void deleteItem(String itemId) {
-        Utils.deleteItem(itemId, this, new OperationCallback<Boolean>() {
+        Utils.deleteItem(itemId, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
@@ -717,5 +719,73 @@ public class ViewItemActivity extends AppCompatActivity {
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("ViewItemActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "ViewItemActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("ViewItemActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

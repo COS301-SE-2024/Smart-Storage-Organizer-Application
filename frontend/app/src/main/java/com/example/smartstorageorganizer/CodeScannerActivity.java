@@ -6,12 +6,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,7 +29,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.io.InputStream;
 
-public class CodeScannerActivity extends AppCompatActivity {
+public class CodeScannerActivity extends BaseActivity {
 
     public static final int PICK_IMAGE = 1;
 
@@ -36,13 +38,13 @@ public class CodeScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_code_scanner);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
 
-        Button scanButton = findViewById(R.id.scan_button);
+        CardView scanButton = findViewById(R.id.scan_button);
         scanButton.setOnClickListener(view -> {
             IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
@@ -54,7 +56,26 @@ public class CodeScannerActivity extends AppCompatActivity {
             integrator.initiateScan();
         });
 
-        Button selectImageButton = findViewById(R.id.select_image_button);
+//        Button barcodeButton = findViewById(R.id.barcode_button);
+//        barcodeButton.setOnClickListener(view -> {
+//            IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
+//            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+//            integrator.setPrompt("Scan a Barcode");
+//            integrator.setCameraId(0);  // Use a specific camera of the device
+//            integrator.setBeepEnabled(true);
+//            integrator.setBarcodeImageEnabled(true);
+//            integrator.setOrientationLocked(true);  // Lock orientation to current
+//            integrator.initiateScan();
+//        });
+
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        CardView selectImageButton = findViewById(R.id.select_image_button);
         selectImageButton.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, PICK_IMAGE);
@@ -82,16 +103,28 @@ public class CodeScannerActivity extends AppCompatActivity {
                 if (result.getContents() == null) {
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    String scannedResult = result.getContents();
+                    String format = result.getFormatName();
+
+                    // If the scanned format is a barcode, remove the last character
+                    if (format != null && !format.equalsIgnoreCase("QR_CODE")) {
+                        if (scannedResult != null && scannedResult.length() > 1) {
+                            scannedResult = scannedResult.substring(0, scannedResult.length() - 1);
+                        }
+                    }
+
+                    // Display and send the result (modified for barcodes, unmodified for QR codes)
+                    Toast.makeText(this, "Scanned: " + scannedResult, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
                     intent.putExtra("item_name", "");
-                    intent.putExtra("item_id", result.getContents());
+                    intent.putExtra("item_id", scannedResult);
                     startActivity(intent);
                     finish();
                 }
             }
         }
     }
+
 
     public void scanQRCodeFromBitmap(Bitmap bitmap) {
         int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];

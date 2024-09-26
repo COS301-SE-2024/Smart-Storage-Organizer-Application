@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#F2F2F2"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -49,20 +49,11 @@
         android:layout_marginTop="-24dp"
         android:fontFamily="@font/alata"
         android:text="BACK!"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/black"
         android:textSize="54dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcometext" />
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Wrong Credentials!"-->
-<!--        android:textColor="@color/red"-->
-<!--        android:layout_marginStart="86dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/backtext" />-->
 
     <RelativeLayout
         android:id="@+id/LogincardView"
@@ -128,36 +119,6 @@
             android:clickable="true"
             android:textColor="@color/colorPrimary"
             android:textSize="16dp" /></LinearLayout>
-        <!--        <EditText-->
-        <!--            android:id="@+id/inputUsername"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="52dp"-->
-        <!--            android:layout_marginEnd="16dp"-->
-        <!--            android:layout_marginTop="16dp"-->
-        <!--            android:textColor="#252C4B"-->
-        <!--            android:textColorHint="#4C4A4A"-->
-        <!--            android:backgroundTint="#4C4A4A"-->
-        <!--            android:textStyle="bold"-->
-        <!--            android:hint="Employee ID"-->
-        <!--            android:inputType="textEmailAddress"-->
-        <!--            />-->
-        <!--        <EditText-->
-        <!--            android:id="@+id/inputPassword"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_below="@id/inputUsername"-->
-        <!--            android:textColor="#252C4B"-->
-        <!--            android:textColorHint="#4C4A4A"-->
-        <!--            android:backgroundTint="#4C4A4A"-->
-        <!--            android:textStyle="bold"-->
-        <!--            android:layout_marginStart="36dp"-->
-        <!--            android:layout_marginEnd="32dp"-->
-        <!--            android:layout_marginTop="32dp"-->
-        <!--            android:hint="Password"-->
-        <!--            android:inputType="textPassword"-->
-        <!--            />-->
-
 
         <RelativeLayout
             android:id="@+id/buttonLogin"
@@ -217,18 +178,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-            <!--            <com.airbnb.lottie.LottieAnimationView-->
-            <!--                android:id="@+id/button_animation"-->
-            <!--                app:lottie_rawRes="@raw/loader"-->
-            <!--                android:layout_width="80dp"-->
-            <!--                android:layout_height="80dp"-->
-            <!--                android:layout_centerInParent="true"-->
-            <!--                app:lottie_autoPlay="false"-->
-            <!--                app:lottie_loop="true"-->
-            <!--                android:visibility="gone"/>-->
-
         </RelativeLayout>
 
         <LinearLayout
@@ -244,7 +193,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginBottom="16dp"
                 android:text="Don't have an account yet? "
-                android:textColor="@color/colorSecondary"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="13dp"/>
 

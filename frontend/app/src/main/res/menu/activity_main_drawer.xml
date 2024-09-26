@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/outline_home_24"
-            android:title="@string/menu_home"
-            android:color="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_color_code"
-            android:icon="@drawable/baseline_question_mark_24"
-            android:title="Color Coding"
-            android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_units"
-            android:icon="@drawable/outline_notifications_24"
-            android:title="Units"
-            android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/outline_notifications_24"
-            android:title="Notifications"
-            android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_profile_management"
-            android:icon="@drawable/outline_settings_24"
-            android:title="Settings"
-            android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_code_scanner"
-            android:icon="@drawable/baseline_qr_code_24"
-            android:title="Scan QR Code"
-            android:textColor="@color/colorPrimary"/>
-        <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/baseline_question_mark_24"
-            android:title="Help"
-            android:textColor="@color/colorPrimary"/>
-
+<!--    <group android:checkableBehavior="single">-->
+<!--        <item-->
+<!--            android:id="@+id/nav_home"-->
+<!--            android:icon="@drawable/outline_home_24"-->
+<!--            android:title="@string/menu_home"-->
+<!--            android:color="@color/colorPrimary"/>-->
+<!--        <item-->
+<!--            android:id="@+id/nav_color_code"-->
+<!--            android:icon="@drawable/baseline_question_mark_24"-->
+<!--            android:title="Color Coding"-->
+<!--            android:textColor="@color/colorPrimary"/>-->
+<!--        <item-->
+<!--            android:id="@+id/nav_units"-->
+<!--            android:icon="@drawable/outline_notifications_24"-->
+<!--            android:title="Units"-->
+<!--            android:textColor="@color/colorPrimary"/>-->
+<!--        <item-->
+<!--            android:id="@+id/nav_notifications"-->
+<!--            android:icon="@drawable/outline_notifications_24"-->
+<!--            android:title="Notifications"-->
+<!--            android:textColor="@color/colorPrimary"/>-->
         <item
             android:id="@+id/nav_requests"
-            android:icon="@drawable/baseline_question_mark_24"
+            android:icon="@drawable/request_icon"
             android:title="Requests"
             android:textColor="@color/colorPrimary"/>
 
         <item
             android:id="@+id/nav_users"
-            android:icon="@drawable/baseline_question_mark_24"
+            android:icon="@drawable/users"
             android:title="Users"
             android:textColor="@color/colorPrimary"/>
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings_icon"
+            android:title="Settings"
+            android:textColor="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_code_scanner"
+            android:icon="@drawable/scan_icon"
+            android:title="Scan QR Code"
+            android:textColor="@color/colorPrimary"/>
+        <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/help"
+            android:title="Reports"
+            android:textColor="@color/colorPrimary"/>
+
 <!--        <item-->
 <!--            android:id="@+id/action_faq"-->
 <!--            android:title="FAQ"-->
 <!--            android:orderInCategory="100"-->
 <!--            android:showAsAction="never" />-->
-    </group>
+<!--    </group>-->
 </menu>

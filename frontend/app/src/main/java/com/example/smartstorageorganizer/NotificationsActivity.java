@@ -24,6 +24,7 @@ import okhttp3.Response;
 
 public class NotificationsActivity extends AppCompatActivity {
 
+
     private EditText notificationTitle;
     private EditText notificationMessage;
     private Button sendButton;

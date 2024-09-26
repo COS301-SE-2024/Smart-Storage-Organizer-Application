@@ -115,11 +115,17 @@ android {
         buildConfigField("String", "CreateOrganization", "\"${localProperties["CreateOrganization"]}\"");
         buildConfigField("String", "FetchOrganization", "\"${localProperties["FetchOrganization"]}\"");
         buildConfigField("String", "FetchAllColours", "\"${localProperties["FetchAllColours"]}\"");
-
-
-
-
-
+        buildConfigField("String", "increaseQuantity", "\"${localProperties["increaseQuantity"]}\"");
+        buildConfigField("String", "reports_getTotalItemsUnderAllParentCategories", "\"${localProperties["reports_getTotalItemsUnderAllParentCategories"]}\"");
+        buildConfigField("String", "GetAllCategories", "\"${localProperties["GetAllCategories"]}\"");
+        buildConfigField("String", "loginActivities", "\"${localProperties["loginActivities"]}\"");
+        buildConfigField("String", "GetLoginReports", "\"${localProperties["GetLoginReports"]}\"");
+        buildConfigField("String", "GenerateProcess", "\"${localProperties["GenerateProcess"]}\"");
+        buildConfigField("String", "OpenSearchInsert", "\"${localProperties["OpenSearchInsert"]}\"");
+        buildConfigField("String", "AddItemSynchronous", "\"${localProperties["AddItemSynchronous"]}\"");
+        buildConfigField("String", "GenerateQRCodeAsync", "\"${localProperties["GenerateQRCodeAsync"]}\"");
+        buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
+        buildConfigField("String", "ModifyItemDimension", "\"${localProperties["ModifyItemDimension"]}\"");
 
     }
 
@@ -148,6 +154,8 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-messaging:latest-version")
     implementation(libs.firebase.database)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
@@ -234,5 +242,19 @@ dependencies {
     testImplementation ("androidx.test:rules:1.4.0")
 
     // oneSignal
-    implementation ("com.onesignal:OneSignal:[4.0.0, 4.99.99]")
+    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+
+    //Graphs dependency
+    implementation ("com.github.PhilJay:MPAndroidChart:3.1.0")
+
+    //firebase
+    implementation ("com.google.firebase:firebase-analytics")
+
+    //Image Crop
+    implementation ("com.github.yalantis:ucrop:2.2.8")
+//    implementation ("com.github.krokyze:ucropnedit:2.2.6-2")
+
+    implementation ("androidx.work:work-runtime:2.7.1")
+    implementation ("com.google.guava:guava:31.1-android")
+
 }

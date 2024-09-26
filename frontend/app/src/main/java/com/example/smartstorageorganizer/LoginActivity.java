@@ -1,7 +1,15 @@
 package com.example.smartstorageorganizer;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -14,7 +22,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -42,6 +55,9 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,7 +70,11 @@ public class LoginActivity extends AppCompatActivity {
     public LottieAnimationView buttonLoader;
     public TextView resetPasswordLink;
     RelativeLayout registerButton;
+    MyAmplifyApp app;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     public static final String API_REQUEST = "API Request";
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +82,11 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        app = (MyAmplifyApp) getApplicationContext();
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
         initializeUI();
-//        checkIfSignedIn();
         signOut();
         configureInsets();
         setOnClickListeners();
@@ -84,8 +107,6 @@ public class LoginActivity extends AppCompatActivity {
         Amplify.Auth.signOut(
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
-//                        showRequestSentDialog()
-//                        handleSuccessfulSignOut();
                     } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
 //                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
                     }
@@ -99,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                 navigateToHome();
             } else {
                 Toast.makeText(this, "User is not signed in.", Toast.LENGTH_LONG).show();
-//                Log.i(TAG, "User is not signed in.");
             }
         });
     }
@@ -135,9 +155,7 @@ public class LoginActivity extends AppCompatActivity {
         String passwordInput = password.getText().toString().trim();
         if (validateForm(emailInput, passwordInput)) {
             showLoading();
-//            checkUserVerificationStatus(emailInput, "");
             signIn(emailInput, passwordInput);
-//            signIn(emailInput, passwordInput);
         }
     }
 
@@ -204,6 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                 session -> {
                     AWSCognitoAuthSession cognitoSession = (AWSCognitoAuthSession) session;
                     String token = cognitoSession.getUserPoolTokensResult().getValue().getIdToken();
+                    Log.i("TOKEN", token);
                     fetchUserAttributes();
                     makeApiRequest(token);
                 },
@@ -307,23 +326,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void navigateToHome(String email) {
+        app.setLoggedIn(true);
+        updateActiveUser(email);
+        logUserFlow("HomeActivity");
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
         finish();
     }
 
+    private void updateActiveUser(String email) {
+        Map<String, Object> activeUserData = new HashMap<>();
+        activeUserData.put("last_active_time", Timestamp.now());
+
+        db.collection("active_users").document(email)
+                .set(activeUserData)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "User activity updated"))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error updating user", e));
+    }
+
     public void navigateToRegistration() {
+        logUserFlow("SearchOrganizationActivity");
         Intent intent = new Intent(LoginActivity.this, SearchOrganizationActivity.class);
         startActivity(intent);
     }
 
     public void navigateToResetPassword() {
+        logUserFlow("ResetPasswordActivity");
         Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
         startActivity(intent);
     }
 
     public void navigateToEmailVerification(String email) {
+        logUserFlow("EmailVerificationActivity");
         Intent intent = new Intent(LoginActivity.this, EmailVerificationActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
@@ -337,12 +372,10 @@ public class LoginActivity extends AppCompatActivity {
                     if(Objects.equals(result, "unverified")){
                         hideLoading();
                         showUnverifiedDialog();
-//                        setUserToUnverified(username, authorization);
                     }
                     else {
                         navigateToHome(username);
                     }
-//                    Toast.makeText(LoginActivity.this, "check user verification successful: "+ result, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -362,35 +395,161 @@ public class LoginActivity extends AppCompatActivity {
 
         Button closeButton = dialogView.findViewById(R.id.closeButton);
 
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String emailInput = email.getText().toString().trim();
-                String passwordInput = password.getText().toString().trim();
-//                setUserToVerified(emailInput, "");
-            }
+        closeButton.setOnClickListener(v -> {
+            String emailInput = email.getText().toString().trim();
+            String passwordInput = password.getText().toString().trim();
         });
 
         builder.show();
     }
 
-    private void setUserToUnverified(String username, String authorization) {
-        UserUtils.setUserToUnverified(username, authorization, this, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    hideLoading();
-                    showUnverifiedDialog();
-//                    navigateToMainActivity(username);
-//                    Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
-//                    showRequestSentDialog();
-                }
-            }
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
 
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(LoginActivity.this, "Login Failed! please try again", Toast.LENGTH_LONG).show();
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("LoginActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "LoginActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public boolean hasInternetAccess() {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection)
+                    (new URL("https://www.google.com").openConnection());
+            urlConnection.setRequestProperty("User-Agent", "ConnectionTest");
+            urlConnection.setRequestProperty("Connection", "close");
+            urlConnection.setConnectTimeout(1500); // Timeout if no internet
+            urlConnection.connect();
+            return (urlConnection.getResponseCode() == 200);
+        } catch (IOException e) {
+            Log.e(TAG, "Error checking internet connection", e);
+            return false;
+        }
+    }
+
+
+    private AlertDialog noInternetDialog;
+
+    public void showNoInternetDialog() {
+        if (noInternetDialog == null || !noInternetDialog.isShowing()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Connect to a network")
+                    .setMessage("To use Smart Storage Organizer, turn on mobile data or connect to Wi-Fi.")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        finish();
+                    });
+            noInternetDialog = builder.create();
+            noInternetDialog.show();
+        }
+    }
+
+
+    public void dismissNoInternetDialog() {
+        if (noInternetDialog != null && noInternetDialog.isShowing()) {
+            noInternetDialog.dismiss();
+        }
+    }
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isNetworkConnected()) {
+                dismissNoInternetDialog();  // If connected to the internet, dismiss the popup
+            } else {
+                showNoInternetDialog();  // If not connected to the internet, show the popup
             }
+        }
+    };
+
+    public void checkInternetAccessInBackground() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            boolean hasInternet = hasInternetAccess();  // Run this on a background thread
+            runOnUiThread(() -> {
+                // Update the UI based on the result
+                if (hasInternet) {
+                    Log.i(TAG, "Internet connection available");
+                    dismissNoInternetDialog();
+                } else {
+                    showNoInternetDialog();
+                }
+            });
         });
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("LoginActivity");
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeReceiver, filter);
+
+        checkInternetAccessInBackground();  // Call this to run the check off the main thread
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(networkChangeReceiver);
     }
 }

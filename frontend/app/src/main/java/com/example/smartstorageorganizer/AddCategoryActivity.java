@@ -36,15 +36,21 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class AddCategoryActivity extends AppCompatActivity {
+public class AddCategoryActivity extends BaseActivity  {
     public static final int GALLERY_CODE = 1;
     public static final String EMAIL_KEY = "email";
     public static final String IMAGE_TYPE = "image/*";
@@ -70,14 +76,19 @@ public class AddCategoryActivity extends AppCompatActivity {
     public List<CategoryModel> categoryModelList = new ArrayList<>();
     public Spinner categorySpinner;
     public String currentEmail;
+    private MyAmplifyApp app;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_category);
+
+        app = (MyAmplifyApp) getApplicationContext();
+
         initViews();
-        setupWindowInsets();
+//        setupWindowInsets();
         getDetails();
         fetchParentCategories();
         setupUploadButton();
@@ -111,6 +122,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void navigateToHome() {
         Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
+        logUserFlow("HomeFragment");
         startActivity(intent);
         finish();
     }
@@ -128,10 +140,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                                 break;
                             default:
                         }
-
-
-
-
                     }
 //                    Log.i("progress","User attributes fetched successfully");
                     future.complete(true);
@@ -146,7 +154,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void fetchParentCategories() {
         String email = getIntent().getStringExtra(EMAIL_KEY);
-        Utils.fetchParentCategories(0, email,"", this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(0, email,app.getOrganizationID(), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 categoryModelList = result;
@@ -187,7 +195,22 @@ public class AddCategoryActivity extends AppCompatActivity {
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
             CategoryModel parent = findCategoryByName(currentSelectedParent);
             if (parent != null) {
-                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
+                sendRequestToAddCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "").thenAccept(result -> {
+                    Log.i("Response", "Unit created successfully");
+                    if (result) {
+                        runOnUiThread(() -> {
+                            showToast("Category added successfully");
+                            navigateToHome();
+                        });
+                    }
+                    else {
+                        showToast("Failed to add category");
+                        loadingScreen.setVisibility(View.GONE);
+                        addCategoryLayout.setVisibility(View.VISIBLE);
+                        addButton.setVisibility(View.VISIBLE);
+                    }
+                });
+//                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
             }
         }
     }
@@ -342,11 +365,26 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void handleImageUploadSuccess(String key) {
         String url = String.format(STORAGE_URL_FORMAT, key);
-        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
+        sendRequestToAddCategory(0, parentCategoryEditText.getText().toString(), url).thenAccept(result -> {
+            Log.i("Response", "Unit created successfully");
+            if (result) {
+                runOnUiThread(() -> {
+                    showToast("Category added successfully");
+                    navigateToHome();
+                });
+            }
+            else {
+                showToast("Failed to add category");
+                loadingScreen.setVisibility(View.GONE);
+                addCategoryLayout.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
+            }
+        });
+//        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
-        Utils.addCategory(parentCategory, categoryName, currentEmail, url, this, new OperationCallback<Boolean>() {
+        Utils.addCategory(parentCategory, categoryName, currentEmail, url, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
@@ -367,5 +405,115 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     public void showToast(String message) {
         Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public CompletableFuture<Boolean> sendRequestToAddCategory(int parentCategory, String categoryName, String url) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("parentCategory", parentCategory);
+        unitRequest.put("categoryName", categoryName);
+        unitRequest.put("url", url);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("category_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("category_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
+        return future;
+    }
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("AddCategoryActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "AddCategoryActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("AddCategoryActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

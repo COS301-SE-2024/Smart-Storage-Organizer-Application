@@ -1,7 +1,12 @@
 package com.example.smartstorageorganizer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -13,11 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,6 +38,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.adapters.ItemAdapter;
 import com.example.smartstorageorganizer.adapters.RecentAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
+import com.example.smartstorageorganizer.adapters.UnitsAdapter;
+import com.example.smartstorageorganizer.model.ArrangementModel;
+import com.example.smartstorageorganizer.model.BinItemModel;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
 import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.SuggestedCategoryModel;
@@ -37,12 +48,17 @@ import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -53,7 +69,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ViewUnitItemsActivity extends AppCompatActivity {
+public class ViewUnitItemsActivity extends BaseActivity {
     private static final int PAGE_SIZE = 10;
     private int currentPage = 1;
     private TextView notFoundText;
@@ -74,13 +90,18 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
     private LinearLayout bottomNavigationView;
     List<SuggestedCategoryModel> suggestedCategoriesList;
     ProgressDialog progressDialog;
-
+    private MyAmplifyApp app;
+    private long startTime;
+    private LinearLayout generateArrangementButton;
+    private ConstraintLayout mainLayout, arrangementLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_view_unit_items);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -117,11 +138,23 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         itemsLayout = findViewById(R.id.newstedScrollview);
         TextView category = findViewById(R.id.category_text);
+        generateArrangementButton = findViewById(R.id.generateArrangementButton);
+        arrangementLoader = findViewById(R.id.arrangementLoader);
+        mainLayout = findViewById(R.id.mainLayout);
         category.setText(getIntent().getStringExtra("unit_name"));
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Suggesting Categories...");
         progressDialog.setCancelable(false);
+
+        generateArrangementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainLayout.setVisibility(View.GONE);
+                arrangementLoader.setVisibility(View.VISIBLE);
+                generateProcess(getIntent().getStringExtra("unit_id"), getIntent().getStringExtra("unit_name"));
+            }
+        });
 
     }
 
@@ -161,7 +194,7 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
         itemRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         itemModelList = new ArrayList<>();
         suggestedCategoriesList = new ArrayList<>();
-        itemAdapter = new ItemAdapter(this, itemModelList);
+        itemAdapter = new ItemAdapter(this, itemModelList, this);
         itemRecyclerView.setAdapter(itemAdapter);
     }
 
@@ -277,7 +310,7 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
     public void suggestCategory(String selectedIds) {
         //Show the progress bar loader
         progressDialog.show();
-        Utils.RecommendMultipleCategories(selectedIds, this, new OperationCallback<List<SuggestedCategoryModel>>() {
+        Utils.RecommendMultipleCategories(selectedIds, app.getOrganizationID() , this, new OperationCallback<List<SuggestedCategoryModel>>() {
             @Override
             public void onSuccess(List<SuggestedCategoryModel> result) {
                 //stop the progress bar loader
@@ -454,5 +487,163 @@ public class ViewUnitItemsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void generateProcess(String unit_id, String unit_name) {
+        Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<ArrangementModel>() {
+            @Override
+            public void onSuccess(ArrangementModel result) {
+                mainLayout.setVisibility(View.VISIBLE);
+                arrangementLoader.setVisibility(View.GONE);
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ViewUnitItemsActivity.this);
+
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_items_list, null);
+                dialogBuilder.setView(dialogView);
+
+                TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
+
+                TableRow headerRow = new TableRow(ViewUnitItemsActivity.this);
+                TextView headerName = new TextView(ViewUnitItemsActivity.this);
+                TextView headerColor = new TextView(ViewUnitItemsActivity.this);
+
+                headerName.setText("Name");
+                headerName.setPadding(8, 8, 8, 8);
+                headerName.setTypeface(null, Typeface.BOLD);
+                headerColor.setText("Color");
+                headerColor.setPadding(8, 8, 8, 8);
+                headerColor.setTypeface(null, Typeface.BOLD);
+
+                headerRow.addView(headerName);
+                headerRow.addView(headerColor);
+
+                tableLayout.addView(headerRow);
+
+                List<BinItemModel> items = result.getItems();
+
+                for (BinItemModel item : items) {
+                    TableRow row = new TableRow(ViewUnitItemsActivity.this);
+
+                    TextView nameView = new TextView(ViewUnitItemsActivity.this);
+                    nameView.setText(item.getName());
+                    nameView.setPadding(8, 8, 8, 8);
+
+                    View colorView = new View(ViewUnitItemsActivity.this);
+                    colorView.setBackgroundColor(parseColor(item.getColor()));
+
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(50, 50);
+                    params.setMargins(8, 8, 8, 8);
+                    colorView.setLayoutParams(params);
+
+                    row.addView(nameView);
+                    row.addView(colorView);
+
+                    tableLayout.addView(row);
+                }
+
+                Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
+                view3DButton.setOnClickListener(v -> {
+                    Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                    sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=" + result.getImageUrl()));
+                    sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                    startActivity(sceneViewerIntent);
+                });
+
+                // Show the dialog
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
+            }
+
+
+
+            @Override
+            public void onFailure(String error) {
+                generateProcess(unit_id, unit_name);
+                Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public int parseColor(String colorString) {
+        // Remove the square brackets and split the string by commas
+        String[] rgbValues = colorString.replaceAll("[\\[\\]]", "").split(",");
+
+        // Parse the RGB values and alpha channel
+        int red = Integer.parseInt(rgbValues[0].trim());
+        int green = Integer.parseInt(rgbValues[1].trim());
+        int blue = Integer.parseInt(rgbValues[2].trim());
+        int alpha = Integer.parseInt(rgbValues[3].trim());
+
+        // Return the color as an int
+        return Color.argb(alpha, red, green, blue);
+    }
+
+
+    private void logActivityView(String activityName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> activityView = new HashMap<>();
+        activityView.put("user_id", userId);
+        activityView.put("activity_name", activityName);
+        activityView.put("view_time", new Timestamp(new Date()));
+
+        db.collection("activity_views")
+                .add(activityView)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Activity view logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging activity view", e));
+    }
+
+    private void logSessionDuration(String activityName, long sessionDuration) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("user_id", userId);
+        sessionData.put("activity_name", activityName);
+        sessionData.put("session_duration", sessionDuration); // Duration in milliseconds
+
+        db.collection("activity_sessions")
+                .add(sessionData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "Session duration logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging session duration", e));
+    }
+    public void logUserFlow(String toActivity) {
+        long sessionDuration = System.currentTimeMillis() - startTime;
+        logSessionDuration("ViewUnitItemsActivity", (sessionDuration));
+        long transitionTime = System.currentTimeMillis();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = app.getEmail();
+
+        Map<String, Object> userFlowData = new HashMap<>();
+        userFlowData.put("user_id", userId);
+        userFlowData.put("previous_activity", "ViewUnitItemsActivity");
+        userFlowData.put("next_activity", toActivity);
+        userFlowData.put("transition_time", new Timestamp(new Date(transitionTime)));
+
+        db.collection("user_flow")
+                .add(userFlowData)
+                .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
+                .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+//    public void logUser
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        logActivityView("ViewUnitItemsActivity");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }
