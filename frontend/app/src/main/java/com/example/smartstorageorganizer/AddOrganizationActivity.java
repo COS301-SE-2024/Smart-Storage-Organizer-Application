@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class AddOrganizationActivity extends AppCompatActivity {
+public class AddOrganizationActivity extends BaseActivity {
     private TextInputEditText organizationEditText;
     private TextInputEditText nameEditText;
     private TextInputEditText surnameEditText;

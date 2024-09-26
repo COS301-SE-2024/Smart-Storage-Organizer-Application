@@ -12,6 +12,13 @@
         android:padding="16dp"
         android:text="Delete"
         android:textSize="18sp" />
+    <TextView
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Color Grouping"
+        android:textSize="18sp" />
 
 <!--    <TextView-->
 <!--        android:id="@+id/delete_category"-->

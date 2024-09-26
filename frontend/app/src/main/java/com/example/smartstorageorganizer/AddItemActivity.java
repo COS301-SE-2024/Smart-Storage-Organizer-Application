@@ -189,7 +189,6 @@ public class AddItemActivity extends BaseActivity  {
                     assignItemToColor();
                     fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
                     showSimilarItemPopup();
-
                 }
             }
         });
@@ -279,7 +278,7 @@ public class AddItemActivity extends BaseActivity  {
         searchResults.clear();
         adapter.notifyDataSetChanged();
 
-        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\",\"organizationid\":\"" + Integer.parseInt(app.getOrganizationID()) + "\"}";
+        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\", \"organizationid\":\"" + Integer.parseInt(app.getOrganizationID()) + "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.SearchEndPoint;

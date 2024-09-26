@@ -419,8 +419,9 @@ public class LoginActivity extends AppCompatActivity {
         Button closeButton = dialogView.findViewById(R.id.closeButton);
 
         closeButton.setOnClickListener(v -> {
-            String emailInput = email.getText().toString().trim();
-            String passwordInput = password.getText().toString().trim();
+            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         builder.show();

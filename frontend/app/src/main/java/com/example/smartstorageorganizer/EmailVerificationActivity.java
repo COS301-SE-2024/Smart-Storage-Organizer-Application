@@ -26,6 +26,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
@@ -42,7 +43,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class EmailVerificationActivity extends AppCompatActivity {
+public class EmailVerificationActivity extends BaseActivity {
     public static final String TAG = "AmplifyQuickstart";
     // UI Elements
     EditText inputCode1;
@@ -54,6 +55,9 @@ public class EmailVerificationActivity extends AppCompatActivity {
     TextView resendOtpTextView;
     private TextView emailTextView;
     CountDownTimer countDownTimer;
+    LottieAnimationView button_animation_otp;
+    TextView next_button_text_otp;
+    ProgressDialog progressDialog;
 
     // Constants
     private static final String AUTH_QUICK_START = "AuthQuickstart";
@@ -79,6 +83,8 @@ public class EmailVerificationActivity extends AppCompatActivity {
         RelativeLayout buttonNext = findViewById(R.id.buttonNext);
         resendOtpTextView = findViewById(R.id.resendOtp);
         emailTextView = findViewById(R.id.textEmail);
+        button_animation_otp = findViewById(R.id.button_animation_otp);
+        next_button_text_otp = findViewById(R.id.next_button_text_otp);
 
         inputCode1 = findViewById(R.id.inputCode1);
         inputCode2 = findViewById(R.id.inputCode2);
@@ -91,6 +97,14 @@ public class EmailVerificationActivity extends AppCompatActivity {
 
         buttonNext.setOnClickListener(v -> {
             if (validateForm()) {
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Verifying Email...");
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                next_button_text_otp.setVisibility(View.GONE);
+                button_animation_otp.setVisibility(View.VISIBLE);
                 String code = collectOtpCode();
                 confirmSignUp(emailTextView.getText().toString(), code);
             }
@@ -268,15 +282,23 @@ public class EmailVerificationActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-//                    navigateToMainActivity(username);
+                    progressDialog.dismiss();
+                    next_button_text_otp.setVisibility(View.VISIBLE);
+                    button_animation_otp.setVisibility(View.GONE);
                     Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
-//                    signOut();
-                    showRequestSentDialog();
+                    if(Objects.equals(getIntent().getStringExtra("type"), "registration")){
+                        showRequestSentDialog();
+                    }
+                    else {
+                        showOrganizationDialog();
+                    }
                 }
             }
 
             @Override
             public void onFailure(String error) {
+                next_button_text_otp.setVisibility(View.VISIBLE);
+                button_animation_otp.setVisibility(View.GONE);
                 Toast.makeText(EmailVerificationActivity.this, "user verification failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -286,14 +308,23 @@ public class EmailVerificationActivity extends AppCompatActivity {
         UserUtils.setUserToVerified(username, authorization, this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-//                fetchOrganizationDetails();
-                showRequestSentDialog();
+                progressDialog.dismiss();
+                next_button_text_otp.setVisibility(View.VISIBLE);
+                button_animation_otp.setVisibility(View.GONE);
+                if(Objects.equals(getIntent().getStringExtra("type"), "registration")){
+                    showRequestSentDialog();
+                }
+                else {
+                    showOrganizationDialog();
+                }
                 Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(String error) {
+                next_button_text_otp.setVisibility(View.VISIBLE);
+                button_animation_otp.setVisibility(View.GONE);
                 Toast.makeText(EmailVerificationActivity.this, "User approval failed", Toast.LENGTH_LONG).show();
             }
         });
@@ -382,44 +413,32 @@ public class EmailVerificationActivity extends AppCompatActivity {
         });
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setCancelable(false);
         alertDialog.show();
     }
 
-    private void fetchOrganizationDetails() {
-        OrganizationUtils.fetchOrganizationsDetails(this, new OperationCallback<List<OrganizationModel>>() {
-            @Override
-            public void onSuccess(List<OrganizationModel> result) {
-                List<String> organizationNames = new ArrayList<>();
-                for (OrganizationModel organization : result) {
-//                    if(Objects.equals(organization.getOrganizationName(), getIntent().getStringExtra("organization"))){
-//                        upDateDetails(organization.getOrganizationId()).thenAccept(updateDetails -> {
-                            showRequestSentDialog();
-//                        });
-//                    }
-                }
+    void showOrganizationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.created_organization_popup, null);
+        builder.setView(dialogView);
 
-                Toast.makeText(EmailVerificationActivity.this, "Organizations fetched successfully", Toast.LENGTH_SHORT).show();
-            }
+        Button finishButton = dialogView.findViewById(R.id.finishButton);
 
+        finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(String error) {
-                Toast.makeText(EmailVerificationActivity.this, "Failed to fetch organizations: " + error, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Intent intent = new Intent(EmailVerificationActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
-    }
 
-    public CompletableFuture<Boolean>  upDateDetails(String organizationId){
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-
-        Amplify.Auth.updateUserAttribute(
-                new AuthUserAttribute(AuthUserAttributeKey.address(), organizationId),
-                result -> Log.i("AuthDemo", "Updated address"),
-                error -> Log.e("AuthDemo", "Update failed", error)
-        );
-        future.complete(true);
-
-        return future;
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
 

@@ -703,7 +703,6 @@ public class ViewItemActivity extends BaseActivity {
                         itemAdapter.unselect();
                         loadInitialData();
                         progressDialog.dismiss();
-
                     }
                 }
             }

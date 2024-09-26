@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchOrganizationActivity extends AppCompatActivity {
+public class SearchOrganizationActivity extends BaseActivity {
     private AutoCompleteTextView autoCompleteTextView;
     private ArrayAdapter<String> adapter;
     private Map<String, String> organizationMap; // Map to store organizationName -> organizationId
