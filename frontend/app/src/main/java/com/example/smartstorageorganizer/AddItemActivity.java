@@ -189,6 +189,7 @@ public class AddItemActivity extends BaseActivity  {
                     assignItemToColor();
                     fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
                     showSimilarItemPopup();
+
                 }
             }
         });
@@ -278,7 +279,7 @@ public class AddItemActivity extends BaseActivity  {
         searchResults.clear();
         adapter.notifyDataSetChanged();
 
-        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
+        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\",\"organizationid\":\"" + Integer.parseInt(app.getOrganizationID()) + "\"}";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.SearchEndPoint;
@@ -569,6 +570,7 @@ public class AddItemActivity extends BaseActivity  {
 
     private void addItem(String itemImage, String itemName, String description, int category, int parentCategory, String unitName, String width, String height, String depth, String weight, String loadbear, String updown) {
         ArrayList<unitModel> units = new ArrayList<>();
+        newItem=new ItemModel("-1",itemName,description,"default"," "," ","1",unitName,app.getEmail(),itemImage," ",String.valueOf(parentCategory),String.valueOf(category),"");
         Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(), unitName, app.getOrganizationID(), width, height, depth, weight, loadbear, updown, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -590,7 +592,10 @@ public class AddItemActivity extends BaseActivity  {
                     try {
                         // Wait until both async tasks complete
                         latch.await();
-                        runOnUiThread(() -> openSearchInsert(result)); // Call openSearchInsert after both tasks
+                        runOnUiThread(() -> {
+                            openSearchInsert(result);
+                            Utils.changes(app.getOrganizationID(), app.getEmail(), app.getName() + " " + app.getSurname(), "ITEM", newItem.getItemName(), "1", "Add", "Added item with details: ");
+                        }); // Call openSearchInsert after both tasks
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -678,14 +683,9 @@ public class AddItemActivity extends BaseActivity  {
             public void onSuccess(Boolean result) {
                 if (result) {
                     // Successfully opened search insert
-                    new Thread(() -> {
-
                             currItem=new ItemModel(" "," "," "," "," "," "," "," ",app.getEmail()," "," "," "," "," ");
                            // newItem=new ItemModel(itemId,)
-                            addItem(ImgUrl, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
-
-
-                    }).start();
+                            newItem.setItemId(itemId);
                 }
             }
 

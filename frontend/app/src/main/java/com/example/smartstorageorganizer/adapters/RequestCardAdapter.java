@@ -632,6 +632,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
                     postEditItem(finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, itemId, parentCategoryId, finalSubcategoryId, progressDialog, position);
+
+
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -803,6 +805,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
+                            Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Item",itemname,String.valueOf(itemId),"Modify","Item modified with name: "+itemname);
                             mixedList.remove(position);
                             notifyDataSetChanged();
                             progressDialog.dismiss();

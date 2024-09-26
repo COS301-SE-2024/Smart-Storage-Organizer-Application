@@ -427,29 +427,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     }
 
-    private void updateCategoryName(int categoryId, String newName) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Updating category name...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        Utils.modifyCategoryName(categoryId, newName, app.getEmail(), app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>(){
-            @Override
-            public void onSuccess(Boolean result) {
-                progressDialog.dismiss();
-                if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    context.startActivity(intent);
-                    ((Activity) context).finish();
-                }
-            }
-            @Override
-            public void onFailure(String error) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed to Modify Category Name.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+
 
     private void deleteCategory(int id) {
         ProgressDialog progressDialog = new ProgressDialog(context);
@@ -473,27 +451,5 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         });
     }
 
-    private void moveItemsUnderTheDeletedCategory(int id) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Deleting category...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        Utils.categoryToUncategorized(id, (Activity) context, new OperationCallback<Boolean>(){
-            @Override
-            public void onSuccess(Boolean result) {
-                progressDialog.dismiss();
-                if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    context.startActivity(intent);
-                    ((Activity) context).finish();
-                }
-            }
-            @Override
-            public void onFailure(String error) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+
 }

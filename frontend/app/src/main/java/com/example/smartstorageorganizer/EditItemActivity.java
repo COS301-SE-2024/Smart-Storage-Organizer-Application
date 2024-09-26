@@ -555,11 +555,16 @@ public class EditItemActivity extends BaseActivity {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
+                        String id=String.valueOf(itemId);
+
+                        Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"ITEM",itemname,String.valueOf(itemId),"EDIT","item edit to: "+newItem.toJson());
                         runOnUiThread(() -> {
+                            Log.i("id",id);
                             Log.i("Request Method", "POST request succeeded: " + responseData);
                             showUpdateSuccessMessage();
                         });
                     } else {
+
                         runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
                         progressDialog.dismiss();
                     }
