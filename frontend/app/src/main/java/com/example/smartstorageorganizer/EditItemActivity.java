@@ -473,8 +473,12 @@ public class EditItemActivity extends BaseActivity {
             int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
-//            sendRequestToModifyItem();
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            if(Objects.equals(app.getUserRole(), "normalUser")){
+                sendRequestToModifyItem();
+            }
+            else if (Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            }
             currentItemName=itemName;
             currentItemDescription=description;
             currentQuantity=quantity;
@@ -592,8 +596,12 @@ public class EditItemActivity extends BaseActivity {
         String parentcategory=getIntent().getStringExtra("parentcategory_id");
         String subcategory=getIntent().getStringExtra("subcategory_id");
 
-
-        postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+        if(Objects.equals(app.getUserRole(), "normalUser")){
+            sendRequestToModifyItem();
+        }
+        else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")) {
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+        }
 
 
         currentItemName=itemName;
