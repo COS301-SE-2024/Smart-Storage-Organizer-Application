@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
@@ -212,27 +213,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .show();
     }
 
-    private void deleteCategory(int id) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Deleting category...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        Utils.deleteCategory(id, "NULL", (Activity) context, new OperationCallback<Boolean>() {
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    moveItemsUnderTheDeletedCategory(id);
-                    progressDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-        });
-    }
+//    private void deleteCategory(int id) {
+//        ProgressDialog progressDialog = new ProgressDialog(context);
+//        progressDialog.setMessage("Deleting category...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//        Utils.deleteCategory(id, "NULL", (Activity) context, new OperationCallback<Boolean>() {
+//            @Override
+//            public void onSuccess(Boolean result) {
+//                if (Boolean.TRUE.equals(result)) {
+//                    moveItemsUnderTheDeletedCategory(id);
+//                    progressDialog.dismiss();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+//                progressDialog.dismiss();
+//            }
+//        });
+//    }
 
     private void moveItemsUnderTheDeletedCategory(int id) {
         ProgressDialog progressDialog = new ProgressDialog(context);
@@ -269,7 +270,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
                     Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
-                    Utils.changes()
+                    String id=String.valueOf(categoryId);
+
                     Intent intent = new Intent(context, HomeActivity.class);
                     context.startActivity(intent);
                     ((Activity) context).finish();

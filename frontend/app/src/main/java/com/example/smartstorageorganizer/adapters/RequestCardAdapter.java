@@ -444,7 +444,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // ViewHolder for Category Requests
     static class CategoryRequestViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType;
+        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType,newCategoryName;
         LinearLayout detailsLayout, buttonsLayout;
         Button approveButton, rejectButton;
 
@@ -544,7 +544,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //                    progressDialog.dismiss();
 
                     createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
-                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog);
+                            cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog, position);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -554,7 +554,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-    public void approveCategoryRequest(String documentId, int position) {
+    public void approveCategoryRequest(String documentId, int position, String requestType) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
 
