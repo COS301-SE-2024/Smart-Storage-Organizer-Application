@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         // If all permissions are granted, proceed with your functionality
         if (allPermissionsGranted) {
             // All permissions granted, proceed with your app logic
-            Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
         } else {
             // Request the permissions
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE);
@@ -228,10 +228,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (allGranted) {
-                Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
                 // Proceed with your app logic
             } else {
-                Toast.makeText(this, "Some permissions were denied", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Some permissions were denied", Toast.LENGTH_SHORT).show();
             }
         }
     }

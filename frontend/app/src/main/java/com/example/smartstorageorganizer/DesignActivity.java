@@ -22,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DesignActivity extends AppCompatActivity {
+public class DesignActivity extends BaseActivity {
     ImageView iv_pick_image;
     ActivityResultLauncher<String> mGetContent;
 
