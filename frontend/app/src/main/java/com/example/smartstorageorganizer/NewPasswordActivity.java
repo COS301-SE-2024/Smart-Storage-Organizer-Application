@@ -57,17 +57,6 @@ public class NewPasswordActivity extends AppCompatActivity {
         resetPassword(newPassword, OTPCode);
     }
 
-//    private void resetPassword(String newPassword, String verificationCode) {
-//        // Amplify password reset confirmation
-//        Amplify.Auth.confirmResetPassword(
-//                "Username",
-//                newPassword,
-//                verificationCode,
-//                () -> Log.i("AuthQuickstart", "New password confirmed"),
-//                error -> Log.e("AuthQuickstart", error.toString())
-//        );
-//    }
-
     private void resetPassword(String newPassword, String verificationCode) {
         // Amplify password reset confirmation
         String email = getIntent().getStringExtra("email");
