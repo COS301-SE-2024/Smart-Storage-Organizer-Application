@@ -114,15 +114,7 @@ def lambda_handler(event, context):
     }
        
 
-event={
-    'body':json.dumps({
-        'username':'DaCoda@gmail.com',
-        'categoryname':'Others',
-        'id':16,
-        'organizationid':1
-    })
-}
-print(lambda_handler(event, None))       
+     
 
     
 
