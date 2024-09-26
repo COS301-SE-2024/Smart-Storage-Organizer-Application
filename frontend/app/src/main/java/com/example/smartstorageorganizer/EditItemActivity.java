@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -482,6 +484,12 @@ public class EditItemActivity extends BaseActivity {
             int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
             int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
+            if(Objects.equals(app.getUserRole(), "normalUser")){
+                sendRequestToModifyItem();
+            }
+            else if (Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            }
 
             postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             Log.i("2Before Post didnt open", " whats the error");
@@ -604,8 +612,12 @@ public class EditItemActivity extends BaseActivity {
         String parentcategory=getIntent().getStringExtra("parentcategory_id");
         String subcategory=getIntent().getStringExtra("subcategory_id");
 
-
-        postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+        if(Objects.equals(app.getUserRole(), "normalUser")){
+            sendRequestToModifyItem();
+        }
+        else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")) {
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+        }
 
 
         currentItemName=itemName;
@@ -711,6 +723,7 @@ public class EditItemActivity extends BaseActivity {
                     db.collection("item_requests").document(documentId)
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
+                                showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })
@@ -724,6 +737,25 @@ public class EditItemActivity extends BaseActivity {
                     future.complete(false);
                 });
 
+    }
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+//            Intent intent = new Intent(ViewItemActivity.this, HomeActivity.class);
+//            startActivity(intent);
+            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
 }

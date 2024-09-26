@@ -4,6 +4,7 @@ import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiTh
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 //import android.util.Log;
 import android.net.http.QuicException;
@@ -2497,6 +2498,46 @@ public class Utils
                 }
             });
 
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, String username, String organizationId,Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + username + "\", \"organization_id\":\"" + organizationId + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
+
+        MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String apiUrl = BuildConfig.AddUnitEndpoint;
+        RequestBody body = RequestBody.create(json, jsonObject);
+
+        Utils.getUserToken().thenAccept(token -> {
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .header("Authorization", token)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    Log.e("Unit Request Method", "POST request failed", e);
+                    callback.onFailure(e.getMessage());
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        Log.i("Unit Response", "Unit created successfully");
+                        callback.onSuccess(true);
+                    } else {
+                        Log.e("Unit Request Method", "POST request failed: " + response);
+                        callback.onFailure("Response code" + response.code());
+                    }
+                }
+            });
         }).exceptionally(ex -> {
             Log.e("TokenError", "Failed to get user token", ex);
             return null;

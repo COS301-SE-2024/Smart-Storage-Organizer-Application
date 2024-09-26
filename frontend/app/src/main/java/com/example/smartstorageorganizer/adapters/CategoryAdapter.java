@@ -167,8 +167,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             updateButton.setOnClickListener(v -> {
                 String newName = editCategoryName.getText().toString().trim();
                 if (!newName.isEmpty() && !newName.equals(category.getCategoryName())) {
-                    sendRequestToModifyCategory(category.getCategoryID(), category.getCategoryName(), newName);
-//                    updateCategoryName(Integer.parseInt(category.getCategoryID()), newName);
+                    if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                        updateCategoryName(Integer.parseInt(category.getCategoryID()), newName);
+                    }
+                    else if(Objects.equals(app.getUserRole(), "normalUser")){
+                        sendRequestToModifyCategory(category.getCategoryID(), category.getCategoryName(), newName);
+                    }
                     editDialog.dismiss();
                 }
             });
@@ -202,8 +206,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .setMessage("Do you want to delete the " + category.getCategoryName() + " category?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     Log.i("Adapter", "Yes clicked.");
-                    sendRequestToDeleteCategory(category.getCategoryID(), category.getCategoryName());
-//                    deleteCategory(Integer.parseInt(category.getCategoryID()));
+                    if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                        deleteCategory(Integer.parseInt(category.getCategoryID()));
+                    }
+                    else if(Objects.equals(app.getUserRole(), "normalUser")){
+                        sendRequestToDeleteCategory(category.getCategoryID(), category.getCategoryName());
+                    }
                 })
                 .setNegativeButton("No", (dialog, which) -> {
                     // Dismiss the dialog
@@ -293,7 +301,36 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.organizationID = organizationId;
     }
 
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+
+//            Intent intent = new Intent(context, HomeActivity.class);
+//            context.startActivity(intent);
+//
+//            if (context instanceof Activity) {
+//                ((Activity) context).finish();
+//            }
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+
     public CompletableFuture<Boolean> sendRequestToDeleteCategory(String id, String categoryName) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Sending Request To Delete a Category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -319,15 +356,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     db.collection("category_requests").document(documentId)
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
+                                progressDialog.dismiss();
+                                showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
                                 Log.e("Firestore", "Error updating documentId", e);
                                 future.complete(false);
                             });
                 })
                 .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
                     Log.e("Firestore", "Error storing request", e);
                     future.complete(false);
                 });
@@ -336,6 +377,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public void sendRequestToModifyCategory(String id, String currentCategoryName, String newCategoryName) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Sending Request to Update Category Name...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -362,18 +408,92 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     db.collection("category_requests").document(documentId)
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
+                                progressDialog.dismiss();
+                                showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
                                 Log.e("Firestore", "Error updating documentId", e);
                                 future.complete(false);
                             });
                 })
                 .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
                     Log.e("Firestore", "Error storing request", e);
                     future.complete(false);
                 });
 
+    }
+
+    private void updateCategoryName(int categoryId, String newName) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Updating category name...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.modifyCategoryName(categoryId, newName, app.getEmail(), app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialog.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
+                }
+            }
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to Modify Category Name.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteCategory(int id) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.deleteCategory(id, "NULL", app.getEmail(), (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    moveItemsUnderTheDeletedCategory(id);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    private void moveItemsUnderTheDeletedCategory(int id) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting category...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.categoryToUncategorized(id, (Activity) context, new OperationCallback<Boolean>(){
+            @Override
+            public void onSuccess(Boolean result) {
+                progressDialog.dismiss();
+                if (Boolean.TRUE.equals(result)) {
+                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
+                }
+            }
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
