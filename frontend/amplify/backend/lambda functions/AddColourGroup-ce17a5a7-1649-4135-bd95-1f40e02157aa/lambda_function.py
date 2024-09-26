@@ -108,14 +108,3 @@ def lambda_handler(event, context):
             curr.close()
         if conn is not None:
             conn.close()
-event = {
-    "body": {
-        "username": "musician.pianist23@gmail.com",
-        "colourcode": "yellow",
-        "organizationid": 1,
-        "description": "yellow colour",
-        "title": "red",
-        "createremail": "musician.pianist23@gmail.com"
-}
-}
-print(lambda_handler(event, None))
