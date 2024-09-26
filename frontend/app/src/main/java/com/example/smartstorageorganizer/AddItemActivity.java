@@ -594,7 +594,7 @@ public class AddItemActivity extends BaseActivity  {
                         latch.await();
                         runOnUiThread(() -> {
                             openSearchInsert(result);
-                            Utils.changes(app.getOrganizationID(), app.getEmail(), app.getName() + " " + app.getSurname(), "ITEM", newItem.getItemName(), "1", "Add", "Added item with details: ");
+                  //          Utils.changes(app.getOrganizationID(), app.getEmail(), app.getName() + " " + app.getSurname(), "ITEM", newItem.getItemName(), "1", "Add", "Added item with details: ");
                         }); // Call openSearchInsert after both tasks
                     } catch (InterruptedException e) {
                         e.printStackTrace();

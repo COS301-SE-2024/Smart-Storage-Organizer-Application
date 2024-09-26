@@ -1017,6 +1017,7 @@ public class Utils
             jsonObject.put("sub_category", category);
             jsonObject.put("colourcoding", colourcoding);
             jsonObject.put("barcode", barcode);
+            jsonObject.put("username", username);
             jsonObject.put("qrcode", qrcode);
             jsonObject.put("quanity", quantity);
             jsonObject.put("location", location);
