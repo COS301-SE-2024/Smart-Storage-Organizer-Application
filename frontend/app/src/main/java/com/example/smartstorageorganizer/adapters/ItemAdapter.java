@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
@@ -50,6 +51,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private boolean selectAllFlag = true;
     private String organizationID;
     private Activity activity;
+    private MyAmplifyApp app;
+
 
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList, Activity activity) {
@@ -57,6 +60,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         this.itemModelList = itemModelList;
         this.activity = activity;
         new OkHttpClient();
+
+        app = (MyAmplifyApp) context.getApplicationContext();
+
     }
 
     @NonNull
