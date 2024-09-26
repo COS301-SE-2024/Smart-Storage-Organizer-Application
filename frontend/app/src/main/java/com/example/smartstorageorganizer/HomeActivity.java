@@ -318,6 +318,7 @@ public class HomeActivity extends BaseActivity  {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formattedDate = dateFormat.format(currentDate);
                     loginActivities(currentEmail, currentName, currentSurname, "sign_out", organizationId, formattedDate);
+                    app.setUserRole("");
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -329,6 +330,7 @@ public class HomeActivity extends BaseActivity  {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formattedDate = dateFormat.format(currentDate);
                     loginActivities(currentEmail, currentName, currentSurname, "sign_out", organizationId, formattedDate);
+                    app.setUserRole("");
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -356,7 +358,8 @@ public class HomeActivity extends BaseActivity  {
             @Override
             public void onSuccess(String result) {
                 app.setUserRole(result);
-                if (Objects.equals(result, "Manager")) {
+                Toast.makeText(HomeActivity.this, "User Role: "+result, Toast.LENGTH_LONG).show();
+                if (Objects.equals(result, "Manager") || Objects.equals(result, "Admin")) {
                     showAdminMenuItems(navigationView.getMenu());
                 }
                 else {
@@ -379,7 +382,7 @@ public class HomeActivity extends BaseActivity  {
             public void onSuccess(OrganizationModel result) {
                 organizationName.setText(result.getOrganizationName().toUpperCase());
                 app.setOrganizationName(result.getOrganizationName().toUpperCase());
-                Toast.makeText(HomeActivity.this, "organization fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, "organization fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override

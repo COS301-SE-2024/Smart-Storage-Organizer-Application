@@ -169,6 +169,7 @@ public class ProfileManagementActivity extends BaseActivity {
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
                         handleSuccessfulSignOut();
+                        app.setUserRole("");
                     } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
                         handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
                     }

@@ -317,6 +317,7 @@ public class UnitActivity extends BaseActivity {
         unitRequest.put("height", height);
         unitRequest.put("depth", depth);
         unitRequest.put("maxweight", maxweight);
+        unitRequest.put("requestType", "Add Unit");
         unitRequest.put("userEmail", app.getEmail());
         unitRequest.put("organizationId", app.getOrganizationID());
         unitRequest.put("status", "pending");  // Initially set to pending

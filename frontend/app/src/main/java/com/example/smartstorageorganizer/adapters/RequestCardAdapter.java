@@ -542,7 +542,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     // Now dismiss the progress dialog
 //                    progressDialog.dismiss();
 
-                    createUnitAPI(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
+                    createUnit(cardItem.getUnitName(), cardItem.getCapacity(), cardItem.getConstraints(),
                             cardItem.getWidth(), cardItem.getHeight(), cardItem.getDepth(), cardItem.getMaxWeight(), progressDialog, position);
                 })
                 .addOnFailureListener(e -> {
@@ -639,48 +639,26 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
     }
 
-    public void createUnitAPI(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog, int position) {
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\"" + width + "\", \"height\":\"" + height + "\", \"depth\":\"" + depth + "\", \"maxweight\":\"" + maxweight + "\", \"username\":\"" + app.getEmail() + "\", \"organization_id\":\"" + app.getOrganizationID() + "\", \"Unit_QR\":\"" + "QR1" + "\"}";
-
-        MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String apiUrl = BuildConfig.AddUnitEndpoint;
-        RequestBody body = RequestBody.create(json, jsonObject);
-
-        Utils.getUserToken().thenAccept(token -> {
-            Request request = new Request.Builder()
-                    .url(apiUrl)
-                    .header("Authorization", token)
-                    .post(body)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    e.printStackTrace();
-                    progressDialog.dismiss();
-                    Log.e("Unit Request Method", "POST request failed", e);
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
+    public void createUnit(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight, Dialog progressDialog, int position) {
+        Utils.createUnitAPI(unitName, capacity, constraints, width, height, depth, maxweight, app.getEmail(), app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    ((Activity) context).runOnUiThread(() -> {
                         mixedList.remove(position);
                         notifyDataSetChanged();
                         progressDialog.dismiss();
-                        Log.i("Unit Response", "Unit created successfully");
-                    } else {
-                        progressDialog.dismiss();
-                        Log.e("Unit Request Method", "POST request failed: " + response);
-                    }
+                    });
+
                 }
-            });
-        }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
-            return null;
+            }
+
+            @Override
+            public void onFailure(String error) {
+                progressDialog.dismiss();
+            }
         });
     }
-
     public void addNewCategory(int parentCategory, String categoryName, String url, String email, String organizationId, Dialog progressDialog, int position) {
         Utils.addCategory(parentCategory, categoryName, email, url, organizationId, (Activity) context, new OperationCallback<Boolean>() {
             @Override
