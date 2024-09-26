@@ -133,13 +133,4 @@ def lambda_handler(event, context):
         'body': 'Item modified successfully'
     }
 
-event={
-        'username':'Tshegofatso.Mapheto7@gmail.com',
-        'parentCategoryId':0,
-        'subCategoryId':16,
-        'itemId':25,
-        'organization_id':1
 
-}
-
-print(lambda_handler(event, None))
