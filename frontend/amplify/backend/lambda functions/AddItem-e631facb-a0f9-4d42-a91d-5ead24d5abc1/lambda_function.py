@@ -181,21 +181,3 @@ def lambda_handler(event, context):
             'body': 'Data inserted successfully'
         }
        
-event={
-        'username':'musician.pianist23@gmail.com',
-        'item_name':'TestDilo3',
-        'description':'Television',
-        'colourcoding':'blue',
-        'barcode':'https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Barcode/barcodes/02510d94-e298-4eda-a65e-d7f9637a8cf4.svg',
-        'qrcode':'https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/Qrcode/qrcodes/b48736f7-73ea-423a-b9c7-e5d6ae2f3e9b.png',
-        'quanity':1,
-        'location':'UnitRed',
-        'email':'musician.pianist23@gmail.com',
-        'item_image':'',
-        'category':-1,
-        'sub_category':-1,
-        'organizationid':1
-    
-}
-
-print(lambda_handler(event, None))
