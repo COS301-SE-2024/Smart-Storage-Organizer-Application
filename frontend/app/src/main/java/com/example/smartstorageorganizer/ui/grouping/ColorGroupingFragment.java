@@ -137,7 +137,7 @@ public class ColorGroupingFragment extends Fragment {
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         colorCodeRecyclerView.setVisibility(View.GONE);
-        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(),requireActivity(), new OperationCallback<Boolean>() {
+        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(), app.getEmail(),requireActivity(), new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

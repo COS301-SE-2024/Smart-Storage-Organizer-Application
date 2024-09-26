@@ -137,7 +137,7 @@ public class AddColorCodeActivity extends BaseActivity  {
     }
 
     public void addNewColorCode(String colorCode, String title, String description, String organizationId) {
-        Utils.addColourGroup(colorCode, title, description, currentEmail, organizationId, this, new OperationCallback<Boolean>() {
+        Utils.addColourGroup(colorCode, title, description, app.getEmail(), app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {

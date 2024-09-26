@@ -577,7 +577,7 @@ public class Utils
 
     public static void addColourGroup(String colourcode, String title, String description, String email, String organizationId, Activity activity, OperationCallback<Boolean> callback)
     {
-        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\", \"createremail\":\""+email+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
+        String json = "{\"colourcode\":\""+colourcode+"\", \"description\":\""+description+"\", \"title\":\""+title+"\", \"createremail\":\""+email+"\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\", \"username\":\""+email+"\"}";
 
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -670,6 +670,7 @@ public class Utils
                             colorCode.setName(itemObject.getString("title"));
                             colorCode.setDescription(itemObject.getString("description"));
                             colorCode.setId(itemObject.getString("id"));
+                            colorCode.setQrCode(itemObject.getString("qrcode"));
 
                             colorCodeModelList.add(colorCode);
                         }
@@ -692,8 +693,8 @@ public class Utils
 
     }
 
-    public static void deleteColour(int colourId, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
-        String json = "{\"id\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\"}";
+    public static void deleteColour(int colourId, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
+        String json = "{\"id\":\"" + Integer.toString(colourId) + "\", \"organizationid\":\""+Integer.parseInt(organizationId)+"\", \"username\":\""+username+"\"}";
 
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
