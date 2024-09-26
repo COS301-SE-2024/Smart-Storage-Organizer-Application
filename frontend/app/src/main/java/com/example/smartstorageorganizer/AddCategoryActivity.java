@@ -1,5 +1,6 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,9 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -192,10 +195,9 @@ public class AddCategoryActivity extends BaseActivity  {
                     sendRequestToAddCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "").thenAccept(result -> {
                         Log.i("Response", "Unit created successfully");
                         if (result) {
-                            runOnUiThread(() -> {
-//                            showToast("Category added successfully");
-                                navigateToHome();
-                            });
+                            //                            showToast("Category added successfully");
+//                                                            navigateToHome();
+                            runOnUiThread(this::showRequestDialog);
                         }
                         else {
                             showToast("Failed to add category");
@@ -367,10 +369,9 @@ public class AddCategoryActivity extends BaseActivity  {
             sendRequestToAddCategory(0, parentCategoryEditText.getText().toString(), url).thenAccept(result -> {
                 Log.i("Response", "Unit created successfully");
                 if (result) {
-                    runOnUiThread(() -> {
-                        showToast("Category added successfully");
-                        navigateToHome();
-                    });
+                    //                        showToast("Category added successfully");
+//                                            navigateToHome();
+                    runOnUiThread(this::showRequestDialog);
                 }
                 else {
                     showToast("Failed to add category");
@@ -407,6 +408,24 @@ public class AddCategoryActivity extends BaseActivity  {
 
     public void showToast(String message) {
         Toast.makeText(AddCategoryActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            navigateToHome();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     public CompletableFuture<Boolean> sendRequestToAddCategory(int parentCategory, String categoryName, String url) {

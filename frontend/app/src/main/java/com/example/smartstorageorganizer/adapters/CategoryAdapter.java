@@ -230,6 +230,31 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.organizationID = organizationId;
     }
 
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+
+//            Intent intent = new Intent(context, HomeActivity.class);
+//            context.startActivity(intent);
+//
+//            if (context instanceof Activity) {
+//                ((Activity) context).finish();
+//            }
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+
     public CompletableFuture<Boolean> sendRequestToDeleteCategory(String id, String categoryName) {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Sending Request To Delete a Category...");
@@ -261,6 +286,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
                                 progressDialog.dismiss();
+                                showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })
