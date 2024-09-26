@@ -1,79 +1,105 @@
 package com.example.smartstorageorganizer;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputEditText;
 import com.amplifyframework.core.Amplify;
 
-
-import java.util.concurrent.CompletableFuture;
-
 public class NewPasswordActivity extends AppCompatActivity {
+    private TextInputEditText inputNewPassword, inputConfirmPassword, inputVerificationCode;
+    private RelativeLayout buttonResetPassword;
+    private ImageView buttonLoader;
 
-    private EditText newPasswordField;
-    private String verificationCode;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_password);
 
-        newPasswordField = findViewById(R.id.newPassword);
-        Button resetPasswordButton = findViewById(R.id.buttonConfirm);
+        // Link XML components to Java
+        inputNewPassword = findViewById(R.id.inputNewPassword);
+        inputConfirmPassword = findViewById(R.id.inputConfirmPassword);
+//        inputVerificationCode = findViewById(R.id.inputVerificationCode); // Verification code field
+        buttonResetPassword = findViewById(R.id.buttonResetPassword);
+        buttonLoader = findViewById(R.id.buttonLoader);
 
-
-        String email = getIntent().getStringExtra("email");
-        verificationCode = getIntent().getStringExtra("verificationCode");
-        assert email != null;
-        Log.i("1Email",email);
-        Log.i("1code",verificationCode);
-
-        resetPasswordButton.setOnClickListener(v -> {
-            String newPassword = newPasswordField.getText().toString();
-
-
-            if (newPassword.isEmpty()) {
-                Toast.makeText(NewPasswordActivity.this, "Please fill in the field", Toast.LENGTH_LONG).show();
-            }
-            else {
-                resetPassword(newPassword, verificationCode);
-            }
-        });
+        buttonResetPassword.setOnClickListener(v -> handlePasswordReset());
     }
 
-//    private CompletableFuture<Boolean> confirmResetPassword(String newPassword, String verificationCode) {
-//        Amplify.Auth.confirmPassword(
+    private void handlePasswordReset() {
+        String newPassword = inputNewPassword.getText().toString().trim();
+        String confirmPassword = inputConfirmPassword.getText().toString().trim();
+//        String verificationCode = inputVerificationCode.getText().toString().trim(); // Get the code
+        String OTPCode = getIntent().getStringExtra("verificationCode");
+
+        // Validate inputs
+        if (TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(confirmPassword) || TextUtils.isEmpty(OTPCode)) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Show the loader and start password reset
+        buttonLoader.setVisibility(View.VISIBLE);
+        resetPassword(newPassword, OTPCode);
+    }
+
+//    private void resetPassword(String newPassword, String verificationCode) {
+//        // Amplify password reset confirmation
+//        Amplify.Auth.confirmResetPassword(
+//                "Username",
 //                newPassword,
 //                verificationCode,
-//                () -> {
-//                    Log.i("AuthQuickstart", "Password reset succeeded");
-//                    runOnUiThread(() -> {
-//                        Toast.makeText(this, "Password reset successful. Please log in.", Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(NewPasswordActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    });
-//                },
-//                error -> {
-//                    Log.e("AuthQuickstart", error.toString());
-//                    runOnUiThread(() -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show());
-//                }
+//                () -> Log.i("AuthQuickstart", "New password confirmed"),
+//                error -> Log.e("AuthQuickstart", error.toString())
 //        );
 //    }
-    public void resetPassword(String newPassword, String verificationCode) {
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
+
+    private void resetPassword(String newPassword, String verificationCode) {
+        // Amplify password reset confirmation
+        String email = getIntent().getStringExtra("email");
+
         Amplify.Auth.confirmResetPassword(
+                email,
                 newPassword,
                 verificationCode,
-                "confirmation code you received",
-                () -> {Log.i("21AuthQuickstart", "New password confirmed");  future.complete(true);},
-                error -> {Log.e("AuthQuickstart", error.toString());  future.complete(false);}
+                () -> {
+                    Log.i("AuthQuickstart", "New password confirmed");
+
+                    // Hide loader
+                    runOnUiThread(() -> buttonLoader.setVisibility(View.GONE));
+
+                    // Navigate to the login activity
+                    runOnUiThread(() -> {
+                        Toast.makeText(NewPasswordActivity.this, "Password reset successful. Please log in.", Toast.LENGTH_SHORT).show();
+                        // Start the login activity
+                        Intent intent = new Intent(NewPasswordActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish(); // Close NewPasswordActivity
+                    });
+                },
+                error -> {
+                    Log.e("AuthQuickstart", error.toString());
+
+                    // Hide loader and show error message
+                    runOnUiThread(() -> {
+                        buttonLoader.setVisibility(View.GONE);
+                        Toast.makeText(NewPasswordActivity.this, "Password reset failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                }
         );
     }
 }
