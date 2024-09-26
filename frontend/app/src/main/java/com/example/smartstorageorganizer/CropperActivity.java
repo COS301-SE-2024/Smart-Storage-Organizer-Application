@@ -16,7 +16,7 @@ import com.yalantis.ucrop.UCrop;
 import java.io.File;
 import java.util.UUID;
 
-public class CropperActivity extends AppCompatActivity {
+public class CropperActivity extends BaseActivity {
     String result;
     Uri fileUri;
 

@@ -148,7 +148,7 @@ public class ProfileManagementActivity extends BaseActivity {
         findViewById(R.id.themeLayout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileManagementActivity.this, ThemeSwitcherActivity.class);
+                Intent intent = new Intent(ProfileManagementActivity.this, ARActivity.class);
                 startActivity(intent);
             }
         });
@@ -169,6 +169,7 @@ public class ProfileManagementActivity extends BaseActivity {
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
                         handleSuccessfulSignOut();
+                        app.setUserRole("");
                     } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
                         handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
                     }

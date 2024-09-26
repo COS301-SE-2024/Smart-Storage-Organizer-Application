@@ -233,7 +233,7 @@ public class SearchActivity extends BaseActivity {
         searchResults.clear();
         adapter.notifyDataSetChanged();
 
-        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
+        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\", \"organizationid\":\""+Integer.parseInt(app.getOrganizationID())+ "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.SearchEndPoint;

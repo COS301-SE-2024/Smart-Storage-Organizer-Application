@@ -1,12 +1,16 @@
 package com.example.smartstorageorganizer;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -119,8 +123,6 @@ public class UnitActivity extends BaseActivity {
 
                     }
                 }
-                Log.i("Constraints", constraints.toString());
-                Log.i("Checkbox count", String.valueOf(checkboxContainer.getChildCount()));
                 String unit;
                 unit = Objects.requireNonNull(unitName.getText()).toString();
 
@@ -130,24 +132,70 @@ public class UnitActivity extends BaseActivity {
                 String height = inputHeight.getText().toString();
                 String depth = inputDepth.getText().toString();
                 String weight = inputWeight.getText().toString();
-                Log.i("Constraints", categoryModelList.toString());
-                Log.i("unit", unit);
-                sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
-                    Log.i("Response", "Unit created successfully");
-                    if (result) {
-                        Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
-                        runOnUiThread(() -> {
-                            unitName.setText("");
-                            unitCap.setText("");
-                            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
-                   }
-              });
 
+                if(Objects.equals(app.getUserRole(), "normalUser")) {
+                    ProgressDialog progressDialog;
+                    progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("Sending Request To Add a New Unit...");
+                    progressDialog.setCancelable(false);
+
+                    progressDialog.show();
+                    sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                        if (result) {
+                            runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                unitName.setText("");
+                                unitCap.setText("");
+                                showRequestDialog();
+                            });
+                        }
+                    });
+
+                }
+                else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                    ProgressDialog progressDialog;
+                    progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("Adding New Unit...");
+                    progressDialog.setCancelable(false);
+
+                    progressDialog.show();
+                    createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                        Log.i("Response", "Unit created successfully");
+                        if (result) {
+                            Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
+                            runOnUiThread(() -> {
+                                unitName.setText("");
+                                unitCap.setText("");
+                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        }
+                    });
+                }
           });
     }
+
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
 
     public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
@@ -295,6 +343,7 @@ public class UnitActivity extends BaseActivity {
         unitRequest.put("height", height);
         unitRequest.put("depth", depth);
         unitRequest.put("maxweight", maxweight);
+        unitRequest.put("requestType", "Add Unit");
         unitRequest.put("userEmail", app.getEmail());
         unitRequest.put("organizationId", app.getOrganizationID());
         unitRequest.put("status", "pending");  // Initially set to pending

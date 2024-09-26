@@ -14,20 +14,11 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Always Visible -->
         <TextView
-            android:id="@+id/categoryName"
+            android:id="@+id/itemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Category Name: [Category Name]"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/newCategoryName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Category Name: [New Category Name]"
-            android:visibility="gone"
+            android:text="Item Name: [Item Name]"
             android:textStyle="bold" />
 
         <TextView
@@ -51,10 +42,22 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/categoryType"
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Category Type: [Type]" />
+                android:text="Description: [Description]" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location: [Location]" />
+
+            <TextView
+                android:id="@+id/colorGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color Group: [Color Group]" />
 
             <TextView
                 android:id="@+id/organizationId"

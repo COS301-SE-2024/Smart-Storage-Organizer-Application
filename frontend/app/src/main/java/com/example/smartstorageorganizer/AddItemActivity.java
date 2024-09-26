@@ -175,9 +175,10 @@ public class AddItemActivity extends BaseActivity  {
                 } else if (TextUtils.isEmpty(itemDescription)) {
                     description.setError("Item description is required");
                     description.requestFocus();
-                } else if (itemImage.getDrawable() == null || !file.exists()) {  // Check if image has been uploaded
-                    Toast.makeText(AddItemActivity.this, "Please upload an item image", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (itemImage.getDrawable() == null || file == null || !file.exists()) {
+                    Toast.makeText(AddItemActivity.this, "Please upload an item image", Toast.LENGTH_LONG).show();
+                }
+                else {
                     // If all fields are valid, proceed with the actions
                     buttonLoader.setVisibility(View.VISIBLE);
                     getSuggestedCategory(itemName, itemDescription);
@@ -273,7 +274,7 @@ public class AddItemActivity extends BaseActivity  {
         searchResults.clear();
         adapter.notifyDataSetChanged();
 
-        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\" }";
+        String json = "{\"target\":\"" + target + "\", \"parentcategoryid\":\"" + parentcategoryid + "\", \"subcategoryid\":\"" + subcategoryid + "\", \"organizationid\":\"" + Integer.parseInt(app.getOrganizationID()) + "\" }";
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String API_URL = BuildConfig.SearchEndPoint;

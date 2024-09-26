@@ -22,6 +22,8 @@ import com.example.smartstorageorganizer.adapters.RequestCardAdapter;
 import com.example.smartstorageorganizer.databinding.FragmentPendingBinding;
 import com.example.smartstorageorganizer.model.CategoryModel;
 import com.example.smartstorageorganizer.model.CategoryRequestModel;
+import com.example.smartstorageorganizer.model.ItemRequestModel;
+import com.example.smartstorageorganizer.model.ModifyItemRequestModel;
 import com.example.smartstorageorganizer.model.RequestModel;
 import com.example.smartstorageorganizer.model.UnitRequestModel;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,6 +58,9 @@ public class ApprovedFragment extends Fragment {
     List<Object> mixedList;
     List<UnitRequestModel> cardItemList;
     List<CategoryRequestModel> cardCategoryList;
+    List<CategoryRequestModel> cardDeleteCategoryList;
+    List<ItemRequestModel> cardDeleteItemList;
+    List<ModifyItemRequestModel> cardModifyItemList;
     RequestCardAdapter requestAdapter;
     RequestCardAdapter adapter;
     private MyAmplifyApp app;
@@ -73,6 +80,9 @@ public class ApprovedFragment extends Fragment {
         mixedList = new ArrayList<>();
         cardItemList = new ArrayList<>();
         cardCategoryList = new ArrayList<>();
+        cardDeleteCategoryList = new ArrayList<>();
+        cardDeleteItemList = new ArrayList<>();
+        cardModifyItemList = new ArrayList<>();
 
         adapter = new RequestCardAdapter(getContext(), mixedList, "approved");
         recyclerView.setAdapter(adapter);
@@ -135,6 +145,7 @@ public class ApprovedFragment extends Fragment {
 
         db.collection("category_requests")
                 .whereEqualTo("status", "approved")
+                .whereEqualTo("requestType", "Add Category")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -178,6 +189,196 @@ public class ApprovedFragment extends Fragment {
                 });
     }
 
+    public void fetchDeleteCategoryPendingRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("category_requests")
+                .whereEqualTo("status", "approved")
+                .whereEqualTo("requestType", "Delete Category")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String categoryName = document.getString("categoryName");
+                            Object parentCategoryObj = document.get("id");
+
+                            String parentCategory;
+                            if (parentCategoryObj instanceof Number) {
+                                parentCategory = String.valueOf(parentCategoryObj);
+                            } else {
+                                parentCategory = (String) parentCategoryObj;
+                            }
+
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            CategoryRequestModel categoryRequest = new CategoryRequestModel(categoryName, Integer.parseInt(parentCategory), formattedDate, status, userEmail, "", documentId, organizationId, requestType);
+
+                            // Add to cardItemList
+                            cardDeleteCategoryList.add(categoryRequest);
+                        }
+                        mixedList.addAll(cardDeleteCategoryList);  // Add all category requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardDeleteCategoryList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
+    public void fetchDeleteItemPendingRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("item_requests")
+                .whereEqualTo("status", "approved")
+                .whereEqualTo("requestType", "Delete Item")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String documentId = document.getString("documentId");
+                            String itemId = document.getString("itemId");
+                            String itemName = document.getString("itemName");
+                            String itemDescription = document.getString("itemDescription");
+                            String location = document.getString("location");
+                            String parentCategory = document.getString("parentCategory");
+                            String colorCode = document.getString("colorCode");
+                            String subcategory = document.getString("subcategory");
+                            String userEmail = document.getString("userEmail");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            ItemRequestModel itemRequest = new ItemRequestModel(
+                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status, itemId
+                            );
+                            // Add to cardItemList
+                            cardDeleteItemList.add(itemRequest);
+                        }
+                        mixedList.addAll(cardDeleteItemList);  // Add all category requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardDeleteItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
+    public void fetchPendingModifyItemRequests() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("item_requests")
+                .whereEqualTo("status", "approved")
+                .whereEqualTo("requestType", "Modify Item")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract data from Firestore document
+                            String documentId = document.getString("documentId");
+                            String itemId = document.getString("itemId");
+                            String itemName = document.getString("itemName");
+                            String itemDescription = document.getString("itemDescription");
+                            String location = document.getString("location");
+                            String quantity = document.getString("quantity");
+                            String qrcode = document.getString("qrcode");
+                            String barcode = document.getString("barcode");
+                            String parentCategory = document.getString("parentCategory");
+                            String parentCategoryId = document.getString("parentCategoryId");
+                            String colorCode = document.getString("colorCode");
+                            String subcategory = document.getString("subcategory");
+                            String subcategoryId = document.getString("subcategoryId");
+                            String userEmail = document.getString("userEmail");
+                            String image = document.getString("image");
+                            String organizationId = document.getString("organizationId");
+                            Timestamp requestDate = document.getTimestamp("requestDate");
+                            String requestType = document.getString("requestType");
+                            assert requestDate != null;
+                            String formattedDate = convertTimestampToDate(requestDate);
+                            String status = document.getString("status");
+
+                            // Create a UnitRequestModel object
+                            ModifyItemRequestModel itemRequest = new ModifyItemRequestModel(
+                                    documentId, itemName, itemDescription, location, parentCategory, subcategory, colorCode, userEmail, organizationId, formattedDate, requestType, status, itemId
+                            );
+
+                            itemRequest.setParentCategoryId(parentCategoryId);
+                            itemRequest.setSubCategoryId(subcategoryId);
+                            itemRequest.setQrcode(qrcode);
+                            itemRequest.setBarcode(barcode);
+                            itemRequest.setQuantity(quantity);
+                            itemRequest.setImage(image);
+
+                            Map<String, Map<String, String>> changedFields = (Map<String, Map<String, String>>) document.get("changedFields");
+
+                            // Now you can use the 'changedFields' map
+                            if (changedFields != null) {
+                                // Example: Fetch old and new values for Subcategory
+                                if(changedFields.get("Subcategory") != null){
+                                    String oldSubcategory = Objects.requireNonNull(changedFields.get("Subcategory")).get("oldValue");
+                                    String newSubcategory = Objects.requireNonNull(changedFields.get("Subcategory")).get("newValue");
+                                    itemRequest.setNewSubcategory(newSubcategory);
+                                    itemRequest.setOldSubcategory(oldSubcategory);
+                                }
+                                if(changedFields.get("ItemName") != null){
+                                    String oldItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("oldValue");
+                                    String newItemName = Objects.requireNonNull(changedFields.get("ItemName")).get("newValue");
+                                    itemRequest.setNewItem(newItemName);
+                                    itemRequest.setOldItem(oldItemName);
+                                }
+                                if(changedFields.get("Category") != null){
+                                    String oldCategory = Objects.requireNonNull(changedFields.get("Category")).get("oldValue");
+                                    String newCategory = Objects.requireNonNull(changedFields.get("Category")).get("newValue");
+                                    itemRequest.setNewParentCategory(newCategory);
+                                    itemRequest.setOldParentCategory(oldCategory);
+                                }
+                                if(changedFields.get("ItemDescription") != null){
+                                    String oldItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("oldValue");
+                                    String newItemDescription = Objects.requireNonNull(changedFields.get("ItemDescription")).get("newValue");
+                                    itemRequest.setNewDescription(newItemDescription);
+                                    itemRequest.setOldDescription(oldItemDescription);
+                                }
+                                if(changedFields.get("ItemQuantity") != null){
+                                    String oldItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("oldValue");
+                                    String newItemQuantity = Objects.requireNonNull(changedFields.get("ItemQuantity")).get("newValue");
+                                    itemRequest.setNewQuantity(newItemQuantity);
+                                    itemRequest.setOldQuantity(oldItemQuantity);
+                                }
+                            }
+
+                            // Add to cardItemList
+                            cardModifyItemList.add(itemRequest);
+                        }
+                        mixedList.addAll(cardModifyItemList);  // Add all unit requests
+                        adapter.notifyDataSetChanged();
+
+                        // Now your cardItemList contains all pending unit requests
+                        // You can now update your UI with the cardItemList
+                        Log.i("Firestore", "Pending requests fetched: " + cardModifyItemList.size());
+                    } else {
+                        Log.e("Firestore", "Error getting pending requests: ", task.getException());
+                    }
+                });
+    }
+
     public String convertTimestampToDate(Timestamp timestamp) {
         // Convert the Timestamp to a Date object
         Date date = timestamp.toDate();
@@ -199,10 +400,15 @@ public class ApprovedFragment extends Fragment {
         mixedList.clear();
         cardItemList.clear();
         cardCategoryList.clear();
+        cardDeleteCategoryList.clear();
+        cardDeleteItemList.clear();
+        cardModifyItemList.clear();
         adapter.notifyDataSetChanged();
 
         fetchPendingRequests();
         fetchCategoryPendingRequests();
+        fetchDeleteCategoryPendingRequests();
+        fetchDeleteItemPendingRequests();
+        fetchPendingModifyItemRequests();
     }
-
 }
