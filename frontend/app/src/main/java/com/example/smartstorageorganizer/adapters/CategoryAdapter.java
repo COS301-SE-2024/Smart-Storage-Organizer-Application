@@ -46,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private List<CategoryModel> categoryModelList;
     private String organizationID;
     private HomeFragment homeFragment;
-
+    String currentName;
     private MyAmplifyApp app;
 
     public CategoryAdapter(Context context, List<CategoryModel> categoryModelList, HomeFragment homeFragment) {
@@ -264,13 +264,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         progressDialog.setMessage("Updating category name...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        Utils.modifyCategoryName(categoryId, newName, (Activity) context, new OperationCallback<Boolean>(){
+        Utils.modifyCategoryName(categoryId, newName, app.getEmail(),app.getOrganizationID(),(Activity) context, new OperationCallback<Boolean>(){
             @Override
             public void onSuccess(Boolean result) {
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
                     Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
-                    String id=String.valueOf(categoryId);
 
                     Intent intent = new Intent(context, HomeActivity.class);
                     context.startActivity(intent);
@@ -340,7 +339,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+        currentName=currentCategoryName;
         // Create a map for the unit request
         Map<String, Object> unitRequest = new HashMap<>();
         unitRequest.put("id", id);

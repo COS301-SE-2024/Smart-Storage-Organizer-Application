@@ -562,6 +562,7 @@ public class EditItemActivity extends BaseActivity {
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
+        return future;
     }
 
     CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {

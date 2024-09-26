@@ -702,6 +702,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void deleteCategory(int id, int position) {
+        CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Deleting category...");
         progressDialog.setCancelable(false);
@@ -710,6 +711,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
+                    String Id=String.valueOf(id);
+                    Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Category",request.getCategoryName(),Id,"Delete","Deleted Category with name: "+request.getCategoryName());
                     moveItemsUnderTheDeletedCategory(id, position);
                     progressDialog.dismiss();
                 }
@@ -759,6 +762,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onSuccess(Boolean result) {
                 progressDialogModify.dismiss();
                 if (Boolean.TRUE.equals(result)) {
+                    String id=String.valueOf(categoryId);
+                    Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Category",newName,id,"Modify","Change Category Name to" + newName);
                     mixedList.remove(position);
                     notifyDataSetChanged();
                     Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
