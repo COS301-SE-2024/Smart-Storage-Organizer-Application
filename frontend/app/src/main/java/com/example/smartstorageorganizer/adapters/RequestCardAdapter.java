@@ -572,7 +572,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                     if(Objects.equals(requestType, "Add Category")){
                         addNewCategory(request.getParentCategory(), request.getCategoryName(),
-                                request.getUrl(), request.getUserEmail(), request.getOrganizationId(), progressDialog, position);
+                                request.getUrl(), app.getEmail(), request.getOrganizationId(), progressDialog, position);
                     }
                     else if(Objects.equals(requestType, "Delete Category")){
                         progressDialog.dismiss();

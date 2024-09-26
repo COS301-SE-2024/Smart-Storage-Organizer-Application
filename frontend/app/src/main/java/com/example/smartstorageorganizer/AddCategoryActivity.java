@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class AddCategoryActivity extends BaseActivity  {
@@ -187,22 +188,26 @@ public class AddCategoryActivity extends BaseActivity  {
         } else if (isSubCategorySelected() && validateSubCategoryForm()) {
             CategoryModel parent = findCategoryByName(currentSelectedParent);
             if (parent != null) {
-                sendRequestToAddCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "").thenAccept(result -> {
-                    Log.i("Response", "Unit created successfully");
-                    if (result) {
-                        runOnUiThread(() -> {
+                if(Objects.equals(app.getUserRole(), "normalUser")){
+                    sendRequestToAddCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "").thenAccept(result -> {
+                        Log.i("Response", "Unit created successfully");
+                        if (result) {
+                            runOnUiThread(() -> {
 //                            showToast("Category added successfully");
-                            navigateToHome();
-                        });
-                    }
-                    else {
-                        showToast("Failed to add category");
-                        loadingScreen.setVisibility(View.GONE);
-                        addCategoryLayout.setVisibility(View.VISIBLE);
-                        addButton.setVisibility(View.VISIBLE);
-                    }
-                });
-//                addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
+                                navigateToHome();
+                            });
+                        }
+                        else {
+                            showToast("Failed to add category");
+                            loadingScreen.setVisibility(View.GONE);
+                            addCategoryLayout.setVisibility(View.VISIBLE);
+                            addButton.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+                else if (Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                    addNewCategory(Integer.parseInt(parent.getCategoryID()), subCategoryEditText.getText().toString(), "");
+                }
             }
         }
     }
@@ -358,22 +363,26 @@ public class AddCategoryActivity extends BaseActivity  {
 
     public void handleImageUploadSuccess(String key) {
         String url = String.format(STORAGE_URL_FORMAT, key);
-        sendRequestToAddCategory(0, parentCategoryEditText.getText().toString(), url).thenAccept(result -> {
-            Log.i("Response", "Unit created successfully");
-            if (result) {
-                runOnUiThread(() -> {
-                    showToast("Category added successfully");
-                    navigateToHome();
-                });
-            }
-            else {
-                showToast("Failed to add category");
-                loadingScreen.setVisibility(View.GONE);
-                addCategoryLayout.setVisibility(View.VISIBLE);
-                addButton.setVisibility(View.VISIBLE);
-            }
-        });
-//        addNewCategory(0, parentCategoryEditText.getText().toString(), url);
+        if(Objects.equals(app.getUserRole(), "normalUser")) {
+            sendRequestToAddCategory(0, parentCategoryEditText.getText().toString(), url).thenAccept(result -> {
+                Log.i("Response", "Unit created successfully");
+                if (result) {
+                    runOnUiThread(() -> {
+                        showToast("Category added successfully");
+                        navigateToHome();
+                    });
+                }
+                else {
+                    showToast("Failed to add category");
+                    loadingScreen.setVisibility(View.GONE);
+                    addCategoryLayout.setVisibility(View.VISIBLE);
+                    addButton.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+        else if (Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")) {
+            addNewCategory(0, parentCategoryEditText.getText().toString(), url);
+        }
     }
 
     public void addNewCategory(int parentCategory, String categoryName, String url) {
