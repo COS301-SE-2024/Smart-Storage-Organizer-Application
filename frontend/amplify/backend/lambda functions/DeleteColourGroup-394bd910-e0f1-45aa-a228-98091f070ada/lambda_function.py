@@ -125,12 +125,3 @@ def lambda_handler(event, context):
             conn.close()
        
 
-event = {
-    
-        'username': 'ezemakau@gmail.com',
-        'id': 10,
-        'organizationid': 1
-    
-}
-print(lambda_handler(event, None))  
-
