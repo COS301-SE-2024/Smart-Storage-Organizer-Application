@@ -200,6 +200,8 @@ public class UnitActivity extends BaseActivity {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
+                            Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Unit",unitName,"-1","Add","Unit added with name: "+unitName);
+
                             runOnUiThread(() -> Log.e("Unit Response Results", responseData));
                             future.complete(true);
                         });

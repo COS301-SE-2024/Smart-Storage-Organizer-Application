@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.BuildConfig;
+import com.example.smartstorageorganizer.EditItemActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
@@ -631,7 +632,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .update("status", "approved")
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
-                    postEditItem(finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, itemId, parentCategoryId, finalSubcategoryId, progressDialog, position);
+                    EditItemActivity.postEditItem(finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, itemId, parentCategoryId, finalSubcategoryId, progressDialog, position);
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -666,6 +667,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Unit",unitName,"-1","Add","Unit added with name: "+unitName);
                         mixedList.remove(position);
                         notifyDataSetChanged();
                         progressDialog.dismiss();
