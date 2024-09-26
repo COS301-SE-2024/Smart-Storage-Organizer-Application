@@ -134,10 +134,3 @@ def lambda_handler(event, context):
             'body': 'item deleted successfully'
         }
 
-event={
-        'username':'tshegofatso.mapheto7@gmail.com',
-        'item_id':36,
-        'organizationId':1   
-}
-
-print(lambda_handler(event, None))
