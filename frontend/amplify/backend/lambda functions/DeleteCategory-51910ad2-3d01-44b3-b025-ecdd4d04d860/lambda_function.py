@@ -148,12 +148,3 @@ def lambda_handler(event, context):
          }
 
 
-
-event={
-    
-        'username':'Tshegofatso.Mapheto7@gmail.com',
-        'id':86
-    
-}
-
-print(lambda_handler(event, None))
