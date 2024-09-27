@@ -177,43 +177,55 @@ public class EditItemActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Track changes for category
-        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String newCategory = categorySpinner.getSelectedItem().toString();
-                String oldCategory = getIntent().getStringExtra("parentCategoryName");
-                if (!newCategory.equals(oldCategory)) {
-                    int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
-                    changedFields.put("Category", new HashMap<String, String>() {{
-                        put("oldValue", oldCategory);
-                        put("newValue", newCategory +", "+selectedParentCategory);
-                    }});
+        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+            // Track changes for category
+            categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String newCategory = categorySpinner.getSelectedItem().toString();
+                    String oldCategory = getIntent().getStringExtra("parentCategoryName");
+                    if (!newCategory.equals(oldCategory)) {
+                        Save.setEnabled(true);
+                        int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+//                    int categoryId = getCategoryId(String.valueOf(selectedParentCategory), "parent");
+                        fetchCategories(selectedParentCategory);
+                        changedFields.put("Category", new HashMap<String, String>() {{
+                            put("oldValue", oldCategory);
+                            put("newValue", newCategory +", "+selectedParentCategory);
+                        }});
+                    } else if(!subcategorySpinner.getSelectedItem().toString().equals(getIntent().getStringExtra("subCategoryName"))){
+                        fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
 
-        // Track changes for subcategory
-        subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String newSubCategory = subcategorySpinner.getSelectedItem().toString();
-                String oldSubCategory = getIntent().getStringExtra("subCategoryName");
-                if (!newSubCategory.equals(oldSubCategory)) {
-                    int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
-                    changedFields.put("Subcategory", new HashMap<String, String>() {{
-                        put("oldValue", oldSubCategory);
-                        put("newValue", newSubCategory +", "+selectedSubCategory);
-                    }});
+            // Track changes for subcategory
+            subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String newSubCategory = subcategorySpinner.getSelectedItem().toString();
+                    String oldSubCategory = getIntent().getStringExtra("subCategoryName");
+                    if (!newSubCategory.equals(oldSubCategory)) {
+                        Save.setEnabled(true);
+                        int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+                        changedFields.put("Subcategory", new HashMap<String, String>() {{
+                            put("oldValue", oldSubCategory);
+                            put("newValue", newSubCategory +", "+selectedSubCategory);
+                        }});
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        }
+        else {
+            categorySpinner.setVisibility(View.GONE);
+            subcategorySpinner.setVisibility(View.GONE);
+        }
     }
 
     private void initializeUI() {
@@ -247,27 +259,32 @@ public class EditItemActivity extends BaseActivity {
                 }
             }
         });
-
-        fetchCategories(0);
-        fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+            fetchCategories(0);
+            fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+        }
+        else {
+            categorySpinner.setVisibility(View.GONE);
+            subcategorySpinner.setVisibility(View.GONE);
+        }
 
 //        private void setupSpinnerListener() {
-            categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    if (isFirstTime) {
-                        isFirstTime = false;
-                        return;
-                    }
-                    int categoryId = getCategoryId(parentView.getItemAtPosition(position).toString(), "parent");
-                    fetchCategories(categoryId);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parentView) {
-                    //Handle when nothing is not selected.
-                }
-            });
+//        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                if (isFirstTime) {
+//                    isFirstTime = false;
+//                    return;
+//                }
+//                int categoryId = getCategoryId(parentView.getItemAtPosition(position).toString(), "parent");
+//                fetchCategories(categoryId);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//                //Handle when nothing is not selected.
+//            }
+//        });
 //        }
     }
 
@@ -474,8 +491,12 @@ public class EditItemActivity extends BaseActivity {
             String itemid=getIntent().getStringExtra("item_id");
             String colourcoding=getIntent().getStringExtra("color_code");
 
-            int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
-            int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+            int selectedParentCategory = -1;
+            int selectedSubCategory = -1;
+            if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+                selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+            }
 
             if(Objects.equals(app.getUserRole(), "normalUser")){
                 sendRequestToModifyItem();
@@ -549,7 +570,7 @@ public class EditItemActivity extends BaseActivity {
                             showUpdateSuccessMessage();
                         });
                     } else {
-                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response));
                         progressDialog.dismiss();
                     }
                 }
@@ -597,14 +618,18 @@ public class EditItemActivity extends BaseActivity {
         String itemid=getIntent().getStringExtra("item_id");
         String colourcoding=getIntent().getStringExtra("colour_code");
 
-        String parentcategory=getIntent().getStringExtra("parentcategory_id");
-        String subcategory=getIntent().getStringExtra("subcategory_id");
+        int selectedParentCategory = -1;
+        int selectedSubCategory = -1;
+        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+            selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+            selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+        }
 
         if(Objects.equals(app.getUserRole(), "normalUser")){
             sendRequestToModifyItem();
         }
         else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")) {
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), Integer.parseInt(parentcategory), Integer.parseInt(subcategory));
+            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
         }
 
 
@@ -616,8 +641,7 @@ public class EditItemActivity extends BaseActivity {
     }
 
     private void fetchCategories(int categoryId) {
-        String email = getIntent().getStringExtra("ezemakau@gmail.com");
-        Utils.fetchParentCategories(categoryId, email, getIntent().getStringExtra("organization_id"), this, new OperationCallback<List<CategoryModel>>() {
+        Utils.fetchParentCategories(categoryId, app.getEmail(), app.getOrganizationID(), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
                 if(categoryId == 0) {
