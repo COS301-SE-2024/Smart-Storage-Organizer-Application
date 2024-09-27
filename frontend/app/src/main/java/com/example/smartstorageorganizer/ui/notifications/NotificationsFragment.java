@@ -138,47 +138,6 @@ public class NotificationsFragment extends Fragment {
                 });
             }
 
-            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-////                    Log.d("API Response", response.body().string());
-//
-//                    String jsonData = response.body().string();
-//                    Log.d("API Response", jsonData);
-//
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(jsonData);
-//                        JSONArray notifications = jsonObject.getJSONArray("notifications");
-//
-//                        // Clear the existing list to avoid duplicates
-//                        notificationList.clear();
-//
-//                        // Parse the notification details
-//                        for (int i = 0; i < notifications.length(); i++) {
-//                            JSONObject notification = notifications.getJSONObject(i);
-//                            String title = notification.optString("headings", "No Title");
-//                            String message = notification.optString("contents", "No Message");
-//                            String date = notification.optString("delivery_time_of_day", "No Date");
-//
-//                            // Add to notification list
-////                            String currentDate = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault()).format(new Date());
-//
-//                            notificationList.add(new NotificationModel(title, message, date));
-//                        }
-//
-//                        // Notify the adapter (make sure this is done on the UI thread)
-//                        requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    // Handle non-successful responses
-//                    requireActivity().runOnUiThread(() -> {
-//                        Toast.makeText(requireContext(), "Error: " + response.message(), Toast.LENGTH_SHORT).show();
-//                    });
-//                }
-//            }
 
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -203,15 +162,18 @@ public class NotificationsFragment extends Fragment {
                             String message = cleanNotificationString(notification.optString("contents", "No Message"));
 //                            String date = notification.optString("delivery_time_of_day", "No Date");
 
+                            // Get the delivery time
+                            long queuedAt = notification.optLong("queued_at", 0);   // For the Org Manager
+                            long sendAfter = notification.optLong("send_after", 0); // For the Org Manager
+                            long completedAt = notification.optLong("completed_at", 0);
                             // Log the entire notification to debug
                             Log.d("Notification JSON", notification.toString());
 
-                            // Check for delivery time and log it if missing
-                            String date = notification.optString("delivery_time_of_day", null);
-                            if (date == null) {
-                                Log.d("Date Issue", "Date is null for this notifiation");
-                            } else {
-                                Log.d("Delivery Time", date);
+                            String date = "No Date";
+                            if (completedAt != 0) {
+                                Date deliveryDate = new Date(completedAt * 1000L); // Convert seconds to milliseconds
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
+                                date = dateFormat.format(deliveryDate);
                             }
 
                             // Add to the notification list
