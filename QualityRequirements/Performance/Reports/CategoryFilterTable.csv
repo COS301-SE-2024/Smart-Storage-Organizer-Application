@@ -1,0 +1,21 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1727360981504,1565,CategoryFilter,200,OK,SmartStorage Users 1-1,text,true,,420,1909,16,16,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1565,0,445
+1727360981720,1363,CategoryFilter,200,OK,SmartStorage Users 1-3,text,true,,420,1909,15,15,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1363,0,430
+1727360981622,1476,CategoryFilter,200,OK,SmartStorage Users 1-2,text,true,,420,1909,14,14,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1476,0,429
+1727360981828,1325,CategoryFilter,200,OK,SmartStorage Users 1-4,text,true,,420,1909,14,14,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1325,0,429
+1727360982432,788,CategoryFilter,200,OK,SmartStorage Users 1-10,text,true,,420,1909,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,788,0,412
+1727360982536,722,CategoryFilter,200,OK,SmartStorage Users 1-11,text,true,,420,1909,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,722,0,412
+1727360981927,1360,CategoryFilter,200,OK,SmartStorage Users 1-5,text,true,,420,1909,12,12,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1360,0,438
+1727360982623,829,CategoryFilter,200,OK,SmartStorage Users 1-12,text,true,,420,1909,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,829,0,433
+1727360982121,1331,CategoryFilter,200,OK,SmartStorage Users 1-7,text,true,,420,1909,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1331,0,423
+1727360982025,1428,CategoryFilter,200,OK,SmartStorage Users 1-6,text,true,,420,1909,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1428,0,432
+1727360982719,742,CategoryFilter,200,OK,SmartStorage Users 1-13,text,true,,420,1909,10,10,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,742,0,436
+1727360982233,1311,CategoryFilter,200,OK,SmartStorage Users 1-8,text,true,,420,1909,9,9,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1311,0,416
+1727360982824,870,CategoryFilter,200,OK,SmartStorage Users 1-14,text,true,,420,1909,8,8,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,870,0,460
+1727360982327,1367,CategoryFilter,200,OK,SmartStorage Users 1-9,text,true,,420,1909,8,8,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,1367,0,419
+1727360982935,964,CategoryFilter,200,OK,SmartStorage Users 1-15,text,true,,420,1909,6,6,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,964,0,519
+1727360983032,867,CategoryFilter,200,OK,SmartStorage Users 1-16,text,true,,420,1909,6,6,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,867,0,444
+1727360983139,849,CategoryFilter,200,OK,SmartStorage Users 1-17,text,true,,420,1909,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,849,0,562
+1727360983237,766,CategoryFilter,200,OK,SmartStorage Users 1-18,text,true,,420,1909,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,766,0,466
+1727360983331,772,CategoryFilter,200,OK,SmartStorage Users 1-19,text,true,,420,1909,2,2,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,772,0,421
+1727360983437,780,CategoryFilter,200,OK,SmartStorage Users 1-20,text,true,,420,1909,1,1,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/CategoryFilter,780,0,471
