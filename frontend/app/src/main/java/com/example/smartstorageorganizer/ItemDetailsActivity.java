@@ -71,7 +71,7 @@ public class ItemDetailsActivity extends BaseActivity {
     private String parentCategory, subcategory;
     private MyAmplifyApp app;
     private long startTime;
-
+    private ImageView editButton;
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -83,6 +83,7 @@ public class ItemDetailsActivity extends BaseActivity {
         app = (MyAmplifyApp) getApplicationContext();
 
         ImageView backButton = findViewById(R.id.backButton);
+        editButton = findViewById(R.id.edit);
 
 
         backButton.setOnClickListener(v -> finish());
@@ -271,8 +272,15 @@ public class ItemDetailsActivity extends BaseActivity {
         arrowCategory = findViewById(R.id.arrowCategory);
 
         if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
-            getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
-            itemCategory.setText(parentCategory+" - "+subcategory);
+            if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
+                itemCategory.setText(parentCategory+" - "+subcategory);
+            }
+            else {
+                editButton.setVisibility(View.VISIBLE);
+                itemCategory.setText("Uncategorized");
+            }
+
         }
 
         cardViewCategory.setTranslationX(800);
@@ -326,7 +334,13 @@ public class ItemDetailsActivity extends BaseActivity {
         Utils.fetchByID(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
-                getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
+                if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                    getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
+                }
+                else {
+                    itemCategory.setText("Uncategorized");
+                    editButton.setVisibility(View.VISIBLE);
+                }
                 Glide.with(ItemDetailsActivity.this)
                         .load(result.get(0).getItemImage())
                         .placeholder(R.drawable.no_image)
@@ -575,6 +589,7 @@ public class ItemDetailsActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 subcategory = result;
+                editButton.setVisibility(View.VISIBLE);
                 itemCategory.setText(parentCategory+ " - "+subcategory);
             }
 

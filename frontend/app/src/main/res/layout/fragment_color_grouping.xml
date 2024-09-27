@@ -8,17 +8,17 @@
     tools:context=".ui.grouping.ColorGroupingFragment">
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/loadingScreen"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:id="@+id/addButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_rawRes="@raw/loading"
-        android:visibility="gone"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/addloader" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container"

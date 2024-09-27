@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer.ui.grouping;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -17,13 +18,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.smartstorageorganizer.AddColorCodeActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.ViewColorCodesActivity;
 import com.example.smartstorageorganizer.adapters.ColorCodeAdapter;
 import com.example.smartstorageorganizer.adapters.SkeletonAdapter;
 import com.example.smartstorageorganizer.model.ColorCodeModel;
+import com.example.smartstorageorganizer.utils.DeletionCallback;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -39,10 +43,9 @@ public class ColorGroupingFragment extends Fragment {
     private List<ColorCodeModel> colorCodeModelList;
     private ColorCodeAdapter colorCodeAdapter;
     private FloatingActionButton deleteFab;
-    private LottieAnimationView loadingScreen;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
-    private String organizationID;
+    private LottieAnimationView addButton;
     MyAmplifyApp app;
 
     @Nullable
@@ -57,14 +60,19 @@ public class ColorGroupingFragment extends Fragment {
 
 //        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
 
-        loadingScreen = root.findViewById(R.id.loadingScreen);
         colorCodeRecyclerView = root.findViewById(R.id.color_code_rec);
         deleteFab = root.findViewById(R.id.delete_fab);
         deleteFab.setVisibility(View.GONE);
         shimmerFrameLayout = root.findViewById(R.id.shimmer_view_container);
         recyclerView = root.findViewById(R.id.recycler_view);
+        addButton = root.findViewById(R.id.addButton);
 
         loadAllColorCodes();
+
+        addButton.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), AddColorCodeActivity.class);
+            startActivity(intent);
+        });
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -88,20 +96,81 @@ public class ColorGroupingFragment extends Fragment {
                 .setTitle("Delete Color Codes")
                 .setMessage("Are you sure you want to delete the selected color codes?")
                 .setPositiveButton("Yes", (dialog, which) -> {
+                    ProgressDialog progressDialog;
+                    progressDialog = new ProgressDialog(requireActivity());
+                    progressDialog.setMessage("Deleting Color Group(s)...");
+                    progressDialog.setCancelable(false);  // Set to false to prevent dismissal until done
+                    progressDialog.show();
+
                     List<ColorCodeModel> selectedItems = colorCodeAdapter.getSelectedItems();
+                    int totalItems = selectedItems.size();
+                    final int[] deletedCount = {0};  // Track the number of completed deletions
+
+                    // Loop through selected items
                     for (ColorCodeModel item : selectedItems) {
-                        deleteCategory(item.getId());
+                        deleteGroup(item.getId(), new DeletionCallback() {
+                            @Override
+                            public void onDeleteSuccess() {
+                                deletedCount[0]++;  // Increment count after successful deletion
+                                if (deletedCount[0] == totalItems) {
+                                    // All deletions are done, dismiss the progress dialog
+                                    progressDialog.dismiss();
+                                    shimmerFrameLayout.stopShimmer();
+                                    shimmerFrameLayout.setVisibility(View.GONE);
+                                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                                    colorCodeAdapter.deleteSelectedItems();
+                                    deleteFab.setVisibility(View.GONE);
+                                    if(colorCodeModelList.isEmpty()){
+                                        addButton.setVisibility(View.VISIBLE);
+                                        shimmerFrameLayout.stopShimmer();
+                                        shimmerFrameLayout.setVisibility(View.GONE);
+                                        colorCodeRecyclerView.setVisibility(View.GONE);
+                                    }
+                                    else {
+                                        addButton.setVisibility(View.GONE);
+                                        shimmerFrameLayout.stopShimmer();
+                                        shimmerFrameLayout.setVisibility(View.GONE);
+                                        colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onDeleteFailure() {
+                                // Handle failure case if needed
+                                deletedCount[0]++;
+                                if (deletedCount[0] == totalItems) {
+                                    progressDialog.dismiss();
+                                    shimmerFrameLayout.stopShimmer();
+                                    shimmerFrameLayout.setVisibility(View.GONE);
+                                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                                    colorCodeAdapter.deleteSelectedItems();
+                                    deleteFab.setVisibility(View.GONE);
+                                    if(colorCodeModelList.isEmpty()){
+                                        addButton.setVisibility(View.VISIBLE);
+                                        shimmerFrameLayout.stopShimmer();
+                                        shimmerFrameLayout.setVisibility(View.GONE);
+                                        colorCodeRecyclerView.setVisibility(View.GONE);
+                                    }
+                                    else {
+                                        addButton.setVisibility(View.GONE);
+                                        shimmerFrameLayout.stopShimmer();
+                                        shimmerFrameLayout.setVisibility(View.GONE);
+                                        colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        });
                     }
-//                    navigateToHome();
-//                    loadingScreen.setVisibility(View.GONE);
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
-                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
-                    colorCodeAdapter.deleteSelectedItems();
-                    deleteFab.setVisibility(View.GONE);
+
+                    // If no items are selected, dismiss the dialog immediately
+                    if (selectedItems.isEmpty()) {
+                        progressDialog.dismiss();
+                    }
                 })
                 .setNegativeButton("No", null)
                 .show());
+
 
         return root;
     }
@@ -117,10 +186,20 @@ public class ColorGroupingFragment extends Fragment {
                 colorCodeModelList.clear();
                 colorCodeModelList.addAll(result);
                 colorCodeAdapter.notifyDataSetChanged();
-//                loadingScreen.setVisibility(View.GONE);
-                shimmerFrameLayout.stopShimmer();
-                shimmerFrameLayout.setVisibility(View.GONE);
-                colorCodeRecyclerView.setVisibility(View.VISIBLE);
+
+                if(result.isEmpty()){
+                    addButton.setVisibility(View.VISIBLE);
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    colorCodeRecyclerView.setVisibility(View.GONE);
+                }
+                else {
+                    addButton.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    colorCodeRecyclerView.setVisibility(View.VISIBLE);
+                }
+
                 Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
@@ -132,27 +211,51 @@ public class ColorGroupingFragment extends Fragment {
         });
     }
 
-    private void deleteCategory(String colorCodeId) {
-//        loadingScreen.setVisibility(View.VISIBLE);
-        shimmerFrameLayout.startShimmer();
-        shimmerFrameLayout.setVisibility(View.VISIBLE);
-        colorCodeRecyclerView.setVisibility(View.GONE);
+    public void deleteGroup(String colorCodeId, DeletionCallback callback) {
+//        shimmerFrameLayout.startShimmer();
+//        shimmerFrameLayout.setVisibility(View.VISIBLE);
+//        colorCodeRecyclerView.setVisibility(View.GONE);
         Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(), app.getEmail(),requireActivity(), new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    showToast("Category added successfully");
+//                    showToast("Category added successfully");
+                    callback.onDeleteSuccess();
                 }
             }
 
             @Override
             public void onFailure(String error) {
                 showToast("Failed to add category: " + error);
+                callback.onDeleteFailure();
 //                loadingScreen.setVisibility(View.GONE);
 //                addCategoryLayout.setVisibility(View.VISIBLE);
             }
         });
     }
+
+
+//    private void deleteGroup(String colorCodeId) {
+////        loadingScreen.setVisibility(View.VISIBLE);
+//        shimmerFrameLayout.startShimmer();
+//        shimmerFrameLayout.setVisibility(View.VISIBLE);
+//        colorCodeRecyclerView.setVisibility(View.GONE);
+//        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(), app.getEmail(),requireActivity(), new OperationCallback<Boolean>() {
+//            @Override
+//            public void onSuccess(Boolean result) {
+//                if (Boolean.TRUE.equals(result)) {
+//                    showToast("Category added successfully");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                showToast("Failed to add category: " + error);
+////                loadingScreen.setVisibility(View.GONE);
+////                addCategoryLayout.setVisibility(View.VISIBLE);
+//            }
+//        });
+//    }
 
     private void navigateToHome() {
         Intent intent = new Intent(requireActivity(), HomeActivity.class);

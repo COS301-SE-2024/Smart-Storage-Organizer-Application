@@ -108,6 +108,7 @@ public class PendingFragment extends Fragment {
 
         db.collection("unit_requests")
                 .whereEqualTo("status", "pending")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -140,6 +141,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -148,7 +150,6 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchCategoryPendingRequests() {
@@ -157,6 +158,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Add Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -191,6 +193,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -199,7 +202,6 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchDeleteCategoryPendingRequests() {
@@ -208,6 +210,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Delete Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -240,6 +243,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardDeleteCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -248,7 +252,6 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchModifyCategoryPendingRequests() {
@@ -257,6 +260,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Modify Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -290,6 +294,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardModifyCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -298,7 +303,6 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchPendingDeleteItemRequests() {
@@ -307,6 +311,7 @@ public class PendingFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Delete Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -339,6 +344,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardDeleteItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -347,7 +353,6 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchPendingModifyItemRequests() {
@@ -356,6 +361,7 @@ public class PendingFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Modify Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -438,6 +444,7 @@ public class PendingFragment extends Fragment {
                         mixedList.addAll(cardModifyItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -445,7 +452,6 @@ public class PendingFragment extends Fragment {
                     } else {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
-                    checkForNoRequests();
                 });
     }
 
@@ -498,7 +504,7 @@ public class PendingFragment extends Fragment {
         fetchPendingDeleteItemRequests();
         fetchPendingModifyItemRequests();
 
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
 }

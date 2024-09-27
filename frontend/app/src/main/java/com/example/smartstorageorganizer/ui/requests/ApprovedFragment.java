@@ -105,6 +105,7 @@ public class ApprovedFragment extends Fragment {
 
         db.collection("unit_requests")
                 .whereEqualTo("status", "approved")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -137,6 +138,7 @@ public class ApprovedFragment extends Fragment {
                         mixedList.addAll(cardItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -145,7 +147,6 @@ public class ApprovedFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchCategoryPendingRequests() {
@@ -154,6 +155,7 @@ public class ApprovedFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "approved")
                 .whereEqualTo("requestType", "Add Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -188,6 +190,7 @@ public class ApprovedFragment extends Fragment {
                         mixedList.addAll(cardCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -196,7 +199,6 @@ public class ApprovedFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchDeleteCategoryPendingRequests() {
@@ -205,6 +207,7 @@ public class ApprovedFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "approved")
                 .whereEqualTo("requestType", "Delete Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -238,6 +241,7 @@ public class ApprovedFragment extends Fragment {
                         mixedList.addAll(cardDeleteCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -246,7 +250,6 @@ public class ApprovedFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchDeleteItemPendingRequests() {
@@ -255,6 +258,7 @@ public class ApprovedFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "approved")
                 .whereEqualTo("requestType", "Delete Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -285,6 +289,7 @@ public class ApprovedFragment extends Fragment {
                         mixedList.addAll(cardDeleteItemList);  // Add all category requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -293,7 +298,6 @@ public class ApprovedFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public void fetchPendingModifyItemRequests() {
@@ -302,6 +306,7 @@ public class ApprovedFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "approved")
                 .whereEqualTo("requestType", "Modify Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -384,6 +389,7 @@ public class ApprovedFragment extends Fragment {
                         mixedList.addAll(cardModifyItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
                         requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -392,7 +398,6 @@ public class ApprovedFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
     }
 
     public String convertTimestampToDate(Timestamp timestamp) {
@@ -441,6 +446,6 @@ public class ApprovedFragment extends Fragment {
         fetchDeleteItemPendingRequests();
         fetchPendingModifyItemRequests();
 
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 }
