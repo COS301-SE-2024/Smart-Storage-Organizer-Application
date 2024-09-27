@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class ColorGroupingFragment extends Fragment {
     private RecyclerView recyclerView;
     private LottieAnimationView addButton;
     MyAmplifyApp app;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -58,16 +60,18 @@ public class ColorGroupingFragment extends Fragment {
         String id = app.getOrganizationID();
         Log.i("AuthDemo", "organization id: "+id);
 
-//        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
-
         colorCodeRecyclerView = root.findViewById(R.id.color_code_rec);
         deleteFab = root.findViewById(R.id.delete_fab);
         deleteFab.setVisibility(View.GONE);
         shimmerFrameLayout = root.findViewById(R.id.shimmer_view_container);
         recyclerView = root.findViewById(R.id.recycler_view);
         addButton = root.findViewById(R.id.addButton);
+        swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
 
         loadAllColorCodes();
+
+        // Refresh the data when user swipes down
+        swipeRefreshLayout.setOnRefreshListener(this::loadAllColorCodes);
 
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), AddColorCodeActivity.class);
@@ -199,22 +203,19 @@ public class ColorGroupingFragment extends Fragment {
                     shimmerFrameLayout.setVisibility(View.GONE);
                     colorCodeRecyclerView.setVisibility(View.VISIBLE);
                 }
-
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String error) {
-//                loadingScreen.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void deleteGroup(String colorCodeId, DeletionCallback callback) {
-//        shimmerFrameLayout.startShimmer();
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        colorCodeRecyclerView.setVisibility(View.GONE);
         Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(), app.getEmail(),requireActivity(), new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
@@ -228,39 +229,8 @@ public class ColorGroupingFragment extends Fragment {
             public void onFailure(String error) {
                 showToast("Failed to add category: " + error);
                 callback.onDeleteFailure();
-//                loadingScreen.setVisibility(View.GONE);
-//                addCategoryLayout.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-
-//    private void deleteGroup(String colorCodeId) {
-////        loadingScreen.setVisibility(View.VISIBLE);
-//        shimmerFrameLayout.startShimmer();
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        colorCodeRecyclerView.setVisibility(View.GONE);
-//        Utils.deleteColour(Integer.parseInt(colorCodeId), app.getOrganizationID(), app.getEmail(),requireActivity(), new OperationCallback<Boolean>() {
-//            @Override
-//            public void onSuccess(Boolean result) {
-//                if (Boolean.TRUE.equals(result)) {
-//                    showToast("Category added successfully");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-//                showToast("Failed to add category: " + error);
-////                loadingScreen.setVisibility(View.GONE);
-////                addCategoryLayout.setVisibility(View.VISIBLE);
-//            }
-//        });
-//    }
-
-    private void navigateToHome() {
-        Intent intent = new Intent(requireActivity(), HomeActivity.class);
-        startActivity(intent);
-        requireActivity().finish();
     }
 
     private void showToast(String message) {
