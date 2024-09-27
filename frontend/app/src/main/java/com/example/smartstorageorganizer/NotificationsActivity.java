@@ -1,6 +1,5 @@
 package com.example.smartstorageorganizer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -8,8 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.smartstorageorganizer.ui.notifications.NotificationsFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,12 +96,8 @@ public class NotificationsActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     Log.d("OneSignal", "Notification sent successfully");
-                    runOnUiThread(() -> {
-                        Toast.makeText(NotificationsActivity.this, "Notification sent successfully", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(NotificationsActivity.this, Hom.class);
-//                        startActivity(intent);
-                        finish();
-                    });
+                    runOnUiThread(() -> Toast.makeText(NotificationsActivity.this, "Notification sent successfully", Toast.LENGTH_SHORT).show());
+                    finish();
                 } else {
                     Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
                     runOnUiThread(() -> Toast.makeText(NotificationsActivity.this, "Failed to send notification", Toast.LENGTH_SHORT).show());
