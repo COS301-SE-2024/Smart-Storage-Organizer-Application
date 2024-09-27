@@ -509,6 +509,11 @@ public class Utils
                     .post(body)
                     .build();
 
+            activity.runOnUiThread(() -> {
+                Log.i(message, "Authorization Token"+ results);
+
+            });
+
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
