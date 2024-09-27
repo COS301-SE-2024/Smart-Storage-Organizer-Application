@@ -71,7 +71,11 @@ public class ItemDetailsActivity extends BaseActivity {
     private String parentCategory, subcategory;
     private MyAmplifyApp app;
     private long startTime;
-
+    private ImageView editButton;
+    private String imageUrl;
+    private String quantity;
+    private String subCategoryId;
+    private String parentCategoryId;
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -83,6 +87,7 @@ public class ItemDetailsActivity extends BaseActivity {
         app = (MyAmplifyApp) getApplicationContext();
 
         ImageView backButton = findViewById(R.id.backButton);
+        editButton = findViewById(R.id.edit);
 
 
         backButton.setOnClickListener(v -> finish());
@@ -164,25 +169,41 @@ public class ItemDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
-
-                intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
-                intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
-                intent.putExtra("location", getIntent().getStringExtra("location"));
-                intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
-                intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
-                intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
-                intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
-                intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
-                intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
-                intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
-                intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
-                intent.putExtra("parentCategoryName", parentCategory);
-                intent.putExtra("subCategoryName", subcategory);
-                intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
+                if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+                    intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
+                    intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
+                    intent.putExtra("location", getIntent().getStringExtra("location"));
+                    intent.putExtra("color_code", getIntent().getStringExtra("color_code"));
+                    intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+                    intent.putExtra("item_image", getIntent().getStringExtra("item_image"));
+                    intent.putExtra("subcategory_id", getIntent().getStringExtra("subcategory_id"));
+                    intent.putExtra("parentcategory_id", getIntent().getStringExtra("parentcategory_id"));
+                    intent.putExtra("item_qrcode", getIntent().getStringExtra("item_qrcode"));
+                    intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
+                    intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
+                    intent.putExtra("parentCategoryName", parentCategory);
+                    intent.putExtra("subCategoryName", subcategory);
+                    intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
+                }
+                else {
+                    intent.putExtra("item_name", itemName.getText());
+                    intent.putExtra("item_description", itemDescription.getText());
+                    intent.putExtra("location", itemUnit.getText());
+                    intent.putExtra("color_code", itemColorCode.getText());
+                    intent.putExtra("item_id", getIntent().getStringExtra("item_id"));
+                    intent.putExtra("item_image", imageUrl);
+                    intent.putExtra("subcategory_id", subCategoryId);
+                    intent.putExtra("parentcategory_id", parentCategoryId);
+                    intent.putExtra("item_qrcode", qrCodeUrl);
+                    intent.putExtra("item_barcode", barcodeUrl);
+                    intent.putExtra("quantity", quantity);
+                    intent.putExtra("parentCategoryName", parentCategory);
+                    intent.putExtra("subCategoryName", subcategory);
+                    intent.putExtra("organization_id", app.getOrganizationID());
+                }
 
                 logUserFlow("EditItemActivity");
                 startActivityForResult(intent, 1);
-//                startActivity(intent);
             }
         });
     }
@@ -271,8 +292,15 @@ public class ItemDetailsActivity extends BaseActivity {
         arrowCategory = findViewById(R.id.arrowCategory);
 
         if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
-            getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
-            itemCategory.setText(parentCategory+" - "+subcategory);
+            if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                getParentCategoryName(getIntent().getStringExtra("parentcategory_id"), "", "");
+                itemCategory.setText(parentCategory+" - "+subcategory);
+            }
+            else {
+                editButton.setVisibility(View.VISIBLE);
+                itemCategory.setText("Uncategorized");
+            }
+
         }
 
         cardViewCategory.setTranslationX(800);
@@ -326,12 +354,23 @@ public class ItemDetailsActivity extends BaseActivity {
         Utils.fetchByID(itemId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
-                getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
+                if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                    getParentCategoryName(result.get(0).getParentCategoryId(), "", result.get(0).getSubCategoryId());
+                }
+                else {
+                    itemCategory.setText("Uncategorized");
+                    editButton.setVisibility(View.VISIBLE);
+                }
                 Glide.with(ItemDetailsActivity.this)
                         .load(result.get(0).getItemImage())
                         .placeholder(R.drawable.no_image)
                         .error(R.drawable.no_image)
                         .into(itemImage);
+
+                imageUrl = result.get(0).getItemImage();
+                quantity = result.get(0).getQuantity();
+                parentCategoryId = result.get(0).getParentCategoryId();
+                subCategoryId = result.get(0).getSubCategoryId();
 
                 itemName.setText(result.get(0).getItemName());
                 itemDescription.setText(result.get(0).getDescription());
@@ -575,6 +614,7 @@ public class ItemDetailsActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 subcategory = result;
+                editButton.setVisibility(View.VISIBLE);
                 itemCategory.setText(parentCategory+ " - "+subcategory);
             }
 

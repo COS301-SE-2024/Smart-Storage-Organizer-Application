@@ -394,7 +394,7 @@ public class AddCategoryActivity extends BaseActivity  {
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     showToast("Category added successfully");
-                    navigateToHome();
+                    showSuccessDialog();
                 }
             }
 
@@ -522,6 +522,31 @@ public class AddCategoryActivity extends BaseActivity  {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
     }
 
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("New Category Added Successfully");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            navigateToHome();
+//            Intent intent = new Intent(AddCategoryActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
 //    public void logUser
 
     @Override
