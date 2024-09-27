@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
-import com.example.smartstorageorganizer.NotificationModel;
 import com.example.smartstorageorganizer.NotificationsActivity;
-import com.example.smartstorageorganizer.NotificationsAdapter;
 import com.example.smartstorageorganizer.R;
+import com.example.smartstorageorganizer.adapters.NotificationsAdapter;
+import com.example.smartstorageorganizer.model.NotificationModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,6 +98,7 @@ public class NotificationsFragment extends Fragment {
         super.onResume();
         // Check session state when resuming the fragment
         checkSessionState();
+        loadNotifications();
     }
 
     private void checkSessionState() {
@@ -181,4 +182,3 @@ public class NotificationsFragment extends Fragment {
         });
     }
 }
-

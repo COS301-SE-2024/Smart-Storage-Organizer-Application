@@ -260,7 +260,7 @@ public class ViewItemActivity extends BaseActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchByColour(colorCodeId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByColour(colorCodeId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();

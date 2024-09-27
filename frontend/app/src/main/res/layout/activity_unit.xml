@@ -139,7 +139,7 @@
                             android:id="@+id/inputWidth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Unit Width"
+                            android:hint="Unit Width(cm)"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,7 +155,7 @@
                             android:id="@+id/inputHeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Unit Height"
+                            android:hint="Unit Height(cm)"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -170,7 +170,7 @@
                             android:id="@+id/inputDepth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Unit Depth"
+                            android:hint="Unit Depth(cm)"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,7 +186,7 @@
                             android:id="@+id/inputWeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Unit Weight"
+                            android:hint="Unit Weight(cm)"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
 

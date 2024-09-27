@@ -1,29 +1,25 @@
 package com.example.smartstorageorganizer;
-
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OSNotificationReceivedEvent;
 import com.onesignal.OneSignal;
 
-import com.example.smartstorageorganizer.utils.OperationCallback;
-import com.example.smartstorageorganizer.utils.UserUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//import com.onesignal.Continue;
-//import com.onesignal.OneSignal;
-//import com.onesignal.debug.LogLevel;
 
 public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
@@ -39,28 +35,9 @@ public class MyAmplifyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        setContentView(R.layout.activity_main);
-
-        // Initialize OneSignal
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
-
-        // Prompt for push notifications permission
-        OneSignal.promptForPushNotifications();
-
-        // Notification click handler
         OneSignal.setNotificationOpenedHandler(new OneSignal.OSNotificationOpenedHandler() {
-//            @Override
-//            public void notificationOpened(OSNotificationOpenedResult result) {
-//                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//
-//                // Pass additional data from the notification to the activity
-//                String additionalData = result.getNotification().getAdditionalData().toString();
-//                intent.putExtra("data_key", additionalData);
-//
-//                startActivity(intent);
-//            }
             public void notificationOpened(OSNotificationOpenedResult result) {
                 Amplify.Auth.fetchAuthSession(
                         authResult -> {
@@ -91,14 +68,12 @@ public class MyAmplifyApp extends Application {
                 OSNotification notification = notificationReceivedEvent.getNotification();
                 String message = notification.getBody();
 
-                // Show the notification content in a custom dialog instead of just a Toast
                 new AlertDialog.Builder(getApplicationContext())
                         .setTitle("New Notification")
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
 
-                // Optionally, show it in the system tray as well
                 notificationReceivedEvent.complete(notification);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
@@ -115,32 +90,6 @@ public class MyAmplifyApp extends Application {
             Log.e("MyAmplifyApp", "Could not initialize Amplify " + error);
         }
     }
-
-//    @Override
-//    public void onTerminate() {
-//        super.onTerminate();
-//        Date currentDate = new Date();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String formattedDate = dateFormat.format(currentDate);
-//        // Called when the app is explicitly terminated (but not guaranteed to be called)
-//        loginActivities(formattedDate);  // API call when the app is closed
-//    }
-
-//    public void loginActivities(String time) {
-//        UserUtils.loginActivities(email, name, surname, "sign_out", organizationID, time, , new OperationCallback<Boolean>() {
-//            @Override
-//            public void onSuccess(Boolean result) {
-//
-////                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save"+ result, Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-////                hideLoading();
-////                loginActivities(email, name, surname, "sign_out", organization_id, time);
-//            }
-//        });
-//    }
 
     public String getOrganizationID() {
         return organizationID;

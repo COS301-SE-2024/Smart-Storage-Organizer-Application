@@ -49,11 +49,11 @@
         android:orientation="vertical"
         android:paddingTop="5dp">
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/recycler_view_messages"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp" />-->
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/recycler_view_messages"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp" />-->
         <EditText
             android:id="@+id/notificationTitle"
             android:layout_width="match_parent"
@@ -74,14 +74,14 @@
 
     </LinearLayout>
 
-<!--        <TextView-->
-<!--            android:id="@+id/text_unread_count"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Unread: 0"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textColor="#FF0000"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            android:layout_marginTop="8dp" />-->
+    <!--        <TextView-->
+    <!--            android:id="@+id/text_unread_count"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Unread: 0"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textColor="#FF0000"-->
+    <!--            android:layout_gravity="center_horizontal"-->
+    <!--            android:layout_marginTop="8dp" />-->
 
 </LinearLayout>
