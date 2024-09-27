@@ -1,0 +1,41 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1727366029943,667,Search,500,Internal Server Error,SmartStorage Users 1-11,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,667,0,436
+1727366030019,672,Search,500,Internal Server Error,SmartStorage Users 1-12,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,672,0,421
+1727366030098,679,Search,500,Internal Server Error,SmartStorage Users 1-13,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,679,0,453
+1727366030164,690,Search,500,Internal Server Error,SmartStorage Users 1-14,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,690,0,450
+1727366030236,686,Search,500,Internal Server Error,SmartStorage Users 1-15,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,686,0,461
+1727366030305,694,Search,500,Internal Server Error,SmartStorage Users 1-16,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,694,0,474
+1727366030388,691,Search,500,Internal Server Error,SmartStorage Users 1-17,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,691,0,472
+1727366030464,677,Search,500,Internal Server Error,SmartStorage Users 1-18,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,677,0,461
+1727366030537,677,Search,500,Internal Server Error,SmartStorage Users 1-19,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,677,0,465
+1727366030614,693,Search,500,Internal Server Error,SmartStorage Users 1-20,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,693,0,466
+1727366030685,672,Search,500,Internal Server Error,SmartStorage Users 1-21,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,672,0,458
+1727366030763,663,Search,500,Internal Server Error,SmartStorage Users 1-22,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,663,0,445
+1727366030837,674,Search,500,Internal Server Error,SmartStorage Users 1-23,text,false,,325,1915,20,20,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,674,0,460
+1727366030909,656,Search,500,Internal Server Error,SmartStorage Users 1-24,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,656,0,438
+1727366030984,649,Search,500,Internal Server Error,SmartStorage Users 1-25,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,649,0,419
+1727366031063,625,Search,500,Internal Server Error,SmartStorage Users 1-26,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,625,0,414
+1727366031137,617,Search,500,Internal Server Error,SmartStorage Users 1-27,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,617,0,407
+1727366031213,647,Search,500,Internal Server Error,SmartStorage Users 1-28,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,647,0,421
+1727366031287,621,Search,500,Internal Server Error,SmartStorage Users 1-29,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,621,0,407
+1727366031356,623,Search,500,Internal Server Error,SmartStorage Users 1-30,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,623,0,413
+1727366031435,640,Search,500,Internal Server Error,SmartStorage Users 1-31,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,640,0,427
+1727366031508,615,Search,500,Internal Server Error,SmartStorage Users 1-32,text,false,,325,1915,19,19,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,615,0,406
+1727366031586,612,Search,500,Internal Server Error,SmartStorage Users 1-33,text,false,,325,1915,18,18,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,612,0,401
+1727366031664,630,Search,500,Internal Server Error,SmartStorage Users 1-34,text,false,,325,1915,17,17,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,630,0,419
+1727366031733,614,Search,500,Internal Server Error,SmartStorage Users 1-35,text,false,,325,1915,16,16,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,614,0,404
+1727366031812,613,Search,500,Internal Server Error,SmartStorage Users 1-36,text,false,,325,1915,15,15,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,613,0,403
+1727366031884,629,Search,500,Internal Server Error,SmartStorage Users 1-37,text,false,,325,1915,14,14,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,629,0,405
+1727366031961,613,Search,500,Internal Server Error,SmartStorage Users 1-38,text,false,,325,1915,13,13,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,613,0,404
+1727366032031,617,Search,500,Internal Server Error,SmartStorage Users 1-39,text,false,,325,1915,12,12,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,616,0,403
+1727366032110,617,Search,500,Internal Server Error,SmartStorage Users 1-40,text,false,,325,1915,11,11,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,617,0,405
+1727366029872,4715,Search,200,OK,SmartStorage Users 1-10,text,true,,9700,1915,10,10,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,4715,0,449
+1727366029487,5102,Search,200,OK,SmartStorage Users 1-5,text,true,,9700,1915,10,10,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5102,0,453
+1727366029333,5273,Search,200,OK,SmartStorage Users 1-3,text,true,,9700,1915,8,8,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5273,0,469
+1727366029180,5427,Search,200,OK,SmartStorage Users 1-1,text,true,,9700,1915,8,8,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5427,0,486
+1727366029568,5044,Search,200,OK,SmartStorage Users 1-6,text,true,,9700,1915,6,6,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5044,0,438
+1727366029725,4902,Search,200,OK,SmartStorage Users 1-8,text,true,,9700,1915,5,5,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,4902,0,445
+1727366029637,4994,Search,200,OK,SmartStorage Users 1-7,text,true,,9700,1915,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,4994,0,476
+1727366029275,5361,Search,200,OK,SmartStorage Users 1-2,text,true,,9700,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5361,0,457
+1727366029409,5227,Search,200,OK,SmartStorage Users 1-4,text,true,,9700,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,5227,0,466
+1727366029786,4866,Search,200,OK,SmartStorage Users 1-9,text,true,,9700,1915,1,1,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/Search,4865,0,432

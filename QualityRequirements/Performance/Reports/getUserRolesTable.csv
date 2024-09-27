@@ -1,0 +1,21 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1727361420871,711,getUserRoles,401,Unauthorized,SmartStorage Users 1-1,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,711,0,503
+1727361421120,763,getUserRoles,401,Unauthorized,SmartStorage Users 1-2,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,763,0,471
+1727361421376,717,getUserRoles,401,Unauthorized,SmartStorage Users 1-3,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,717,0,509
+1727361421643,751,getUserRoles,401,Unauthorized,SmartStorage Users 1-4,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,751,0,452
+1727361421874,768,getUserRoles,401,Unauthorized,SmartStorage Users 1-5,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,768,0,522
+1727361422129,764,getUserRoles,401,Unauthorized,SmartStorage Users 1-6,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,764,0,515
+1727361422391,722,getUserRoles,401,Unauthorized,SmartStorage Users 1-7,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,722,0,503
+1727361422629,776,getUserRoles,401,Unauthorized,SmartStorage Users 1-8,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,776,0,490
+1727361422879,744,getUserRoles,401,Unauthorized,SmartStorage Users 1-9,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,744,0,528
+1727361423141,760,getUserRoles,401,Unauthorized,SmartStorage Users 1-10,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,760,0,483
+1727361423391,764,getUserRoles,401,Unauthorized,SmartStorage Users 1-11,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,764,0,514
+1727361423633,764,getUserRoles,401,Unauthorized,SmartStorage Users 1-12,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,764,0,527
+1727361423887,751,getUserRoles,401,Unauthorized,SmartStorage Users 1-13,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,751,0,506
+1727361424133,719,getUserRoles,401,Unauthorized,SmartStorage Users 1-14,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,719,0,515
+1727361424376,771,getUserRoles,401,Unauthorized,SmartStorage Users 1-15,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,771,0,477
+1727361424625,739,getUserRoles,401,Unauthorized,SmartStorage Users 1-16,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,739,0,524
+1727361424876,793,getUserRoles,401,Unauthorized,SmartStorage Users 1-17,text,false,,299,4802,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,793,0,489
+1727361425130,746,getUserRoles,401,Unauthorized,SmartStorage Users 1-18,text,false,,299,4802,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,746,0,541
+1727361425381,802,getUserRoles,401,Unauthorized,SmartStorage Users 1-19,text,false,,299,4802,2,2,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,802,0,498
+1727361425657,833,getUserRoles,401,Unauthorized,SmartStorage Users 1-20,text,false,,299,4802,1,1,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/getUserRoles/,833,0,529

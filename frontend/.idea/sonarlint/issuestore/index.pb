@@ -110,3 +110,7 @@ A
 gradlew.bat,2\a\2a45a911a8f1836b0b6c5b758962572012d8f8c3
 ƒ
 Sapp/src/main/java/com/example/smartstorageorganizer/MyFirebaseMessagingService.java,2\d\2d4ee7bd5bfc54d8560553b4a0228ac913435d6f
+y
+Iapp/src/main/java/com/example/smartstorageorganizer/ApplicationClass.java,0\6\06b61eccbf98ba5ffa0b0340c06c338712c4e4f2
+u
+Eapp/src/main/java/com/example/smartstorageorganizer/MyAmplifyApp.java,8\4\84b4e6ddc167f2573bb331b91ea6dd44c1799fff
