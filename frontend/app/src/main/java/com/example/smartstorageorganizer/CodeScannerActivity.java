@@ -32,48 +32,44 @@ import java.io.InputStream;
 public class CodeScannerActivity extends BaseActivity {
 
     public static final int PICK_IMAGE = 1;
+    private boolean isGroupScan = false; // Flag to track scan type
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_code_scanner);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         CardView scanButton = findViewById(R.id.scan_button);
+        CardView scanGroupButton = findViewById(R.id.group_button);
+
+        // Scan individual items (for ItemDetailsActivity)
         scanButton.setOnClickListener(view -> {
+            isGroupScan = false; // Set flag to false (indicating item scan)
             IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
             integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
             integrator.setPrompt("Scan a QR Code");
-            integrator.setCameraId(0);  // Use a specific camera of the device
+            integrator.setCameraId(0);  // Use the default camera
             integrator.setBeepEnabled(true);
             integrator.setBarcodeImageEnabled(true);
             integrator.setOrientationLocked(true);  // Lock orientation to current
             integrator.initiateScan();
         });
 
-//        Button barcodeButton = findViewById(R.id.barcode_button);
-//        barcodeButton.setOnClickListener(view -> {
-//            IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
-//            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-//            integrator.setPrompt("Scan a Barcode");
-//            integrator.setCameraId(0);  // Use a specific camera of the device
-//            integrator.setBeepEnabled(true);
-//            integrator.setBarcodeImageEnabled(true);
-//            integrator.setOrientationLocked(true);  // Lock orientation to current
-//            integrator.initiateScan();
-//        });
-
-        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        // Scan groups (for ViewColorsActivity)
+        scanGroupButton.setOnClickListener(view -> {
+            isGroupScan = true; // Set flag to true (indicating group scan)
+            IntentIntegrator integrator = new IntentIntegrator(CodeScannerActivity.this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt("Scan a Group QR Code");
+            integrator.setCameraId(0);  // Use the default camera
+            integrator.setBeepEnabled(true);
+            integrator.setBarcodeImageEnabled(true);
+            integrator.setOrientationLocked(true);  // Lock orientation to current
+            integrator.initiateScan();
         });
+
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
         CardView selectImageButton = findViewById(R.id.select_image_button);
         selectImageButton.setOnClickListener(view -> {
@@ -106,25 +102,33 @@ public class CodeScannerActivity extends BaseActivity {
                     String scannedResult = result.getContents();
                     String format = result.getFormatName();
 
-                    // If the scanned format is a barcode, remove the last character
+                    // If the format is not QR code, modify the result for barcodes
                     if (format != null && !format.equalsIgnoreCase("QR_CODE")) {
                         if (scannedResult != null && scannedResult.length() > 1) {
                             scannedResult = scannedResult.substring(0, scannedResult.length() - 1);
                         }
                     }
 
-                    // Display and send the result (modified for barcodes, unmodified for QR codes)
-                    Toast.makeText(this, "Scanned: " + scannedResult, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
-                    intent.putExtra("item_name", "");
-                    intent.putExtra("item_id", scannedResult);
-                    startActivity(intent);
+                    // Check the scan type based on the flag and navigate to the appropriate activity
+                    if (isGroupScan) {
+                        // If it's a group scan, go to ViewColorsActivity
+                        Intent intent = new Intent(CodeScannerActivity.this, ViewItemActivity.class);
+                        intent.putExtra("color_code_id", scannedResult);
+                        intent.putExtra("category", "");
+                        intent.putExtra("category_id", "");
+                        startActivity(intent);
+                    } else {
+                        // If it's an item scan, go to ItemDetailsActivity
+                        Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
+                        intent.putExtra("item_name", "");
+                        intent.putExtra("item_id", scannedResult);
+                        startActivity(intent);
+                    }
                     finish();
                 }
             }
         }
     }
-
 
     public void scanQRCodeFromBitmap(Bitmap bitmap) {
         int[] intArray = new int[bitmap.getWidth() * bitmap.getHeight()];
@@ -136,15 +140,23 @@ public class CodeScannerActivity extends BaseActivity {
         try {
             Result result = new MultiFormatReader().decode(binaryBitmap);
             Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
-            intent.putExtra("item_name", "");
-            intent.putExtra("item_id", result.getText());
-            startActivity(intent);
+
+            // Check the scan type based on the flag and navigate to the appropriate activity
+            if (isGroupScan) {
+                Intent intent = new Intent(CodeScannerActivity.this, ViewItemActivity.class);
+                intent.putExtra("color_code_id", result.getText());
+                intent.putExtra("category", "");
+                intent.putExtra("category_id", "");
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(CodeScannerActivity.this, ItemDetailsActivity.class);
+                intent.putExtra("item_name", "");
+                intent.putExtra("item_id", result.getText());
+                startActivity(intent);
+            }
             finish();
         } catch (ReaderException e) {
             Toast.makeText(this, "No QR code found in image", Toast.LENGTH_LONG).show();
         }
     }
-
-
 }

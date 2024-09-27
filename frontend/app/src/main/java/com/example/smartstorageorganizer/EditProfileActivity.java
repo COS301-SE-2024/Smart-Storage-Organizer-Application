@@ -116,6 +116,8 @@ public class EditProfileActivity extends BaseActivity {
                 Log.i("EditProfileActivity", "Back button clicked");
 
                 Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
                 startActivity(intent);
                 finish();
             });
@@ -256,6 +258,8 @@ public class EditProfileActivity extends BaseActivity {
         );
         Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
+        Intent resultIntent = new Intent();
+        setResult(RESULT_OK, resultIntent);
         startActivity(intent);
         finish();
 

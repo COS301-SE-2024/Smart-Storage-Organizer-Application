@@ -165,6 +165,8 @@ public class AddItemActivity extends BaseActivity  {
         subcategoryModelList = new ArrayList<>();
         unitList = new ArrayList<>();
 
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
         findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -581,10 +583,7 @@ public class AddItemActivity extends BaseActivity  {
                 generateQRCodeAsync(result, latch);
                 generateBarCodeAsync(result, latch);
 
-                Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
-                logUserFlow("HomeFragment");
-                startActivity(intent);
-                finish();
+                showSuccessDialog();
 
                 // Run this in a background thread to wait for latch to finish
                 new Thread(() -> {
@@ -984,6 +983,32 @@ public class AddItemActivity extends BaseActivity  {
                 .add(userFlowData)
                 .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Item Added Successfully");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
+            logUserFlow("HomeFragment");
+            startActivity(intent);
+            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
 //    public void logUser

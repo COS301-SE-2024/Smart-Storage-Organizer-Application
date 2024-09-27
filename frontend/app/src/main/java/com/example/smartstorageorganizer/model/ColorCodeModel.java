@@ -5,6 +5,7 @@ public class ColorCodeModel {
     private String description;
     private String color;
     private String id;
+    private String qrCode;
 
     public ColorCodeModel() {
 
@@ -46,5 +47,13 @@ public class ColorCodeModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }

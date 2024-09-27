@@ -123,66 +123,6 @@ public class ResetPasswordVerificationActivity extends AppCompatActivity {
 
     }
 
-//    public CompletableFuture<Boolean> ConfirmSignUp(String email , String Code)
-//    {
-//        CompletableFuture<Boolean> future = new CompletableFuture<>();
-//        Amplify.Auth.confirmSignUp(
-//                email,
-//                Code,
-//                result ->{ Log.i("AuthQuickstart", result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
-//                    future.complete(true);
-//                    // Change to reset password page
-//                    runOnUiThread(() -> {
-//                        Toast.makeText(this, "Please reset your new password.", Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
-//                        intent.putExtra("email", email);
-//                        startActivity(intent);
-//                        finish();
-//                    });
-//
-//                },
-//                error ->{future.complete(false);
-//                    Log.e("AuthQuickstart", error.toString());
-//                    //dont change to different page
-//                    Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show();
-//                }
-//        );
-//        return future;
-//    }
-
-
-    public void confirmSignUp(String email, String code) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        Log.i("retried email",email);
-        Log.i("Rcode",code);
-        Amplify.Auth.confirmSignUp(
-                email,
-                code,
-                result -> {
-                    Log.i("AuthQuickstart", result.isSignUpComplete() ? "Verification code confirmed" : "Verification code confirmation not complete");
-                    if (result.isSignUpComplete()) {
-                        future.complete(true);
-                        // Change to reset password page
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Please reset your new password.", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(ResetPasswordVerificationActivity.this, NewPasswordActivity.class);
-                            intent.putExtra("email", email);
-                            startActivity(intent);
-                            finish();
-                        });
-                    } else {
-                        future.complete(false);
-                    }
-                },
-                error -> {
-                    future.complete(false);
-                    Log.e("1AuthQuickstart", error.toString());
-                    runOnUiThread(() -> Toast.makeText(this, "Wrong Verification Pin.", Toast.LENGTH_LONG).show());
-                }
-        );
-    }
-
-
     private void setupOTPInputs() {
         inputCode1.addTextChangedListener(new TextWatcher() {
             @Override

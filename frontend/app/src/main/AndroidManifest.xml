@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -38,6 +40,9 @@
         tools:targetApi="31">
         <activity
             android:name=".ARActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationsActivity"
             android:exported="false" />
         <activity
             android:name=".ThemeSwitcherActivity"
@@ -186,17 +191,17 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- <service -->
-        <!-- android:name=".MyFirebaseMessagingService" -->
-        <!-- android:exported="false"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
-        <!-- <service -->
-        <!-- android:name=".AppTerminationService" -->
-        <!-- android:foregroundServiceType="dataSync" -->
-        <!-- tools:ignore="ForegroundServicePermission" /> -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <service
             android:name=".AppTerminationService"
             android:exported="false"
@@ -214,6 +219,9 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+            <meta-data
+                android:name="com.onesignal.NotificationServiceExtension"
+                android:value="com.example.smartstorageorganizer.NotificationServiceExtension" />
         </provider>
     </application>
 

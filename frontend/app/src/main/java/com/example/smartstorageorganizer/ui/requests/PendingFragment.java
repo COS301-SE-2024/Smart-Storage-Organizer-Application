@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.LoginActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
@@ -30,6 +32,7 @@ import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
 import com.example.smartstorageorganizer.utils.Utils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -64,7 +67,9 @@ public class PendingFragment extends Fragment {
     List<ModifyItemRequestModel> cardModifyItemList;
     RequestCardAdapter requestAdapter;
     RequestCardAdapter adapter;
+    ShimmerFrameLayout skeletonLoader;
     private MyAmplifyApp app;
+    private TextView noRequest;
 
 
     @Nullable
@@ -77,6 +82,8 @@ public class PendingFragment extends Fragment {
 
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        skeletonLoader = root.findViewById(R.id.skeletonLoader);
+        noRequest = root.findViewById(R.id.text);
 
         mixedList = new ArrayList<>();
         cardItemList = new ArrayList<>();
@@ -101,6 +108,7 @@ public class PendingFragment extends Fragment {
 
         db.collection("unit_requests")
                 .whereEqualTo("status", "pending")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -132,6 +140,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -148,6 +158,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Add Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -181,6 +192,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -197,6 +210,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Delete Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -228,6 +242,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardDeleteCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -244,6 +260,7 @@ public class PendingFragment extends Fragment {
         db.collection("category_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Modify Category")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -276,6 +293,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardModifyCategoryList);  // Add all category requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -292,6 +311,7 @@ public class PendingFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Delete Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -323,6 +343,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardDeleteItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -339,6 +361,7 @@ public class PendingFragment extends Fragment {
         db.collection("item_requests")
                 .whereEqualTo("status", "pending")
                 .whereEqualTo("requestType", "Modify Item")
+                .whereEqualTo("organizationId", app.getOrganizationID())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -420,6 +443,8 @@ public class PendingFragment extends Fragment {
                         }
                         mixedList.addAll(cardModifyItemList);  // Add all unit requests
                         adapter.notifyDataSetChanged();
+                        requireActivity().runOnUiThread(() -> skeletonLoader.setVisibility(View.GONE));
+                        checkForNoRequests();
 
                         // Now your cardItemList contains all pending unit requests
                         // You can now update your UI with the cardItemList
@@ -441,6 +466,18 @@ public class PendingFragment extends Fragment {
         return dateFormat.format(date);
     }
 
+    private void checkForNoRequests() {
+        // After all the fetch operations are complete
+        if (mixedList.isEmpty()) {
+            // If the list is empty, show the noRequest TextView
+            noRequest.setVisibility(View.VISIBLE);
+        } else {
+            // Otherwise, hide the noRequest TextView
+            noRequest.setVisibility(View.GONE);
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -448,6 +485,9 @@ public class PendingFragment extends Fragment {
     }
 
     private void refreshData() {
+        skeletonLoader = root.findViewById(R.id.skeletonLoader);
+        skeletonLoader.setVisibility(View.VISIBLE);
+        noRequest.setVisibility(View.GONE);
         mixedList.clear();
         cardItemList.clear();
         cardCategoryList.clear();
@@ -463,6 +503,8 @@ public class PendingFragment extends Fragment {
         fetchModifyCategoryPendingRequests();
         fetchPendingDeleteItemRequests();
         fetchPendingModifyItemRequests();
+
+//        checkForNoRequests();
     }
 
 }

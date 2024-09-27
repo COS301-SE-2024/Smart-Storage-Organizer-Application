@@ -50,6 +50,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.AmplifyException;
@@ -139,6 +140,8 @@ public class HomeFragment extends Fragment {
     private AppCompatButton tryAgainButton;
     MyAmplifyApp app;
     private long startTime;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshRecentLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -166,6 +169,8 @@ public class HomeFragment extends Fragment {
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
+        swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshRecentLayout = root.findViewById(R.id.swipe_refresh_recent_layout);
 
 //        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
 //        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
@@ -202,6 +207,32 @@ public class HomeFragment extends Fragment {
 
         addButton.setOnClickListener(v -> showBottomDialog());
 
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Refresh the data when user swipes down
+            recentText.setVisibility(View.GONE);
+            shimmerFrameLayoutCategory.startShimmer();
+            shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutName.setVisibility(View.VISIBLE);
+            itemRecyclerView.setVisibility(View.GONE);
+            category_RecyclerView.setVisibility(View.GONE);
+            noInternet.setVisibility(View.GONE);
+            getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        });
+
+        swipeRefreshRecentLayout.setOnRefreshListener(() -> {
+            // Refresh the data when user swipes down
+            recentText.setVisibility(View.GONE);
+            shimmerFrameLayoutCategory.startShimmer();
+            shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutName.setVisibility(View.VISIBLE);
+            itemRecyclerView.setVisibility(View.GONE);
+            category_RecyclerView.setVisibility(View.GONE);
+            noInternet.setVisibility(View.GONE);
+            getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        });
+
         return root;
     }
 
@@ -229,8 +260,8 @@ public class HomeFragment extends Fragment {
                 }
 
                 itemRecyclerView.setVisibility(View.VISIBLE);
-//                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
-            }
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);            }
 
             @Override
             public void onFailure(String error) {
@@ -245,6 +276,8 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutCategory.setVisibility(View.GONE);
                 shimmerFrameLayoutRecent.stopShimmer();
                 shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -347,11 +380,15 @@ public class HomeFragment extends Fragment {
                     adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 }
+                category_RecyclerView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String error) {
-//                showToast("Failed to fetch categories: " + error);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
                 Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
 
             }

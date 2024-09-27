@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -100,6 +101,8 @@ public class UnitActivity extends BaseActivity {
 
             }
 
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
             addButton.setOnClickListener(v1 -> {
                 StringBuilder constraints = new StringBuilder();
                 int j = 2;
@@ -166,9 +169,10 @@ public class UnitActivity extends BaseActivity {
                             runOnUiThread(() -> {
                                 unitName.setText("");
                                 unitCap.setText("");
-                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                finish();
+                                showSuccessDialog();
+//                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+//                                startActivity(intent);
+//                                finish();
                             });
                         }
                     });
@@ -184,6 +188,31 @@ public class UnitActivity extends BaseActivity {
         builder.setView(dialogView);
         AlertDialog alertDialog = builder.create();
         Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("New Unit Added Successfully");
 
         closeButton.setOnClickListener(v -> {
             alertDialog.dismiss();

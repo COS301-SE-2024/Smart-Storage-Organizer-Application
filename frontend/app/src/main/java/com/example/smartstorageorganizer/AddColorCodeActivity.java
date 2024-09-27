@@ -1,12 +1,15 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.utils.OperationCallback;
@@ -40,6 +44,8 @@ public class AddColorCodeActivity extends BaseActivity  {
     public String currentEmail;
     MyAmplifyApp app;
     private long startTime;
+    LottieAnimationView loadingScreen;
+    LinearLayout mainLayout;
 
 
     @Override
@@ -50,52 +56,30 @@ public class AddColorCodeActivity extends BaseActivity  {
 
         app = (MyAmplifyApp) getApplicationContext();
 
-//        TextView gfgTextView = findViewById(R.id.gfg_heading);
+        mainLayout = findViewById(R.id.mainLayout);
+        loadingScreen = findViewById(R.id.loadingScreen);
         Button mPickColorButton = findViewById(R.id.pick_color_button);
         Button addColorCodeButton = findViewById(R.id.add_colorcode_button);
         mColorPreview = findViewById(R.id.preview_selected_color);
         titleEditText = findViewById(R.id.colorCodeName);
         descriptionEditText = findViewById(R.id.colorCodeDescription);
 
-        getDetails();
-
         mDefaultColor = 0;
+
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
         mPickColorButton.setOnClickListener(v -> openColorPickerDialogue());
         addColorCodeButton.setOnClickListener(v -> {
-//            gfgTextView.setTextColor(mDefaultColor);
             String color = convertIntToHexColor(mDefaultColor);
             String titleInput = titleEditText.getText().toString().trim();
             String descriptionInput = descriptionEditText.getText().toString().trim();
 
             if (validateForm(titleInput, descriptionInput)) {
+                mainLayout.setVisibility(View.GONE);
+                loadingScreen.setVisibility(View.VISIBLE);
                 addNewColorCode(color, titleInput, descriptionInput, app.getOrganizationID());
             }
         });
-    }
-
-    public CompletableFuture<Boolean> getDetails() {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-
-        Amplify.Auth.fetchUserAttributes(
-                attributes -> {
-                    for (AuthUserAttribute attribute : attributes) {
-                        switch (attribute.getKey().getKeyString()) {
-                            case "email":
-                                currentEmail = attribute.getValue();
-                                break;
-                            default:
-                        }
-                    }
-                    Log.i("progress", "User attributes fetched successfully");
-                    future.complete(true);
-                },
-                error -> {
-                    Log.e("AuthDemo", "Failed to fetch user attributes.", error);
-                    future.complete(false);
-                }
-        );
-        return future;
     }
 
     public boolean validateForm(String title, String description) {
@@ -137,12 +121,12 @@ public class AddColorCodeActivity extends BaseActivity  {
     }
 
     public void addNewColorCode(String colorCode, String title, String description, String organizationId) {
-        Utils.addColourGroup(colorCode, title, description, currentEmail, organizationId, this, new OperationCallback<Boolean>() {
+        Utils.addColourGroup(colorCode, title, description, app.getEmail(), app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     showToast("Color Code added successfully");
-                    navigateToHome();
+                    showSuccessDialog();
                 }
             }
 
@@ -154,6 +138,8 @@ public class AddColorCodeActivity extends BaseActivity  {
     }
 
     public void showToast(String message) {
+        mainLayout.setVisibility(View.VISIBLE);
+        loadingScreen.setVisibility(View.GONE);
         Toast.makeText(AddColorCodeActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -211,6 +197,29 @@ public class AddColorCodeActivity extends BaseActivity  {
                 .add(userFlowData)
                 .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Color Group Added Successfully");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            navigateToHome();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
 //    public void logUser

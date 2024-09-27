@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "316283145595",
+    "project_id": "smart-project-push",
+    "storage_bucket": "smart-project-push.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316283145595:android:2216a0a227d446b7e341de",
+        "android_client_info": {
+          "package_name": "com.example.smartstorageorganizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuyY82jt_FMI4tNrCSWmS650m9B4Ddqcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

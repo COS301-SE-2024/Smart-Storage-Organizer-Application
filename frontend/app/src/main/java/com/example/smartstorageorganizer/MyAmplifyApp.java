@@ -1,5 +1,8 @@
 package com.example.smartstorageorganizer;
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,12 +14,13 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
+import com.onesignal.OSNotification;
+import com.onesignal.OSNotificationOpenedResult;
+import com.onesignal.OSNotificationReceivedEvent;
+import com.onesignal.OneSignal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//import com.onesignal.Continue;
-//import com.onesignal.OneSignal;
-//import com.onesignal.debug.LogLevel;
 
 public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
@@ -32,53 +36,81 @@ public class MyAmplifyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Verbose Logging set to help debug issues, remove before releasing your app.
-//
-////        //   OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
-// OneSignal Initialization
-//        OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
-//
-//        // requestPermission will show the native Android notification permission prompt.
-//        // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
-//        OneSignal.getNotifications().requestPermission(false, Continue.none());
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        boolean notificationPromptShown = sharedPreferences.getBoolean("notificationPromptShown", false);
+
+        OneSignal.setNotificationOpenedHandler(new OneSignal.OSNotificationOpenedHandler() {
+            public void notificationOpened(OSNotificationOpenedResult result) {
+                Amplify.Auth.fetchAuthSession(
+                        authResult -> {
+                            if (authResult.isSignedIn()) {
+                                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.putExtra("data_key", result.getNotification().getAdditionalData().toString());
+                                startActivity(intent);
+
+                                // Check if the notification prompt has been shown before
+                                if (!notificationPromptShown) {
+                                    // Show dialog to allow notifications only for first login
+                                    new AlertDialog.Builder(getApplicationContext())
+                                            .setTitle("Allow Notifications")
+                                            .setMessage("Would you like to allow notifications?")
+                                            .setPositiveButton("Allow", (dialog, which) -> {
+                                                // Store the flag that the prompt has been shown
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putBoolean("notificationPromptShown", true);
+                                                editor.apply();
+                                            })
+                                            .setNegativeButton("Don't Allow", null)
+                                            .show();
+                                }
+                            } else {
+                                // If not signed in, redirect to login
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        },
+                        error -> {
+                            Log.e("AuthSession", "Session check failed: " + error);
+                            // Optional: Handle session check failure (e.g., show an error)
+                        }
+                );
+            }
+
+        });
+
+        // Handle notification when app is in the foreground (in-app notifications)
+        OneSignal.setNotificationWillShowInForegroundHandler(new OneSignal.OSNotificationWillShowInForegroundHandler() {
+            @Override
+            public void notificationWillShowInForeground(OSNotificationReceivedEvent notificationReceivedEvent) {
+                OSNotification notification = notificationReceivedEvent.getNotification();
+                String message = notification.getBody();
+
+//                new AlertDialog.Builder(getApplicationContext())
+//                        .setTitle("New Notification")
+//                        .setMessage(message)
+//                        .setPositiveButton(android.R.string.ok, null)
+//                        .show();
+
+                notificationReceivedEvent.complete(notification);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+
+        });
 
         try {
-
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
             Log.i("MyAmplifyApp", "Initialized Amplify");
         } catch (AmplifyException error) {
-            Log.e("MyAmplifyApp", "Could not initialize Amplify " +error);
+            Log.e("MyAmplifyApp", "Could not initialize Amplify " + error);
         }
     }
-
-//    @Override
-//    public void onTerminate() {
-//        super.onTerminate();
-//        Date currentDate = new Date();
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String formattedDate = dateFormat.format(currentDate);
-//        // Called when the app is explicitly terminated (but not guaranteed to be called)
-//        loginActivities(formattedDate);  // API call when the app is closed
-//    }
-
-//    public void loginActivities(String time) {
-//        UserUtils.loginActivities(email, name, surname, "sign_out", organizationID, time, , new OperationCallback<Boolean>() {
-//            @Override
-//            public void onSuccess(Boolean result) {
-//
-////                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save"+ result, Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onFailure(String error) {
-////                hideLoading();
-////                loginActivities(email, name, surname, "sign_out", organization_id, time);
-//            }
-//        });
-//    }
 
     public String getOrganizationID() {
         return organizationID;
