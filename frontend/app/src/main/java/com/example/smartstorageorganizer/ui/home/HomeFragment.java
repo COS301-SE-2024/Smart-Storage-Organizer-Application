@@ -468,13 +468,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(Boolean result) {
                 app.setLoggedIn(false);
-                Toast.makeText(requireActivity(), "Login Activities Successfully Saved"+ result, Toast.LENGTH_LONG).show();
+//                Toast.makeText(requireActivity(), "Login Activities Successfully Saved"+ result, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(String error) {
 //                loginActivities(email, name, surname, "sign_in", organization_id, time);
-                Toast.makeText(requireActivity(), "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
+//                Toast.makeText(requireActivity(), "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
             }
         });
     }

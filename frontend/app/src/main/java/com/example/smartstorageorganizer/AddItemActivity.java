@@ -570,7 +570,7 @@ public class AddItemActivity extends BaseActivity  {
         Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(), unitName, app.getOrganizationID(), width, height, depth, weight, loadbear, updown, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
+//                Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 
                 // Create CountDownLatch with count 3 for two async operations
                 CountDownLatch latch = new CountDownLatch(3);
@@ -802,7 +802,7 @@ public class AddItemActivity extends BaseActivity  {
             categories.add(categories.size() - 1, currentSelectedCategory+" - "+currentSelectedSubcategory); // Add before "Add Custom Category"
             adapter2.notifyDataSetChanged();
             suggestionSpinner.setSelection(categories.indexOf(currentSelectedCategory+" - "+currentSelectedSubcategory));
-            Toast.makeText(AddItemActivity.this, "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(AddItemActivity.this, "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> {

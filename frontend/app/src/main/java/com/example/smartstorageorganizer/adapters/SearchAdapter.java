@@ -79,11 +79,5 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             titleTextView = view.findViewById(R.id.title);
             descriptionTextView = view.findViewById(R.id.description);
         }
-
-//        public void bind(final ItemModel item, final OnItemClickListener listener) {
-//            titleTextView.setText(item.getItemName());
-//            descriptionTextView.setText(item.getDescription());
-//            itemView.setOnClickListener(v -> listener.onItemClick(item));
-//        }
     }
 }

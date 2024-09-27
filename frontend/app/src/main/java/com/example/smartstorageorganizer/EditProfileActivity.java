@@ -90,6 +90,7 @@ public class EditProfileActivity extends BaseActivity {
         surname = findViewById(R.id.surname);
         email = findViewById(R.id.email);
         address = findViewById(R.id.address);
+        address.setVisibility(View.GONE);
         phone = findViewById(R.id.phone);
         cpp = findViewById(R.id.ccp);
 
@@ -112,7 +113,7 @@ public class EditProfileActivity extends BaseActivity {
                 loadingScreen.playAnimation();
                 content.setVisibility(View.GONE);
 
-                Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
                 Log.i("EditProfileActivity", "Back button clicked");
 
                 Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
@@ -256,7 +257,7 @@ public class EditProfileActivity extends BaseActivity {
                 resultProfile -> Log.i("AuthDemo", "Updated Profile Picture"),
                 error -> Log.e("AuthDemo", "Update failed", error)
         );
-        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(EditProfileActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(EditProfileActivity.this, ProfileManagementActivity.class);
         Intent resultIntent = new Intent();
         setResult(RESULT_OK, resultIntent);

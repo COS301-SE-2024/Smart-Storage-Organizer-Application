@@ -193,7 +193,7 @@ public class UncategorizedItemsActivity extends BaseActivity {
                     recentAdapter.notifyDataSetChanged();
                 }
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
-                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
                 updatePaginationButtons(result.size());
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
@@ -225,7 +225,7 @@ public class UncategorizedItemsActivity extends BaseActivity {
                 }
 
                 setupSort(currentSelectedOption);
-                Toast.makeText(UncategorizedItemsActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(UncategorizedItemsActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
             }
 
             @Override

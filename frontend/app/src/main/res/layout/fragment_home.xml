@@ -266,7 +266,7 @@
                     <ImageView
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:src="@drawable/no_internet"
+                        android:src="@drawable/error_icon"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -278,13 +278,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Slow or no internet connection."
-                        android:textColor="@color/gray"
-                        android:textSize="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Please check your internet settings and try again."
+                        android:text="Something went wrong."
                         android:textColor="@color/gray"
                         android:textSize="14dp"/>
 

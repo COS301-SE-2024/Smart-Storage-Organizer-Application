@@ -382,8 +382,31 @@ public class EditItemActivity extends BaseActivity {
         }
     }
 
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Item Details Updated Successfully!!!");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            showUpdateSuccessMessage();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private void showUpdateSuccessMessage() {
-        Toast.makeText(EditItemActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(EditItemActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
         int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
         int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
 
@@ -567,7 +590,8 @@ public class EditItemActivity extends BaseActivity {
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
-                            showUpdateSuccessMessage();
+//                            showUpdateSuccessMessage();
+                            showSuccessDialog();
                         });
                     } else {
                         runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response));
@@ -636,7 +660,7 @@ public class EditItemActivity extends BaseActivity {
         currentItemName=itemName;
         currentItemDescription=description;
         currentQuantity=quantity;
-        showUpdateSuccessMessage();
+        showSuccessDialog();
         return url;
     }
 

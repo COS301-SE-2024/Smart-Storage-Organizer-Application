@@ -358,7 +358,7 @@ public class HomeActivity extends BaseActivity  {
             @Override
             public void onSuccess(String result) {
                 app.setUserRole(result);
-                Toast.makeText(HomeActivity.this, "User Role: "+result, Toast.LENGTH_LONG).show();
+//                Toast.makeText(HomeActivity.this, "User Role: "+result, Toast.LENGTH_LONG).show();
                 if (Objects.equals(result, "Manager") || Objects.equals(result, "Admin")) {
                     showAdminMenuItems(navigationView.getMenu());
                 }
@@ -371,7 +371,7 @@ public class HomeActivity extends BaseActivity  {
             public void onFailure(String error) {
 //                progressDialog.dismiss();
                 hideAdminMenuItems(navigationView.getMenu());
-                Toast.makeText(HomeActivity.this, "Getting user role failed", Toast.LENGTH_LONG).show();
+//                Toast.makeText(HomeActivity.this, "Getting user role failed", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -405,7 +405,7 @@ public class HomeActivity extends BaseActivity  {
             public void onFailure(String error) {
 //                hideLoading();
 //                loginActivities(email, name, surname, "sign_out", organization_id, time);
-                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
+//                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
             }
         });
     }

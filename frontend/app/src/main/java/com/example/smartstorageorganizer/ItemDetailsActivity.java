@@ -381,7 +381,7 @@ public class ItemDetailsActivity extends BaseActivity {
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 detailedLayout.setVisibility(View.VISIBLE);
-                Toast.makeText(ItemDetailsActivity.this, "Item details fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ItemDetailsActivity.this, "Item details fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override

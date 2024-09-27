@@ -259,8 +259,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "Item added successfully!!!", Toast.LENGTH_SHORT).show();
-                    ((Activity) context).finish();
+                    showSuccessDialog("Item Added Successfully!!!", "add");
+//                    Toast.makeText(context, "Item added successfully!!!", Toast.LENGTH_SHORT).show();
+//                    ((Activity) context).finish();
 //                    showToast("Category added successfully");
 //                    navigateToHome();
                 }
@@ -291,7 +292,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, itemModelList.size());
                         progressDialog.dismiss();
-                        Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+                        showSuccessDialog("Item Deleted Successfully!!!", "delete");
+//                        Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
                     });
                 }
             }
@@ -377,6 +379,33 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 //            Intent intent = new Intent(ViewItemActivity.this, HomeActivity.class);
 //            startActivity(intent);
 //            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    public void showSuccessDialog(String message, String type) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        android.app.AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText(message);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+//            Intent intent = new Intent(context, HomeActivity.class);
+//            context.startActivity(intent);
+            if(!Objects.equals(type, "delete")){
+                ((Activity) context).finish();
+            }
         });
 
         alertDialog.setCanceledOnTouchOutside(false);

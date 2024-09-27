@@ -219,7 +219,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
                     itemAdapter.notifyDataSetChanged();
                 }
                 notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
-                Toast.makeText(ViewUnitItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ViewUnitItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
                 updatePaginationButtons(result.size());
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
@@ -251,7 +251,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
                 }
 
                 setupSort(currentSelectedOption);
-                Toast.makeText(ViewUnitItemsActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ViewUnitItemsActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
             }
 
             @Override

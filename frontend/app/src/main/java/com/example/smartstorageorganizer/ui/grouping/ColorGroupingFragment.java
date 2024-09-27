@@ -204,13 +204,13 @@ public class ColorGroupingFragment extends Fragment {
                     colorCodeRecyclerView.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String error) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Failed to fetch color groups: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -227,7 +227,7 @@ public class ColorGroupingFragment extends Fragment {
 
             @Override
             public void onFailure(String error) {
-                showToast("Failed to add category: " + error);
+                showToast("Failed to delete color group: " + error);
                 callback.onDeleteFailure();
             }
         });
