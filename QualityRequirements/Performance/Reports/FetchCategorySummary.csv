@@ -1,0 +1,21 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1727360614894,1577,FetchCategory,200,OK,SmartStorage Users 1-1,text,true,,3114,1915,5,5,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,1577,0,556
+1727360615656,920,FetchCategory,200,OK,SmartStorage Users 1-3,text,true,,3114,1915,4,4,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,920,0,614
+1727360615268,1462,FetchCategory,200,OK,SmartStorage Users 1-2,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,1462,0,502
+1727360616059,874,FetchCategory,200,OK,SmartStorage Users 1-4,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,874,0,417
+1727360616455,837,FetchCategory,200,OK,SmartStorage Users 1-5,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,837,0,483
+1727360616864,940,FetchCategory,200,OK,SmartStorage Users 1-6,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,940,0,635
+1727360617260,843,FetchCategory,200,OK,SmartStorage Users 1-7,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,843,0,546
+1727360617656,823,FetchCategory,200,OK,SmartStorage Users 1-8,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,823,0,459
+1727360618068,974,FetchCategory,200,OK,SmartStorage Users 1-9,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,974,0,678
+1727360618465,874,FetchCategory,200,OK,SmartStorage Users 1-10,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,874,0,569
+1727360618859,787,FetchCategory,200,OK,SmartStorage Users 1-11,text,true,,3114,1915,2,2,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,787,0,482
+1727360619265,881,FetchCategory,200,OK,SmartStorage Users 1-12,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,881,0,589
+1727360619677,809,FetchCategory,200,OK,SmartStorage Users 1-13,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,809,0,498
+1727360620094,871,FetchCategory,200,OK,SmartStorage Users 1-14,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,871,0,579
+1727360620472,724,FetchCategory,200,OK,SmartStorage Users 1-15,text,true,,3114,1915,2,2,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,724,0,425
+1727360620878,1022,FetchCategory,200,OK,SmartStorage Users 1-16,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,1022,0,617
+1727360621274,814,FetchCategory,200,OK,SmartStorage Users 1-17,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,814,0,433
+1727360621676,823,FetchCategory,200,OK,SmartStorage Users 1-18,text,true,,3114,1915,3,3,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,823,0,534
+1727360622073,750,FetchCategory,200,OK,SmartStorage Users 1-19,text,true,,3114,1915,2,2,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,750,0,422
+1727360622478,856,FetchCategory,200,OK,SmartStorage Users 1-20,text,true,,3114,1915,1,1,https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/FetchCategory,856,0,554
