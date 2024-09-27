@@ -181,8 +181,8 @@ public class ItemDetailsActivity extends BaseActivity {
                 intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
 
                 logUserFlow("EditItemActivity");
-
-                startActivity(intent);
+                startActivityForResult(intent, 1);
+//                startActivity(intent);
             }
         });
     }
@@ -654,4 +654,13 @@ public class ItemDetailsActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            finish();  // Close ItemDetailsActivity when EditItemActivity finishes
+        }
+    }
+
 }

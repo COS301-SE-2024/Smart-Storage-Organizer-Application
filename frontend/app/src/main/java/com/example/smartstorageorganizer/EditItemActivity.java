@@ -384,6 +384,8 @@ public class EditItemActivity extends BaseActivity {
         intent.putExtra("item_barcode", getIntent().getStringExtra("item_barcode"));
         intent.putExtra("quantity", Objects.requireNonNull(ItemQuantity.getText()).toString().trim());
 
+        Intent resultIntent = new Intent();
+        setResult(RESULT_OK, resultIntent);  // You can pass extra data if needed
         startActivity(intent);
         finish();
     }

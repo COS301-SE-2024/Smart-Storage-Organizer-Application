@@ -114,6 +114,8 @@ public class AddCategoryActivity extends BaseActivity  {
         parentCategoryImage = findViewById(R.id.parentCategoryImage);
         uploadButton = findViewById(R.id.uploadButton);
         loadingScreen = findViewById(R.id.loadingScreen);
+
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
     }
 
     public void navigateToHome() {

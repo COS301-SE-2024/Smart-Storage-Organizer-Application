@@ -64,6 +64,8 @@ public class AddColorCodeActivity extends BaseActivity  {
 
         mDefaultColor = 0;
 
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
         mPickColorButton.setOnClickListener(v -> openColorPickerDialogue());
         addColorCodeButton.setOnClickListener(v -> {
             String color = convertIntToHexColor(mDefaultColor);

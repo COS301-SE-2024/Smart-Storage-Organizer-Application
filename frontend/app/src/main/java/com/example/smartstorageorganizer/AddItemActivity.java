@@ -161,6 +161,8 @@ public class AddItemActivity extends BaseActivity  {
         subcategoryModelList = new ArrayList<>();
         unitList = new ArrayList<>();
 
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
         findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

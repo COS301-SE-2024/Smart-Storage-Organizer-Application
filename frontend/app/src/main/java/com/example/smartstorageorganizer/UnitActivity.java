@@ -100,6 +100,8 @@ public class UnitActivity extends BaseActivity {
 
             }
 
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
             addButton.setOnClickListener(v1 -> {
                 StringBuilder constraints = new StringBuilder();
                 int j = 2;
