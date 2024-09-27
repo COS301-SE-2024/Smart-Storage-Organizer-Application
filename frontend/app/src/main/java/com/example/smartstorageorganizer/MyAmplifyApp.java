@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +38,10 @@ public class MyAmplifyApp extends Application {
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        boolean notificationPromptShown = sharedPreferences.getBoolean("notificationPromptShown", false);
+
         OneSignal.setNotificationOpenedHandler(new OneSignal.OSNotificationOpenedHandler() {
             public void notificationOpened(OSNotificationOpenedResult result) {
                 Amplify.Auth.fetchAuthSession(
@@ -46,6 +51,22 @@ public class MyAmplifyApp extends Application {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 intent.putExtra("data_key", result.getNotification().getAdditionalData().toString());
                                 startActivity(intent);
+
+                                // Check if the notification prompt has been shown before
+                                if (!notificationPromptShown) {
+                                    // Show dialog to allow notifications only for first login
+                                    new AlertDialog.Builder(getApplicationContext())
+                                            .setTitle("Allow Notifications")
+                                            .setMessage("Would you like to allow notifications?")
+                                            .setPositiveButton("Allow", (dialog, which) -> {
+                                                // Store the flag that the prompt has been shown
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putBoolean("notificationPromptShown", true);
+                                                editor.apply();
+                                            })
+                                            .setNegativeButton("Don't Allow", null)
+                                            .show();
+                                }
                             } else {
                                 // If not signed in, redirect to login
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -68,11 +89,11 @@ public class MyAmplifyApp extends Application {
                 OSNotification notification = notificationReceivedEvent.getNotification();
                 String message = notification.getBody();
 
-                new AlertDialog.Builder(getApplicationContext())
-                        .setTitle("New Notification")
-                        .setMessage(message)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show();
+//                new AlertDialog.Builder(getApplicationContext())
+//                        .setTitle("New Notification")
+//                        .setMessage(message)
+//                        .setPositiveButton(android.R.string.ok, null)
+//                        .show();
 
                 notificationReceivedEvent.complete(notification);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
