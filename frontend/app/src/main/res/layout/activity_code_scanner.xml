@@ -88,8 +88,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:text="Scan QR Code"
-                    android:textSize="14sp"
+                    android:text="Scan Item QR Code and Barcode"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:layout_marginTop="8dp" />
@@ -98,7 +98,7 @@
 
         <!-- CardView 2 -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/barcode_button"
+            android:id="@+id/group_button"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_columnWeight="1"
@@ -127,8 +127,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:text="Scan Barcode"
-                    android:textSize="14sp"
+                    android:text="Scan Color Group QR Code"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:layout_marginTop="8dp" />

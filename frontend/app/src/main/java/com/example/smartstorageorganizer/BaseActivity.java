@@ -12,31 +12,45 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
+import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.UserUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private static final long INACTIVITY_TIMEOUT = 60000; // 5 minutes in milliseconds (300,000)
+    private static final long INACTIVITY_TIMEOUT = 6000000; // 1 minute in milliseconds (60,000)
+    private static final long POPUP_TIMEOUT = 6000000; // 1 minute timeout for popup
     private Handler inactivityHandler;
     private Runnable inactivityCallback;
+    private Handler popupTimeoutHandler; // To handle the timeout for the popup
+    private Runnable popupTimeoutCallback; // Action to perform if user does not respond to the popup
+    private MyAmplifyApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = (MyAmplifyApp) getApplicationContext();
 
         // Initialize the handler and runnable for inactivity
         inactivityHandler = new Handler(Looper.getMainLooper());
         inactivityCallback = new Runnable() {
             @Override
             public void run() {
-                // Show popup after 5 minutes of inactivity
+                // Show popup after 1 minute of inactivity
                 showInactivityPopup();
             }
         };
@@ -54,10 +68,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void resetInactivityTimer() {
         // Remove any previous callbacks and start the timer again
         inactivityHandler.removeCallbacks(inactivityCallback);
-        inactivityHandler.postDelayed(inactivityCallback, INACTIVITY_TIMEOUT); // Set the delay for 5 minutes
+        inactivityHandler.postDelayed(inactivityCallback, INACTIVITY_TIMEOUT); // Set the delay for 1 minute
     }
 
     private void showInactivityPopup() {
+        // Cancel any previous timeout handlers for the popup
+        if (popupTimeoutHandler != null) {
+            popupTimeoutHandler.removeCallbacks(popupTimeoutCallback);
+        }
+
         // Create and show a dialog asking if the user is still there
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Are you still there?")
@@ -67,17 +86,33 @@ public abstract class BaseActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // If user is still there, reset the inactivity timer
                         resetInactivityTimer();
+                        // Cancel the popup timeout if the user responds
+                        if (popupTimeoutHandler != null) {
+                            popupTimeoutHandler.removeCallbacks(popupTimeoutCallback);
+                        }
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Logout", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Handle what happens when the user is not there (e.g., exit the app or log out)
-                        finish(); // Optionally, you can close the app or perform another action
+                        // Optionally, you can close the app or perform another action
+                        signOut();
                     }
                 })
                 .setCancelable(false) // Make sure the user can't dismiss the dialog without choosing
                 .show();
+
+        // Initialize the handler for popup timeout
+        popupTimeoutHandler = new Handler(Looper.getMainLooper());
+        popupTimeoutCallback = new Runnable() {
+            @Override
+            public void run() {
+                // Sign out the user if they haven't responded to the popup
+                signOut();
+            }
+        };
+        // Post a delayed action to sign out if no response in 1 minute
+        popupTimeoutHandler.postDelayed(popupTimeoutCallback, POPUP_TIMEOUT);
     }
 
     public boolean isNetworkConnected() {
@@ -101,7 +136,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-
     private AlertDialog noInternetDialog;
 
     public void showNoInternetDialog() {
@@ -117,7 +151,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             noInternetDialog.show();
         }
     }
-
 
     public void dismissNoInternetDialog() {
         if (noInternetDialog != null && noInternetDialog.isShowing()) {
@@ -152,10 +185,58 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
+    private void signOut() {
+        Amplify.Auth.signOut(
+                signOutResult -> {
+                    if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
+                        handleSuccessfulSignOut();
+                    } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
+                        handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
+                    }
+                }
+        );
+    }
+
+    private void handleSuccessfulSignOut() {
+        moveToLoginActivity();
+    }
+
+    private void handleFailedSignOut(Exception exception) {
+        moveToLoginActivity();
+    }
+
+    private void moveToLoginActivity() {
+        runOnUiThread(() -> {
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(currentDate);
+            app.setUserRole("");
+            loginActivities(app.getEmail(), app.getName(), app.getSurname(), "sign_out", app.getOrganizationID(), formattedDate);
+            Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    public void loginActivities(String email, String name, String surname, String type, String organization_id, String time) {
+        UserUtils.loginActivities(email, name, surname, type, organization_id, time, this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+
+//                Toast.makeText(HomeActivity.this, "Login Activities Failed to Save"+ result, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                hideLoading();
+//                loginActivities(email, name, surname, "sign_out", organization_id, time);
+            }
+        });
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-//        logActivityView("LoginActivity");
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(networkChangeReceiver, filter);
@@ -189,4 +270,3 @@ public abstract class BaseActivity extends AppCompatActivity {
         unregisterReceiver(networkChangeReceiver);
     }
 }
-

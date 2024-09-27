@@ -2,6 +2,7 @@ package com.example.smartstorageorganizer;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.example.smartstorageorganizer.utils.Utils;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -46,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -257,7 +260,7 @@ public class ViewItemActivity extends BaseActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
         mySpinner.setVisibility(View.GONE);
-        Utils.fetchByColour(colorCodeId, app.getOrganizationID(), this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchByColour(colorCodeId, app.getOrganizationID(), app.getEmail(), this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -530,6 +533,15 @@ public class ViewItemActivity extends BaseActivity {
         }
     }
 
+    private ItemModel findItem(String itemId){
+        for(ItemModel item : itemModelList){
+            if(Objects.equals(item.getItemId(), itemId)){
+                return item;
+            }
+        }
+        return null;
+    }
+
     private void setupBottomNavigationBar() {
         LinearLayout deleteButton = findViewById(R.id.delete);
         LinearLayout colorButton = findViewById(R.id.color);
@@ -542,18 +554,26 @@ public class ViewItemActivity extends BaseActivity {
                     .setTitle("Delete Item")
                     .setMessage("Are you sure you want to delete this item?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        progressDialog.setMessage("Deleting item(s)...");
-                        progressDialog.show();
+//                        progressDialog.setMessage("Deleting item(s)...");
+//                        progressDialog.show();
                         count = 0;
                         List<String> selectedItemIds = itemAdapter.getSelectedItemsIdsArray();
                         size = selectedItemIds.size();
-                        for(String itemId: selectedItemIds){
-                            deleteItem(itemId);
+                        if(Objects.equals(app.getUserRole(), "normalUser")){
+                            for(String itemId: selectedItemIds){
+                                ItemModel item = findItem(itemId);
+                                sendRequestToDeleteItem(item.getItemId(), item.getItemName(), item.getDescription(), item.getLocation(), item.getParentCategoryName(), item.getColourCoding(), item.getSubcategoryName());
+                            }
                         }
-//                        for(String itemId: selectedItemIds){
-//                            deleteItem(itemId);
-//                        }
-//                        progressDialog.dismiss();
+                        else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                            ProgressDialog progressDialog = new ProgressDialog(this);
+                            progressDialog.setMessage("Deleting category...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show();
+                            for(String itemId: selectedItemIds){
+                                deleteItem(itemId, progressDialog);
+                            }
+                        }
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -673,23 +693,22 @@ public class ViewItemActivity extends BaseActivity {
         });
     }
 
-    private void deleteItem(String itemId) {
+    private void deleteItem(String itemId, ProgressDialog progressDialog) {
         Utils.deleteItem(itemId, app.getOrganizationID(), this, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     ++count;
                     if(count == size){
-                        progressDialog.dismiss();
                         itemAdapter.unselect();
                         loadInitialData();
+                        progressDialog.dismiss();
                     }
                 }
             }
 
             @Override
             public void onFailure(String error) {
-                progressDialog.dismiss();
 //                showToast("Failed to add category: " + error);
 //                loadingScreen.setVisibility(View.GONE);
 //                addCategoryLayout.setVisibility(View.VISIBLE);
@@ -719,6 +738,85 @@ public class ViewItemActivity extends BaseActivity {
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+    }
+
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+//            Intent intent = new Intent(ViewItemActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    public void sendRequestToDeleteItem(String id, String itemName, String itemDescription, String location, String parentCategory, String colorCode, String subcategory) {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Sending Request To Delete an Item...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("itemId", id);
+        unitRequest.put("itemName", itemName);
+        unitRequest.put("itemDescription", itemDescription);
+        unitRequest.put("location", location);
+        unitRequest.put("parentCategory", parentCategory);
+        unitRequest.put("colorCode", colorCode);
+        unitRequest.put("subcategory", subcategory);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("requestType", "Delete Item");
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("item_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("item_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                ++count;
+                                if(count == size){
+                                    progressDialog.dismiss();
+                                    showRequestDialog();
+                                    itemAdapter.unselect();
+                                }
+                                progressDialog.dismiss();
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
     }
 
     private void logActivityView(String activityName) {

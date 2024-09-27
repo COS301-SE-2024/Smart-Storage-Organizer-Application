@@ -159,6 +159,7 @@ public class ReportsActivity extends BaseActivity  {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
     }
 
     private void rotateArrow(ImageView arrow, float fromDegree, float toDegree) {

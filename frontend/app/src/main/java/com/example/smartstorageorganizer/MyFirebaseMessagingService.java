@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -25,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    public static final String ACTION_NEW_NOTIFICATION = "com.example.smartstorageorganizer.NEW_NOTIFICATION";
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // Handle FCM messages here.
         Log.d("FCMService", "Message received: " + remoteMessage.getMessageId());

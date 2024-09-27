@@ -3,6 +3,7 @@ package com.example.smartstorageorganizer.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,19 +22,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.ItemDetailsActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UncategorizedItemsActivity;
 import com.example.smartstorageorganizer.ViewItemActivity;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.ItemModel;
+import com.example.smartstorageorganizer.utils.OperationCallback;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -50,13 +60,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private boolean selectAllFlag = true;
     private String organizationID;
     private Activity activity;
-
+    private MyAmplifyApp app;
 
     public ItemAdapter(Context context, List<ItemModel> itemModelList, Activity activity) {
         this.context = context;
         this.itemModelList = itemModelList;
         this.activity = activity;
         new OkHttpClient();
+
+        app = (MyAmplifyApp) context.getApplicationContext();
+
     }
 
     @NonNull
@@ -166,10 +179,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
 
     private void showBottomSheetDialog(int position, String itemId) {
+        ItemModel item = itemModelList.get(position);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_dialog_item, null);
 
         TextView deleteItem = bottomSheetView.findViewById(R.id.delete);
+        TextView groupItem = bottomSheetView.findViewById(R.id.group);
 
         deleteItem.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
@@ -177,7 +192,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     .setTitle("Delete Item")
                     .setMessage("Are you sure you want to delete this item?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                        deleteItem(itemId, position);
+                        if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                            deleteItem(itemId, position);
+                        }
+                        else if (Objects.equals(app.getUserRole(), "normalUser")){
+                            sendRequestToDeleteItem(item.getItemId(), item.getItemName(), item.getDescription(), item.getLocation(), item.getParentCategoryName(), item.getColourCoding(), item.getSubcategoryName(), position);
+                        }
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -189,53 +209,29 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     private void deleteItem(String itemId, int position) {
-        try {
-            int itemIdInt = Integer.parseInt(itemId);
-            String json = "{\"item_id\":\"" + itemIdInt + "\"}";
-            Log.d("Delete Item Payload", "JSON Payload: " + json);
-            MediaType JSON = MediaType.get("application/json; charset=utf-8");
-            String API_URL = BuildConfig.DeleteItemEndPoint;
-            Log.d("Delete Item Endpoint", "API URL: " + BuildConfig.DeleteItemEndPoint);
-            RequestBody body = RequestBody.create(json, JSON);
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .post(body)
-                    .build();
-
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Log.e("Delete Item", "Error deleting item", e);
-                    ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Deleting Item...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Utils.deleteItem(itemId, app.getOrganizationID(), (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (Boolean.TRUE.equals(result)) {
+                    ((android.app.Activity) context).runOnUiThread(() -> {
+                        itemModelList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, itemModelList.size());
+                        progressDialog.dismiss();
+                        Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+                    });
                 }
+            }
 
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        String responseBody = response.body().string();
-                        Log.d("Delete Item Response", "Response: " + response);
-                        Log.d("Delete Item Response Body", "Response Body: " + responseBody);
+            @Override
+            public void onFailure(String error) {
 
-                        ((android.app.Activity) context).runOnUiThread(() -> {
-                            itemModelList.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, itemModelList.size());
-                            Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
-                        });
-                    } else {
-                        String errorBody = response.body().string();
-                        Log.e("Delete Item", "Failed to delete item. Response code: " + response.code() + ", message: " + response.message());
-                        Log.e("Delete Item", "Error body: " + errorBody);
-
-                        ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Failed to delete item. Please try again.", Toast.LENGTH_SHORT).show());
-                    }
-                }
-            });
-        } catch (NumberFormatException e) {
-            Log.e("Delete Item", "Invalid itemId: " + itemId, e);
-            ((android.app.Activity) context).runOnUiThread(() -> Toast.makeText(context, "Invalid item ID. Please check and try again.", Toast.LENGTH_SHORT).show());
-        }
+            }
+        });
     }
 
     public String getSelectedItemsIds() {
@@ -281,5 +277,85 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     public void setOrganizationId(String organizationId) {
         this.organizationID = organizationId;
+    }
+
+    public void sendRequestToDeleteItem(String id, String itemName, String itemDescription, String location, String parentCategory, String colorCode, String subcategory, int position) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Sending Request To Delete an Item...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Create a map for the unit request
+        Map<String, Object> unitRequest = new HashMap<>();
+        unitRequest.put("itemId", id);
+        unitRequest.put("itemName", itemName);
+        unitRequest.put("itemDescription", itemDescription);
+        unitRequest.put("location", location);
+        unitRequest.put("parentCategory", parentCategory);
+        unitRequest.put("colorCode", colorCode);
+        unitRequest.put("subcategory", subcategory);
+        unitRequest.put("userEmail", app.getEmail());
+        unitRequest.put("requestType", "Delete Item");
+        unitRequest.put("organizationId", app.getOrganizationID());
+        unitRequest.put("status", "pending");  // Initially set to pending
+        unitRequest.put("requestDate", FieldValue.serverTimestamp()); // Store request date and time
+
+        // Store the request in Firestore
+        db.collection("item_requests")
+                .add(unitRequest)
+                .addOnSuccessListener(documentReference -> {
+                    // Get the unique document ID
+                    String documentId = documentReference.getId();
+
+                    // Update the document to include the document ID or use it as a unique ID
+                    db.collection("item_requests").document(documentId)
+                            .update("documentId", documentId) // Store documentId within the document itself
+                            .addOnSuccessListener(aVoid -> {
+                                ((android.app.Activity) context).runOnUiThread(() -> {
+//                                    itemModelList.remove(position);
+//                                    notifyItemRemoved(position);
+//                                    notifyItemRangeChanged(position, itemModelList.size());
+                                    showRequestDialog();
+//                                    Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                });
+                                Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                future.complete(true);
+                            })
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Log.e("Firestore", "Error updating documentId", e);
+                                future.complete(false);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Log.e("Firestore", "Error storing request", e);
+                    future.complete(false);
+                });
+
+    }
+
+    public void showRequestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+//            Intent intent = new Intent(ViewItemActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 }

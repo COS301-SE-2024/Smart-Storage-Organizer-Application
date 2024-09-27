@@ -190,15 +190,15 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!--            <com.airbnb.lottie.LottieAnimationView-->
-            <!--                android:id="@+id/button_animation_otp"-->
-            <!--                app:lottie_rawRes="@raw/loader"-->
-            <!--                android:layout_width="80dp"-->
-            <!--                android:layout_height="80dp"-->
-            <!--                android:layout_centerInParent="true"-->
-            <!--                app:lottie_autoPlay="false"-->
-            <!--                app:lottie_loop="true"-->
-            <!--                android:visibility="gone"/>-->
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/button_animation_otp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_centerInParent="true"
+                            app:lottie_rawRes="@raw/loading"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            android:visibility="gone"/>
 
         </RelativeLayout>
 

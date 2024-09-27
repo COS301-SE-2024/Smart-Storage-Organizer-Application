@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
@@ -142,7 +144,7 @@ public class ProfileManagementActivity extends BaseActivity {
     }
 
     private void setupButtons() {
-        AppCompatButton editProfileButton = findViewById(R.id.editProfileButton);
+        LinearLayout editProfileButton = findViewById(R.id.editProfileButton);
         ConstraintLayout logoutButton = findViewById(R.id.logoutButton);
 
         findViewById(R.id.themeLayout).setOnClickListener(new View.OnClickListener() {
@@ -153,15 +155,28 @@ public class ProfileManagementActivity extends BaseActivity {
             }
         });
 
+        findViewById(R.id.help).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileManagementActivity.this, HelpActivity.class);
+                startActivity(intent);
+            }
+        });
+
         editProfileButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileManagementActivity.this, EditProfileActivity.class);
-            startActivity(intent);
-            finish();
+//            startActivity(intent);
+            startActivityForResult(intent, 1);
+//            finish();
         });
 
         logoutButton.setOnClickListener(v -> signOut());
 
-        profileBackButton.setOnClickListener(v -> finish());
+        profileBackButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileManagementActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void signOut() {
@@ -169,6 +184,7 @@ public class ProfileManagementActivity extends BaseActivity {
                 signOutResult -> {
                     if (signOutResult instanceof AWSCognitoAuthSignOutResult) {
                         handleSuccessfulSignOut();
+                        app.setUserRole("");
                     } else if (signOutResult instanceof AWSCognitoAuthSignOutResult.FailedSignOut) {
                         handleFailedSignOut(((AWSCognitoAuthSignOutResult.FailedSignOut) signOutResult).getException());
                     }
@@ -198,4 +214,14 @@ public class ProfileManagementActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            finish();  // Close ItemDetailsActivity when EditItemActivity finishes
+        }
+    }
+
 }
