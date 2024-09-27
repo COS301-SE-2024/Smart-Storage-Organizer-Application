@@ -148,7 +148,7 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
     public void fetchCategoryPendingRequests() {
@@ -199,7 +199,7 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
     public void fetchDeleteCategoryPendingRequests() {
@@ -248,7 +248,7 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
     public void fetchModifyCategoryPendingRequests() {
@@ -298,7 +298,7 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
     public void fetchPendingDeleteItemRequests() {
@@ -347,7 +347,7 @@ public class PendingFragment extends Fragment {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
                 });
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
     public void fetchPendingModifyItemRequests() {
@@ -445,7 +445,7 @@ public class PendingFragment extends Fragment {
                     } else {
                         Log.e("Firestore", "Error getting pending requests: ", task.getException());
                     }
-                    checkForNoRequests();
+//                    checkForNoRequests();
                 });
     }
 
@@ -460,16 +460,16 @@ public class PendingFragment extends Fragment {
         return dateFormat.format(date);
     }
 
-    private void checkForNoRequests() {
-        // After all the fetch operations are complete
-        if (mixedList.isEmpty()) {
-            // If the list is empty, show the noRequest TextView
-            noRequest.setVisibility(View.VISIBLE);
-        } else {
-            // Otherwise, hide the noRequest TextView
-            noRequest.setVisibility(View.GONE);
-        }
-    }
+//    private void checkForNoRequests() {
+//        // After all the fetch operations are complete
+//        if (mixedList.isEmpty()) {
+//            // If the list is empty, show the noRequest TextView
+//            noRequest.setVisibility(View.VISIBLE);
+//        } else {
+//            // Otherwise, hide the noRequest TextView
+//            noRequest.setVisibility(View.GONE);
+//        }
+//    }
 
 
     @Override
@@ -498,7 +498,7 @@ public class PendingFragment extends Fragment {
         fetchPendingDeleteItemRequests();
         fetchPendingModifyItemRequests();
 
-        checkForNoRequests();
+//        checkForNoRequests();
     }
 
 }

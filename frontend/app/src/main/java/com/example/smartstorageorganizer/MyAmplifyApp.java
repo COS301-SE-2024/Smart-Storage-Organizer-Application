@@ -20,9 +20,6 @@ import com.onesignal.OneSignal;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//import com.onesignal.Continue;
-//import com.onesignal.OneSignal;
-//import com.onesignal.debug.LogLevel;
 
 public class MyAmplifyApp extends Application {
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
@@ -40,23 +37,7 @@ public class MyAmplifyApp extends Application {
 
         OneSignal.initWithContext(this);
         OneSignal.setAppId(ONESIGNAL_APP_ID);
-
-        // Prompt for push notifications permission
-        OneSignal.promptForPushNotifications();
-
-        // Notification click handler
         OneSignal.setNotificationOpenedHandler(new OneSignal.OSNotificationOpenedHandler() {
-            //            @Override
-//            public void notificationOpened(OSNotificationOpenedResult result) {
-//                Intent intent = new Intent(getApplicationContext(), NotificationsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//
-//                // Pass additional data from the notification to the activity
-//                String additionalData = result.getNotification().getAdditionalData().toString();
-//                intent.putExtra("data_key", additionalData);
-//
-//                startActivity(intent);
-//            }
             public void notificationOpened(OSNotificationOpenedResult result) {
                 Amplify.Auth.fetchAuthSession(
                         authResult -> {
@@ -87,14 +68,12 @@ public class MyAmplifyApp extends Application {
                 OSNotification notification = notificationReceivedEvent.getNotification();
                 String message = notification.getBody();
 
-                // Show the notification content in a custom dialog instead of just a Toast
                 new AlertDialog.Builder(getApplicationContext())
                         .setTitle("New Notification")
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok, null)
                         .show();
 
-                // Optionally, show it in the system tray as well
                 notificationReceivedEvent.complete(notification);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }

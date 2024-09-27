@@ -98,6 +98,7 @@ public class NotificationsFragment extends Fragment {
         super.onResume();
         // Check session state when resuming the fragment
         checkSessionState();
+        loadNotifications();
     }
 
     private void checkSessionState() {

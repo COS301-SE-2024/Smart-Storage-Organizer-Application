@@ -42,6 +42,9 @@
             android:name=".ARActivity"
             android:exported="false" />
         <activity
+            android:name=".NotificationsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ThemeSwitcherActivity"
             android:exported="false" />
         <activity
