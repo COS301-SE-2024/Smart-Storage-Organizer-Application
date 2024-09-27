@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 apply(plugin = "com.google.gms.google-services") // Apply Google Services plugin here
 
@@ -237,7 +238,7 @@ dependencies {
     testImplementation ("androidx.test:rules:1.4.0")
 
     // oneSignal
-    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+    implementation ("com.onesignal:OneSignal:[4.0.0, 4.99.99]")
 
     //Graphs dependency
     implementation ("com.github.PhilJay:MPAndroidChart:3.1.0")
