@@ -139,14 +139,55 @@ public class NotificationsFragment extends Fragment {
             }
 
             @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+////                    Log.d("API Response", response.body().string());
+//
+//                    String jsonData = response.body().string();
+//                    Log.d("API Response", jsonData);
+//
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(jsonData);
+//                        JSONArray notifications = jsonObject.getJSONArray("notifications");
+//
+//                        // Clear the existing list to avoid duplicates
+//                        notificationList.clear();
+//
+//                        // Parse the notification details
+//                        for (int i = 0; i < notifications.length(); i++) {
+//                            JSONObject notification = notifications.getJSONObject(i);
+//                            String title = notification.optString("headings", "No Title");
+//                            String message = notification.optString("contents", "No Message");
+//                            String date = notification.optString("delivery_time_of_day", "No Date");
+//
+//                            // Add to notification list
+////                            String currentDate = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault()).format(new Date());
+//
+//                            notificationList.add(new NotificationModel(title, message, date));
+//                        }
+//
+//                        // Notify the adapter (make sure this is done on the UI thread)
+//                        requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    // Handle non-successful responses
+//                    requireActivity().runOnUiThread(() -> {
+//                        Toast.makeText(requireContext(), "Error: " + response.message(), Toast.LENGTH_SHORT).show();
+//                    });
+//                }
+//            }
+
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-//                    Log.d("API Response", response.body().string());
-
+                    // Get the response body as a string
                     String jsonData = response.body().string();
                     Log.d("API Response", jsonData);
 
                     try {
+                        // Convert response string to JSON object
                         JSONObject jsonObject = new JSONObject(jsonData);
                         JSONArray notifications = jsonObject.getJSONArray("notifications");
 
@@ -156,14 +197,25 @@ public class NotificationsFragment extends Fragment {
                         // Parse the notification details
                         for (int i = 0; i < notifications.length(); i++) {
                             JSONObject notification = notifications.getJSONObject(i);
-                            String title = notification.optString("headings", "No Title");
-                            String message = notification.optString("contents", "No Message");
-                            String date = notification.optString("delivery_time_of_day", "No Date");
 
-                            // Add to notification list
-                            String currentDate = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault()).format(new Date());
+                            // Get the title and message, remove "en" and brackets
+                            String title = cleanNotificationString(notification.optString("headings", "No Title"));
+                            String message = cleanNotificationString(notification.optString("contents", "No Message"));
+//                            String date = notification.optString("delivery_time_of_day", "No Date");
 
-                            notificationList.add(new NotificationModel(title, message, currentDate));
+                            // Log the entire notification to debug
+                            Log.d("Notification JSON", notification.toString());
+
+                            // Check for delivery time and log it if missing
+                            String date = notification.optString("delivery_time_of_day", null);
+                            if (date == null) {
+                                Log.d("Date Issue", "Date is null for this notifiation");
+                            } else {
+                                Log.d("Delivery Time", date);
+                            }
+
+                            // Add to the notification list
+                            notificationList.add(new NotificationModel(title, message, date));
                         }
 
                         // Notify the adapter (make sure this is done on the UI thread)
@@ -179,6 +231,13 @@ public class NotificationsFragment extends Fragment {
                     });
                 }
             }
+
+            // Helper function to clean the notification string by removing "en" and braces
+            private String cleanNotificationString(String input) {
+                // Replace any occurrence of '{"en":' or '}'
+                return input.replace("{\"en\":", "").replace("}", "").replace("\"", "");
+            }
+
         });
     }
 }
