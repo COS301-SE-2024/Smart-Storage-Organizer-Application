@@ -216,9 +216,14 @@ public class UnitActivity extends BaseActivity {
 
         closeButton.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            if(Objects.equals(getIntent().getStringExtra("type"), "AddItem")){
+                finish();
+            }
+            else {
+                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         alertDialog.setCanceledOnTouchOutside(false);

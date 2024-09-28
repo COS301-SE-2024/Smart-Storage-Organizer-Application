@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,6 +123,7 @@ public class AddItemActivity extends BaseActivity  {
     private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
     private List<unitModel> unitList;
     private LottieAnimationView buttonLoader;
+    private boolean isAddUnit = false;
 
 
     @Override
@@ -155,6 +157,10 @@ public class AddItemActivity extends BaseActivity  {
         inputLoadbear = findViewById(R.id.inputLoadbear);
         inputUpdown = findViewById(R.id.inputUpdown);
         buttonLoader = findViewById(R.id.buttonLoader);
+
+        moreOptionsLayout.setVisibility(View.VISIBLE);
+        moreText.setText("Hide Fields (Used for bin packing)");
+        unitsSpinner.setVisibility(View.GONE);
 
 
         categoryModelList = new ArrayList<>();
@@ -209,16 +215,46 @@ public class AddItemActivity extends BaseActivity  {
         itemImage.setOnClickListener(v -> showImagePickerDialog());
 
         findViewById(R.id.addButton).setOnClickListener(v -> {
+            SpinnerAdapter adapter = unitsSpinner.getAdapter();
+
             if (shouldFillAllFields()) {
                 Toast.makeText(AddItemActivity.this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
-            } else {
+            }
+            //check if spinner is empty.
+            else if(adapter == null || adapter.getCount() == 0) {
+                showAddUnitDialog();
+            }
+            else {
                 progressDialogAddingItem.show();
                 File compressedFile = compressImage(file);
                 uploadItemImage(compressedFile);
             }
         });
+    }
 
+    public void showAddUnitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_unit_popup, null);
 
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView message = dialogView.findViewById(R.id.textView3);
+        message.setText("You need to create a storage unit for the "+suggestionSpinner.getSelectedItem().toString()+" category before adding items. Please create a unit now to store items in this category.");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            isAddUnit = true;
+            Intent intent = new Intent(AddItemActivity.this, UnitActivity.class);
+            intent.putExtra("type", "AddItem");
+            startActivity(intent);
+
+//            navigateToHome();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     private File compressImage(File file) {
@@ -908,9 +944,18 @@ public class AddItemActivity extends BaseActivity  {
 
                     for(unitModel unit : result) {
                         if(unit.getCategories().contains(parentCategory)){
+                            unitsSpinner.setVisibility(View.VISIBLE);
                             unitsNames.add(unit.getUnitName());
                         }
                     }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+                else {
+                    unitsSpinner.setVisibility(View.GONE);
+                    List<String> unitsNames = new ArrayList<>();
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1012,6 +1057,13 @@ public class AddItemActivity extends BaseActivity  {
     public void onResume() {
         super.onResume();
         startTime = System.currentTimeMillis();
+        if(isAddUnit){
+            String[] suggestedCategory = suggestionSpinner.getSelectedItem().toString().split(" - ");
+
+            // The first part (index 0) will contain "Electronics"
+            String parentCategoryName = suggestedCategory[0];
+            loadUnits(parentCategoryName);
+        }
     }
 
     @Override

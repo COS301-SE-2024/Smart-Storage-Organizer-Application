@@ -153,9 +153,6 @@ public class HomeFragment extends Fragment {
 
         app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
-
-        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
-
         addItemButton = root.findViewById(R.id.addItemButton);
         addButton = root.findViewById(R.id.addButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
@@ -165,17 +162,14 @@ public class HomeFragment extends Fragment {
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
         noInternet = root.findViewById(R.id.noInternet);
-//        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
         swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshRecentLayout = root.findViewById(R.id.swipe_refresh_recent_layout);
 
-//        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
-//        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
-//        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
-//        recyclerViewRecent.setAdapter(skeletonAdapter);
+        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
@@ -241,22 +235,26 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
-                itemModelList.addAll(result);
+                if(!result.isEmpty()){
+                    itemModelList.addAll(result);
+                }
                 recentAdapter.notifyDataSetChanged();
 
-                recentText.setVisibility(View.VISIBLE);
-                shimmerFrameLayoutCategory.stopShimmer();
-                shimmerFrameLayoutCategory.setVisibility(View.GONE);
-                shimmerFrameLayoutRecent.stopShimmer();
-                shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                    recentText.setVisibility(View.VISIBLE);
+                    shimmerFrameLayoutCategory.stopShimmer();
+                    shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                    shimmerFrameLayoutRecent.stopShimmer();
+                    shimmerFrameLayoutRecent.setVisibility(View.GONE);
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
                     addItemButton.setVisibility(View.GONE);
+                    swipeRefreshRecentLayout.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
                     addItemButton.setVisibility(View.VISIBLE);
+                    swipeRefreshRecentLayout.setVisibility(View.VISIBLE);
                 }
 
                 itemRecyclerView.setVisibility(View.VISIBLE);
@@ -265,7 +263,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(String error) {
-                recentText.setVisibility(View.GONE);
+//                recentText.setVisibility(View.GONE);
                 shimmerFrameLayoutCategory.startShimmer();
                 shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
                 shimmerFrameLayoutRecent.startShimmer();
@@ -278,6 +276,14 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutRecent.setVisibility(View.GONE);
                 swipeRefreshLayout.setRefreshing(false);
                 swipeRefreshRecentLayout.setRefreshing(false);
+//                if(itemModelList.isEmpty()){
+//                    addButton.setVisibility(View.VISIBLE);
+//                    addItemButton.setVisibility(View.GONE);
+//                }
+//                else {
+//                    addButton.setVisibility(View.GONE);
+//                    addItemButton.setVisibility(View.VISIBLE);
+//                }
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
