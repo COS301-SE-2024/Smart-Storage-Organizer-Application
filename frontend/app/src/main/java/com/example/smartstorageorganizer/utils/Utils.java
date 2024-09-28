@@ -2102,8 +2102,8 @@ public class Utils
                     activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
-                        jsonObject.getString("statusCode");
-                        if(jsonObject.getString("statusCode").equals("200")){
+//                        jsonObject.getString("statusCode");
+                        if(jsonObject.toString().contains("\""+"statusCode"+"\"") && jsonObject.getString("statusCode").equals("200")){
                             activity.runOnUiThread(() -> Log.e("Arrangement", responseData));
                             String bodyString = jsonObject.getString("response");
                             activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
@@ -2128,12 +2128,12 @@ public class Utils
 
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         } // item with no dimension
-                        else if(jsonObject.getString("status").equals("400")){
+                        else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("400")){
                             List<BinItemModel> itemList = new ArrayList<>();
                             ArrangementModel obj = new ArrangementModel("400", itemList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
-                        else if(jsonObject.getString("status").equals("401")){
+                        else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("401")){
                             List<BinItemModel> itemList = new ArrayList<>();
                             ArrangementModel obj = new ArrangementModel("401", itemList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
