@@ -133,7 +133,7 @@ public class SearchActivity extends BaseActivity {
                         // Search icon touched
                         String query = searchView.getText().toString();
                         if (!query.isEmpty()) {
-                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                             SearchForItem(query, "*", "*");
                             searchResults.clear();
                         } else {
@@ -176,7 +176,7 @@ public class SearchActivity extends BaseActivity {
     private void handleVoiceInput(String spokenText) {
         if (!spokenText.isEmpty()) {
             loader.setVisibility(View.VISIBLE);
-            Toast.makeText(SearchActivity.this, "Search query: " + spokenText, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SearchActivity.this, "Search query: " + spokenText, Toast.LENGTH_SHORT).show();
             SearchForItem(spokenText, "*", "*");
             searchResults.clear();
         } else {
@@ -196,7 +196,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Handle the search query submission
-                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchActivity.this, "Search query: " + query, Toast.LENGTH_SHORT).show();
                 searchResults.clear();
                 SearchForItem(query, "", "");
                 return false;
@@ -353,7 +353,7 @@ public class SearchActivity extends BaseActivity {
                     default:
                 }
 
-                Toast.makeText(SearchActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SearchActivity.this, "Selected: " + currentSelectedOption, Toast.LENGTH_SHORT).show();
             }
 
             @Override

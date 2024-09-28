@@ -204,7 +204,7 @@ public class EmailVerificationActivity extends BaseActivity {
                     Log.i(AUTH_QUICK_START, result.isSignUpComplete() ? "Confirm signUp succeeded" : "Confirm sign up not complete");
                     future.complete(true);
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(this, "Registration Successful.", Toast.LENGTH_LONG).show();
 //                        new Handler().postDelayed(() -> {
                         checkIfSignedIn(email, getIntent().getStringExtra("password"));
 //                        }, 2000);
@@ -285,7 +285,7 @@ public class EmailVerificationActivity extends BaseActivity {
                     progressDialog.dismiss();
                     next_button_text_otp.setVisibility(View.VISIBLE);
                     button_animation_otp.setVisibility(View.GONE);
-                    Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(EmailVerificationActivity.this, "user unverified successful: ", Toast.LENGTH_LONG).show();
                     if(Objects.equals(getIntent().getStringExtra("type"), "registration")){
                         showRequestSentDialog();
                     }
@@ -317,7 +317,7 @@ public class EmailVerificationActivity extends BaseActivity {
                 else {
                     showOrganizationDialog();
                 }
-                Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EmailVerificationActivity.this, "User approved successfully", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -336,7 +336,7 @@ public class EmailVerificationActivity extends BaseActivity {
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     setUserToVerified(username, authorization);
-                    Toast.makeText(EmailVerificationActivity.this, "User role set successfully", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(EmailVerificationActivity.this, "User role set successfully", Toast.LENGTH_SHORT).show();
                 }
             }
 

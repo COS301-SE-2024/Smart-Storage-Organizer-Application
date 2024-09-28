@@ -366,10 +366,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onSuccess(Boolean result) {
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    context.startActivity(intent);
-                    ((Activity) context).finish();
+                    showSuccessDialog("Category Name Changed Successfully.");
                 }
             }
             @Override
@@ -412,10 +409,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onSuccess(Boolean result) {
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, HomeActivity.class);
-                    context.startActivity(intent);
-                    ((Activity) context).finish();
+                    showSuccessDialog("Category Deleted Successfully.");
                 }
             }
             @Override
@@ -424,5 +418,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 Toast.makeText(context, "Failed to Delete Category.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void showSuccessDialog(String message) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        android.app.AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText(message);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(context, HomeActivity.class);
+            context.startActivity(intent);
+            ((Activity) context).finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 }

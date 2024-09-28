@@ -91,11 +91,13 @@ public class UnitsFragment extends Fragment {
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setVisibility(View.GONE);
                     skeletonLoader.setVisibility(View.GONE);
                     recyclerViewUnits.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
                     skeletonLoader.setVisibility(View.GONE);
                     recyclerViewUnits.setVisibility(View.VISIBLE);
                 }

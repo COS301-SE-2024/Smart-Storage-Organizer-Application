@@ -139,7 +139,7 @@ public class CodeScannerActivity extends BaseActivity {
 
         try {
             Result result = new MultiFormatReader().decode(binaryBitmap);
-            Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
 
             // Check the scan type based on the flag and navigate to the appropriate activity
             if (isGroupScan) {

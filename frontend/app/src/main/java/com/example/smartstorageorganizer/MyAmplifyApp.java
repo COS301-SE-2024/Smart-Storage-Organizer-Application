@@ -89,12 +89,6 @@ public class MyAmplifyApp extends Application {
                 OSNotification notification = notificationReceivedEvent.getNotification();
                 String message = notification.getBody();
 
-//                new AlertDialog.Builder(getApplicationContext())
-//                        .setTitle("New Notification")
-//                        .setMessage(message)
-//                        .setPositiveButton(android.R.string.ok, null)
-//                        .show();
-
                 notificationReceivedEvent.complete(notification);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }

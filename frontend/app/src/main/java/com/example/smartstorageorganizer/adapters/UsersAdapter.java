@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.EmailVerificationActivity;
 import com.example.smartstorageorganizer.LoginActivity;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
@@ -30,10 +31,12 @@ import java.util.Objects;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHolder> {
     private Context context;
     private List<UserModel> usersList;
+    private MyAmplifyApp app;
 
     public UsersAdapter(Context context, List<UserModel> usersList) {
         this.context = context;
         this.usersList = usersList;
+        app = (MyAmplifyApp) context.getApplicationContext();
     }
 
     @NonNull
@@ -67,7 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            setUserRole(cardItem.getEmail(), "guestUser", "", holder.getAdapterPosition(), progressDialog);
+            setUserRole(app.getEmail(), "guestUser" , cardItem.getEmail(), holder.getAdapterPosition(), progressDialog);
         });
 
         holder.moreButton.setOnClickListener(v -> showBottomSheetDialog(cardItem));
@@ -126,7 +129,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             progressDialog.setMessage("Setting role...");
             progressDialog.setCancelable(false);
             progressDialog.show();
-            setUserRole(cardItem.getEmail(), selectedRole, "", -1, progressDialog);
+            setUserRole(app.getEmail(), selectedRole, cardItem.getEmail(), -1, progressDialog);
             bottomSheetDialog.dismiss();
         });
 
@@ -181,7 +184,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
                     ((Activity) context).runOnUiThread(() -> {
-                        setUserToVerified(username, "", position, progressDialog);
+//                        setUserToVerified(username, "", position, progressDialog);
                         Toast.makeText(context, "User role set successfully", Toast.LENGTH_SHORT).show();
                     });
                 }

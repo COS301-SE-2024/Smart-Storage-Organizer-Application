@@ -267,11 +267,12 @@ public class UserUtils {
             });
     }
 
-    public static void getUsersInGroup(String username, String type, String authorizationToken, Activity activity, OperationCallback<List<UserModel>> callback) {
+    public static void getUsersInGroup(String username, String type, String organizationId, Activity activity, OperationCallback<List<UserModel>> callback) {
         String json = "{"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\","
-                + "\"type\": \"" + type + "\""
+                + "\"type\": \"" + type + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\""
                 + "}"
                 + "}";
 
@@ -359,11 +360,12 @@ public class UserUtils {
         });
     }
 
-    public static void setUserRole(String username, String role, String authorizationToken, Activity activity, OperationCallback<Boolean> callback) {
+    public static void setUserRole(String username, String role, String email, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\","
-                + "\"role\": \"" + role + "\""
+                + "\"role\": \"" + role + "\","
+                + "\"email\": \"" + email + "\""
                 + "}"
                 + "}";
 

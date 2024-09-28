@@ -48,10 +48,6 @@ public class ViewUnitsActivity extends BaseActivity {
     }
 
     private void loadUnits(String authorizationToken) {
-//        shimmerFrameLayout.startShimmer();
-//        shimmerFrameLayout.setVisibility(View.VISIBLE);
-//        itemsLayout.setVisibility(View.GONE);
-//        sortBySpinner.setVisibility(View.GONE);
 
         Utils.FetchAllUnits(app.getOrganizationID(), this, new OperationCallback<List<unitModel>>() {
             @Override
@@ -59,34 +55,6 @@ public class ViewUnitsActivity extends BaseActivity {
                 unitList.clear();
                 unitList.addAll(result);
                 unitsAdapter.notifyDataSetChanged();
-//                if (!Objects.equals(currentSelectedOption, "Sort by")) {
-//                    setupSort(currentSelectedOption);
-//                } else {
-//                    recentAdapter.notifyDataSetChanged();
-//                }
-//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
-//                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
-//                updatePaginationButtons(result.size());
-//                shimmerFrameLayout.stopShimmer();
-//                shimmerFrameLayout.setVisibility(View.GONE);
-//                itemsLayout.setVisibility(View.VISIBLE);
-//                sortBySpinner.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(ViewUnitsActivity.this, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void loadCategoriesOfUnits(String unit_id) {
-        Utils.FetchCategoriesOfUnits(unit_id, this, new OperationCallback<List<String>>() {
-            @Override
-            public void onSuccess(List<String> result) {
-//                unitList.clear();
-//                unitList.addAll(result);
-//                unitsAdapter.notifyDataSetChanged();
             }
 
             @Override

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.adapters.UsersAdapter;
 import com.example.smartstorageorganizer.model.UserModel;
@@ -34,12 +35,14 @@ public class AllFragment extends Fragment {
     String currentEmail;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView recyclerView;
+    private MyAmplifyApp app;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_request, container, false);
+        app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
         shimmerFrameLayout = root.findViewById(R.id.shimmer_view_container);
         recyclerView = root.findViewById(R.id.recyclerView);
@@ -94,7 +97,7 @@ public class AllFragment extends Fragment {
     }
 
     private void getUsersInGroup(String username, String type, String authorizationToken) {
-        UserUtils.getUsersInGroup(username, type, authorizationToken, requireActivity(), new OperationCallback<List<UserModel>>() {
+        UserUtils.getUsersInGroup(username, type, app.getOrganizationID(), requireActivity(), new OperationCallback<List<UserModel>>() {
             @Override
             public void onSuccess(List<UserModel> result) {
                 cardItemList.addAll(result);

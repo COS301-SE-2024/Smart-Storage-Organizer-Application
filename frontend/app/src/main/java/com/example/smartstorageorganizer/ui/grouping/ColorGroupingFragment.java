@@ -126,12 +126,14 @@ public class ColorGroupingFragment extends Fragment {
                                     deleteFab.setVisibility(View.GONE);
                                     if(colorCodeModelList.isEmpty()){
                                         addButton.setVisibility(View.VISIBLE);
+                                        swipeRefreshLayout.setVisibility(View.GONE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.GONE);
                                     }
                                     else {
                                         addButton.setVisibility(View.GONE);
+                                        swipeRefreshLayout.setVisibility(View.VISIBLE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.VISIBLE);
@@ -152,12 +154,14 @@ public class ColorGroupingFragment extends Fragment {
                                     deleteFab.setVisibility(View.GONE);
                                     if(colorCodeModelList.isEmpty()){
                                         addButton.setVisibility(View.VISIBLE);
+                                        swipeRefreshLayout.setVisibility(View.GONE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.GONE);
                                     }
                                     else {
                                         addButton.setVisibility(View.GONE);
+                                        swipeRefreshLayout.setVisibility(View.VISIBLE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.VISIBLE);
@@ -193,24 +197,26 @@ public class ColorGroupingFragment extends Fragment {
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setVisibility(View.GONE);
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
                     colorCodeRecyclerView.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
                     colorCodeRecyclerView.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(String error) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Failed to fetch color groups: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -227,7 +233,7 @@ public class ColorGroupingFragment extends Fragment {
 
             @Override
             public void onFailure(String error) {
-                showToast("Failed to add category: " + error);
+                showToast("Failed to delete color group: " + error);
                 callback.onDeleteFailure();
             }
         });
