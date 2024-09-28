@@ -126,12 +126,14 @@ public class ColorGroupingFragment extends Fragment {
                                     deleteFab.setVisibility(View.GONE);
                                     if(colorCodeModelList.isEmpty()){
                                         addButton.setVisibility(View.VISIBLE);
+                                        swipeRefreshLayout.setVisibility(View.GONE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.GONE);
                                     }
                                     else {
                                         addButton.setVisibility(View.GONE);
+                                        swipeRefreshLayout.setVisibility(View.VISIBLE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.VISIBLE);
@@ -152,12 +154,14 @@ public class ColorGroupingFragment extends Fragment {
                                     deleteFab.setVisibility(View.GONE);
                                     if(colorCodeModelList.isEmpty()){
                                         addButton.setVisibility(View.VISIBLE);
+                                        swipeRefreshLayout.setVisibility(View.GONE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.GONE);
                                     }
                                     else {
                                         addButton.setVisibility(View.GONE);
+                                        swipeRefreshLayout.setVisibility(View.VISIBLE);
                                         shimmerFrameLayout.stopShimmer();
                                         shimmerFrameLayout.setVisibility(View.GONE);
                                         colorCodeRecyclerView.setVisibility(View.VISIBLE);
@@ -193,12 +197,14 @@ public class ColorGroupingFragment extends Fragment {
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setVisibility(View.GONE);
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
                     colorCodeRecyclerView.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
                     colorCodeRecyclerView.setVisibility(View.VISIBLE);
