@@ -1757,7 +1757,8 @@ public class Utils
         String json = "{"
                 + "\"body\": {"
                 + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
-                + "\"quantity\": \"" + quantity + "\""
+                + "\"quantity\": \"" + quantity + "\","
+                + "\"username\": \"" + quantity + "\""
                 + "}"
                 + "}";
 
@@ -2099,42 +2100,53 @@ public class Utils
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
                     activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
-
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("response");
-//                        JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
-                        JSONObject jsonObject1 = new JSONObject(bodyString);
-                        String imageUrl = jsonObject1.getString("path");
-                        String items = jsonObject1.getString("items");
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", imageUrl));
+                        jsonObject.getString("statusCode");
+                        if(jsonObject.getString("statusCode").equals("200")){
+                            activity.runOnUiThread(() -> Log.e("Arrangement", responseData));
+                            String bodyString = jsonObject.getString("response");
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
+                            JSONObject jsonObject1 = new JSONObject(bodyString);
+                            String imageUrl = jsonObject1.getString("path");
+                            String items = jsonObject1.getString("items");
 
-                        JSONArray itemsArray = new JSONArray(items);
-                        List<BinItemModel> itemsList = new ArrayList<>();
+                            JSONArray itemsArray = new JSONArray(items);
+                            List<BinItemModel> itemsList = new ArrayList<>();
 
-                        for (int i = 0; i < itemsArray.length(); i++) {
-                            JSONObject itemObject = itemsArray.getJSONObject(i);
+                            for (int i = 0; i < itemsArray.length(); i++) {
+                                JSONObject itemObject = itemsArray.getJSONObject(i);
 
-                            String name = itemObject.getString("name");
-                            String color = itemObject.getString("color");
+                                String name = itemObject.getString("name");
+                                String color = itemObject.getString("color");
 
-                            BinItemModel item = new BinItemModel(name, color);
-                            itemsList.add(item);
+                                BinItemModel item = new BinItemModel(name, color);
+                                itemsList.add(item);
+                            }
+
+                            ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
+
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        } // item with no dimension
+                        else if(jsonObject.getString("status").equals("400")){
+                            List<BinItemModel> itemList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("400", itemList);
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
-
-                        ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
-
-                        activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        else if(jsonObject.getString("status").equals("401")){
+                            List<BinItemModel> itemList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("401", itemList);
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        }
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
-                            Log.e("View Response Results Body Array", "JSON parsing error: " + e.getMessage());
+                            Log.e("Arrangement", "" + e.getMessage());
                             callback.onFailure(e.getMessage());
                         });
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed:" + response);
+                        Log.e(message, "Arrangement:" + response);
                         callback.onFailure("Response code:" + response.code());
                     });
                 }

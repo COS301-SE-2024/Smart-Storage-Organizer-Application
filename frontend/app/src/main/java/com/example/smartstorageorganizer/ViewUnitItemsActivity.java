@@ -489,76 +489,110 @@ public class ViewUnitItemsActivity extends BaseActivity {
         });
     }
 
+    public void showArrangementDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.arrangement_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView message = dialogView.findViewById(R.id.textView3);
+//        message.setText("");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+
+        });
+
+//        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private void generateProcess(String unit_id, String unit_name) {
         Utils.generateProcess(unit_id, unit_name, this, new OperationCallback<ArrangementModel>() {
             @Override
             public void onSuccess(ArrangementModel result) {
-                mainLayout.setVisibility(View.VISIBLE);
-                arrangementLoader.setVisibility(View.GONE);
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ViewUnitItemsActivity.this);
+                if (Objects.equals(result.getImageUrl(), "400")) {
+                    mainLayout.setVisibility(View.VISIBLE);
+                    arrangementLoader.setVisibility(View.GONE);
+                    showArrangementDialog();
+                } else if (Objects.equals(result.getImageUrl(), "401")) {
+                    mainLayout.setVisibility(View.VISIBLE);
+                    arrangementLoader.setVisibility(View.GONE);
+//                    showArrangementDialog();
+                    generateProcess(unit_id, unit_name);
+                } else {
+                    mainLayout.setVisibility(View.VISIBLE);
+                    arrangementLoader.setVisibility(View.GONE);
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ViewUnitItemsActivity.this);
 
-                LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_items_list, null);
-                dialogBuilder.setView(dialogView);
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.dialog_items_list, null);
+                    dialogBuilder.setView(dialogView);
 
-                TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
+                    TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
 
-                TableRow headerRow = new TableRow(ViewUnitItemsActivity.this);
-                TextView headerName = new TextView(ViewUnitItemsActivity.this);
-                TextView headerColor = new TextView(ViewUnitItemsActivity.this);
+                    TableRow headerRow = new TableRow(ViewUnitItemsActivity.this);
+                    TextView headerName = new TextView(ViewUnitItemsActivity.this);
+                    TextView headerColor = new TextView(ViewUnitItemsActivity.this);
 
-                headerName.setText("Name");
-                headerName.setPadding(8, 8, 8, 8);
-                headerName.setTypeface(null, Typeface.BOLD);
-                headerColor.setText("Color");
-                headerColor.setPadding(8, 8, 8, 8);
-                headerColor.setTypeface(null, Typeface.BOLD);
+                    headerName.setText("Name");
+                    headerName.setPadding(8, 8, 8, 8);
+                    headerName.setTypeface(null, Typeface.BOLD);
+                    headerColor.setText("Color");
+                    headerColor.setPadding(8, 8, 8, 8);
+                    headerColor.setTypeface(null, Typeface.BOLD);
 
-                headerRow.addView(headerName);
-                headerRow.addView(headerColor);
+                    headerRow.addView(headerName);
+                    headerRow.addView(headerColor);
 
-                tableLayout.addView(headerRow);
+                    tableLayout.addView(headerRow);
 
-                List<BinItemModel> items = result.getItems();
+                    List<BinItemModel> items = result.getItems();
 
-                for (BinItemModel item : items) {
-                    TableRow row = new TableRow(ViewUnitItemsActivity.this);
+                    for (BinItemModel item : items) {
+                        TableRow row = new TableRow(ViewUnitItemsActivity.this);
 
-                    TextView nameView = new TextView(ViewUnitItemsActivity.this);
-                    nameView.setText(item.getName());
-                    nameView.setPadding(8, 8, 8, 8);
+                        TextView nameView = new TextView(ViewUnitItemsActivity.this);
+                        nameView.setText(item.getName());
+                        nameView.setPadding(8, 8, 8, 8);
 
-                    View colorView = new View(ViewUnitItemsActivity.this);
-                    colorView.setBackgroundColor(parseColor(item.getColor()));
+                        View colorView = new View(ViewUnitItemsActivity.this);
+                        colorView.setBackgroundColor(parseColor(item.getColor()));
 
-                    TableRow.LayoutParams params = new TableRow.LayoutParams(50, 50);
-                    params.setMargins(8, 8, 8, 8);
-                    colorView.setLayoutParams(params);
+                        TableRow.LayoutParams params = new TableRow.LayoutParams(50, 50);
+                        params.setMargins(8, 8, 8, 8);
+                        colorView.setLayoutParams(params);
 
-                    row.addView(nameView);
-                    row.addView(colorView);
+                        row.addView(nameView);
+                        row.addView(colorView);
 
-                    tableLayout.addView(row);
+                        tableLayout.addView(row);
+                    }
+
+                    Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
+                    view3DButton.setOnClickListener(v -> {
+                        Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                        sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=" + result.getImageUrl()));
+                        sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                        startActivity(sceneViewerIntent);
+                    });
+
+                    // Show the dialog
+                    AlertDialog dialog = dialogBuilder.create();
+                    dialog.show();
                 }
 
-                Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
-                view3DButton.setOnClickListener(v -> {
-                    Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-                    sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=" + result.getImageUrl()));
-                    sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
-                    startActivity(sceneViewerIntent);
-                });
-
-                // Show the dialog
-                AlertDialog dialog = dialogBuilder.create();
-                dialog.show();
             }
 
 
 
             @Override
             public void onFailure(String error) {
-                generateProcess(unit_id, unit_name);
+                if(Objects.equals(error.toLowerCase(), "timeout")){
+                    generateProcess(unit_id, unit_name);
+                }
                 Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });

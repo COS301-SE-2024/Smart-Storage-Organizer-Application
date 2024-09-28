@@ -225,9 +225,14 @@ public class AddItemActivity extends BaseActivity  {
                 showAddUnitDialog();
             }
             else {
-                progressDialogAddingItem.show();
-                File compressedFile = compressImage(file);
-                uploadItemImage(compressedFile);
+                if(TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+                    showNoDimensionsDialog();
+                }
+                else {
+                    progressDialogAddingItem.show();
+                    File compressedFile = compressImage(file);
+                    uploadItemImage(compressedFile);
+                }
             }
         });
     }
@@ -250,7 +255,33 @@ public class AddItemActivity extends BaseActivity  {
             intent.putExtra("type", "AddItem");
             startActivity(intent);
 
-//            navigateToHome();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    public void showNoDimensionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.no_dimensions_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        Button addDimensionsButton = dialogView.findViewById(R.id.addDimensionsButton);
+
+//        TextView message = dialogView.findViewById(R.id.textView3);
+//        message.setText("You need to create a storage unit for the "+suggestionSpinner.getSelectedItem().toString()+" category before adding items. Please create a unit now to store items in this category.");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            progressDialogAddingItem.show();
+            File compressedFile = compressImage(file);
+            uploadItemImage(compressedFile);
+        });
+        addDimensionsButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
         });
 
         alertDialog.setCanceledOnTouchOutside(false);
@@ -463,7 +494,12 @@ public class AddItemActivity extends BaseActivity  {
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        if(!TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+            addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        }
+        else {
+            addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), "", "", "", "", "", "");
+        }
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -609,10 +645,18 @@ public class AddItemActivity extends BaseActivity  {
 //                Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 
                 // Create CountDownLatch with count 3 for two async operations
-                CountDownLatch latch = new CountDownLatch(3);
-                ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
-                generateQRCodeAsync(result, latch);
-                generateBarCodeAsync(result, latch);
+                CountDownLatch latch;
+                if (!TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+                    latch = new CountDownLatch(3);
+                    ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
+                    generateQRCodeAsync(result, latch);
+                    generateBarCodeAsync(result, latch);
+                }
+                else {
+                    latch = new CountDownLatch(2);
+                    generateQRCodeAsync(result, latch);
+                    generateBarCodeAsync(result, latch);
+                }
 
                 showSuccessDialog();
 
