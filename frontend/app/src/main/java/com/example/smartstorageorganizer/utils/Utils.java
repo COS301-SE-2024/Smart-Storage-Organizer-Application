@@ -1588,12 +1588,11 @@ public class Utils
         return future;
     }
 
-    public static void fetchItemsUnderUnit(String unitName, Activity activity, OperationCallback<List<ItemModel>> callback)
+    public static void fetchItemsUnderUnit(String unitName, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
         String json = "{"
-                + "\"body\": {"
-                + "\"unit_name\": \"" + unitName + "\""
-                + "}"
+                + "\"unit_name\": \"" + unitName + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\""
                 + "}";
 
 
@@ -1631,31 +1630,36 @@ public class Utils
                             if(responseData != null && !responseData.isEmpty()){
                                 JSONObject jsonObject = new JSONObject(responseData);
                                 String bodyString = jsonObject.getString("body");
-                                JSONArray bodyArray = new JSONArray(bodyString);
-                                activity.runOnUiThread(() -> Log.e(message, "bodyArray"+bodyArray.toString()));
+                                if(bodyString.equals("{\"error\": \"No items found\"}")){
+                                    activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                                }
+                                else{
+                                    JSONArray bodyArray = new JSONArray(bodyString);
+                                    activity.runOnUiThread(() -> Log.e(message, "bodyArray"+bodyArray.toString()));
 
-                                for (int i = 0; i < bodyArray.length(); i++) {
-                                    JSONObject itemObject = bodyArray.getJSONObject(i);
+                                    for (int i = 0; i < bodyArray.length(); i++) {
+                                        JSONObject itemObject = bodyArray.getJSONObject(i);
 
-                                    ItemModel item = new ItemModel();
-                                    item.setItemId(itemObject.getString("item_id"));
-                                    item.setItemName(itemObject.getString("item_name"));
-                                    item.setDescription(itemObject.getString("description"));
-                                    item.setColourCoding(itemObject.getString("colour_coding"));
-                                    item.setBarcode(itemObject.getString("barcode"));
-                                    item.setQrcode(itemObject.getString("qrcode"));
-                                    item.setQuantity(itemObject.getString("quanity"));
-                                    item.setLocation(itemObject.getString("location"));
-                                    item.setEmail(itemObject.getString("email"));
-                                    item.setItemImage(itemObject.getString("item_image"));
-                                    item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-                                    item.setSubCategoryId(itemObject.getString("subcategoryid"));
+                                        ItemModel item = new ItemModel();
+                                        item.setItemId(itemObject.getString("item_id"));
+                                        item.setItemName(itemObject.getString("item_name"));
+                                        item.setDescription(itemObject.getString("description"));
+                                        item.setColourCoding(itemObject.getString("colour_coding"));
+                                        item.setBarcode(itemObject.getString("barcode"));
+                                        item.setQrcode(itemObject.getString("qrcode"));
+                                        item.setQuantity(itemObject.getString("quanity"));
+                                        item.setLocation(itemObject.getString("location"));
+                                        item.setEmail(itemObject.getString("email"));
+                                        item.setItemImage(itemObject.getString("item_image"));
+                                        item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                                        item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
-                                    itemModelList.add(item);
-                                }
+                                        itemModelList.add(item);
+                                    }
 
-                                activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                                    activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                                }
                             }
                             else {
                                 activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
@@ -2060,9 +2064,9 @@ public class Utils
                             ArrangementModel obj = new ArrangementModel("400", itemList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
-                        else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("401")){
+                        else if(jsonObject.toString().contains("\""+"statusCode"+"\"") && jsonObject.getString("statusCode").equals("500")){
                             List<BinItemModel> itemList = new ArrayList<>();
-                            ArrangementModel obj = new ArrangementModel("401", itemList);
+                            ArrangementModel obj = new ArrangementModel("500", itemList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
                     } catch (JSONException e) {

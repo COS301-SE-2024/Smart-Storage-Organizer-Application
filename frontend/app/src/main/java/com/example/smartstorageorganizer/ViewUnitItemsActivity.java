@@ -208,7 +208,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
         itemsLayout.setVisibility(View.GONE);
         sortBySpinner.setVisibility(View.GONE);
 
-        Utils.fetchItemsUnderUnit(getIntent().getStringExtra("unit_name"), this, new OperationCallback<List<ItemModel>>() {
+        Utils.fetchItemsUnderUnit(getIntent().getStringExtra("unit_name"), app.getOrganizationID(),  this, new OperationCallback<List<ItemModel>>() {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
@@ -489,7 +489,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
         });
     }
 
-    public void showArrangementDialog() {
+    public void showArrangementDialog(String text, String unit_id, String unit_name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.arrangement_popup, null);
@@ -498,11 +498,21 @@ public class ViewUnitItemsActivity extends BaseActivity {
         AlertDialog alertDialog = builder.create();
         Button closeButton = dialogView.findViewById(R.id.finishButton);
         TextView message = dialogView.findViewById(R.id.textView3);
-//        message.setText("");
-
+        if(!Objects.equals(text, "")){
+            message.setText(text);
+            closeButton.setText("Try Again");
+        }
+        else {
+            message.setText("The arrangement could not be generated because one or more items are missing essential dimensions (width, depth, height, or weight). All items must have complete dimensions in order for the system to create an optimized arrangement. Please ensure that each item has the necessary dimensions and try again.");
+            closeButton.setText("Close");
+        }
         closeButton.setOnClickListener(v -> {
             alertDialog.dismiss();
-
+            if(!Objects.equals(text, "")){
+                mainLayout.setVisibility(View.GONE);
+                arrangementLoader.setVisibility(View.VISIBLE);
+                generateProcess(unit_id, unit_name);
+            }
         });
 
 //        alertDialog.setCanceledOnTouchOutside(false);
@@ -516,12 +526,12 @@ public class ViewUnitItemsActivity extends BaseActivity {
                 if (Objects.equals(result.getImageUrl(), "400")) {
                     mainLayout.setVisibility(View.VISIBLE);
                     arrangementLoader.setVisibility(View.GONE);
-                    showArrangementDialog();
-                } else if (Objects.equals(result.getImageUrl(), "401")) {
+                    showArrangementDialog("", unit_id, unit_name);
+                } else if (Objects.equals(result.getImageUrl(), "500")) {
                     mainLayout.setVisibility(View.VISIBLE);
                     arrangementLoader.setVisibility(View.GONE);
-//                    showArrangementDialog();
-                    generateProcess(unit_id, unit_name);
+                    showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name);
+//                    generateProcess(unit_id, unit_name);
                 } else {
                     mainLayout.setVisibility(View.VISIBLE);
                     arrangementLoader.setVisibility(View.GONE);
