@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.adapters.NotificationsAdapter;
-import com.example.smartstorageorganizer.model.NotificationModel;
+import com.example.smartstorageorganizer.ViewNotificationActivity;
+import com.example.smartstorageorganizer.NotificationsAdapter;
+import com.example.smartstorageorganizer.NotificationModel;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +61,19 @@ public class NotificationsFragment extends Fragment {
 
         // Initialize the notification list and adapter
         notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(requireContext(), notificationList);
+//        adapter = new NotificationsAdapter(requireContext(), notificationList);
+
+
+        // Set up the adapter with the click listener
+        adapter = new NotificationsAdapter(requireContext(), notificationList, notification -> {
+            // Handle the click event here
+            Intent intent = new Intent(requireContext(), ViewNotificationActivity.class);
+            intent.putExtra("notification_title", notification.getTitle());
+            intent.putExtra("notification_message", notification.getMessage());
+            intent.putExtra("notification_date", notification.getDate());
+            startActivity(intent);
+        });
+
         recyclerView.setAdapter(adapter);
 
 
@@ -85,10 +99,12 @@ public class NotificationsFragment extends Fragment {
             String data = arguments.getString("data_key");
             if (data != null && !data.isEmpty()) {
                 // Handle the incoming data
-                notificationList.add(new NotificationModel("New Notification", data, "Now"));
+                // Add a new notification with 'isRead' set to false (unread)
+                notificationList.add(new NotificationModel("New Notification", data, "Now", false));
                 adapter.notifyDataSetChanged(); // Refresh the RecyclerView to show new data
             }
         }
+
 
         return view;
     }
@@ -138,15 +154,15 @@ public class NotificationsFragment extends Fragment {
                 });
             }
 
-            @Override
+
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-//                    Log.d("API Response", response.body().string());
-
+                    // Get the response body as a string
                     String jsonData = response.body().string();
                     Log.d("API Response", jsonData);
 
                     try {
+                        // Convert response string to JSON object
                         JSONObject jsonObject = new JSONObject(jsonData);
                         JSONArray notifications = jsonObject.getJSONArray("notifications");
 
@@ -156,14 +172,28 @@ public class NotificationsFragment extends Fragment {
                         // Parse the notification details
                         for (int i = 0; i < notifications.length(); i++) {
                             JSONObject notification = notifications.getJSONObject(i);
-                            String title = notification.optString("headings", "No Title");
-                            String message = notification.optString("contents", "No Message");
-                            String date = notification.optString("delivery_time_of_day", "No Date");
 
-                            // Add to notification list
-                            String currentDate = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault()).format(new Date());
+                            // Get the title and message, remove "en" and brackets
+                            String title = cleanNotificationString(notification.optString("headings", "No Title"));
+                            String message = cleanNotificationString(notification.optString("contents", "No Message"));
+//                            String date = notification.optString("delivery_time_of_day", "No Date");
 
-                            notificationList.add(new NotificationModel(title, message, currentDate));
+                            // Get the delivery time
+                            long queuedAt = notification.optLong("queued_at", 0);   // For the Org Manager
+                            long sendAfter = notification.optLong("send_after", 0); // For the Org Manager
+                            long completedAt = notification.optLong("completed_at", 0);
+                            // Log the entire notification to debug
+                            Log.d("Notification JSON", notification.toString());
+
+                            String date = "No Date";
+                            if (completedAt != 0) {
+                                Date deliveryDate = new Date(completedAt * 1000L); // Convert seconds to milliseconds
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
+                                date = dateFormat.format(deliveryDate);
+                            }
+
+                            // Add to the notification list
+                            notificationList.add(new NotificationModel(title, message, date,false));
                         }
 
                         // Notify the adapter (make sure this is done on the UI thread)
@@ -179,6 +209,13 @@ public class NotificationsFragment extends Fragment {
                     });
                 }
             }
+
+            // Helper function to clean the notification string by removing "en" and braces
+            private String cleanNotificationString(String input) {
+                // Replace any occurrence of '{"en":' or '}'
+                return input.replace("{\"en\":", "").replace("}", "").replace("\"", "");
+            }
+
         });
     }
 }
