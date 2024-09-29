@@ -4,7 +4,7 @@
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
 
   <a href="">
-        <img src="https://img.shields.io/coveralls/github/badges/shields"
+        <img src="https://img.shields.io/badge/coverage-%2081%25%20-green"
   alt="Code Coverage"></a>
 
 ## Team Name: Syntax Savants
