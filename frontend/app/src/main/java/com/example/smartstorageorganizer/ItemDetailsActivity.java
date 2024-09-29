@@ -170,6 +170,23 @@ public class ItemDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ItemDetailsActivity.this, EditItemActivity.class);
                 if(!Objects.equals(getIntent().getStringExtra("item_name"), "")){
+                    runOnUiThread(() -> {
+                        Log.d("Request Method", "Name: "+getIntent().getStringExtra("item_name"));
+                        Log.d("Request Method", "Description: "+getIntent().getStringExtra("item_description"));
+                        Log.d("Request Method", "Location: "+getIntent().getStringExtra("location"));
+                        Log.d("Request Method", "Color: "+getIntent().getStringExtra("color_code"));
+                        Log.d("Request Method", "item_id: "+getIntent().getStringExtra("item_id"));
+                        Log.d("Request Method", "item_image: "+getIntent().getStringExtra("item_image"));
+                        Log.d("Request Method", "subcategory_id: "+getIntent().getStringExtra("subcategory_id"));
+                        Log.d("Request Method", "parentcategory_id: "+getIntent().getStringExtra("parentcategory_id"));
+                        Log.d("Request Method", "qrcode: "+getIntent().getStringExtra("item_qrcode"));
+                        Log.d("Request Method", "barcode: "+getIntent().getStringExtra("item_barcode"));
+                        Log.d("Request Method", "quantity: "+getIntent().getStringExtra("quantity"));
+                        Log.d("Request Method", "Parent Category Name: "+parentCategory);
+                        Log.d("Request Method", "Sub Category Name: "+subcategory);
+                        Log.d("Request Method", "Organization Id: "+getIntent().getStringExtra("organization_id"));
+
+                    });
                     intent.putExtra("item_name", getIntent().getStringExtra("item_name"));
                     intent.putExtra("item_description", getIntent().getStringExtra("item_description"));
                     intent.putExtra("location", getIntent().getStringExtra("location"));
@@ -183,6 +200,7 @@ public class ItemDetailsActivity extends BaseActivity {
                     intent.putExtra("quantity", getIntent().getStringExtra("quantity"));
                     intent.putExtra("parentCategoryName", parentCategory);
                     intent.putExtra("subCategoryName", subcategory);
+                    intent.putExtra("CategoryName", itemCategory.getText().toString());
                     intent.putExtra("organization_id", getIntent().getStringExtra("organization_id"));
                 }
                 else {

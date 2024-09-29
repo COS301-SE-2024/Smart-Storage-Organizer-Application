@@ -255,7 +255,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     }
 
     public void incrementQuantity(String item_id, int quantity) {
-        Utils.incrementQuantity(item_id, ++quantity, (Activity) context, new OperationCallback<Boolean>() {
+        Utils.incrementQuantity(item_id, ++quantity, app.getEmail(), (Activity) context, new OperationCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
