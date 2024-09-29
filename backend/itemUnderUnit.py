@@ -12,7 +12,7 @@ def get_db_connection():
             database=os.environ.get('DB_Name'),
             user=os.environ.get('Username'),
             password=os.environ.get('Password')
-            
+
         )
     return con
 def get_all_units(unit_name,organization_id,conn,curr):
@@ -40,8 +40,8 @@ def lambda_handler(event, context):
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-        unit_name=event['body']['unit_name']
-        organization_id=event['body']['organization_id']
+        unit_name=event['unit_name']
+        organization_id=event['organization_id']
         response=get_all_units(unit_name,organization_id,conn,curr)
     except Exception as e:
       conn.rollback()
