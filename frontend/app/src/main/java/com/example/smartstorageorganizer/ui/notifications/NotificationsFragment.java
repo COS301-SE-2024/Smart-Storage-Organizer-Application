@@ -99,10 +99,12 @@ public class NotificationsFragment extends Fragment {
             String data = arguments.getString("data_key");
             if (data != null && !data.isEmpty()) {
                 // Handle the incoming data
-                notificationList.add(new NotificationModel("New Notification", data, "Now"));
+                // Add a new notification with 'isRead' set to false (unread)
+                notificationList.add(new NotificationModel("New Notification", data, "Now", false));
                 adapter.notifyDataSetChanged(); // Refresh the RecyclerView to show new data
             }
         }
+
 
         return view;
     }
@@ -191,7 +193,7 @@ public class NotificationsFragment extends Fragment {
                             }
 
                             // Add to the notification list
-                            notificationList.add(new NotificationModel(title, message, date));
+                            notificationList.add(new NotificationModel(title, message, date,false));
                         }
 
                         // Notify the adapter (make sure this is done on the UI thread)
