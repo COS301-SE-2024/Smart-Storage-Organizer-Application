@@ -240,11 +240,11 @@ public class HomeFragment extends Fragment {
                 }
                 recentAdapter.notifyDataSetChanged();
 
-                    recentText.setVisibility(View.VISIBLE);
-                    shimmerFrameLayoutCategory.stopShimmer();
-                    shimmerFrameLayoutCategory.setVisibility(View.GONE);
-                    shimmerFrameLayoutRecent.stopShimmer();
-                    shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                recentText.setVisibility(View.VISIBLE);
+                shimmerFrameLayoutCategory.stopShimmer();
+                shimmerFrameLayoutCategory.setVisibility(View.GONE);
+                shimmerFrameLayoutRecent.stopShimmer();
+                shimmerFrameLayoutRecent.setVisibility(View.GONE);
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);

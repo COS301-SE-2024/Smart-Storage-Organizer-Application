@@ -144,6 +144,8 @@
                 android:id="@+id/cpp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:ccpDialog_textColor="@color/colorSecondary"
+                app:ccp_contentColor="@color/colorSecondary"
                 android:layout_marginTop="32dp"
                 android:layout_marginStart="16dp"
                 app:ccp_showNameCode="false" />

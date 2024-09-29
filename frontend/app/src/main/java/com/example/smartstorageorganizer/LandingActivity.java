@@ -80,6 +80,16 @@ public class LandingActivity extends BaseActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 //            finish();
         });
+
+        findViewById(R.id.createOrganization).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LandingActivity.this, AddOrganizationActivity.class);
+                logUserFlow("AddOrganizationActivity");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
     }
 
     public void signOut() {

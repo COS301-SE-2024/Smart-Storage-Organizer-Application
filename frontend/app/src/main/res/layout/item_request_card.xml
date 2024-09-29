@@ -5,6 +5,7 @@
     android:layout_margin="10dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="5dp"
+    app:cardBackgroundColor="@color/card"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
