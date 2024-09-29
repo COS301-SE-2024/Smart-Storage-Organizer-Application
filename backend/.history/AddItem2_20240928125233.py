@@ -114,5 +114,22 @@ def lambda_handler(event, context):
         curr.close()
         conn.close()
 
+body = {
+    "body": {
+        "username":"zhouvel7@gmail.com",
+        "item_name": "Sample Item",
+        "description": "Sample Description",
+        "colourcoding": "default",
+        "barcode": "123456789012",
+        "qrcode": "https://example.com/qrcode",
+        "quanity": "10",
+        "location": "Unit 3D Room",
+        "email": "user@example.com",
+        "item_image": "https://example.com/item_image.png",
+        "category": "1",
+        "sub_category": "2",
+        "organizationid": "1"
+    }
+}
 
 

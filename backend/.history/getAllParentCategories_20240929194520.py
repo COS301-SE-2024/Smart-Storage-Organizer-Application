@@ -17,39 +17,33 @@ def get_db_connection():
 
          )
     return con
-def get_all_units(conn,curr,organizationid,parentcategory):
+def get_all_units(conn,curr,body):
 
     query ="SELECT id, categoryname FROM category WHERE (organizationid =%s OR organizationid=0) AND parentcategory =%s"
-    parameters=(organizationid,parentcategory)
+    parameters=(body['organizationid'],'0')
     curr.execute(query,parameters)
     conn.commit()
     results = curr.fetchall()
-
+    print(results)
     if results:
-
-        return json.dumps(results)
+        
+        return {
+        'statusCode': 200,
+        'body': json.dumps(results)
+        }
     else:
         return {
             'statusCode': 404,
             'body': json.dumps({'error': 'No items found'})
         }
-
-
-def getAllParentsIds(conn,curr,body):
-    list_of_lists = [[item['id'], item['categoryname']] for item in body]
-    ids = [item[0] for item in list_of_lists]
-    names = [item[1] for item in list_of_lists]
-    list=[]
-    for i in ids:
-        list.append(get_all_units(conn,curr,0,0))
-    return list
+    
 
 def lambda_handler(event, context):
     conn = get_db_connection()
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-      response =getAllParentsIds(conn,curr,event['body'])
+        response=get_all_units(conn,curr,event['body'])
       #  response=get_all_units(conn,curr)
     except Exception as e:
       conn.rollback()
@@ -61,7 +55,7 @@ def lambda_handler(event, context):
     finally:
        curr.close()
        conn.close()
-    return json.dumps(response)
+    return response
 
-
-
+event={'body': {'organizationid': 1, 'parentcategory': 9}}
+print(lambda_handler(event, None))

@@ -10,14 +10,11 @@ def get_db_connection():
     global con
     if con is None or con.closed:
         con = psycopg2.connect(
-            # host=os.environ.get('Host_address'),
-            # database=os.environ.get('DB_Name'),
-            # user=os.environ.get('Username'),
-            # password=os.environ.get('Password')
-              host="Smartstoragedb.c7ymg4sywvej.eu-north-1.rds.amazonaws.com",
-            database="postgres",
-            user="MasterUser",
-            password="MasterDb#ss1"
+            host=os.environ.get('Host_address'),
+            database=os.environ.get('DB_Name'),
+            user=os.environ.get('Username'),
+            password=os.environ.get('Password')
+
          )
     return con
 def get_all_units(conn,curr,body):
@@ -60,5 +57,3 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
-event={'body': {'organizationid': 1, 'parentcategory': 9}}
-print(lambda_handler(event, None))

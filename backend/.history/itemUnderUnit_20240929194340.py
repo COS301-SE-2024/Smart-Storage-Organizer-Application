@@ -55,3 +55,6 @@ def lambda_handler(event, context):
        conn.close()
     return response
 
+body={'unit_name':'TV Storage Unit',
+      'organization_id':1}
+print(lambda_handler({'body':body},None))

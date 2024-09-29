@@ -63,5 +63,6 @@ def lambda_handler(event, context):
        conn.close()
     return json.dumps(response)
 
-
+event={'body': [{"id": 84, "categoryname": "Plants"}, {"id": 1, "categoryname": "Garden, Pool & Patio"}, {"id": 2, "categoryname": "Health & Personal Care"}]}
+print(lambda_handler(event, None))
 

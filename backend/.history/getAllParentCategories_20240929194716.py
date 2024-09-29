@@ -2,6 +2,8 @@ import json
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+import boto3
+
 
 con = None
 def get_db_connection():
@@ -12,24 +14,37 @@ def get_db_connection():
             database=os.environ.get('DB_Name'),
             user=os.environ.get('Username'),
             password=os.environ.get('Password')
+
          )
     return con
-def increment_quantity(conn,curr,event):
+def get_all_units(conn,curr,body):
 
-    query = "UPDATE ITEMS SET quanity = %s WHERE item_id = %s"
-    parameters = ( event['body']['quantity'],event['body']['item_id'],)
+    query ="SELECT id, categoryname FROM category WHERE (organizationid =%s OR organizationid=0) AND parentcategory =%s"
+    parameters=(body['organizationid'],'0')
     curr.execute(query,parameters)
     conn.commit()
-    return {
+    results = curr.fetchall()
+    print(results)
+    if results:
+        
+        return {
         'statusCode': 200,
-        'body': json.dumps('Item updated successfully')
-    }
+        'body': json.dumps(results)
+        }
+    else:
+        return {
+            'statusCode': 404,
+            'body': json.dumps({'error': 'No items found'})
+        }
+    
+
 def lambda_handler(event, context):
     conn = get_db_connection()
     curr = conn.cursor(cursor_factory = RealDictCursor)
 
     try:
-        response=increment_quantity(conn,curr,event)
+        response=get_all_units(conn,curr,event['body'])
+      #  response=get_all_units(conn,curr)
     except Exception as e:
       conn.rollback()
       return {
