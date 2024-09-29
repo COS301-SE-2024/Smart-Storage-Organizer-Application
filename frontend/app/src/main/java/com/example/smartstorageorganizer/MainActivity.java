@@ -4,25 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import androidx.activity.EdgeToEdge;
-
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.amplifyframework.core.Amplify;
-import com.google.firebase.FirebaseApp; // Import Firebase
-import com.google.firebase.messaging.FirebaseMessaging; // Import Firebase Messaging
-
-import java.util.concurrent.CompletableFuture;
 import com.example.smartstorageorganizer.adapters.SlidePagerAdapter;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -88,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 onGetStartedClicked();
             }
         });
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // Simulate sending credentials over HTTP
+        sendCredentials("Tshegofatso.Mapheto7@gmail.com", "#McFlurry5");
     }
 
     private boolean isOnboardingCompleted() {
@@ -141,6 +144,28 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(KEY_ONBOARDING_COMPLETE, false);
         editor.apply();
+    }
+
+    private void sendCredentials(String username, String password) {
+        try {
+            URL url = new URL("https://ueolonfa4j.execute-api.eu-north-1.amazonaws.com/testing/smartstorage/loginActivity"); // Insecure HTTP request
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+
+            String data = "username=" + username + "&password=" + password;
+
+            OutputStream os = conn.getOutputStream();
+            os.write(data.getBytes());
+            os.flush();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+            Log.d("HTTP", "Response Code: " + responseCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 //
 //
