@@ -91,7 +91,6 @@ public class AddCategoryActivity extends BaseActivity  {
 
         app = (MyAmplifyApp) getApplicationContext();
 
-
         initViews();
 //        setupWindowInsets();
         getDetails();
@@ -394,7 +393,7 @@ public class AddCategoryActivity extends BaseActivity  {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    showToast("Category added successfully");
+//                    showToast("Category added successfully");
                     showSuccessDialog();
                 }
             }

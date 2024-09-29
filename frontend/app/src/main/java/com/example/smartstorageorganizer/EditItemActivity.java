@@ -35,8 +35,8 @@ import com.amplifyframework.storage.StoragePath;
 import com.amplifyframework.storage.options.StorageUploadFileOptions;
 import com.bumptech.glide.Glide;
 import com.example.smartstorageorganizer.model.CategoryModel;
-import com.example.smartstorageorganizer.model.ItemModel;
 import com.example.smartstorageorganizer.model.TokenManager;
+import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -100,10 +101,11 @@ public class EditItemActivity extends BaseActivity {
     private RelativeLayout moreOptionsLayout;
     private TextView moreText;
     MyAmplifyApp app;
-    ItemModel currItem;
-    ItemModel  newItem;
-//    private Map<String, Object> changedFields = new HashMap<>();
+    //    private Map<String, Object> changedFields = new HashMap<>();
     private Map<String, Map<String, String>> changedFields = new HashMap<>(); // Track changed fields
+    private String categoryNames;
+    private String parentCategoryName;
+    private String subcategoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,34 @@ public class EditItemActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_item);
 
         app = (MyAmplifyApp) getApplicationContext();
+
+        categoryNames = getIntent().getStringExtra("CategoryName");
+
+        String[] categories = categoryNames.split(" - ");
+
+        if (categories.length == 2) {
+            parentCategoryName = categories[0].trim();
+            subcategoryName = categories[1].trim();
+        }
+
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Name: "+getIntent().getStringExtra("item_name"));
+            Log.d("Request Method", "Description: "+getIntent().getStringExtra("item_description"));
+            Log.d("Request Method", "Location: "+getIntent().getStringExtra("location"));
+            Log.d("Request Method", "Color: "+getIntent().getStringExtra("color_code"));
+            Log.d("Request Method", "item_id: "+getIntent().getStringExtra("item_id"));
+            Log.d("Request Method", "item_image: "+getIntent().getStringExtra("item_image"));
+            Log.d("Request Method", "subcategory_id: "+getIntent().getStringExtra("subcategory_id"));
+            Log.d("Request Method", "parentcategory_id: "+getIntent().getStringExtra("parentcategory_id"));
+            Log.d("Request Method", "qrcode: "+getIntent().getStringExtra("item_qrcode"));
+            Log.d("Request Method", "barcode: "+getIntent().getStringExtra("item_barcode"));
+            Log.d("Request Method", "quantity: "+getIntent().getStringExtra("quantity"));
+            Log.d("Request Method", "Parent Category Name: "+getIntent().getStringExtra("parentCategory"));
+            Log.d("Request Method", "Sub Category Name: "+getIntent().getStringExtra("subcategory"));
+            Log.d("Request Method", "Category Name: "+getIntent().getStringExtra("CategoryName"));
+            Log.d("Request Method", "Organization Id: "+getIntent().getStringExtra("organization_id"));
+
+        });
 
         initializeUI();
         GetDetail();
@@ -180,24 +210,39 @@ public class EditItemActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+        if(getIntent().getStringExtra("parentcategory_id") != null && !Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
             // Track changes for category
             categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String newCategory = categorySpinner.getSelectedItem().toString();
-                    String oldCategory = getIntent().getStringExtra("parentCategoryName");
-                    if (!newCategory.equals(oldCategory)) {
-                        Save.setEnabled(true);
-                        int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+                    if(!isFirstTimeParentApi){
+                        String newCategory = categorySpinner.getSelectedItem().toString();
+                        categoryNames = getIntent().getStringExtra("CategoryName");
+
+                        String[] categories = categoryNames.split(" - ");
+
+                        if (categories.length == 2) {
+                            parentCategoryName = categories[0].trim();
+                            subcategoryName = categories[1].trim();
+                        }
+                        String oldCategory = categories[0].trim();;
+                        if (!newCategory.equals(oldCategory)) {
+                            Save.setEnabled(true);
+                            int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
 //                    int categoryId = getCategoryId(String.valueOf(selectedParentCategory), "parent");
-                        fetchCategories(selectedParentCategory);
-                        changedFields.put("Category", new HashMap<String, String>() {{
-                            put("oldValue", oldCategory);
-                            put("newValue", newCategory +", "+selectedParentCategory);
-                        }});
-                    } else if(!subcategorySpinner.getSelectedItem().toString().equals(getIntent().getStringExtra("subCategoryName"))){
-                        fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+                            fetchCategories(selectedParentCategory);
+                            changedFields.put("Category", new HashMap<String, String>() {{
+                                put("oldValue", oldCategory);
+                                put("newValue", newCategory +", "+selectedParentCategory);
+                            }});
+                        } else if(!subcategorySpinner.getSelectedItem().toString().equals(categories[1].trim())){
+                            if(getIntent().getStringExtra("parentcategory_id") != null){
+                                fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
+                            }
+                        }
+                    }
+                    else {
+                        isFirstTimeParentApi = false;
                     }
                 }
 
@@ -209,8 +254,16 @@ public class EditItemActivity extends BaseActivity {
             subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    categoryNames = getIntent().getStringExtra("CategoryName");
+
+                    String[] categories = categoryNames.split(" - ");
+
+                    if (categories.length == 2) {
+                        parentCategoryName = categories[0].trim();
+                        subcategoryName = categories[1].trim();
+                    }
                     String newSubCategory = subcategorySpinner.getSelectedItem().toString();
-                    String oldSubCategory = getIntent().getStringExtra("subCategoryName");
+                    String oldSubCategory = categories[1].trim();
                     if (!newSubCategory.equals(oldSubCategory)) {
                         Save.setEnabled(true);
                         int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
@@ -262,13 +315,9 @@ public class EditItemActivity extends BaseActivity {
                 }
             }
         });
-        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+        if(getIntent().getStringExtra("parentcategory_id") != null && !Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
             fetchCategories(0);
             fetchCategories(Integer.parseInt(getIntent().getStringExtra("parentcategory_id")));
-        }
-        else {
-            categorySpinner.setVisibility(View.GONE);
-            subcategorySpinner.setVisibility(View.GONE);
         }
 
 //        private void setupSpinnerListener() {
@@ -304,9 +353,6 @@ public class EditItemActivity extends BaseActivity {
         ItemName.setText(getIntent().getStringExtra("item_name"));
         ItemDescription.setText(getIntent().getStringExtra("item_description"));
         ItemQuantity.setText(getIntent().getStringExtra("quantity"));
-
-
-        currItem=new ItemModel(getIntent().getStringExtra("item_id"),getIntent().getStringExtra("item_name"),getIntent().getStringExtra("item_description"),getIntent().getStringExtra("color_code"),getIntent().getStringExtra("item_barcode"),getIntent().getStringExtra("item_qrcode"),getIntent().getStringExtra("quantity"),getIntent().getStringExtra("location"),app.getEmail(),getIntent().getStringExtra("item_image"),getIntent().getStringExtra("createdAt"),getIntent().getStringExtra("parentcategory_id"),getIntent().getStringExtra("subcategory_id"),getIntent().getStringExtra("expiry_date"));
 
         loadingScreen.setVisibility(View.GONE);
 
@@ -388,10 +434,37 @@ public class EditItemActivity extends BaseActivity {
         }
     }
 
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Item Details Updated Successfully!!!");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            showUpdateSuccessMessage();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private void showUpdateSuccessMessage() {
-        Toast.makeText(EditItemActivity.this, "Details Updated", Toast.LENGTH_SHORT).show();
         int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
         int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+
+        if(getIntent().getStringExtra("parentcategory_id") != null && Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+            selectedParentCategory = -1;
+            selectedSubCategory = -1;
+        }
 
         Intent intent = new Intent(EditItemActivity.this, ItemDetailsActivity.class);
         intent.putExtra("item_name", Objects.requireNonNull(ItemName.getText()).toString().trim());
@@ -471,16 +544,13 @@ public class EditItemActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.save_button).setOnClickListener(v  -> {
+        findViewById(R.id.save_button).setOnClickListener(v -> {
             loadingScreen.setVisibility(View.VISIBLE);
             loadingScreen.playAnimation();
 
-            UpdateDetails();
+            UpdateDetails();  // Save changes and upload
             loadingScreen.setVisibility(View.GONE);
             loadingScreen.cancelAnimation();
-
-            Save.setEnabled(false);
-
         });
     }
 
@@ -500,22 +570,20 @@ public class EditItemActivity extends BaseActivity {
             String itemid=getIntent().getStringExtra("item_id");
             String colourcoding=getIntent().getStringExtra("color_code");
 
-            int selectedParentCategory = -1;
-            int selectedSubCategory = -1;
-            if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
-                selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
-                selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+            int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+            int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+
+            if(getIntent().getStringExtra("parentcategory_id") != null && Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+                selectedParentCategory = -1;
+                selectedSubCategory = -1;
             }
 
             if(Objects.equals(app.getUserRole(), "normalUser")){
                 sendRequestToModifyItem();
             }
             else if (Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
-                postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+                EditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
             }
-
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
-            Log.i("2Before Post didnt open", " whats the error");
             currentItemName=itemName;
             currentItemDescription=description;
             currentQuantity=quantity;
@@ -548,57 +616,26 @@ public class EditItemActivity extends BaseActivity {
         return 0;
     }
 
-    private CompletableFuture<Boolean> postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
+    private void EditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, int quantity, String location, String itemimage,int itemId, int parentcategory, int subcategory) {
         progressDialog.show();
-        CompletableFuture<Boolean> future=new CompletableFuture<>();
-        newItem=new ItemModel(String.valueOf(itemId),itemname,description,colourcoding,barcode,qrcode,String.valueOf(quantity),location,app.getEmail(),itemimage,"",String.valueOf(parentcategory),String.valueOf(subcategory),"");;
-        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\", \"username\": \""+app.getEmail()+"\", \"organizationid\":\""+app.getOrganizationID()+"\" }";
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.EditItemEndPoint;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        TokenManager.getToken().thenAccept(results-> {
-
-                    Request request = new Request.Builder()
-                            .url(API_URL)
-                            .addHeader("Authorization", results)
-                            .post(body)
-                            .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+        Utils.postEditItem(itemname, description, colourcoding, barcode, qrcode, String.valueOf(quantity), location, itemimage, String.valueOf(itemId), parentcategory, subcategory, app.getEmail(), app.getOrganizationID(), this, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if (result) {
                     progressDialog.dismiss();
+                    showSuccessDialog();
                 }
+                // Decrement latch count
+            }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        String id=String.valueOf(itemId);
-
-                        Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"ITEM",itemname,String.valueOf(itemId),"EDIT","item edit to: "+newItem.toJson());
-                        runOnUiThread(() -> {
-                            Log.i("id",id);
-                            Log.i("Request Method", "POST request succeeded: " + responseData);
-                            showUpdateSuccessMessage();
-                        });
-                    } else {
-
-                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response));
-                        progressDialog.dismiss();
-                    }
-                }
-            });
-
-                }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
-            return null;
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(EditItemActivity.this, "Modify Item failed: "+parentcategory+" - "+subcategory+error, Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+//                ModifyItemDimension(itemId, width, height, depth, weight, loadbear, updown, latch);
+//                latch.countDown(); // Ensure latch is decremented even in case of failure
+            }
         });
-        return future;
     }
 
     CompletableFuture<Boolean> uploadProfilePicture(File profilePicture) {
@@ -637,71 +674,105 @@ public class EditItemActivity extends BaseActivity {
         String itemid=getIntent().getStringExtra("item_id");
         String colourcoding=getIntent().getStringExtra("colour_code");
 
-        int selectedParentCategory = -1;
-        int selectedSubCategory = -1;
-        if(!Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
-            selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
-            selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+        int selectedParentCategory = getCategoryId((String) categorySpinner.getSelectedItem(), "parent");
+        int selectedSubCategory = getCategoryId((String) subcategorySpinner.getSelectedItem(), "sub");
+
+        if(getIntent().getStringExtra("parentcategory_id") != null && Objects.equals(getIntent().getStringExtra("parentcategory_id"), "-1")){
+            selectedParentCategory = -1;
+            selectedSubCategory = -1;
         }
 
         if(Objects.equals(app.getUserRole(), "normalUser")){
             sendRequestToModifyItem();
         }
         else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")) {
-            postEditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
+            EditItem(itemName, description,colourcoding,barcode,qrcode,Integer.parseInt(quantity),location,ImageUrl,Integer.parseInt(itemid), selectedParentCategory, selectedSubCategory);
         }
 
 
         currentItemName=itemName;
         currentItemDescription=description;
         currentQuantity=quantity;
-        showUpdateSuccessMessage();
+        showSuccessDialog();
         return url;
     }
 
     private void fetchCategories(int categoryId) {
+
         Utils.fetchParentCategories(categoryId, app.getEmail(), app.getOrganizationID(), this, new OperationCallback<List<CategoryModel>>() {
             @Override
             public void onSuccess(List<CategoryModel> result) {
-                if(categoryId == 0) {
-                    categoryModelList.clear();
-                    categoryModelList = result;
-                    setupSpinnerAdapter();
-                }
-                else {
-                    subcategoryModelList.clear();
-                    subcategoryModelList = result;
-                    setupSubcategorySpinnerAdapter();
+                if (!result.isEmpty()) {
+                    if (categoryId == 0) {
+                        categoryModelList.clear();
+                        categoryModelList = result;
+                        setupSpinnerAdapter();
+                    } else {
+                        subcategoryModelList.clear();
+                        subcategoryModelList = result;
+                        setupSubcategorySpinnerAdapter();
+                    }
                 }
             }
 
             @Override
             public void onFailure(String error) {
-//                showToast("Failed to fetch categories: " + error);
+                // Completing the future exceptionally in case of failure
             }
         });
     }
 
     private void setupSpinnerAdapter() {
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up Parent One");
+        });
+        categoryNames = getIntent().getStringExtra("CategoryName");
+
+        String[] categories = categoryNames.split(" - ");
+
+        if (categories.length == 2) {
+            parentCategoryName = categories[0].trim();
+            subcategoryName = categories[1].trim();
+        }
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up Parent Two");
+        });
         List<String> parentCategories = new ArrayList<>();
-        parentCategories.add(getIntent().getStringExtra("parentCategoryName"));
+        parentCategories.add(categories[0].trim());
         for (CategoryModel category : categoryModelList) {
-            if(!Objects.equals(category.getCategoryName(), getIntent().getStringExtra("parentCategoryName"))){
+            if(!Objects.equals(category.getCategoryName(), categories[0].trim())){
                 parentCategories.add(category.getCategoryName());
             }
         }
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up Parent Three");
+        });
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
     }
     private void setupSubcategorySpinnerAdapter() {
+        categoryNames = getIntent().getStringExtra("CategoryName");
+
+        String[] categories = categoryNames.split(" - ");
+
+        if (categories.length == 2) {
+            parentCategoryName = categories[0].trim();
+            subcategoryName = categories[1].trim();
+        }
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up One");
+        });
         List<String> subCategories = new ArrayList<>();
         if(isFirstTimeSubApi){
-            subCategories.add(getIntent().getStringExtra("subCategoryName"));
+            subCategories.add(categories[1].trim());
         }
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up Two");
+        });
         for (CategoryModel category : subcategoryModelList) {
             if(isFirstTimeSubApi){
-                if(!Objects.equals(category.getCategoryName(), getIntent().getStringExtra("subCategoryName"))){
+                if(!Objects.equals(category.getCategoryName(), categories[1].trim())){
                     subCategories.add(category.getCategoryName());
                 }
             }
@@ -709,6 +780,9 @@ public class EditItemActivity extends BaseActivity {
                 subCategories.add(category.getCategoryName());
             }
         }
+        runOnUiThread(() -> {
+            Log.d("Request Method", "Setting up Three");
+        });
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subcategorySpinner.setAdapter(adapter);
@@ -727,10 +801,10 @@ public class EditItemActivity extends BaseActivity {
         unitRequest.put("itemDescription", getIntent().getStringExtra("item_description"));
         unitRequest.put("location", getIntent().getStringExtra("location"));
         unitRequest.put("image", getIntent().getStringExtra("item_image"));
-        unitRequest.put("parentCategory", getIntent().getStringExtra("parentCategoryName"));
+        unitRequest.put("parentCategory", parentCategoryName);
         unitRequest.put("parentCategoryId", getIntent().getStringExtra("parentcategory_id"));
         unitRequest.put("colorCode", getIntent().getStringExtra("color_code"));
-        unitRequest.put("subcategory", getIntent().getStringExtra("subCategoryName"));
+        unitRequest.put("subcategory", parentCategoryName);
         unitRequest.put("subcategoryId", getIntent().getStringExtra("subcategory_id"));
         unitRequest.put("qrcode", getIntent().getStringExtra("item_qrcode"));
         unitRequest.put("barcode", getIntent().getStringExtra("item_barcode"));

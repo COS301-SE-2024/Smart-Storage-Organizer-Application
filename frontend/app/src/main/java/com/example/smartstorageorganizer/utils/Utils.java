@@ -1,13 +1,10 @@
 package com.example.smartstorageorganizer.utils;
 
-import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 //import android.util.Log;
-import android.net.http.QuicException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +23,6 @@ import com.amplifyframework.auth.options.AuthFetchSessionOptions;
 
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
-import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ArrangementModel;
 import com.example.smartstorageorganizer.model.BinItemModel;
@@ -46,8 +42,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +60,6 @@ import okhttp3.Response;
 
 public class Utils
 {
-    private MyAmplifyApp app;
     private static String type = "application/json; charset=utf-8";
     private static String message = "Request Method";
 
@@ -93,7 +88,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e("Category Request Method", "GET request failed", e);
+                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -102,12 +97,12 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e("Category Response Results", responseData));
+                        activity.runOnUiThread(() -> Log.e(message, responseData));
                         try {
                             JSONObject jsonObject = new JSONObject(responseData);
                             String bodyString = jsonObject.getString("body");
                             JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("Category Details Array", bodyArray.toString()));
+                            activity.runOnUiThread(() -> Log.e(message, bodyArray.toString()));
 
                             for (int i = 0; i < bodyArray.length(); i++) {
                                 JSONObject itemObject = bodyArray.getJSONObject(i);
@@ -124,13 +119,13 @@ public class Utils
                             activity.runOnUiThread(() -> callback.onSuccess(categoryModelList));
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "GET request failed: " + response);
+                                Log.e(message, "GET request failed: " + response);
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "GET request failed: " + response);
+                            Log.e(message, "GET request failed: " + response);
                             callback.onFailure("Response code: " + response.code());
                         });
                     }
@@ -1026,11 +1021,17 @@ public class Utils
             jsonObject.put("sub_category", category);
             jsonObject.put("colourcoding", colourcoding);
             jsonObject.put("barcode", barcode);
-            jsonObject.put("username", username);
             jsonObject.put("qrcode", qrcode);
             jsonObject.put("quanity", quantity);
             jsonObject.put("location", location);
             jsonObject.put("email", email);
+            jsonObject.put("username", username);
+            jsonObject.put("width", width);
+            jsonObject.put("height", height);
+            jsonObject.put("depth", depth);
+            jsonObject.put("weight", weight);
+            jsonObject.put("loadbear", loadbear);
+            jsonObject.put("updown", updown);
             jsonObject.put("organizationid", Integer.parseInt(organizationId));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1138,22 +1139,22 @@ public class Utils
 //                            for (int i = 0; i < bodyArray.length(); i++) {
 //                                JSONObject itemObject = bodyString.getJSONObject(i);
 
-                                ItemModel item = new ItemModel();
-                                item.setItemId(results.getString("item_id"));
-                                item.setItemName(results.getString("item_name"));
-                                item.setDescription(results.getString("description"));
-                                item.setColourCoding(results.getString("colourcoding"));
-                                item.setBarcode(results.getString("barcode"));
-                                item.setQrcode(results.getString("qrcode"));
-                                item.setQuantity(results.getString("quanity"));
-                                item.setLocation(results.getString("location"));
-                                item.setEmail(results.getString("email"));
-                                item.setItemImage(results.getString("item_image"));
-                                item.setParentCategoryId(results.getString("parentcategoryid"));
-                                item.setSubCategoryId(results.getString("subcategoryid"));
+                            ItemModel item = new ItemModel();
+                            item.setItemId(results.getString("item_id"));
+                            item.setItemName(results.getString("item_name"));
+                            item.setDescription(results.getString("description"));
+                            item.setColourCoding(results.getString("colourcoding"));
+                            item.setBarcode(results.getString("barcode"));
+                            item.setQrcode(results.getString("qrcode"));
+                            item.setQuantity(results.getString("quanity"));
+                            item.setLocation(results.getString("location"));
+                            item.setEmail(results.getString("email"));
+                            item.setItemImage(results.getString("item_image"));
+                            item.setParentCategoryId(results.getString("parentcategoryid"));
+                            item.setSubCategoryId(results.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
-                                itemModelList.add(item);
+                            itemModelList.add(item);
 //                            }
 
                             activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
@@ -1468,84 +1469,6 @@ public class Utils
 
     }
 
-    public static void FetchCategoriesOfUnits(String unit_id,  Activity activity, OperationCallback<List<String>> callback)
-    {
-        String json = "{"
-                + "\"unit_id\": \"" + Integer.parseInt(unit_id) + "\""
-                + "}";
-        List<String> categoriesList = new ArrayList<>();
-
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
-        String API_URL = BuildConfig.GetCategoriesOfUnits;
-        RequestBody body = RequestBody.create(json, JSON);
-
-        TokenManager.getToken().thenAccept(results-> {
-                    Request request = new Request.Builder()
-                            .url(API_URL)
-                            .post(body)
-                            .addHeader("Authorization", results)
-                            .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    activity.runOnUiThread(() -> {
-                        Log.e(message, "GET request failed", e);
-                        callback.onFailure(e.getMessage());
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        activity.runOnUiThread(() -> Log.e(message, responseData));
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(responseData);
-                            String bodyString = jsonObject.getString("body");
-//                            if(!bodyString.equals("No category found for the given unit")){
-                                JSONArray bodyArray = new JSONArray(bodyString);
-                                activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
-
-                                for (int i = 0; i < bodyArray.length(); i++) {
-                                    JSONObject itemObject = bodyArray.getJSONObject(i);
-
-                                    String categoryName = (itemObject.getString("categoryname"));
-//                            String capacity = (itemObject.getString("capacity"));
-//                            String unitId = (itemObject.getString("id"));
-//                            String capacityUsed = (itemObject.getString("capacity_used"));
-
-//                            unitModel item = new unitModel(unitName, unitId, Integer.parseInt(capacity), Integer.parseInt(capacityUsed));
-
-                                    categoriesList.add(categoryName);
-                                }
-//                            }
-
-                            activity.runOnUiThread(() -> callback.onSuccess(categoriesList));
-                        } catch (JSONException e) {
-                            activity.runOnUiThread(() -> {
-                                Log.e(message, "JSON parsing error: " + e.getMessage());
-                                callback.onFailure(e.getMessage());
-                            });
-                        }
-                    } else {
-                        activity.runOnUiThread(() -> {
-                            Log.e(message, "GET request failed:" + response);
-                            callback.onFailure("Response code:" + response.code());
-                        });
-                    }
-                }
-            });
-
-                }).exceptionally(ex -> {
-//            Log.e("TokenError", "Failed to get user token", ex);
-            return null;
-        });
-    }
-
     public static void FetchAllUnits(String organizationId,  Activity activity, OperationCallback<List<unitModel>> callback)
     {
         String json = "{"
@@ -1561,11 +1484,11 @@ public class Utils
         RequestBody body = RequestBody.create(json, JSON);
 
         TokenManager.getToken().thenAccept(results-> {
-                    Request request = new Request.Builder()
-                            .url(API_URL)
-                            .post(body)
-                            .addHeader("Authorization", results)
-                            .build();
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .addHeader("Authorization", results)
+                    .build();
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -1632,7 +1555,7 @@ public class Utils
                                 });
                             }
                         }
-                } else {
+                    } else {
                         activity.runOnUiThread(() -> {
 //                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
@@ -1641,7 +1564,7 @@ public class Utils
                 }
             });
 
-                }).exceptionally(ex -> {
+        }).exceptionally(ex -> {
 //            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
@@ -1694,7 +1617,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed", e);
+                        Log.e(message, "GET request failed", e);
                         callback.onFailure(e.getMessage());
                     });
                 }
@@ -1703,45 +1626,50 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-//                        activity.runOnUiThread(() -> Log.e(message, responseData));
+                        activity.runOnUiThread(() -> Log.e(message, "responseData: "+responseData));
 
                         try {
-                            JSONObject jsonObject = new JSONObject(responseData);
-                            String bodyString = jsonObject.getString("body");
-                            JSONArray bodyArray = new JSONArray(bodyString);
-//                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyArray.toString()));
+                            if(responseData != null && !responseData.isEmpty()){
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                String bodyString = jsonObject.getString("body");
+                                JSONArray bodyArray = new JSONArray(bodyString);
+                                activity.runOnUiThread(() -> Log.e(message, "bodyArray"+bodyArray.toString()));
 
-                            for (int i = 0; i < bodyArray.length(); i++) {
-                                JSONObject itemObject = bodyArray.getJSONObject(i);
+                                for (int i = 0; i < bodyArray.length(); i++) {
+                                    JSONObject itemObject = bodyArray.getJSONObject(i);
 
-                                ItemModel item = new ItemModel();
-                                item.setItemId(itemObject.getString("item_id"));
-                                item.setItemName(itemObject.getString("item_name"));
-                                item.setDescription(itemObject.getString("description"));
-                                item.setColourCoding(itemObject.getString("colour_coding"));
-                                item.setBarcode(itemObject.getString("barcode"));
-                                item.setQrcode(itemObject.getString("qrcode"));
-                                item.setQuantity(itemObject.getString("quanity"));
-                                item.setLocation(itemObject.getString("location"));
-                                item.setEmail(itemObject.getString("email"));
-                                item.setItemImage(itemObject.getString("item_image"));
-                                item.setParentCategoryId(itemObject.getString("parentcategoryid"));
-                                item.setSubCategoryId(itemObject.getString("subcategoryid"));
+                                    ItemModel item = new ItemModel();
+                                    item.setItemId(itemObject.getString("item_id"));
+                                    item.setItemName(itemObject.getString("item_name"));
+                                    item.setDescription(itemObject.getString("description"));
+                                    item.setColourCoding(itemObject.getString("colour_coding"));
+                                    item.setBarcode(itemObject.getString("barcode"));
+                                    item.setQrcode(itemObject.getString("qrcode"));
+                                    item.setQuantity(itemObject.getString("quanity"));
+                                    item.setLocation(itemObject.getString("location"));
+                                    item.setEmail(itemObject.getString("email"));
+                                    item.setItemImage(itemObject.getString("item_image"));
+                                    item.setParentCategoryId(itemObject.getString("parentcategoryid"));
+                                    item.setSubCategoryId(itemObject.getString("subcategoryid"));
 //                            item.setCreatedAt(itemObject.getString("created_at"));
 
-                                itemModelList.add(item);
-                            }
+                                    itemModelList.add(item);
+                                }
 
-                            activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                                activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                            }
+                            else {
+                                activity.runOnUiThread(() -> callback.onSuccess(itemModelList));
+                            }
                         } catch (JSONException e) {
                             activity.runOnUiThread(() -> {
-//                                Log.e(message, "JSON parsing error: " + e.getMessage());
+                                Log.e(message, "JSON parsing error: " + e.getMessage());
                                 callback.onFailure(e.getMessage());
                             });
                         }
                     } else {
                         activity.runOnUiThread(() -> {
-//                            Log.e(message, "GET request failed:" + response);
+                            Log.e(message, "GET request failed:" + response);
                             callback.onFailure("Response code:" + response.code());
                         });
                     }
@@ -1753,11 +1681,12 @@ public class Utils
         });
     }
 
-    public static void incrementQuantity(String item_id, int quantity, Activity activity, OperationCallback<Boolean> callback) {
+    public static void incrementQuantity(String item_id, int quantity, String username, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{"
                 + "\"body\": {"
                 + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
-                + "\"quantity\": \"" + quantity + "\""
+                + "\"quantity\": \"" + quantity + "\","
+                + "\"username\": \"" + username + "\""
                 + "}"
                 + "}";
 
@@ -2069,86 +1998,6 @@ public class Utils
             return null;
         });
     }
-    static public CompletableFuture<Boolean> editItemActivity(ItemModel previous,ItemModel current,String organizationId,String reason_for_change,String commments,String username,String nameAndSurname,String record_type,String action){
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        JSONObject body = new JSONObject();
-        Log.i("Hello","hello");
-        Date date = new Date();
-
-        try {
-            body.put("current", current.toJson());
-            body.put("previous", previous.toJson());
-            body.put("username", username);
-            body.put("changes", " "); // Consider making this dynamic
-            body.put("changed_by", nameAndSurname); // Consider making this dynamic
-            body.put("organization_id", organizationId);
-            body.put("Reason_for_change", reason_for_change);
-            body.put("comments", commments);
-            body.put("changes_for", record_type);
-            body.put("changes_type", action);
-            body.put("changes_date_and_time", date.toString());
-            body.put("related_record_id", previous.getItemId());
-            body.put("related_record_name", current.getItemName());
-        } catch (JSONException e) {
-            Log.e("EditItemActivity", "JSON Exception", e);
-        }
-        JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put("body", body);
-        }
-        catch (JSONException e){
-            runOnUiThread(() ->
-                    Log.i("EditItemActivity", "JSON Exception", e));
-        }
-
-        runOnUiThread(() -> {
-            Log.i("username",username);
-            Log.i("EditItemActivity", "editItemActivity: "+jsonObject.toString());
-        });
-        OkHttpClient client=new OkHttpClient();
-        MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON);
-        TokenManager.getToken().thenAccept(token->{
-
-
-            Request request = new Request.Builder()
-                    .url(BuildConfig.SaveReportApi)
-                    .addHeader("Authorization", token)
-                    .post(requestBody)
-                    .build();
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    editItemActivity(previous,current,organizationId,reason_for_change,commments,username,nameAndSurname,record_type,action);
-                    e.printStackTrace();
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        final String responseData = response.body().string();
-                        runOnUiThread(() -> {
-                            Log.i("Request Method", "POST request succeeded: " + responseData);
-                           ;
-
-                        });
-                    } else {
-                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-
-                    }
-                }
-            });
-
-        }).exceptionally(ex -> {
-            Log.e("TokenError", "Failed to get user token", ex);
-            return null;
-        });
-        return future;
-    }
-
 
     public static void generateProcess(String unitId, String unitName, Activity activity, OperationCallback<ArrangementModel> callback)
     {
@@ -2179,42 +2028,53 @@ public class Utils
                 if (response.isSuccessful()) {
                     final String responseData = response.body().string();
                     activity.runOnUiThread(() -> Log.e("View Response Results Body Array", responseData));
-
                     try {
                         JSONObject jsonObject = new JSONObject(responseData);
-                        String bodyString = jsonObject.getString("response");
-//                        JSONArray bodyArray = new JSONArray(bodyString);
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
-                        JSONObject jsonObject1 = new JSONObject(bodyString);
-                        String imageUrl = jsonObject1.getString("path");
-                        String items = jsonObject1.getString("items");
-                        activity.runOnUiThread(() -> Log.e("View Response Results Body Array", imageUrl));
+//                        jsonObject.getString("statusCode");
+                        if(jsonObject.toString().contains("\""+"statusCode"+"\"") && jsonObject.getString("statusCode").equals("200")){
+                            activity.runOnUiThread(() -> Log.e("Arrangement", responseData));
+                            String bodyString = jsonObject.getString("response");
+                            activity.runOnUiThread(() -> Log.e("View Response Results Body Array", bodyString));
+                            JSONObject jsonObject1 = new JSONObject(bodyString);
+                            String imageUrl = jsonObject1.getString("path");
+                            String items = jsonObject1.getString("items");
 
-                        JSONArray itemsArray = new JSONArray(items);
-                        List<BinItemModel> itemsList = new ArrayList<>();
+                            JSONArray itemsArray = new JSONArray(items);
+                            List<BinItemModel> itemsList = new ArrayList<>();
 
-                        for (int i = 0; i < itemsArray.length(); i++) {
-                            JSONObject itemObject = itemsArray.getJSONObject(i);
+                            for (int i = 0; i < itemsArray.length(); i++) {
+                                JSONObject itemObject = itemsArray.getJSONObject(i);
 
-                            String name = itemObject.getString("name");
-                            String color = itemObject.getString("color");
+                                String name = itemObject.getString("name");
+                                String color = itemObject.getString("color");
 
-                            BinItemModel item = new BinItemModel(name, color);
-                            itemsList.add(item);
+                                BinItemModel item = new BinItemModel(name, color);
+                                itemsList.add(item);
+                            }
+
+                            ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
+
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        } // item with no dimension
+                        else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("400")){
+                            List<BinItemModel> itemList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("400", itemList);
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
-
-                        ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
-
-                        activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("401")){
+                            List<BinItemModel> itemList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("401", itemList);
+                            activity.runOnUiThread(() -> callback.onSuccess(obj));
+                        }
                     } catch (JSONException e) {
                         activity.runOnUiThread(() -> {
-                            Log.e("View Response Results Body Array", "JSON parsing error: " + e.getMessage());
+                            Log.e("Arrangement", "" + e.getMessage());
                             callback.onFailure(e.getMessage());
                         });
                     }
                 } else {
                     activity.runOnUiThread(() -> {
-//                        Log.e(message, "GET request failed:" + response);
+                        Log.e(message, "Arrangement:" + response);
                         callback.onFailure("Response code:" + response.code());
                     });
                 }
@@ -2222,8 +2082,7 @@ public class Utils
         });
     }
 
-    public static String GenerateQRCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
-        String QRCode="";
+    public static void GenerateQRCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
         String json = "{"
                 + "\"body\": {"
                 + "\"item_id\": \"" + Integer.parseInt(item_id) + "\","
@@ -2264,9 +2123,7 @@ public class Utils
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
                             Log.i(message, "POST request succeeded: " + responseData);
-
                             callback.onSuccess(true);
-
                         });
                     } else {
                         activity.runOnUiThread(() -> {
@@ -2281,7 +2138,6 @@ public class Utils
 //            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
-        return  QRCode;
     }
 
     public static void GenerateBarCodeAsync(String item_id, String organizationId, String username, Activity activity, OperationCallback<Boolean> callback) {
@@ -2324,7 +2180,6 @@ public class Utils
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         activity.runOnUiThread(() -> {
-                            Log.i("BAR", "POST request succeeded: " + responseData);
                             Log.i(message, "POST request succeeded: " + responseData);
                             callback.onSuccess(true);
                         });
@@ -2500,7 +2355,59 @@ public class Utils
             return null;
         });
     }
-    static public CompletableFuture<Boolean> changes(String organizationId,String email , String username,String related_record_type, String related_record_name,String related_record_id, String action,String details ){
+    public static void postEditItem(String itemname, String description, String colourcoding, String barcode, String qrcode, String quantity, String location, String itemimage,String itemId, int parentcategory, int subcategory, String username, String organizationId, Activity activity, OperationCallback<Boolean> callback) {
+
+        String json = "{\"item_name\":\"" + itemname + "\",\"description\":\"" + description + "\" ,\"colourcoding\":\"" + colourcoding + "\",\"barcode\":\"" + barcode + "\",\"qrcode\":\"" + qrcode + "\",\"quanity\":" + quantity + ",\"location\":\"" + location + "\", \"item_id\":\"" + itemId + "\", \"item_image\": \""+itemimage+"\", \"parentcategoryid\": \""+parentcategory+"\", \"subcategoryid\": \""+subcategory+"\", \"username\": \""+username+"\", \"organizationid\":\""+organizationId+"\" }";
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.EditItemEndPoint;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+            activity.runOnUiThread(() -> {
+                Log.i(message, "JSON: "+ json.toString());
+            });
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    activity.runOnUiThread(() -> {
+                        Log.d(message, "POST request failed", e);
+                        Log.i(message, "POST request failed"+ json.toString());
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            Log.i(message, "POST request success: "+ json.toString());
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: Modify " + response);
+                            Log.e(message, "POST request failed: Modify"+ json.toString());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+    static public CompletableFuture<Boolean> changes(String organizationId,String email , String username,String related_record_type, String related_record_name,String related_record_id, String action,String details ,Activity activity){
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         JSONObject body = new JSONObject();
         Date date = new Date();
@@ -2526,11 +2433,11 @@ public class Utils
             jsonObject.put("body", body);
         }
         catch (JSONException e){
-            runOnUiThread(() ->
+            activity.runOnUiThread(() ->
                     Log.i("EditItemActivity", "JSON Exception", e));
         }
 
-        runOnUiThread(() -> {
+        activity.runOnUiThread(() -> {
             Log.i("username",username);
             Log.i("EditItemActivity", "editItemActivity: "+jsonObject.toString());
         });
@@ -2551,7 +2458,7 @@ public class Utils
                 public void onFailure(Call call, IOException e) {
 
                     e.printStackTrace();
-                    runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
+                    activity.runOnUiThread(() -> Log.e("Request Method", "POST request failed", e));
                     future.complete(false);
 
                 }
@@ -2560,15 +2467,15 @@ public class Utils
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
-                        runOnUiThread(() -> {
+                        activity.runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
 
                             future.complete(true);
 
                         });
                     } else {
-                        runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
-                        changes(organizationId,email,username,related_record_type,related_record_name," ",action,details);
+                        activity.runOnUiThread(() -> Log.e("Request Method", "POST request failed: " + response.code()));
+                        changes(organizationId,email,username,related_record_type,related_record_name," ",action,details,activity);
                         future.complete(false);
 
                     }
@@ -2582,8 +2489,4 @@ public class Utils
         return future;
 
     }
-
-
-
 }
-

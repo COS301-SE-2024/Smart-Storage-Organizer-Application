@@ -96,88 +96,88 @@ public class UnitActivity extends BaseActivity {
 //        inputLoadbear = findViewById(R.id.inputLoadbear);
 //        inputUpdown = findViewById(R.id.inputUpdown);
 
-            if (flag) {
-                fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
+        if (flag) {
+            fetchParentCategories(0, app.getEmail(), app.getOrganizationID());
 
-            }
+        }
 
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
-            addButton.setOnClickListener(v1 -> {
-                StringBuilder constraints = new StringBuilder();
-                int j = 2;
-                for (; j < checkboxContainer.getChildCount(); j++) {
-                    CheckBox cb = (CheckBox) checkboxContainer.getChildAt(j);
-                    if (cb.isChecked()) {
+        addButton.setOnClickListener(v1 -> {
+            StringBuilder constraints = new StringBuilder();
+            int j = 2;
+            for (; j < checkboxContainer.getChildCount(); j++) {
+                CheckBox cb = (CheckBox) checkboxContainer.getChildAt(j);
+                if (cb.isChecked()) {
 
 
-                        Log.i("ConstraintsName", cb.getText().toString());
+                    Log.i("ConstraintsName", cb.getText().toString());
 
-                        if (constraints.toString().isEmpty()) {
+                    if (constraints.toString().isEmpty()) {
 
-                            constraints.append(getCategoriesId(cb.getText().toString()));
+                        constraints.append(getCategoriesId(cb.getText().toString()));
 
-                        }else {
-                            constraints.append(","+getCategoriesId(cb.getText().toString()));
-
-                        }
-
-
+                    }else {
+                        constraints.append(","+getCategoriesId(cb.getText().toString()));
 
                     }
-                }
-                String unit;
-                unit = Objects.requireNonNull(unitName.getText()).toString();
 
-                String capacity;
-                capacity = unitCap.getText().toString();
-                String width = inputWidth.getText().toString();
-                String height = inputHeight.getText().toString();
-                String depth = inputDepth.getText().toString();
-                String weight = inputWeight.getText().toString();
 
-                if(Objects.equals(app.getUserRole(), "normalUser")) {
-                    ProgressDialog progressDialog;
-                    progressDialog = new ProgressDialog(this);
-                    progressDialog.setMessage("Sending Request To Add a New Unit...");
-                    progressDialog.setCancelable(false);
-
-                    progressDialog.show();
-                    sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
-                        if (result) {
-                            runOnUiThread(() -> {
-                                progressDialog.dismiss();
-                                unitName.setText("");
-                                unitCap.setText("");
-                                showRequestDialog();
-                            });
-                        }
-                    });
 
                 }
-                else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
-                    ProgressDialog progressDialog;
-                    progressDialog = new ProgressDialog(this);
-                    progressDialog.setMessage("Adding New Unit...");
-                    progressDialog.setCancelable(false);
+            }
+            String unit;
+            unit = Objects.requireNonNull(unitName.getText()).toString();
 
-                    progressDialog.show();
-                    createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
-                        Log.i("Response", "Unit created successfully");
-                        if (result) {
-                            Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
-                            runOnUiThread(() -> {
-                                unitName.setText("");
-                                unitCap.setText("");
-                                showSuccessDialog();
+            String capacity;
+            capacity = unitCap.getText().toString();
+            String width = inputWidth.getText().toString();
+            String height = inputHeight.getText().toString();
+            String depth = inputDepth.getText().toString();
+            String weight = inputWeight.getText().toString();
+
+            if(Objects.equals(app.getUserRole(), "normalUser")) {
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Sending Request To Add a New Unit...");
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+                sendRequestToAddUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                    if (result) {
+                        runOnUiThread(() -> {
+                            progressDialog.dismiss();
+                            unitName.setText("");
+                            unitCap.setText("");
+                            showRequestDialog();
+                        });
+                    }
+                });
+
+            }
+            else if(Objects.equals(app.getUserRole(), "Manager") || Objects.equals(app.getUserRole(), "Admin")){
+                ProgressDialog progressDialog;
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Adding New Unit...");
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+                createUnit(unit, capacity, constraints.toString(), width, height, depth, weight).thenAccept(result -> {
+                    Log.i("Response", "Unit created successfully");
+                    if (result) {
+                        Log.i("Unit Creation", "Unit created successfully " + unit + " " + capacity);
+                        runOnUiThread(() -> {
+                            unitName.setText("");
+                            unitCap.setText("");
+                            showSuccessDialog();
 //                                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
 //                                startActivity(intent);
 //                                finish();
-                            });
-                        }
-                    });
-                }
-          });
+                        });
+                    }
+                });
+            }
+        });
     }
 
     public void showRequestDialog() {
@@ -216,9 +216,14 @@ public class UnitActivity extends BaseActivity {
 
         closeButton.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            if(Objects.equals(getIntent().getStringExtra("type"), "AddItem")){
+                finish();
+            }
+            else {
+                Intent intent = new Intent(UnitActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         alertDialog.setCanceledOnTouchOutside(false);
@@ -255,8 +260,6 @@ public class UnitActivity extends BaseActivity {
                     if (response.isSuccessful()) {
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
-                            Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Unit",unitName,"-1","Add","Unit added with name: "+unitName);
-
                             runOnUiThread(() -> Log.e("Unit Response Results", responseData));
                             future.complete(true);
                         });
@@ -478,5 +481,3 @@ public class UnitActivity extends BaseActivity {
         super.onPause();
     }
 }
-
-

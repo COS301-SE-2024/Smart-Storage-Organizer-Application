@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartstorageorganizer.BuildConfig;
-import com.example.smartstorageorganizer.EditItemActivity;
 import com.example.smartstorageorganizer.HomeActivity;
 import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.R;
@@ -444,7 +443,7 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // ViewHolder for Category Requests
     static class CategoryRequestViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType,newCategoryName;
+        TextView categoryName, categoryType, userEmail, organizationId, requestDate, status, viewMoreLink, requestType, newCategoryName;
         LinearLayout detailsLayout, buttonsLayout;
         Button approveButton, rejectButton;
 
@@ -632,8 +631,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 .addOnSuccessListener(aVoid -> {
                     Log.i("Firestore", "Request approved successfully.");
                     postEditItem(finalItemName, finalDescription, colorCode, qrcode, barcode, finalQuantity, location, image, itemId, parentCategoryId, finalSubcategoryId, progressDialog, position);
-
-
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firestore", "Error approving request", e);
@@ -648,7 +645,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     ((Activity) context).runOnUiThread(() -> {
-                        Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Unit",unitName,"-1","Add","Unit added with name: "+unitName);
                         mixedList.remove(position);
                         notifyDataSetChanged();
                         progressDialog.dismiss();
@@ -670,7 +666,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (Boolean.TRUE.equals(result)) {
                     mixedList.remove(position);
                     notifyDataSetChanged();
-                    Utils.changes(organizationId,email,app.getName()+" "+app.getSurname(),"Category",categoryName,"-1","Add","Category added with name: "+categoryName);
                     progressDialog.dismiss();
                 }
             }
@@ -683,7 +678,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void deleteCategory(int id, int position) {
-        CategoryRequestModel request = (CategoryRequestModel) mixedList.get(position);
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Deleting category...");
         progressDialog.setCancelable(false);
@@ -692,8 +686,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    String Id=String.valueOf(id);
-                    Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Category",request.getCategoryName(),Id,"Delete","Deleted Category with name: "+request.getCategoryName());
                     moveItemsUnderTheDeletedCategory(id, position);
                     progressDialog.dismiss();
                 }
@@ -719,7 +711,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (Boolean.TRUE.equals(result)) {
                     mixedList.remove(position);
                     notifyDataSetChanged();
-                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Category Deleted Successfully!!!");
+//                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(context, HomeActivity.class);
 //                    context.startActivity(intent);
 //                    ((Activity) context).finish();
@@ -743,11 +736,10 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             public void onSuccess(Boolean result) {
                 progressDialogModify.dismiss();
                 if (Boolean.TRUE.equals(result)) {
-                    String id=String.valueOf(categoryId);
-                    Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Category",newName,id,"Modify","Change Category Name to" + newName);
                     mixedList.remove(position);
                     notifyDataSetChanged();
-                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Category Name Changed Successfully!!!");
+//                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -805,7 +797,6 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         final String responseData = response.body().string();
                         runOnUiThread(() -> {
                             Log.i("Request Method", "POST request succeeded: " + responseData);
-                            Utils.changes(app.getOrganizationID(),app.getEmail(),app.getName()+" "+app.getSurname(),"Item",itemname,String.valueOf(itemId),"Modify","Item modified with name: "+itemname);
                             mixedList.remove(position);
                             notifyDataSetChanged();
                             progressDialog.dismiss();
@@ -823,5 +814,26 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return null;
         });
     }
-}
 
+    public void showSuccessDialog(String message) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        android.app.AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText(message);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+}
