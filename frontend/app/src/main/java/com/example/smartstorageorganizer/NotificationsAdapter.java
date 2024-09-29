@@ -1,9 +1,11 @@
 package com.example.smartstorageorganizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,10 +17,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private List<NotificationModel> notificationsList;
     private Context context;
 
+
+    private OnItemClickListener onItemClickListener;
+
+    // Interface for handling item clicks
+    public interface OnItemClickListener {
+        void onItemClick(NotificationModel notification);
+    }
+
     // Constructor to initialize context and list
-    public NotificationsAdapter(Context context, List<NotificationModel> notificationsList) {
+    public NotificationsAdapter(Context context, List<NotificationModel> notificationsList, OnItemClickListener listener) {
         this.context = context;
         this.notificationsList = notificationsList;
+        this.onItemClickListener = listener;
     }
 
     // ViewHolder class
@@ -52,10 +63,21 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.titleTextView.setText(notification.getTitle());
         holder.messageTextView.setText(notification.getMessage());
         holder.dateTextView.setText(notification.getDate());
+
+        // Set up the click listener on the item view
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                // Pass NotificationModel object to the click listener
+                onItemClickListener.onItemClick(notification);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return notificationsList.size();
     }
+
+
+
 }
