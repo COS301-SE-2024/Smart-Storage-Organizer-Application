@@ -1,5 +1,5 @@
 # Smart Storage Organization
-[![codecov][https://img.shields.io/azure-devops/coverage/COS301-SE-2024/Smart-Storage-Organizer-Application/81]
+![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/COS301-SE-2024/Smart-Storage-Organizer-Application/81)
 ![main](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/actions/workflows/AndroidBuild.yml/badge.svg?branch=fix-errors)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
