@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:textColor="@color/black" />
 
         <!-- Message of the Notification -->
@@ -38,6 +38,34 @@
             android:textSize="14sp"
             android:textColor="@color/gray"
             android:layout_marginTop="4dp" />
+
+        <!-- Read/Unread buttons -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/button_mark_as_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mark as Read"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" /> <!-- Initially hidden -->
+
+            <Button
+                android:id="@+id/button_mark_as_unread"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mark as Unread"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" /> <!-- Initially hidden -->
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
