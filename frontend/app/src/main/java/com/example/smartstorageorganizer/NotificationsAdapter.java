@@ -1,11 +1,9 @@
 package com.example.smartstorageorganizer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,7 +48,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the custom layout for each list item
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_notifications_adapter, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_notification, parent, false);
         return new ViewHolder(view);
     }
 
