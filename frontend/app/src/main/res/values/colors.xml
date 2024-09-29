@@ -8,5 +8,7 @@
     <color name="colorPrimary">#0582ca</color>
     <color name="background">#F2F2F2</color>
     <color name="skeleton_color">#E0E0E0</color>
+    <color name="card">#FFFFFF</color>
+
 
 </resources>

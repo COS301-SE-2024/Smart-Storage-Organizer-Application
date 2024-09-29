@@ -1,10 +1,89 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.SmartStorageOrganizer" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorSecondary</item>
     </style>
+
+    <style name="Theme.SmartStorageOrganizer" parent="Base.Theme.SmartStorageOrganizer" />
+
+    <style name="CustomTextInputOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/colorPrimary
+        </item> <!-- Change this to your desired color -->
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusTopStart">32dp</item> <!-- Adjust radius as needed -->
+        <item name="boxCornerRadiusTopEnd">32dp</item>
+        <item name="boxCornerRadiusBottomEnd">32dp</item>
+        <item name="boxCornerRadiusBottomStart">32dp</item>
+    </style>
+
+    <style name="CustomTextInputFilledBox.White" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <!-- Set the background color to white -->
+        <item name="boxBackgroundColor">@color/background</item>
+
+        <!-- Set the stroke color (using the ColorStateList) -->
+        <item name="boxStrokeColor">@color/white_box_stroke_color</item>
+
+        <!-- Hint text color (optional) -->
+        <item name="hintTextColor">@color/colorPrimary</item>
+
+        <!-- Optional: Set the error state stroke color (handled in ColorStateList) -->
+        <item name="boxStrokeErrorColor">@color/red</item>
+    </style>
+
+
+
+    <style name="CustomTextInputFilledBox.Black" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/white
+        </item> <!-- Set the box background color to white -->
+        <item name="boxStrokeColor">@color/colorPrimary
+        </item> <!-- Optional: Set the stroke color -->
+        <item name="hintTextColor">@color/colorPrimary
+        </item> <!-- Optional: Set the hint text color -->
+        <item name="boxStrokeErrorColor">@color/red</item>
+    </style>
+
+    <style name="RoundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">60dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
+    <style name="RoundedCornersProfile">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">54dp</item> <!-- Adjust the radius as needed -->
+    </style>
+    <style name="RoundedCornersLogin">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">44dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
+    <style name="RoundedItem">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item> <!-- Adjust the radius as needed -->
+    </style>
+
+    <style name="Theme.SmartStorageOrganizer.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.SmartStorageOrganizer.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+
+    <style name="Theme.SmartStorageOrganizer.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
+
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
 </resources>
