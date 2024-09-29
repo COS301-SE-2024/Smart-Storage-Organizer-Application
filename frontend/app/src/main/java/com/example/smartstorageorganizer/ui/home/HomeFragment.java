@@ -50,6 +50,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.amplifyframework.AmplifyException;
@@ -139,6 +140,8 @@ public class HomeFragment extends Fragment {
     private AppCompatButton tryAgainButton;
     MyAmplifyApp app;
     private long startTime;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshRecentLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -150,9 +153,6 @@ public class HomeFragment extends Fragment {
 
         app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
-
-        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
-
         addItemButton = root.findViewById(R.id.addItemButton);
         addButton = root.findViewById(R.id.addButton);
         itemRecyclerView = root.findViewById(R.id.item_rec);
@@ -162,15 +162,14 @@ public class HomeFragment extends Fragment {
         shimmerFrameLayoutName = root.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutCategory = root.findViewById(R.id.shimmer_view_container_category);
         noInternet = root.findViewById(R.id.noInternet);
-//        recyclerViewRecent = root.findViewById(R.id.recycler_view_recent);
         shimmerFrameLayoutRecent = root.findViewById(R.id.shimmer_view_container_recent);
         recentText = root.findViewById(R.id.recentText);
         name = root.findViewById(R.id.name);
+        swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshRecentLayout = root.findViewById(R.id.swipe_refresh_recent_layout);
 
-//        LinearLayoutManager layoutManagerSkeleton = new LinearLayoutManager(requireActivity());
-//        recyclerViewRecent.setLayoutManager(layoutManagerSkeleton);
-//        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(6);
-//        recyclerViewRecent.setAdapter(skeletonAdapter);
+        getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+
 
         category_RecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
         categoryModelList = new ArrayList<>();
@@ -202,6 +201,32 @@ public class HomeFragment extends Fragment {
 
         addButton.setOnClickListener(v -> showBottomDialog());
 
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Refresh the data when user swipes down
+            recentText.setVisibility(View.GONE);
+            shimmerFrameLayoutCategory.startShimmer();
+            shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutName.setVisibility(View.VISIBLE);
+            itemRecyclerView.setVisibility(View.GONE);
+            category_RecyclerView.setVisibility(View.GONE);
+            noInternet.setVisibility(View.GONE);
+            getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        });
+
+        swipeRefreshRecentLayout.setOnRefreshListener(() -> {
+            // Refresh the data when user swipes down
+            recentText.setVisibility(View.GONE);
+            shimmerFrameLayoutCategory.startShimmer();
+            shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutRecent.setVisibility(View.VISIBLE);
+            shimmerFrameLayoutName.setVisibility(View.VISIBLE);
+            itemRecyclerView.setVisibility(View.GONE);
+            category_RecyclerView.setVisibility(View.GONE);
+            noInternet.setVisibility(View.GONE);
+            getDetails().thenAccept(getDetails-> Log.i("AuthDemo", "User is signed in"));
+        });
+
         return root;
     }
 
@@ -210,7 +235,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(List<ItemModel> result) {
                 itemModelList.clear();
-                itemModelList.addAll(result);
+                if(!result.isEmpty()){
+                    itemModelList.addAll(result);
+                }
                 recentAdapter.notifyDataSetChanged();
 
                 recentText.setVisibility(View.VISIBLE);
@@ -222,19 +249,21 @@ public class HomeFragment extends Fragment {
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
                     addItemButton.setVisibility(View.GONE);
+                    swipeRefreshRecentLayout.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
                     addItemButton.setVisibility(View.VISIBLE);
+                    swipeRefreshRecentLayout.setVisibility(View.VISIBLE);
                 }
 
                 itemRecyclerView.setVisibility(View.VISIBLE);
-//                Toast.makeText(requireActivity(), "Items fetched successfully", Toast.LENGTH_SHORT).show();
-            }
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);            }
 
             @Override
             public void onFailure(String error) {
-                recentText.setVisibility(View.GONE);
+//                recentText.setVisibility(View.GONE);
                 shimmerFrameLayoutCategory.startShimmer();
                 shimmerFrameLayoutCategory.setVisibility(View.VISIBLE);
                 shimmerFrameLayoutRecent.startShimmer();
@@ -245,6 +274,16 @@ public class HomeFragment extends Fragment {
                 shimmerFrameLayoutCategory.setVisibility(View.GONE);
                 shimmerFrameLayoutRecent.stopShimmer();
                 shimmerFrameLayoutRecent.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
+//                if(itemModelList.isEmpty()){
+//                    addButton.setVisibility(View.VISIBLE);
+//                    addItemButton.setVisibility(View.GONE);
+//                }
+//                else {
+//                    addButton.setVisibility(View.GONE);
+//                    addItemButton.setVisibility(View.VISIBLE);
+//                }
                 Toast.makeText(requireActivity(), "Failed to fetch items: " + error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -343,11 +382,15 @@ public class HomeFragment extends Fragment {
                     adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, parentCategories);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 }
+                category_RecyclerView.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String error) {
-//                showToast("Failed to fetch categories: " + error);
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshRecentLayout.setRefreshing(false);
                 Toast.makeText(requireActivity(), "Category Fetching failed... ", Toast.LENGTH_LONG).show();
 
             }
@@ -431,13 +474,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(Boolean result) {
                 app.setLoggedIn(false);
-                Toast.makeText(requireActivity(), "Login Activities Successfully Saved"+ result, Toast.LENGTH_LONG).show();
+//                Toast.makeText(requireActivity(), "Login Activities Successfully Saved"+ result, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(String error) {
 //                loginActivities(email, name, surname, "sign_in", organization_id, time);
-                Toast.makeText(requireActivity(), "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
+//                Toast.makeText(requireActivity(), "Login Activities Failed to Save", Toast.LENGTH_LONG).show();
             }
         });
     }

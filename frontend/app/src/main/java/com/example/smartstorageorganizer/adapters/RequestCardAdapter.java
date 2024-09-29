@@ -711,7 +711,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (Boolean.TRUE.equals(result)) {
                     mixedList.remove(position);
                     notifyDataSetChanged();
-                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Category Deleted Successfully!!!");
+//                    Toast.makeText(context, "Category Deleted Successfully.", Toast.LENGTH_SHORT).show();
 //                    Intent intent = new Intent(context, HomeActivity.class);
 //                    context.startActivity(intent);
 //                    ((Activity) context).finish();
@@ -737,7 +738,8 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 if (Boolean.TRUE.equals(result)) {
                     mixedList.remove(position);
                     notifyDataSetChanged();
-                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Category Name Changed Successfully!!!");
+//                    Toast.makeText(context, "Category Name Changed Successfully.", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -811,6 +813,28 @@ public class RequestCardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
+    }
+
+    public void showSuccessDialog(String message) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        android.app.AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText(message);
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 }
 

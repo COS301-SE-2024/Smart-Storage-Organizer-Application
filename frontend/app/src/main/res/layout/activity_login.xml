@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
+    android:background="@color/background"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:id="@+id/iconImageView"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:src="@drawable/logo_two"
+            android:src="@drawable/icon"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"/>
 
@@ -49,7 +49,7 @@
         android:layout_marginTop="-24dp"
         android:fontFamily="@font/alata"
         android:text="BACK!"
-        android:textColor="@color/black"
+        android:textColor="@color/colorSecondary"
         android:textSize="54dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -193,7 +193,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginBottom="16dp"
                 android:text="Don't have an account yet? "
-                android:textColor="@color/black"
+                android:textColor="@color/colorSecondary"
                 android:textStyle="bold"
                 android:textSize="13dp"/>
 

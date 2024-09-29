@@ -161,7 +161,7 @@ public class ViewColorCodesActivity extends BaseActivity {
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
                 colorCodeRecyclerView.setVisibility(View.VISIBLE);
-                Toast.makeText(ViewColorCodesActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ViewColorCodesActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -181,7 +181,7 @@ public class ViewColorCodesActivity extends BaseActivity {
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    showToast("Category added successfully");
+//                    showToast("Color Group(s) deleted successfully");
                 }
             }
 

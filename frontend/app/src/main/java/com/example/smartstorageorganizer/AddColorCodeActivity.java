@@ -1,10 +1,12 @@
 package com.example.smartstorageorganizer;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -124,7 +126,7 @@ public class AddColorCodeActivity extends BaseActivity  {
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
                     showToast("Color Code added successfully");
-                    navigateToHome();
+                    showSuccessDialog();
                 }
             }
 
@@ -195,6 +197,29 @@ public class AddColorCodeActivity extends BaseActivity  {
                 .add(userFlowData)
                 .addOnSuccessListener(documentReference -> Log.d("Firestore", "User flow logged."))
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
+    }
+
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Color Group Added Successfully");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            navigateToHome();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
 //    public void logUser

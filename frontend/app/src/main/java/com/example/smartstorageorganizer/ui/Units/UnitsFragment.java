@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ public class UnitsFragment extends Fragment {
     MyAmplifyApp app;
     private ShimmerFrameLayout skeletonLoader;
     private LottieAnimationView addButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -52,6 +54,8 @@ public class UnitsFragment extends Fragment {
         recyclerViewUnits = root.findViewById(R.id.recyclerViewUnits);
         recyclerViewUnits.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
+        swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
+
         unitList = new ArrayList<>();
 
         unitsAdapter = new UnitsAdapter(requireContext(), unitList);
@@ -64,10 +68,18 @@ public class UnitsFragment extends Fragment {
 
         loadUnits("");
 
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            // Refresh the data when user swipes down
+            loadUnits("");
+        });
+
         return root;
     }
 
     private void loadUnits(String authorizationToken) {
+        skeletonLoader.startShimmer();
+        skeletonLoader.setVisibility(View.VISIBLE);
+        recyclerViewUnits.setVisibility(View.GONE);
 
         Utils.FetchAllUnits(app.getOrganizationID(), requireActivity(), new OperationCallback<List<unitModel>>() {
             @Override
@@ -79,45 +91,23 @@ public class UnitsFragment extends Fragment {
 
                 if(result.isEmpty()){
                     addButton.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setVisibility(View.GONE);
                     skeletonLoader.setVisibility(View.GONE);
+                    recyclerViewUnits.setVisibility(View.GONE);
                 }
                 else {
                     addButton.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
                     skeletonLoader.setVisibility(View.GONE);
+                    recyclerViewUnits.setVisibility(View.VISIBLE);
                 }
-//                if (!Objects.equals(currentSelectedOption, "Sort by")) {
-//                    setupSort(currentSelectedOption);
-//                } else {
-//                    recentAdapter.notifyDataSetChanged();
-//                }
-//                notFoundText.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
-//                Toast.makeText(UncategorizedItemsActivity.this, "Items fetched successfully", Toast.LENGTH_SHORT).show();
-//                updatePaginationButtons(result.size());
-//                shimmerFrameLayout.stopShimmer();
-//                shimmerFrameLayout.setVisibility(View.GONE);
-//                itemsLayout.setVisibility(View.VISIBLE);
-//                sortBySpinner.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String error) {
+                swipeRefreshLayout.setRefreshing(false);
                 skeletonLoader.setVisibility(View.GONE);
-                Toast.makeText(requireActivity(), "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void loadCategoriesOfUnits(String unit_id) {
-        Utils.FetchCategoriesOfUnits(unit_id, requireActivity(), new OperationCallback<List<String>>() {
-            @Override
-            public void onSuccess(List<String> result) {
-//                unitList.clear();
-//                unitList.addAll(result);
-//                unitsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(String error) {
                 Toast.makeText(requireActivity(), "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
             }
         });

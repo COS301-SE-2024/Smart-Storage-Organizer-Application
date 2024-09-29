@@ -10,6 +10,7 @@
     <color name="skeleton_color">#E0E0E0</color>
     <color name="unread_background">#E0F7FA</color> <!-- Light blue for unread -->
     <color name="read_background">#FFFFFF</color> <!-- White for read -->
+    <color name="card">#FFFFFF</color>
 
 
 </resources>

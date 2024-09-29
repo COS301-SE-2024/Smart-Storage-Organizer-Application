@@ -80,6 +80,16 @@ public class LandingActivity extends BaseActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 //            finish();
         });
+
+        findViewById(R.id.createOrganization).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LandingActivity.this, AddOrganizationActivity.class);
+                logUserFlow("AddOrganizationActivity");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
+        });
     }
 
     public void signOut() {
@@ -183,7 +193,7 @@ public class LandingActivity extends BaseActivity {
         // If all permissions are granted, proceed with your functionality
         if (allPermissionsGranted) {
             // All permissions granted, proceed with your app logic
-            Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
         } else {
             // Request the permissions
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE);
@@ -204,10 +214,10 @@ public class LandingActivity extends BaseActivity {
             }
 
             if (allGranted) {
-                Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "All permissions granted", Toast.LENGTH_SHORT).show();
                 // Proceed with your app logic
             } else {
-                Toast.makeText(this, "Some permissions were denied", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Some permissions were denied", Toast.LENGTH_SHORT).show();
             }
         }
     }

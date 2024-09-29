@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,6 +123,7 @@ public class AddItemActivity extends BaseActivity  {
     private TextInputEditText inputWidth, inputHeight, inputDepth, inputWeight, inputLoadbear, inputUpdown;
     private List<unitModel> unitList;
     private LottieAnimationView buttonLoader;
+    private boolean isAddUnit = false;
 
 
     @Override
@@ -155,6 +157,10 @@ public class AddItemActivity extends BaseActivity  {
         inputLoadbear = findViewById(R.id.inputLoadbear);
         inputUpdown = findViewById(R.id.inputUpdown);
         buttonLoader = findViewById(R.id.buttonLoader);
+
+        moreOptionsLayout.setVisibility(View.VISIBLE);
+        moreText.setText("Hide Fields (Used for bin packing)");
+        unitsSpinner.setVisibility(View.GONE);
 
 
         categoryModelList = new ArrayList<>();
@@ -209,16 +215,77 @@ public class AddItemActivity extends BaseActivity  {
         itemImage.setOnClickListener(v -> showImagePickerDialog());
 
         findViewById(R.id.addButton).setOnClickListener(v -> {
+            SpinnerAdapter adapter = unitsSpinner.getAdapter();
+
             if (shouldFillAllFields()) {
                 Toast.makeText(AddItemActivity.this, "Please fill all fields.", Toast.LENGTH_SHORT).show();
-            } else {
-                progressDialogAddingItem.show();
-                File compressedFile = compressImage(file);
-                uploadItemImage(compressedFile);
+            }
+            //check if spinner is empty.
+            else if(adapter == null || adapter.getCount() == 0) {
+                showAddUnitDialog();
+            }
+            else {
+                if(TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+                    showNoDimensionsDialog();
+                }
+                else {
+                    progressDialogAddingItem.show();
+                    File compressedFile = compressImage(file);
+                    uploadItemImage(compressedFile);
+                }
             }
         });
+    }
 
+    public void showAddUnitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_unit_popup, null);
 
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView message = dialogView.findViewById(R.id.textView3);
+        message.setText("You need to create a storage unit for the "+suggestionSpinner.getSelectedItem().toString()+" category before adding items. Please create a unit now to store items in this category.");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            isAddUnit = true;
+            Intent intent = new Intent(AddItemActivity.this, UnitActivity.class);
+            intent.putExtra("type", "AddItem");
+            startActivity(intent);
+
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
+    public void showNoDimensionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.no_dimensions_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        Button addDimensionsButton = dialogView.findViewById(R.id.addDimensionsButton);
+
+//        TextView message = dialogView.findViewById(R.id.textView3);
+//        message.setText("You need to create a storage unit for the "+suggestionSpinner.getSelectedItem().toString()+" category before adding items. Please create a unit now to store items in this category.");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            progressDialogAddingItem.show();
+            File compressedFile = compressImage(file);
+            uploadItemImage(compressedFile);
+        });
+        addDimensionsButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     private File compressImage(File file) {
@@ -427,7 +494,12 @@ public class AddItemActivity extends BaseActivity  {
     {
         String url = "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
         Log.i("MyAmplifyApp", "subCategory: "+subcategoryId + " Parent: "+ parentCategoryId);
-        addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        if(!TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+            addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), inputWidth.getText().toString(), inputHeight.getText().toString(), inputDepth.getText().toString(), inputWeight.getText().toString(), inputLoadbear.getText().toString(), inputUpdown.getText().toString());
+        }
+        else {
+            addItem(url, name.getText().toString().trim(), description.getText().toString().trim(), Integer.parseInt(subcategoryId), Integer.parseInt(parentCategoryId), unitsSpinner.getSelectedItem().toString(), "", "", "", "", "", "");
+        }
 
         return "https://frontend-storage-5dbd9817acab2-dev.s3.amazonaws.com/public/ItemImages/"+key+".png";
     }
@@ -570,18 +642,23 @@ public class AddItemActivity extends BaseActivity  {
         Utils.postAddItem(app.getEmail(), itemImage, itemName, description, category, parentCategory, app.getEmail(), unitName, app.getOrganizationID(), width, height, depth, weight, loadbear, updown, this, new OperationCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
+//                Toast.makeText(AddItemActivity.this, "Item Added Successfully ", Toast.LENGTH_LONG).show();
 
                 // Create CountDownLatch with count 3 for two async operations
-                CountDownLatch latch = new CountDownLatch(3);
-                ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
-                generateQRCodeAsync(result, latch);
-                generateBarCodeAsync(result, latch);
+                CountDownLatch latch;
+                if (!TextUtils.isEmpty(inputWidth.getText().toString().trim())){
+                    latch = new CountDownLatch(3);
+                    ModifyItemDimension(result, width, height, depth, weight, loadbear, updown, latch);
+                    generateQRCodeAsync(result, latch);
+                    generateBarCodeAsync(result, latch);
+                }
+                else {
+                    latch = new CountDownLatch(2);
+                    generateQRCodeAsync(result, latch);
+                    generateBarCodeAsync(result, latch);
+                }
 
-                Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
-                logUserFlow("HomeFragment");
-                startActivity(intent);
-                finish();
+                showSuccessDialog();
 
                 // Run this in a background thread to wait for latch to finish
                 new Thread(() -> {
@@ -805,7 +882,7 @@ public class AddItemActivity extends BaseActivity  {
             categories.add(categories.size() - 1, currentSelectedCategory+" - "+currentSelectedSubcategory); // Add before "Add Custom Category"
             adapter2.notifyDataSetChanged();
             suggestionSpinner.setSelection(categories.indexOf(currentSelectedCategory+" - "+currentSelectedSubcategory));
-            Toast.makeText(AddItemActivity.this, "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(AddItemActivity.this, "Selected: " + currentSelectedCategory+" - "+currentSelectedSubcategory, Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> {
@@ -911,9 +988,18 @@ public class AddItemActivity extends BaseActivity  {
 
                     for(unitModel unit : result) {
                         if(unit.getCategories().contains(parentCategory)){
+                            unitsSpinner.setVisibility(View.VISIBLE);
                             unitsNames.add(unit.getUnitName());
                         }
                     }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+                else {
+                    unitsSpinner.setVisibility(View.GONE);
+                    List<String> unitsNames = new ArrayList<>();
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -977,6 +1063,32 @@ public class AddItemActivity extends BaseActivity  {
                 .addOnFailureListener(e -> Log.w("Firestore", "Error logging user flow", e));
     }
 
+    public void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.send_request_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView textView = dialogView.findViewById(R.id.textView);
+        TextView textView3 = dialogView.findViewById(R.id.textView3);
+
+        textView.setText("Sucess");
+        textView3.setText("Item Added Successfully");
+
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(AddItemActivity.this, HomeActivity.class);
+            logUserFlow("HomeFragment");
+            startActivity(intent);
+            finish();
+        });
+
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
 //    public void logUser
 
     @Override
@@ -989,6 +1101,13 @@ public class AddItemActivity extends BaseActivity  {
     public void onResume() {
         super.onResume();
         startTime = System.currentTimeMillis();
+        if(isAddUnit){
+            String[] suggestedCategory = suggestionSpinner.getSelectedItem().toString().split(" - ");
+
+            // The first part (index 0) will contain "Electronics"
+            String parentCategoryName = suggestedCategory[0];
+            loadUnits(parentCategoryName);
+        }
     }
 
     @Override

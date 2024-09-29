@@ -95,6 +95,16 @@
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/userRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/email"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
 <!--                <androidx.appcompat.widget.AppCompatButton-->
 <!--                    android:id="@+id/editProfileButton"-->
 <!--                    android:layout_width="wrap_content"-->
@@ -142,7 +152,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorSecondary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:text="Update Your Profile"/>
@@ -183,7 +193,7 @@
                         android:id="@+id/item_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorSecondary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:text="Theme Settings"/>
@@ -223,7 +233,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorSecondary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:text="Help"/>

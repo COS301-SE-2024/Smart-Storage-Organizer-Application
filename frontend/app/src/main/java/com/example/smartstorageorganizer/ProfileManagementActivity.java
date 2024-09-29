@@ -33,6 +33,7 @@ public class ProfileManagementActivity extends BaseActivity {
     private static final String TAG = "ProfileManagementActivity";
     private TextView email;
     private TextView username;
+    private TextView userRole;
     private ConstraintLayout content;
     private LottieAnimationView loadingScreen;
     private ImageView profileBackButton;
@@ -71,6 +72,7 @@ public class ProfileManagementActivity extends BaseActivity {
     private void initializeViews() {
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
+        userRole = findViewById(R.id.userRole);
         content = findViewById(R.id.content);
         loadingScreen = findViewById(R.id.loadingScreen);
         profileBackButton = findViewById(R.id.ProfileBackButton);
@@ -137,6 +139,7 @@ public class ProfileManagementActivity extends BaseActivity {
         email.setText(currentEmail);
         String fullName = currentName + " " + currentSurname;
         username.setText(fullName);
+        userRole.setText(app.getUserRole());
 
         loadingScreen.setVisibility(View.GONE);
         loadingScreen.pauseAnimation();
