@@ -1,10 +1,11 @@
 # Smart Storage Organization
-  <a href="">
-        <img src="https://img.shields.io/coveralls/github/badges/shields"
-  alt="Code Coverage"></a>
 ![main](https://github.com/COS301-SE-2024/Smart-Storage-Organizer-Application/actions/workflows/AndroidBuild.yml/badge.svg?branch=fix-errors)
 ![GitHub issues](https://img.shields.io/github/issues/COS301-SE-2024/Smart-Storage-Organizer-Application)
 ![commits](https://badgen.net/github/commits/COS301-SE-2024/Smart-Storage-Organizer-Application/main)
+
+  <a href="">
+        <img src="https://img.shields.io/coveralls/github/badges/shields"
+  alt="Code Coverage"></a>
 
 ## Team Name: Syntax Savants
 Project Email: syntaxsavants98@gmail.com
