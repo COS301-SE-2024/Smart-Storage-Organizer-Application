@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amplifyframework.core.Amplify;
 import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.R;
-import com.example.smartstorageorganizer.adapters.NotificationsAdapter;
-import com.example.smartstorageorganizer.model.NotificationModel;
+import com.example.smartstorageorganizer.ViewNotificationActivity;
+import com.example.smartstorageorganizer.NotificationsAdapter;
+import com.example.smartstorageorganizer.NotificationModel;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +61,19 @@ public class NotificationsFragment extends Fragment {
 
         // Initialize the notification list and adapter
         notificationList = new ArrayList<>();
-        adapter = new NotificationsAdapter(requireContext(), notificationList);
+//        adapter = new NotificationsAdapter(requireContext(), notificationList);
+
+
+        // Set up the adapter with the click listener
+        adapter = new NotificationsAdapter(requireContext(), notificationList, notification -> {
+            // Handle the click event here
+            Intent intent = new Intent(requireContext(), ViewNotificationActivity.class);
+            intent.putExtra("notification_title", notification.getTitle());
+            intent.putExtra("notification_message", notification.getMessage());
+            intent.putExtra("notification_date", notification.getDate());
+            startActivity(intent);
+        });
+
         recyclerView.setAdapter(adapter);
 
 
