@@ -244,7 +244,20 @@
             android:id="@+id/help_modify_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To modify the category, you can click on the category and the click on the icon to modify the category." />
+            android:text="A: To modify the category, you can click on the category and then click on the icon to modify the category." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add an item?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_delete_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To delete the category, you can click on the category and then click on the icon to delete the category." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
