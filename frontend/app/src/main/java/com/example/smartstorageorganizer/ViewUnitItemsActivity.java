@@ -531,7 +531,6 @@ public class ViewUnitItemsActivity extends BaseActivity {
                     mainLayout.setVisibility(View.VISIBLE);
                     arrangementLoader.setVisibility(View.GONE);
                     showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name);
-//                    generateProcess(unit_id, unit_name);
                 } else {
                     mainLayout.setVisibility(View.VISIBLE);
                     arrangementLoader.setVisibility(View.GONE);
@@ -543,6 +542,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
 
                     TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
 
+                    // Add header for fitted items
                     TableRow headerRow = new TableRow(ViewUnitItemsActivity.this);
                     TextView headerName = new TextView(ViewUnitItemsActivity.this);
                     TextView headerColor = new TextView(ViewUnitItemsActivity.this);
@@ -559,8 +559,8 @@ public class ViewUnitItemsActivity extends BaseActivity {
 
                     tableLayout.addView(headerRow);
 
+                    // Add rows for fitted items
                     List<BinItemModel> items = result.getItems();
-
                     for (BinItemModel item : items) {
                         TableRow row = new TableRow(ViewUnitItemsActivity.this);
 
@@ -581,6 +581,36 @@ public class ViewUnitItemsActivity extends BaseActivity {
                         tableLayout.addView(row);
                     }
 
+                    // Add a new section for unfitted items if the list is not empty
+                    if (!result.getUnfittedItems().isEmpty()) {
+                        // Header for unfitted items
+                        TableRow unfittedHeaderRow = new TableRow(ViewUnitItemsActivity.this);
+                        TextView unfittedHeaderName = new TextView(ViewUnitItemsActivity.this);
+                        TextView unfittedHeaderColor = new TextView(ViewUnitItemsActivity.this);
+
+                        unfittedHeaderName.setText("Unfitted Name");
+                        unfittedHeaderName.setPadding(8, 8, 8, 8);
+                        unfittedHeaderName.setTypeface(null, Typeface.BOLD);
+
+                        unfittedHeaderRow.addView(unfittedHeaderName);
+
+                        tableLayout.addView(unfittedHeaderRow);
+
+                        // Rows for unfitted items
+                        List<BinItemModel> unfittedItems = result.getUnfittedItems();
+                        for (BinItemModel unfittedItem : unfittedItems) {
+                            TableRow row = new TableRow(ViewUnitItemsActivity.this);
+
+                            TextView unfittedNameView = new TextView(ViewUnitItemsActivity.this);
+                            unfittedNameView.setText(unfittedItem.getName());
+                            unfittedNameView.setPadding(8, 8, 8, 8);
+
+                            row.addView(unfittedNameView);
+
+                            tableLayout.addView(row);
+                        }
+                    }
+
                     Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
                     view3DButton.setOnClickListener(v -> {
                         Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
@@ -593,20 +623,18 @@ public class ViewUnitItemsActivity extends BaseActivity {
                     AlertDialog dialog = dialogBuilder.create();
                     dialog.show();
                 }
-
             }
-
-
 
             @Override
             public void onFailure(String error) {
-                if(Objects.equals(error.toLowerCase(), "timeout")){
+                if (Objects.equals(error.toLowerCase(), "timeout")) {
                     generateProcess(unit_id, unit_name);
                 }
                 Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }
+
 
     public int parseColor(String colorString) {
         // Remove the square brackets and split the string by commas

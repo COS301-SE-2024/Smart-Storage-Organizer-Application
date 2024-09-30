@@ -292,6 +292,35 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
                         tableLayout.addView(row);
                     }
 
+                    if (!result.getUnfittedItems().isEmpty()) {
+                        // Header for unfitted items
+                        TableRow unfittedHeaderRow = new TableRow(context);
+                        TextView unfittedHeaderName = new TextView(context);
+                        TextView unfittedHeaderColor = new TextView(context);
+
+                        unfittedHeaderName.setText("Unfitted Name");
+                        unfittedHeaderName.setPadding(8, 8, 8, 8);
+                        unfittedHeaderName.setTypeface(null, Typeface.BOLD);
+
+                        unfittedHeaderRow.addView(unfittedHeaderName);
+
+                        tableLayout.addView(unfittedHeaderRow);
+
+                        // Rows for unfitted items
+                        List<BinItemModel> unfittedItems = result.getUnfittedItems();
+                        for (BinItemModel unfittedItem : unfittedItems) {
+                            TableRow row = new TableRow(context);
+
+                            TextView unfittedNameView = new TextView(context);
+                            unfittedNameView.setText(unfittedItem.getName());
+                            unfittedNameView.setPadding(8, 8, 8, 8);
+
+                            row.addView(unfittedNameView);
+
+                            tableLayout.addView(row);
+                        }
+                    }
+
                     Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
                     view3DButton.setOnClickListener(v -> {
                         Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);

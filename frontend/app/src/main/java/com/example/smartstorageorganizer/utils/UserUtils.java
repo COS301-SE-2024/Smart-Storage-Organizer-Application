@@ -121,9 +121,6 @@ public class UserUtils {
     public static void setUserToVerified(String username, String authorizationToken, Activity activity, OperationCallback<Boolean> callback) {
         // Construct the JSON payload
         String json = "{"
-                + "\"header\": {"
-                + "\"Authorization\": \"" + authorizationToken + "\""
-                + "},"
                 + "\"body\": {"
                 + "\"username\": \"" + username + "\""
                 + "}"

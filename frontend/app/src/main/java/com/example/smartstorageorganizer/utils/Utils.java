@@ -2046,6 +2046,7 @@ public class Utils
 
                             JSONArray itemsArray = new JSONArray(items);
                             List<BinItemModel> itemsList = new ArrayList<>();
+                            List<BinItemModel> unfittedItemsList = new ArrayList<>();
 
                             for (int i = 0; i < itemsArray.length(); i++) {
                                 JSONObject itemObject = itemsArray.getJSONObject(i);
@@ -2057,18 +2058,46 @@ public class Utils
                                 itemsList.add(item);
                             }
 
-                            ArrangementModel obj = new ArrangementModel(imageUrl, itemsList);
+                            if(jsonObject.toString().contains("\""+"binRespibse"+"\"")){
+                                String binRespibse = jsonObject.getString("binRespibse");
+                                JSONObject jsonObjectbinRespibse = new JSONObject(binRespibse);
+                                String body = jsonObjectbinRespibse.getString("body");
+
+                                JSONArray bodyArray = new JSONArray(body);
+
+                                JSONObject itemObject = bodyArray.getJSONObject(0);
+
+                                String unfittedItem = itemObject.getString("unfitted_items");
+
+                                JSONArray unfittedItemArray = new JSONArray(unfittedItem);
+
+                                activity.runOnUiThread(() -> Log.e("View Response Results Body Array", unfittedItem.toString()));
+
+                                for (int i = 0; i < unfittedItemArray.length(); i++) {
+                                    JSONObject unfittedItemObject = unfittedItemArray.getJSONObject(i);
+
+                                    String name = unfittedItemObject.getString("id");
+                                    String color = unfittedItemObject.getString("width");
+
+                                    BinItemModel item = new BinItemModel(name, color);
+                                    unfittedItemsList.add(item);
+                                }
+                            }
+
+                            ArrangementModel obj = new ArrangementModel(imageUrl, itemsList, unfittedItemsList);
 
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         } // item with no dimension
                         else if(jsonObject.toString().contains("\""+"status"+"\"") && jsonObject.getString("status").equals("400")){
                             List<BinItemModel> itemList = new ArrayList<>();
-                            ArrangementModel obj = new ArrangementModel("400", itemList);
+                            List<BinItemModel> unfittedItemsList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("400", itemList, unfittedItemsList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
                         else if(jsonObject.toString().contains("\""+"statusCode"+"\"") && jsonObject.getString("statusCode").equals("500")){
                             List<BinItemModel> itemList = new ArrayList<>();
-                            ArrangementModel obj = new ArrangementModel("500", itemList);
+                            List<BinItemModel> unfittedItemsList = new ArrayList<>();
+                            ArrangementModel obj = new ArrangementModel("500", itemList, unfittedItemsList);
                             activity.runOnUiThread(() -> callback.onSuccess(obj));
                         }
                     } catch (JSONException e) {
@@ -2409,6 +2438,108 @@ public class Utils
 
         }).exceptionally(ex -> {
             Log.e("TokenError", "Failed to get user token", ex);
+            return null;
+        });
+    }
+
+    public static void FetchUnitsConstraint(String organizationId, String categoryId,  Activity activity, OperationCallback<List<unitModel>> callback)
+    {
+        String json = "{"
+                + "\"body\": {"
+                + "\"category_id\": \"" + Integer.parseInt(categoryId) + "\","
+                + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\""
+                + "}"
+                + "}";
+        List<unitModel> unitModelList = new ArrayList<>();
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.GetUnitConstraints;
+        RequestBody body = RequestBody.create(json, JSON);
+
+        TokenManager.getToken().thenAccept(results-> {
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .post(body)
+                    .addHeader("Authorization", results)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "GET request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        if(responseData == null){
+                            activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
+                        }
+                        else {
+                            activity.runOnUiThread(() -> Log.e(message, responseData));
+
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                String bodyString = jsonObject.getString("body");
+
+                                // Try to convert bodyString to a JSONArray
+                                try {
+                                    JSONArray bodyArray = new JSONArray(bodyString);
+                                    // If bodyString is a valid JSONArray, proceed with parsing the items
+                                    for (int i = 0; i < bodyArray.length(); i++) {
+                                        JSONObject itemObject = bodyArray.getJSONObject(i);
+
+                                        String unitName = itemObject.getString("name");
+                                        String capacity = itemObject.getString("capacity");
+                                        String unitId = itemObject.getString("id");
+                                        String capacityUsed = itemObject.getString("capacity_used");
+//                                        String categories = itemObject.getString("category_name");
+
+                                        // Clean up the categories string
+//                                        categories = categories.replaceAll("[\\[\\]\"]", "");
+//
+//                                        // Split categories into a list
+//                                        List<String> list = new ArrayList<>(Arrays.asList(categories.split(", ")));
+
+                                        // Create the unitModel object and add it to the list
+                                        unitModel item = new unitModel(unitName, unitId, Integer.parseInt(capacity), Integer.parseInt(capacityUsed), "");
+//                                        item.setCategories(list);
+
+                                        unitModelList.add(item);
+                                    }
+
+                                    // If JSONArray parsing and processing is successful, return the result
+                                    activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
+
+                                } catch (JSONException jsonArrayException) {
+                                    // If bodyString is not a valid JSONArray, return the existing unitModelList
+                                    activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
+                                }
+
+                            } catch (JSONException e) {
+                                // Handle any JSON parsing errors and call onFailure
+                                activity.runOnUiThread(() -> {
+                                    activity.runOnUiThread(() -> callback.onSuccess(unitModelList));
+                                });
+                            }
+                        }
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "GET request failed:" + response);
+                            callback.onFailure("Response code:" + response.code());
+                        });
+                    }
+                }
+            });
+
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
             return null;
         });
     }
