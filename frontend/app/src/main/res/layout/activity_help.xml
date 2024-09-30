@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ReportsActivity">
+    tools:context=".HelpActivity">
 
     <RelativeLayout
         android:id="@+id/appBarLayout"
@@ -17,15 +17,14 @@
         android:paddingEnd="16dp"
         android:background="@drawable/bgthree"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/arrow_back"/>
+            android:src="@drawable/arrow_back" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="R E P O R T S"
+                android:text="F A Q"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold"
@@ -44,10 +43,16 @@
 
         </LinearLayout>
     </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/reportInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To reset your password, you can click on the 'Forgot Password' button which will take you to the forgot password page which will let you to reset your password by entering your email address then you will receive an email to reset you password." />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +91,6 @@
             android:layout_height="wrap_content"
             android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu. You will then click on 'Add Category', which will give you a page where you select Parent Category or Sub Category. Then you can add your own Sub Category and click on 'Finish'." />
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +114,7 @@
             android:id="@+id/help_edit_profile_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture."/>
+            android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture." />
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,7 +127,7 @@
             android:id="@+id/help_unit_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
+            android:text="A: To add a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
 
         <TextView
             android:layout_width="wrap_content"
@@ -140,7 +145,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Q: How do I see how the item are stored in the room"
+            android:text="Q: How do I see how the items are stored in the room"
             android:textStyle="bold"
             android:padding="4dp" />
 
@@ -148,7 +153,7 @@
             android:id="@+id/help_3D_Room_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To view the how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
+            android:text="A: To view how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
 
         <TextView
             android:layout_width="wrap_content"
@@ -177,4 +182,5 @@
             android:text="A: To add an item, you can click on the 'Create Item' button where you can access the Add item page and then you will be able to add an item." />
 
     </LinearLayout>
-</ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
