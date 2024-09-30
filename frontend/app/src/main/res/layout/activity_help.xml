@@ -43,221 +43,226 @@
 
         </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/reportInfoLayout"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+            android:id="@+id/reportInfoLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Q: How do I reset my password?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/help_reset_password_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To reset your password, you will need to go to the forgot password page before you log into the application." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I reset my password?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How secure is my data in the smart storage?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_reset_password_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To reset your password, you will need to go to the forgot password page before you log into the application." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: Your data is highly secure with end-to-end encryption, ensuring that only you can access your files. Additionally, our servers are protected by advanced security measures to safeguard your information." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How secure is my data in the smart storage?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add a Category to the smart storage?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: Your data is highly secure with end-to-end encryption, ensuring that only you can access your files. Additionally, our servers are protected by advanced security measures to safeguard your information." />
 
-        <TextView
-            android:id="@+id/help_add_category_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu. You will then click on 'Add Category', which will give you a page where you select Parent Category or Sub Category. Then you can add your own Sub Category and click on 'Finish'." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add a Category to the smart storage?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I contact customer support?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_add_category_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: When you want to add a Category, you will have to click on the '+' button at the bottom of the Homepage which will then give you a menu. You will then click on 'Add Category', which will give you a page where you select Parent Category or Sub Category. Then you can add your own Sub Category and click on 'Finish'." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: If you need assistance, you can contact our customer support team by going to the 'Help' section and tapping 'Contact Support'. You can also reach us via email or chat support available on our website." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I contact customer support?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I edit my profile?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: If you need assistance, you can contact our customer support team by going to the 'Help' section and tapping 'Contact Support'. You can also reach us via email or chat support available on our website." />
 
-        <TextView
-            android:id="@+id/help_edit_profile_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I edit my profile?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add a unit?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_edit_profile_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture." />
 
-        <TextView
-            android:id="@+id/help_unit_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To add a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add a unit?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I make reports?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_unit_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To add a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
 
-        <TextView
-            android:id="@+id/help_generate_reports"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To generate reports, you can click on the 'Generate Report' button which will take you to the Reports page, where you can decide whether you want to create item reports or reports based on the app. You can also download the reports as a pdf." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I make reports?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I see how the items are stored in the room"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_generate_reports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To generate reports, you can click on the 'Generate Report' button which will take you to the Reports page, where you can decide whether you want to create item reports or reports based on the app. You can also download the reports as a pdf." />
 
-        <TextView
-            android:id="@+id/help_3D_Room_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To view how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I see how the items are stored in the room"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add a Colour Code Group?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_3D_Room_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To view how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
 
-        <TextView
-            android:id="@+id/help_color_group_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To add the colour group, you can click on the 'Color Group' button where you will be then have the access to create a color code group." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add a Colour Code Group?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_color_group_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To add the colour group, you can click on the 'Color Group' button where you will be then have the access to create a color code group." />
 
-        <TextView
-            android:id="@+id/help_item_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To add an item, you can click on the 'Create Item' button where you can access the Add item page and then you will be able to add an item." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I scan for an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_item_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To add an item, you can click on the 'Create Item' button where you can access the Add item page and then you will be able to add an item." />
 
-        <TextView
-            android:id="@+id/help_scan_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To scan a QR code or Barcode for an item, you can click on the 'Scan' button which will take you to the page that gives you the allowance to scan a QRCode or Barcode." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I scan for an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I delete an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_scan_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To scan a QR code or Barcode for an item, you can click on the 'Scan' button which will take you to the page that gives you the allowance to scan a QRCode or Barcode." />
 
-        <TextView
-            android:id="@+id/help_delete_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To delete an item, you will need to click on the the dots on the item to get a menu then click on delete." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I delete an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I modify an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_delete_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To delete an item, you will need to click on the the dots on the item to get a menu then click on delete." />
 
-        <TextView
-            android:id="@+id/help_modify_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To modify an item, you can click on the item with the icon to edit the details of the item." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I modify an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I search items?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_modify_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To modify an item, you can click on the item with the icon to edit the details of the item." />
 
-        <TextView
-            android:id="@+id/help_search_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To search an item, you can click on the 'Search Item' button where you can search for items as you will redirected to the search page." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I search items?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_search_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To search an item, you can click on the 'Search Item' button where you can search for items as you will redirected to the search page." />
 
-        <TextView
-            android:id="@+id/help_modify_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To modify the category, you can click on the category and then click on the icon to modify the category." />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Q: How do I add an item?"
-            android:textStyle="bold"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/help_modify_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To modify the category, you can click on the category and then click on the icon to modify the category." />
 
-        <TextView
-            android:id="@+id/help_delete_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A: To delete the category, you can click on the category and then click on the icon to delete the category." />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add an item?"
+                android:textStyle="bold"
+                android:padding="4dp" />
 
+            <TextView
+                android:id="@+id/help_delete_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To delete the category, you can click on the category and then click on the icon to delete the category." />
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
