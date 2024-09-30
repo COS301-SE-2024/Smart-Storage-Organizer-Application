@@ -30,9 +30,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    private static final long INACTIVITY_TIMEOUT = 6000000; // 1 minute in milliseconds (60,000)
-    private static final long POPUP_TIMEOUT = 6000000; // 1 minute timeout for popup
+    private static final long INACTIVITY_TIMEOUT = 1200000; // 1 minute in milliseconds (60,000)
+    private static final long POPUP_TIMEOUT = 1200000; // 1 minute timeout for popup
     private Handler inactivityHandler;
     private Runnable inactivityCallback;
     private Handler popupTimeoutHandler; // To handle the timeout for the popup

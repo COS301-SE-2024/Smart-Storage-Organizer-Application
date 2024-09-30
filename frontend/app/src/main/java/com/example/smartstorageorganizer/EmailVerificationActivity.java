@@ -162,7 +162,7 @@ public class EmailVerificationActivity extends BaseActivity {
                             setUserToUnverified(getIntent().getStringExtra(EMAIL), "");
                         }
                         else {
-                            setUserRole(getIntent().getStringExtra(EMAIL), "Manager", "");
+                            setUserRole("ezemakau@gmail.com", "Manager", getIntent().getStringExtra(EMAIL));
 //                            setUserToVerified(getIntent().getStringExtra(EMAIL), "");
                         }
                         future.complete(true);

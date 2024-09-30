@@ -70,7 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            setUserRole(app.getEmail(), "guestUser" , cardItem.getEmail(), holder.getAdapterPosition(), progressDialog);
+            setUserRole(app.getEmail(), "normalUser" , cardItem.getEmail(), holder.getAdapterPosition(), progressDialog);
         });
 
         holder.moreButton.setOnClickListener(v -> showBottomSheetDialog(cardItem));
@@ -117,7 +117,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
 
         actionDelete.setOnClickListener(v -> {
             // Handle delete action
-            Toast.makeText(context, "Delete clicked for " + cardItem.getName(), Toast.LENGTH_SHORT).show();
+
+            ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Removing User...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            setUserToUnverified(cardItem.getEmail(), "");
+            progressDialog.dismiss();
             bottomSheetDialog.dismiss();
         });
 
@@ -184,7 +191,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
                 progressDialog.dismiss();
                 if (Boolean.TRUE.equals(result)) {
                     ((Activity) context).runOnUiThread(() -> {
-//                        setUserToVerified(username, "", position, progressDialog);
+                        setUserToVerified(authorization, "", position, progressDialog);
                         Toast.makeText(context, "User role set successfully", Toast.LENGTH_SHORT).show();
                     });
                 }

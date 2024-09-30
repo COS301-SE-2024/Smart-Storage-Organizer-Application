@@ -360,6 +360,9 @@ public class AddItemActivity extends BaseActivity  {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     e.printStackTrace();
+                    if(Objects.equals(e.getMessage(), "timeout")){
+                        SearchForItem(target, parentcategoryid, subcategoryid);
+                    }
                     future.completeExceptionally(e);
                 }
 
@@ -442,7 +445,7 @@ public class AddItemActivity extends BaseActivity  {
                 parentCategoryId = suggestedCategory.get(0).getCategoryID();
                 subcategoryId = suggestedCategory.get(1).getCategoryID();
                 List<String> categories = new ArrayList<>();
-                loadUnits(suggestedCategory.get(0).getCategoryName());
+                FetchUnitsConstraint(suggestedCategory.get(0).getCategoryID());
                 categories.add(suggestedCategory.get(0).getCategoryName() + " - " + suggestedCategory.get(1).getCategoryName());
                 categories.add("Add Custom Category");
 
@@ -1014,6 +1017,45 @@ public class AddItemActivity extends BaseActivity  {
         });
     }
 
+    private void FetchUnitsConstraint(String parentCategory) {
+        Utils.FetchUnitsConstraint(app.getOrganizationID(), parentCategory, this, new OperationCallback<List<unitModel>>() {
+            @Override
+            public void onSuccess(List<unitModel> result) {
+                if(!result.isEmpty()){
+                    unitList.clear();
+                    unitList.addAll(result);
+                    List<String> unitsNames = new ArrayList<>();
+
+//                    Toast.makeText(AddItemActivity.this, "Result: "+result.get(0).getUnitName(), Toast.LENGTH_LONG).show();
+
+                    for(unitModel unit : result) {
+//                        if(unit.getCategories().contains(parentCategory)){
+                            unitsSpinner.setVisibility(View.VISIBLE);
+                            unitsNames.add(unit.getUnitName());
+//                        }
+                    }
+//
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+                else {
+                    unitsSpinner.setVisibility(View.GONE);
+                    List<String> unitsNames = new ArrayList<>();
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(AddItemActivity.this, android.R.layout.simple_spinner_item, unitsNames);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    unitsSpinner.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(AddItemActivity.this, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void logActivityView(String activityName) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = app.getEmail();
@@ -1106,7 +1148,7 @@ public class AddItemActivity extends BaseActivity  {
 
             // The first part (index 0) will contain "Electronics"
             String parentCategoryName = suggestedCategory[0];
-            loadUnits(parentCategoryName);
+            FetchUnitsConstraint(parentCategoryId);
         }
     }
 
