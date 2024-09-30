@@ -96,5 +96,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I make reports?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/help_generate_reports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To generate reports, you can click on the 'Generate Report' button which will take you to the Reports page, where you can decide whether you want to create item reports or reports based on the app. You can also download the reports as a pdf." />
     </LinearLayout>
 </ScrollView>
