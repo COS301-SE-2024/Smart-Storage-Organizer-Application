@@ -232,6 +232,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To search an item, you can click on the 'Search Item' button where you can search for items as you will redirected to the search page." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add an item?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_modify_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To modify the category, you can click on the category and the click on the icon to modify the category." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
