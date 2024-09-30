@@ -206,6 +206,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To delete an item, you will need to click on the the dots on the item to get a menu then click on delete." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I modify an item?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_modify_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To modify an item, you can click on the item with the icon to edit the details of the item." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
