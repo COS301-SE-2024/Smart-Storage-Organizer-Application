@@ -63,10 +63,9 @@ public class NotificationsActivity extends AppCompatActivity {
         try {
             jsonBody.put("app_id", "152f0f5c-d21d-4e43-89b1-5e02acc42abe");
             // jsonBody.put("included_segments", new JSONArray().put("All"));  // Target audience (e.g., All users)
-            jsonBody.put("include_external_user_ids", new JSONArray().put("zhouvel7@gmail.com"));
             jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
             jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
-           // jsonBody.put("tags", new JSONObject().put("organizationID", app.getOrganizationID()));
+            jsonBody.put("tags", new JSONObject().put("organizationID", app.getOrganizationID()));
             jsonBody.put("filters", new JSONArray()
                     .put(new JSONObject().put("field", "tag").put("key", "organizationID").put("relation", "=").put("value", app.getOrganizationID())));
 

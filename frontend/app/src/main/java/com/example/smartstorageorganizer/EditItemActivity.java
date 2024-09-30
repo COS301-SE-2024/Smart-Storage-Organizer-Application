@@ -830,7 +830,7 @@ public class EditItemActivity extends BaseActivity {
                             .addOnSuccessListener(aVoid -> {
                                 showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
-                                Utils.sendNotificationFromPhoneForUserRole("Item request for "+getIntent().getStringExtra("item_name")+" needs approval","Item edit request","Manager","Edit");
+                                Utils.sendNotificationFromPhoneForUserRole("Item request for "+getIntent().getStringExtra("item_name")+" needs approval ,by \"+app.getName()+\" \"+app.getSurname()","Item edit request","Manager","Edit",app.getOrganizationID().toString());
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {

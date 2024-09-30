@@ -315,6 +315,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
                                 ((android.app.Activity) context).runOnUiThread(() -> {
+                                    Utils.sendNotificationFromPhoneForUserRole("Request to delete item has been made by"+app.getName()+" "+app.getSurname(), "You have a new request to delete an item", "Manager","Delete",app.getOrganizationID());
+
 //                                    itemModelList.remove(position);
 //                                    notifyItemRemoved(position);
 //                                    notifyItemRangeChanged(position, itemModelList.size());
@@ -322,7 +324,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 //                                    Toast.makeText(context, "Item deleted successfully", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                 });
-                                Utils.sendNotificationFromPhoneForUserRole("Request to delete item", "You have a new request to delete an item", "Admin","Delete");
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })

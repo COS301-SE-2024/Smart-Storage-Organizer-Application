@@ -2662,7 +2662,7 @@ public class Utils
         });
     }
 
-    public static void sendNotificationFromPhoneForUserRole(String message, String title,String userRole,String label) {
+    public static void sendNotificationFromPhoneForUserRole(String message, String title,String userRole,String label,String organizationId) {
         OkHttpClient client = new OkHttpClient();
         String url = "https://onesignal.com/api/v1/notifications";
 
@@ -2673,7 +2673,9 @@ public class Utils
             jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
             jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
             jsonBody.put("filters", new JSONArray()
-                    .put(new JSONObject().put("field", "tag").put("key", "userRole").put("relation", "=").put("value", userRole)));
+                    .put(new JSONObject().put("field", "tag").put("key", "userRole").put("relation", "=").put("value", userRole))
+                    .put(new JSONObject().put("field", "tag").put("key", "organizationID").put("relation", "=").put("value",organizationId ))
+                    );
 
             JSONObject data = new JSONObject();
             data.put("label", label);
