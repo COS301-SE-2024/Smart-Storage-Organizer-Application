@@ -122,5 +122,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To view the how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add a Colour Code Group?"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/help_color_group_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To add the colour group, you can click on the 'Color Group' button where you will be then have the access to create a color code group." />
     </LinearLayout>
 </ScrollView>
