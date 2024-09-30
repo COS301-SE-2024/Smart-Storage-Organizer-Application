@@ -341,6 +341,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
                                 ((android.app.Activity) context).runOnUiThread(() -> {
+                                    Utils.sendNotificationFromPhoneForUserRole("Request to delete an item has been made by"+app.getName()+" "+app.getSurname(), "Request to delete an item: " + itemName + " has been sent", "Manager", "Delete",app.getOrganizationID());
 //                                    itemModelList.remove(position);
 //                                    notifyItemRemoved(position);
 //                                    notifyItemRangeChanged(position, itemModelList.size());

@@ -230,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
                         checkUserVerificationStatus(email, "");
                         fetchUserSession(email);
                         future.complete(true);
+
                     } else {
                         handleSignInFailure("Sign in not complete.");
                         future.complete(false);

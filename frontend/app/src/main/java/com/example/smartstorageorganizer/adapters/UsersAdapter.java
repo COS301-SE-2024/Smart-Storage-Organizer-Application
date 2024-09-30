@@ -23,6 +23,7 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.UserModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.UserUtils;
+import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
@@ -172,7 +173,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.CardViewHold
             @Override
             public void onSuccess(Boolean result) {
                 if (Boolean.TRUE.equals(result)) {
-                    Toast.makeText(context, "user unverified successful: ", Toast.LENGTH_LONG).show();
+
+                    Utils.sendNotificationFromPhoneForOneUser("Your account has been removed from the organization by your Administrator","Account Disabled",username);
+                    ((Activity) context).runOnUiThread(() -> {
+                        Toast.makeText(context, "User removed successfully", Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
 

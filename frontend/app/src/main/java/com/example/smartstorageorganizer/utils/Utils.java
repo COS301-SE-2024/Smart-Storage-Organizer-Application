@@ -1,5 +1,7 @@
 package com.example.smartstorageorganizer.utils;
 
+import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,6 +25,7 @@ import com.amplifyframework.auth.options.AuthFetchSessionOptions;
 
 import com.example.smartstorageorganizer.BuildConfig;
 import com.example.smartstorageorganizer.HomeActivity;
+import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.model.ArrangementModel;
 import com.example.smartstorageorganizer.model.BinItemModel;
@@ -2541,6 +2544,179 @@ public class Utils
             return null;
         });
     }
+     public static void sendNotificationFromPhoneForOneUser(String message, String title,String email) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://onesignal.com/api/v1/notifications";
+
+        // Build JSON payload for the notification
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("app_id", "152f0f5c-d21d-4e43-89b1-5e02acc42abe");
+            // jsonBody.put("included_segments", new JSONArray().put("All"));  // Target audience (e.g., All users)
+            jsonBody.put("include_external_user_ids", new JSONArray().put(email));
+            jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
+            jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
+            // jsonBody.put("tags", new JSONObject().put("organizationID", app.getOrganizationID()));
+//            jsonBody.put("filters", new JSONArray()
+//                    .put(new JSONObject().put("field", "tag").put("key", "organizationID").put("relation", "=").put("value", app.getOrganizationID())));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return;
+        }
+
+        // Create request body with JSON payload
+        RequestBody body = RequestBody.create(
+                jsonBody.toString(),
+                MediaType.parse("application/json; charset=utf-8")
+        );
+
+        // Build the request with headers (including Authorization with your REST API key)
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Authorization", "Basic ZGFlMzY3MjktOGIyOC00ZDI4LTg1MzQtMWE5NjY2ZDJkOGZh")  // Replace with your REST API key
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("OneSignal", "Failed to send notification", e);
+
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    Log.d("OneSignal", "Notification sent successfully");
+
+                } else {
+                    Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
+
+                }
+            }
+        });
+    }
+
+    public static  void sendNotificationFromPhoneForAllUsersUnderOrganization(String message, String title,String organizationID) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://onesignal.com/api/v1/notifications";
+
+        // Build JSON payload for the notification
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("app_id", "152f0f5c-d21d-4e43-89b1-5e02acc42abe");
+            jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
+            jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
+
+            jsonBody.put("filters", new JSONArray()
+                    .put(new JSONObject().put("field", "tag").put("key", "organizationID").put("relation", "=").put("value", organizationID)));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return;
+        }
+
+        // Create request body with JSON payload
+        RequestBody body = RequestBody.create(
+                jsonBody.toString(),
+                MediaType.parse("application/json; charset=utf-8")
+        );
+
+        // Build the request with headers (including Authorization with your REST API key)
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Authorization", "Basic ZGFlMzY3MjktOGIyOC00ZDI4LTg1MzQtMWE5NjY2ZDJkOGZh")  // Replace with your REST API key
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("OneSignal", "Failed to send notification", e);
+
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    Log.d("OneSignal", "Notification sent successfully");
+
+                } else {
+                    Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
+
+                }
+            }
+        });
+    }
+
+    public static void sendNotificationFromPhoneForUserRole(String message, String title,String userRole,String label,String organizationId) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://onesignal.com/api/v1/notifications";
+
+        // Build JSON payload for the notification
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("app_id", "152f0f5c-d21d-4e43-89b1-5e02acc42abe");
+            jsonBody.put("contents", new JSONObject().put("en", message));  // The notification message
+            jsonBody.put("headings", new JSONObject().put("en", title));    // The notification title
+            jsonBody.put("filters", new JSONArray()
+                    .put(new JSONObject().put("field", "tag").put("key", "userRole").put("relation", "=").put("value", userRole))
+                    .put(new JSONObject().put("field", "tag").put("key", "organizationID").put("relation", "=").put("value",organizationId ))
+                    );
+
+            JSONObject data = new JSONObject();
+            data.put("label", label);
+            jsonBody.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return;
+        }
+
+        // Create request body with JSON payload
+        RequestBody body = RequestBody.create(
+                jsonBody.toString(),
+                MediaType.parse("application/json; charset=utf-8")
+        );
+
+        // Build the request with headers (including Authorization with your REST API key)
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("Authorization", "Basic ZGFlMzY3MjktOGIyOC00ZDI4LTg1MzQtMWE5NjY2ZDJkOGZh")  // Replace with your REST API key
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("OneSignal", "Failed to send notification", e);
+
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    Log.d("OneSignal", "Notification sent successfully");
+
+                } else {
+                    Log.e("OneSignal", "Failed to send notification, response code: " + response.code());
+
+                }
+            }
 
     public static void modifyUnit(String unitId, String width, String height, String depth, String maxWeight, Activity activity, OperationCallback<Boolean> callback)
     {

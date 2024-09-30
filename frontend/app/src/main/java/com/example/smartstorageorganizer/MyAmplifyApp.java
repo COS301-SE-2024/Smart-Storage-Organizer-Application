@@ -19,6 +19,8 @@ import com.onesignal.OSNotificationOpenedResult;
 import com.onesignal.OSNotificationReceivedEvent;
 import com.onesignal.OneSignal;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -106,6 +108,23 @@ public class MyAmplifyApp extends Application {
         }
     }
 
+    public void setupOneSignalForUser(String email, String organizationID, String userRole) {
+        OneSignal.setExternalUserId(email, new OneSignal.OSExternalUserIdUpdateCompletionHandler() {
+            @Override
+            public void onSuccess(JSONObject jsonObject) {
+                Log.i("OneSignal", "External user ID set: " + jsonObject.toString());
+            }
+
+
+            @Override
+            public void onFailure(OneSignal.ExternalIdError externalIdError) {
+                Log.e("OneSignal", "Failed to set external user ID: " + externalIdError.toString());
+            }
+        });
+
+        OneSignal.sendTag("organizationID", organizationID);
+        OneSignal.sendTag("userRole", userRole);
+    }
     public String getOrganizationID() {
         return organizationID;
     }

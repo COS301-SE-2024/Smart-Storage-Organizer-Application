@@ -803,6 +803,7 @@ public class ViewItemActivity extends BaseActivity {
                                 }
                                 progressDialog.dismiss();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                Utils.sendNotificationFromPhoneForUserRole("Delete Item request has been made by "+app.getName()+" "+app.getSurname(), "Item Deletion Request ", "Manager","Delete", app.getOrganizationID());
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {
