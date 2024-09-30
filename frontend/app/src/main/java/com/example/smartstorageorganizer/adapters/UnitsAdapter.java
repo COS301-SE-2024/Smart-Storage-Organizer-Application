@@ -227,21 +227,47 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
     }
 
+    public void showArrangementDialog(String text, String unit_id, String unit_name, UnitViewHolder holder, ProgressDialog progressDialog) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.arrangement_popup, null);
+
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        Button closeButton = dialogView.findViewById(R.id.finishButton);
+        TextView message = dialogView.findViewById(R.id.textView3);
+        if(!Objects.equals(text, "")){
+            message.setText(text);
+            closeButton.setText("Try Again");
+        }
+        else {
+            message.setText("The arrangement could not be generated because one or more items are missing essential dimensions (width, depth, height, or weight). All items must have complete dimensions in order for the system to create an optimized arrangement. Please ensure that each item has the necessary dimensions and try again.");
+            closeButton.setText("Close");
+        }
+        closeButton.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            if(!Objects.equals(text, "")){
+                progressDialog.dismiss();
+                generateProcess(unit_id, unit_name, holder, progressDialog);
+            }
+        });
+
+//        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+    }
+
     private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder, ProgressDialog progressDialog) {
         Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
             @Override
             public void onSuccess(ArrangementModel result) {
                 if (Objects.equals(result.getImageUrl(), "400")) {
                     progressDialog.dismiss();
-//                    mainLayout.setVisibility(View.VISIBLE);
-//                    arrangementLoader.setVisibility(View.GONE);
-//                    showArrangementDialog("", unit_id, unit_name);
                 } else if (Objects.equals(result.getImageUrl(), "500")) {
                     progressDialog.dismiss();
 //                    mainLayout.setVisibility(View.VISIBLE);
 //                    arrangementLoader.setVisibility(View.GONE);
-//                    showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name);
-//                    generateProcess(unit_id, unit_name);
+                    showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name, holder, progressDialog);
+                    generateProcess(unit_id, unit_name, holder, progressDialog);
                 } else {
 //                    progressDialog.dismiss();
 //                    mainLayout.setVisibility(View.VISIBLE);
@@ -361,6 +387,28 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
         // Return the color as an int
         return Color.argb(alpha, red, green, blue);
+    }
+
+    private void modifyUnit(String unitId, String width, String height, String depth, String maxWeight) {
+//        skeletonLoader.startShimmer();
+//        skeletonLoader.setVisibility(View.VISIBLE);
+//        recyclerViewUnits.setVisibility(View.GONE);
+
+        Utils.modifyUnit(unitId, width, height, depth, maxWeight, (Activity) context, new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if(result) {
+                    Toast.makeText((Activity) context, "Modified Successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                swipeRefreshLayout.setRefreshing(false);
+//                skeletonLoader.setVisibility(View.GONE);
+                Toast.makeText((Activity) context, "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

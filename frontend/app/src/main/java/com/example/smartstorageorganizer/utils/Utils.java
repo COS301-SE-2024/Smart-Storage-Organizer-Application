@@ -272,7 +272,6 @@ public class Utils
     }
 
     public static void filterBySubCategory(int parentCategory, int subcategory, int howMany, int pageNumber, String organizationID, Activity activity, OperationCallback<List<ItemModel>> callback) {
-//        String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\" }";
         String json = "{\"parentcategory\":\"" + parentCategory + "\", \"subcategory\":\"" + subcategory + "\", \"limit\":\""+Integer.toString(howMany)+"\", \"offset\":\""+Integer.toString(pageNumber)+"\", \"organizationid\":\"" + Integer.parseInt(organizationID) +"\" }";
 
         String message = "View Request Method";
@@ -357,7 +356,6 @@ public class Utils
     public static void deleteCategory(int id, String email, String username, Activity activity, OperationCallback<Boolean> callback)
     {
         String json = "{\"useremail\":\""+email+"\", \"id\":\""+Integer.toString(id)+"\", \"username\" :\""+username+"\"}";
-//        Log.d("Delete Item Payload Cc", "JSON Payload: " + json);  // Log the JSON payload
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -2719,6 +2717,51 @@ public class Utils
 
                 }
             }
+
+    public static void modifyUnit(String unitId, String width, String height, String depth, String maxWeight, Activity activity, OperationCallback<Boolean> callback)
+    {
+        String json = "{\"unitid\":\""+Integer.parseInt(unitId)+"\", \"width\":\""+width+"\", \"height\":\""+height+"\", \"depth\":\""+depth+"\", \"maxweight\":\""+maxWeight+"\"}";
+
+        MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        OkHttpClient client = new OkHttpClient();
+        String API_URL = BuildConfig.ModifyUnitDimension;
+        RequestBody body = RequestBody.create(json, JSON);
+        TokenManager.getToken().thenAccept(results->{
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", results)
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Log.e(message, "POST request failed", e);
+                        callback.onFailure(e.getMessage());
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
+                        activity.runOnUiThread(() -> {
+                            Log.i(message, "POST request succeeded: " + responseData);
+                            callback.onSuccess(true);
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> {
+                            Log.e(message, "POST request failed: " + response.code());
+                            callback.onFailure("Response code" + response.code());
+                        });
+                    }
+                }
+            });
+        }).exceptionally(ex -> {
+//            Log.e("TokenError", "Failed to get user token", ex);
+            return null;
         });
     }
 }

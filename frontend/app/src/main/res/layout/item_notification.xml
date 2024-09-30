@@ -1,71 +1,142 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notificationLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    android:layout_height="132dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/background"
+    android:padding="16dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
-        <!-- Title of the Notification -->
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
+        <!-- Icon on the left -->
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/notification_bell"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Lottie animation for unread notification at the top-right corner -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/unread"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:lottie_rawRes="@raw/unread"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="0dp" />
+
+        <!-- Title and date in a horizontal LinearLayout -->
+        <LinearLayout
+            android:id="@+id/titleLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="normal"
-            android:textColor="@color/black" />
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Message of the Notification -->
+            <!-- Title TextView -->
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondary"
+                android:text="Reminder!"
+                android:textStyle="bold"
+                android:layout_marginEnd="32dp"
+                android:textSize="16dp"
+                android:layout_weight="1" /> <!-- Weight to take up available space -->
+
+            <!-- Date TextView next to title, aligned to the end -->
+            <!-- Positioned below the Lottie animation -->
+        </LinearLayout>
+
+        <!-- Message TextView below title and date -->
         <TextView
             android:id="@+id/textView_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout"
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:text="Doctor appointment today at 6:30pm, need to pick up files on the way."
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/button_mark_as_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:text="Mark as read"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_message" />
+        <TextView
+            android:id="@+id/button_mark_as_unread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mark as unread"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_message" />
 
-        <!-- Date of the Notification -->
         <TextView
             android:id="@+id/textView_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Date"
             android:textSize="14sp"
-            android:textColor="@color/gray"
-            android:layout_marginTop="4dp" />
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_message" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Read/Unread buttons -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_marginTop="8dp">-->
 
-            <Button
-                android:id="@+id/button_mark_as_read"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark as Read"
-                android:textSize="14sp"
-                android:padding="8dp"
-                android:layout_marginEnd="8dp"
-                android:visibility="gone" /> <!-- Initially hidden -->
+<!--        <Button-->
+<!--            android:id="@+id/button_mark_as_read"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Mark as Read"-->
+<!--            android:textSize="14sp"-->
+<!--            android:padding="8dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:visibility="gone" /> &lt;!&ndash; Initially hidden &ndash;&gt;-->
 
-            <Button
-                android:id="@+id/button_mark_as_unread"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark as Unread"
-                android:textSize="14sp"
-                android:padding="8dp"
-                android:layout_marginEnd="8dp"
-                android:visibility="gone" /> <!-- Initially hidden -->
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+<!--        <Button-->
+<!--            android:id="@+id/button_mark_as_unread"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Mark as Unread"-->
+<!--            android:textSize="14sp"-->
+<!--            android:padding="8dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:visibility="gone" /> &lt;!&ndash; Initially hidden &ndash;&gt;-->
+<!--    </LinearLayout>-->
+</LinearLayout>
