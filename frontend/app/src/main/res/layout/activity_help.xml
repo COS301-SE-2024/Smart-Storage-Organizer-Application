@@ -135,5 +135,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To add the colour group, you can click on the 'Color Group' button where you will be then have the access to create a color code group." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add an item?"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/help_item_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To add an item, you can click on the 'Create Item' button where you can access the Add item page and then you will be able to add an item." />
     </LinearLayout>
 </ScrollView>
