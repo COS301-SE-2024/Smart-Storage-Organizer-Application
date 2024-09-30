@@ -1,14 +1,13 @@
 package com.example.smartstorageorganizer;
 
-import android.os.Bundle;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.SpannableString;
-import android.text.style.ClickableSpan;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Spanned;
-import android.widget.TextView;
-import android.view.View;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.View;
+import android.widget.TextView;
 
 public class HelpActivity extends BaseActivity {
 
@@ -24,10 +23,12 @@ public class HelpActivity extends BaseActivity {
         TextView help1 = findViewById(R.id.help_reset_password_text_view);
         TextView help2 = findViewById(R.id.help_add_category_text_view);
         TextView help3 = findViewById(R.id.help_edit_profile_text_view);
+        TextView help4 = findViewById(R.id.help_unit_view);
 
         makeLink(help1, "Forgot Password", new Intent(this, ResetPasswordActivity.class));
         makeLink(help2, "Homepage", new Intent(this, HomeActivity.class));
         makeLink(help3, "EDIT PROFILE", new Intent(this, ProfileManagementActivity.class));
+        makeLink(help4, "Unit", new Intent(this, UnitActivity.class));
     }
 
     private void makeLink(TextView textView, String linkText, Intent intent) {
