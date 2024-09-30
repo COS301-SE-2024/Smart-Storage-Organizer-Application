@@ -125,5 +125,3 @@ def lambda_handler(event, context):
         'body': json.dumps(finalList)
     }
 
-event={'body': {'organizationid': 1, 'parentcategory': 9}}
-print(lambda_handler(event, None))
