@@ -1,6 +1,7 @@
 package com.example.smartstorageorganizer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import java.util.List;
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder> {
     private List<NotificationModel> notificationsList;
     private Context context;
-
+    private MyAmplifyApp app;
 
     private OnItemClickListener onItemClickListener;
 
@@ -35,6 +36,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         this.context = context;
         this.notificationsList = notificationsList;
         this.onItemClickListener = listener;
+        app = (MyAmplifyApp) context.getApplicationContext();
     }
 
     // ViewHolder class
@@ -94,12 +96,22 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         // Mark as Read button
         holder.markAsReadButton.setOnClickListener(v -> {
             notification.setRead(true);
+            SharedPreferences sharedPreferences = context.getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String key =  app.getEmail() + "_" + notification.getDate(); // Use username + notification ID as key
+            editor.putBoolean(key, true); // Mark as read for the specific user
+            editor.apply();
             notifyItemChanged(position); // Update the current item
         });
 
         // Mark as Unread button
         holder.markAsUnreadButton.setOnClickListener(v -> {
             notification.setRead(false);
+            SharedPreferences sharedPreferences = context.getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String key =  app.getEmail() + "_" + notification.getDate(); // Use username + notification ID as key
+            editor.putBoolean(key, false); // Mark as read for the specific user
+            editor.apply();
             notifyItemChanged(position); // Update the current item
         });
 
@@ -107,11 +119,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 notification.setRead(true);
-                // Mark the message as read when clicked
-//                notification.setRead(true);
-//                notifyItemChanged(position); // Update UI to reflect the change
-                // Pass NotificationModel object to the click listener
-//                onItemClickListener.onItemClick(notification);
             }
         });
     }

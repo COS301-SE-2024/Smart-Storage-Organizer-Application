@@ -52,6 +52,7 @@
                 android:textColor="@color/colorSecondary"
                 android:text="Reminder!"
                 android:textStyle="bold"
+                android:layout_marginEnd="32dp"
                 android:textSize="16dp"
                 android:layout_weight="1" /> <!-- Weight to take up available space -->
 
