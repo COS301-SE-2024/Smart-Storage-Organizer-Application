@@ -1591,8 +1591,10 @@ public class Utils
     public static void fetchItemsUnderUnit(String unitName, String organizationId, Activity activity, OperationCallback<List<ItemModel>> callback)
     {
         String json = "{"
+                + "\"body\": {"
                 + "\"unit_name\": \"" + unitName + "\","
                 + "\"organization_id\": \"" + Integer.parseInt(organizationId) + "\""
+                + "}"
                 + "}";
 
 

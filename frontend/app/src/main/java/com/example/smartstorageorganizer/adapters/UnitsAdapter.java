@@ -1,10 +1,13 @@
 package com.example.smartstorageorganizer.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.Gravity;
@@ -15,9 +18,12 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +39,14 @@ import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.UnitActivity;
 import com.example.smartstorageorganizer.ViewUnitItemsActivity;
 import com.example.smartstorageorganizer.model.ArrangementModel;
+import com.example.smartstorageorganizer.model.BinItemModel;
 import com.example.smartstorageorganizer.model.unitModel;
 import com.example.smartstorageorganizer.utils.OperationCallback;
 import com.example.smartstorageorganizer.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
+import java.util.Objects;
 
 import kotlin.Unit;
 
@@ -68,8 +76,8 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         holder.categories.setText(String.join(", ", unit.getCategories()));
 
         boolean isExpanded = unit.isExpanded();
-        holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+//        holder.capacity.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+//        holder.capacityUsed.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.categories.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.viewItemsButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.modifyText.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -97,7 +105,13 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
 
         holder.modifyText.setOnClickListener(v -> showBottomDialog(unit.getUnitName(), unit.getCapacity()));
         holder.viewText.setOnClickListener(v -> {
-            generateProcess(unit.getId(), unit.getUnitName(), holder);
+            ProgressDialog progressDialog;
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Generating 3D Arrangement...");
+            progressDialog.setCancelable(false);
+
+            progressDialog.show();
+            generateProcess(unit.getId(), unit.getUnitName(), holder, progressDialog);
         });
     }
 
@@ -125,23 +139,23 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         }
     }
 
-    private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder) {
-        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
-            @Override
-            public void onSuccess(ArrangementModel result) {
-                Toast.makeText(context, result.getImageUrl(), Toast.LENGTH_LONG).show();
-                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
-                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
-                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
-                context.startActivity(sceneViewerIntent);
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(context, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//    private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder) {
+//        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
+//            @Override
+//            public void onSuccess(ArrangementModel result) {
+//                Toast.makeText(context, result.getImageUrl(), Toast.LENGTH_LONG).show();
+//                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+//                sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file="+result.getImageUrl()));
+//                sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+//                context.startActivity(sceneViewerIntent);
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                Toast.makeText(context, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
     private void showBottomDialog(String name, int unitCapacity) {
 //        unitModel unit = unitList.get(position);
@@ -211,6 +225,113 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
+    }
+
+    private void generateProcess(String unit_id, String unit_name, UnitViewHolder holder, ProgressDialog progressDialog) {
+        Utils.generateProcess(unit_id, unit_name, (Activity) context, new OperationCallback<ArrangementModel>() {
+            @Override
+            public void onSuccess(ArrangementModel result) {
+                if (Objects.equals(result.getImageUrl(), "400")) {
+                    progressDialog.dismiss();
+//                    mainLayout.setVisibility(View.VISIBLE);
+//                    arrangementLoader.setVisibility(View.GONE);
+//                    showArrangementDialog("", unit_id, unit_name);
+                } else if (Objects.equals(result.getImageUrl(), "500")) {
+                    progressDialog.dismiss();
+//                    mainLayout.setVisibility(View.VISIBLE);
+//                    arrangementLoader.setVisibility(View.GONE);
+//                    showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name);
+//                    generateProcess(unit_id, unit_name);
+                } else {
+//                    progressDialog.dismiss();
+//                    mainLayout.setVisibility(View.VISIBLE);
+//                    arrangementLoader.setVisibility(View.GONE);
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+
+                    LayoutInflater inflater = LayoutInflater.from(context);
+                    View dialogView = inflater.inflate(R.layout.dialog_items_list, null);
+                    dialogBuilder.setView(dialogView);
+
+                    TableLayout tableLayout = dialogView.findViewById(R.id.items_table);
+
+                    TableRow headerRow = new TableRow(context);
+                    TextView headerName = new TextView(context);
+                    TextView headerColor = new TextView(context);
+
+                    headerName.setText("Name");
+                    headerName.setPadding(8, 8, 8, 8);
+                    headerName.setTypeface(null, Typeface.BOLD);
+                    headerColor.setText("Color");
+                    headerColor.setPadding(8, 8, 8, 8);
+                    headerColor.setTypeface(null, Typeface.BOLD);
+
+                    headerRow.addView(headerName);
+                    headerRow.addView(headerColor);
+
+                    tableLayout.addView(headerRow);
+
+                    List<BinItemModel> items = result.getItems();
+
+                    for (BinItemModel item : items) {
+                        TableRow row = new TableRow(context);
+
+                        TextView nameView = new TextView(context);
+                        nameView.setText(item.getName());
+                        nameView.setPadding(8, 8, 8, 8);
+
+                        View colorView = new View(context);
+                        colorView.setBackgroundColor(parseColor(item.getColor()));
+
+                        TableRow.LayoutParams params = new TableRow.LayoutParams(50, 50);
+                        params.setMargins(8, 8, 8, 8);
+                        colorView.setLayoutParams(params);
+
+                        row.addView(nameView);
+                        row.addView(colorView);
+
+                        tableLayout.addView(row);
+                    }
+
+                    Button view3DButton = dialogView.findViewById(R.id.view_3d_button);
+                    view3DButton.setOnClickListener(v -> {
+                        Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                        sceneViewerIntent.setData(Uri.parse("https://arvr.google.com/scene-viewer/1.0?file=" + result.getImageUrl()));
+                        sceneViewerIntent.setPackage("com.google.android.googlequicksearchbox");
+                        context.startActivity(sceneViewerIntent);
+                    });
+
+                    // Show the dialog
+                    AlertDialog dialog = dialogBuilder.create();
+                    dialog.show();
+                    progressDialog.dismiss();
+                }
+
+            }
+
+
+
+            @Override
+            public void onFailure(String error) {
+                if(Objects.equals(error.toLowerCase(), "timeout")){
+                    generateProcess(unit_id, unit_name, holder, progressDialog);
+                }
+                Toast.makeText(context, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public int parseColor(String colorString) {
+        // Remove the square brackets and split the string by commas
+        String[] rgbValues = colorString.replaceAll("[\\[\\]]", "").split(",");
+
+        // Parse the RGB values and alpha channel
+        int red = Integer.parseInt(rgbValues[0].trim());
+        int green = Integer.parseInt(rgbValues[1].trim());
+        int blue = Integer.parseInt(rgbValues[2].trim());
+        int alpha = Integer.parseInt(rgbValues[3].trim());
+
+        // Return the color as an int
+        return Color.argb(alpha, red, green, blue);
     }
 
 }

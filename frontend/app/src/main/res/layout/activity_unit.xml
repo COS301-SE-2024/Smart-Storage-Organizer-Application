@@ -186,7 +186,7 @@
                             android:id="@+id/inputWeight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Unit Weight(cm)"
+                            android:hint="Unit Weight(g)"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
 

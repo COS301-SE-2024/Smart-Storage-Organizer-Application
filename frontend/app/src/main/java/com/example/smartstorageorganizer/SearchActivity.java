@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -250,6 +251,11 @@ public class SearchActivity extends BaseActivity {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     e.printStackTrace();
+                    if(Objects.equals(e.getMessage(), "timeout")){
+                        SearchForItem(target, parentcategoryid, subcategoryid);
+                    }
+                    runOnUiThread(() -> Log.e("Search Results Body Array", "here one: "+e.getMessage()));
+
                     future.completeExceptionally(e);
                 }
 
@@ -295,6 +301,7 @@ public class SearchActivity extends BaseActivity {
                             });
 
                         }catch (JSONException e) {
+                            runOnUiThread(() -> Log.e("Search Results Body Array", "here two: "+e.getMessage()));
                             if(searchResults.isEmpty()){
                                 resultsNotFound.setVisibility(View.VISIBLE);
                             }

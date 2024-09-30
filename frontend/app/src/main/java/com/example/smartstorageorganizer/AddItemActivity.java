@@ -360,6 +360,9 @@ public class AddItemActivity extends BaseActivity  {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     e.printStackTrace();
+                    if(Objects.equals(e.getMessage(), "timeout")){
+                        SearchForItem(target, parentcategoryid, subcategoryid);
+                    }
                     future.completeExceptionally(e);
                 }
 
