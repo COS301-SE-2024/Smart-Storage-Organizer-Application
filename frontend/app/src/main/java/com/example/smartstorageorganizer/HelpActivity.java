@@ -30,6 +30,7 @@ public class HelpActivity extends BaseActivity {
         TextView help7 = findViewById(R.id.help_color_group_view);
         TextView help8 = findViewById(R.id.help_item_view);
         TextView help9 = findViewById(R.id.help_search_item);
+        TextView help10 = findViewById(R.id.help_item_room);
 
         makeLink(help1, "Scan", new Intent(this, CodeScannerActivity.class));
         makeLink(help2, "Homepage", new Intent(this, HomeActivity.class));
@@ -40,6 +41,7 @@ public class HelpActivity extends BaseActivity {
         makeLink(help7, "Color Group", new Intent(this, AddColorCodeActivity.class));
         makeLink(help8, "Create Item", new Intent(this, AddItemActivity.class));
         makeLink(help9, "Search Item", new Intent(this, SearchActivity.class));
+        makeLink(help10, "Room", new Intent(this, AddItemActivity.class));
     }
 
     private void makeLink(TextView textView, String linkText, Intent intent) {
