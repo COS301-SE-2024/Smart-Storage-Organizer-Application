@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I reset my password?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -76,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How secure is my data in the smart storage?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -88,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I add a Category to the smart storage?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -101,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I contact customer support?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -113,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I edit my profile?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -126,6 +131,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I add a unit?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -139,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I make reports?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -152,6 +159,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I see how the items are stored in the room"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -165,6 +173,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I add a Colour Code Group?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -178,6 +187,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I add an item?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -191,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I scan for an item?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -204,6 +215,7 @@
                 android:layout_height="wrap_content"
                 android:text="Q: How do I delete an item?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -216,6 +228,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Q: How do I modify an item?"
+                android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:padding="4dp" />
 
@@ -228,8 +241,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q: How do I search items?"
+                android:text="Q: How do I search for an item?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -241,8 +255,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q: How do I add an item?"
+                android:text="Q: How do I modify a category?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -254,8 +269,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q: How do I add an item?"
+                android:text="Q: How do I delete a Category?"
                 android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
                 android:padding="4dp" />
 
             <TextView
@@ -263,6 +279,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="A: To delete the category, you can click on the category and then click on the icon to delete the category." />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q: How do I add an item in to the 3D Room?"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:padding="4dp" />
+
+            <TextView
+                android:id="@+id/help_item_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A: To add an item to the 3D Room, you can click on the 'Room' which take you to the item page to add an item and all the dimensions need for the measurements of the item so that it can be added into the room. Once you have created all the item information then you need to add create a Unit or add to an existing Unit then you can click on the View 3D Room and then click on View Room." />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
