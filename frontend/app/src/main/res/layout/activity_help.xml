@@ -64,7 +64,7 @@
             android:id="@+id/help_reset_password_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: To reset your password, you can click on the 'Forgot Password' button which will take you to the forgot password page which will let you to reset your password by entering your email address then you will receive an email to reset you password." />
+            android:text="A: To reset your password, you will need to go to the forgot password page before you log into the application." />
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,6 +181,18 @@
             android:layout_height="wrap_content"
             android:text="A: To add an item, you can click on the 'Create Item' button where you can access the Add item page and then you will be able to add an item." />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I scan for an item?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_scan_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To scan a QR code or Barcode for an item, you can click on the 'Scan' button which will take you to the page that gives you the allowance to scan a QRCode or Barcode." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
