@@ -112,4 +112,26 @@ public class UnitsFragment extends Fragment {
             }
         });
     }
+
+    private void modifyUnit(String unitId, String width, String height, String depth, String maxWeight) {
+//        skeletonLoader.startShimmer();
+//        skeletonLoader.setVisibility(View.VISIBLE);
+//        recyclerViewUnits.setVisibility(View.GONE);
+
+        Utils.modifyUnit(unitId, width, height, depth, maxWeight, requireActivity(), new OperationCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                if(result) {
+                    Toast.makeText(requireActivity(), "Modified Successful", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+//                swipeRefreshLayout.setRefreshing(false);
+//                skeletonLoader.setVisibility(View.GONE);
+                Toast.makeText(requireActivity(), "Failed to fetch units: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

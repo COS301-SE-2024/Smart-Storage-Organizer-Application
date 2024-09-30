@@ -1,6 +1,8 @@
 package com.example.smartstorageorganizer.ui.notifications;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.core.Amplify;
+import com.example.smartstorageorganizer.MyAmplifyApp;
 import com.example.smartstorageorganizer.NotificationsActivity;
 import com.example.smartstorageorganizer.R;
 import com.example.smartstorageorganizer.ViewNotificationActivity;
@@ -41,11 +44,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class NotificationsFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private NotificationsAdapter adapter;
     private List<NotificationModel> notificationList;
     private Button sendNotificationButton; // Declare the button
+    private MyAmplifyApp app;
 
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
 
@@ -54,6 +57,8 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the fragment layout
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        app = (MyAmplifyApp) requireActivity().getApplicationContext();
 
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view_messages);
@@ -170,15 +175,15 @@ public class NotificationsFragment extends Fragment {
                         notificationList.clear();
 
                         // Parse the notification details
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Notifications", Context.MODE_PRIVATE);
+
                         for (int i = 0; i < notifications.length(); i++) {
                             JSONObject notification = notifications.getJSONObject(i);
 
-                            // Get the title and message, remove "en" and brackets
                             String title = cleanNotificationString(notification.optString("headings", "No Title"));
                             String message = cleanNotificationString(notification.optString("contents", "No Message"));
 //                            String date = notification.optString("delivery_time_of_day", "No Date");
 
-                            // Get the delivery time
                             long queuedAt = notification.optLong("queued_at", 0);   // For the Org Manager
                             long sendAfter = notification.optLong("send_after", 0); // For the Org Manager
                             long completedAt = notification.optLong("completed_at", 0);
@@ -186,15 +191,24 @@ public class NotificationsFragment extends Fragment {
                             Log.d("Notification JSON", notification.toString());
 
                             String date = "No Date";
+                            Boolean isRead;
+
                             if (completedAt != 0) {
                                 Date deliveryDate = new Date(completedAt * 1000L); // Convert seconds to milliseconds
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault());
                                 date = dateFormat.format(deliveryDate);
+                                String key = app.getEmail() + "_" + dateFormat.format(deliveryDate);
+                                isRead = sharedPreferences.getBoolean(key, false);
+                            } else {
+                                isRead = false;
                             }
 
-                            // Add to the notification list
-                            notificationList.add(new NotificationModel(title, message, date,false));
-                        }
+                            // Fetch the read status for the specific user
+
+
+                            // Add notification with read status
+                            notificationList.add(new NotificationModel(title, message, date, isRead));
+                    }
 
                         // Notify the adapter (make sure this is done on the UI thread)
                         requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
@@ -217,5 +231,8 @@ public class NotificationsFragment extends Fragment {
             }
 
         });
+
+
+
     }
 }
