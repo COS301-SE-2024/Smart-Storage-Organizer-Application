@@ -219,6 +219,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To modify an item, you can click on the item with the icon to edit the details of the item." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I search items?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_search_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To search an item, you can click on the 'Search Item' button where you can search for items as you will redirected to the search page." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
