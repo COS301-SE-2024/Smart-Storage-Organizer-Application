@@ -83,5 +83,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: If you want to edit your profile, you will have to click on Profile Management on the Settings Page, which will then give you an option to click on 'EDIT PROFILE' at the top of the screen. Once you click on the button you will see your details and you can then edit them and even change your Profile Picture."/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I add a unit?"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/help_unit_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To a unit, you can click on the 'Unit' button which will take you to the Unit page which will let you to create a Unit and set how much capacity you want it to have and the size of the unit." />
     </LinearLayout>
 </ScrollView>
