@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I reset my password?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/help_reset_password_text_view"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How secure is my data in the smart storage?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I add a Category to the smart storage?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/help_add_category_text_view"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I contact customer support?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I edit my profile?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/help_edit_profile_text_view"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I add a unit?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/help_unit_view"
@@ -102,12 +102,25 @@
             android:layout_height="wrap_content"
             android:text="Q: How do I make reports?"
             android:textStyle="bold"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
 
         <TextView
             android:id="@+id/help_generate_reports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To generate reports, you can click on the 'Generate Report' button which will take you to the Reports page, where you can decide whether you want to create item reports or reports based on the app. You can also download the reports as a pdf." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I see how the item are stored in the room"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/help_3D_Room_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To view the how items are stored, you can click on the 'View Room' button which will take you to the Unit page and you will then have to click on view 3D room to see how the items are stored." />
     </LinearLayout>
 </ScrollView>
