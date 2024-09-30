@@ -458,6 +458,7 @@ public class AddCategoryActivity extends BaseActivity  {
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                Utils.sendNotificationFromPhoneForUserRole("New Category Request", "A new category request has been made", "Manager", "Add");
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {

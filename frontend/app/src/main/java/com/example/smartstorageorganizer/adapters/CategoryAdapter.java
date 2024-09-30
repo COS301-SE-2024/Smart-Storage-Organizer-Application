@@ -340,6 +340,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                                 progressDialog.dismiss();
                                 showRequestDialog();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
+                                Utils.sendNotificationFromPhoneForUserRole("Modify Category", "A request to modify a category has been sent.", "Manager","Edit");
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {

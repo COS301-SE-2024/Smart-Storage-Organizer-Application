@@ -123,6 +123,7 @@ public class HomeActivity extends BaseActivity  {
 
         getDetails().thenAccept(getDetails->{
             Log.i("AuthDemo", "User is signed in");
+
         });
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -173,7 +174,9 @@ public class HomeActivity extends BaseActivity  {
         }
         else {
             if (Objects.equals(app.getUserRole(), "Manager")) {
+                app.setupOneSignalForUser(getIntent().getStringExtra("email"), app.getOrganizationID(), "Manager");
                 showAdminMenuItems(navigationView.getMenu());
+
             }
             else {
                 hideAdminMenuItems(navigationView.getMenu());
@@ -358,6 +361,7 @@ public class HomeActivity extends BaseActivity  {
             @Override
             public void onSuccess(String result) {
                 app.setUserRole(result);
+                app.setupOneSignalForUser(getIntent().getStringExtra("email"), app.getOrganizationID(), result);
 //                Toast.makeText(HomeActivity.this, "User Role: "+result, Toast.LENGTH_LONG).show();
                 if (Objects.equals(result, "Manager") || Objects.equals(result, "Admin")) {
                     showAdminMenuItems(navigationView.getMenu());
