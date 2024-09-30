@@ -193,6 +193,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A: To scan a QR code or Barcode for an item, you can click on the 'Scan' button which will take you to the page that gives you the allowance to scan a QRCode or Barcode." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Q: How do I delete an item?"
+            android:textStyle="bold"
+            android:padding="4dp" />
+
+        <TextView
+            android:id="@+id/help_delete_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A: To delete an item, you will need to click on the the dots on the item to get a menu then click on delete." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
