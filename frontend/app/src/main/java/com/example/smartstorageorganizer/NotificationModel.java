@@ -4,9 +4,9 @@ public class NotificationModel {
     private String title;
     private String message;
     private String date;
-    private boolean isRead;
+    private Boolean isRead;
 
-    public NotificationModel(String title, String message, String date, boolean isRead) {
+    public NotificationModel(String title, String message, String date, Boolean isRead) {
         this.title = title;
         this.message = message;
         this.date = date;
@@ -25,11 +25,11 @@ public class NotificationModel {
         return date;
     }
 
-    public boolean isRead() {
+    public Boolean isRead() {
         return isRead;
     }
 
-    public void setRead(boolean read) {
+    public void setRead(Boolean read) {
         isRead = read;
     }
 }

@@ -41,7 +41,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class NotificationsFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private NotificationsAdapter adapter;
     private List<NotificationModel> notificationList;

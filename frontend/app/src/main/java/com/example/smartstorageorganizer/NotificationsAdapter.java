@@ -2,15 +2,19 @@ package com.example.smartstorageorganizer;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.List;
 
@@ -38,8 +42,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         public TextView titleTextView;
         public TextView messageTextView;
         public TextView dateTextView;
-        public Button markAsReadButton;
-        public Button markAsUnreadButton;
+        public TextView markAsReadButton;
+        public TextView markAsUnreadButton;
+        public LinearLayout notificationLayout;
+        public LottieAnimationView lottieAnimationView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -48,6 +54,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             dateTextView = itemView.findViewById(R.id.textView_date);
             markAsReadButton = itemView.findViewById(R.id.button_mark_as_read);
             markAsUnreadButton = itemView.findViewById(R.id.button_mark_as_unread);
+            notificationLayout = itemView.findViewById(R.id.notificationLayout);
+            lottieAnimationView = itemView.findViewById(R.id.unread);
+
         }
     }
 
@@ -71,9 +80,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
         // Show the correct button based on the read status
         if (notification.isRead()) {
+            holder.lottieAnimationView.setVisibility(View.GONE);
+//            holder.notificationLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.background));
             holder.markAsReadButton.setVisibility(View.GONE);
             holder.markAsUnreadButton.setVisibility(View.VISIBLE);
         } else {
+            holder.lottieAnimationView.setVisibility(View.VISIBLE);
+//            holder.notificationLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.card));
             holder.markAsReadButton.setVisibility(View.VISIBLE);
             holder.markAsUnreadButton.setVisibility(View.GONE);
         }
@@ -93,12 +106,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         // Set up the click listener on the item view
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-
+                notification.setRead(true);
                 // Mark the message as read when clicked
 //                notification.setRead(true);
 //                notifyItemChanged(position); // Update UI to reflect the change
                 // Pass NotificationModel object to the click listener
-                onItemClickListener.onItemClick(notification);
+//                onItemClickListener.onItemClick(notification);
             }
         });
     }

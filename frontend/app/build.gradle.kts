@@ -125,7 +125,7 @@ android {
         buildConfigField("String", "GenerateQRCodeAsync", "\"${localProperties["GenerateQRCodeAsync"]}\"");
         buildConfigField("String", "GenerateBarCodeAsync", "\"${localProperties["GenerateBarCodeAsync"]}\"");
         buildConfigField("String", "ModifyItemDimension", "\"${localProperties["ModifyItemDimension"]}\"");
-
+        buildConfigField("String", "ModifyUnitDimension", "\"${localProperties["ModifyUnitDimension"]}\"");
     }
 
     buildTypes {
