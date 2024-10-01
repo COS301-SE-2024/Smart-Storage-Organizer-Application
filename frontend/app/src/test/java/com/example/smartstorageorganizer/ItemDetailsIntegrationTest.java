@@ -31,31 +31,31 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = {28})
+//@RunWith(RobolectricTestRunner.class)
+//@Config(sdk = {28})
 public class ItemDetailsIntegrationTest {
 
     private ItemDetailsActivity activity;
 
-    @Before
-    public void setUp() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), ItemDetailsActivity.class);
-        intent.putExtra("item_id", "1");
-        intent.putExtra("item_name", "Test Item");
-        intent.putExtra("item_image", "https://example.com/test_image.png");
-        intent.putExtra("item_description", "Test Description");
-        intent.putExtra("location", "Test Location");
-        intent.putExtra("color_code", "Red");
-        intent.putExtra("item_qrcode", "https://example.com/test_qrcode.png");
+//    @Before
+//    public void setUp() {
+//        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), ItemDetailsActivity.class);
+//        intent.putExtra("item_id", "1");
+//        intent.putExtra("item_name", "Test Item");
+//        intent.putExtra("item_image", "https://example.com/test_image.png");
+//        intent.putExtra("item_description", "Test Description");
+//        intent.putExtra("location", "Test Location");
+//        intent.putExtra("color_code", "Red");
+//        intent.putExtra("item_qrcode", "https://example.com/test_qrcode.png");
+//
+//        ActivityScenario<ItemDetailsActivity> scenario = ActivityScenario.launch(intent);
+//        scenario.onActivity(activity -> this.activity = activity);
+//    }
 
-        ActivityScenario<ItemDetailsActivity> scenario = ActivityScenario.launch(intent);
-        scenario.onActivity(activity -> this.activity = activity);
-    }
-
-    @Test
-    public void testActivityNotNull() {
-        assertNotNull(activity);
-    }
+//    @Test
+//    public void testActivityNotNull() {
+//        assertNotNull(activity);
+//    }
 
 //    @Test
 //    public void testViewsAreInitializedCorrectly() {

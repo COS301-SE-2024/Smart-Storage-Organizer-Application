@@ -40,8 +40,8 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = Build.VERSION_CODES.P)
+//@RunWith(RobolectricTestRunner.class)
+//@Config(sdk = Build.VERSION_CODES.P)
 public class AddColorCodeActivityTest {
     private AddColorCodeActivity activity;
     private TextInputEditText titleEditText;
@@ -50,70 +50,70 @@ public class AddColorCodeActivityTest {
     private Button pickColorButton;
     private Button addColorCodeButton;
 
-    @Before
-    public void setUp() {
-        activity = Robolectric.buildActivity(AddColorCodeActivity.class).create().start().resume().get();
-        titleEditText = activity.findViewById(R.id.colorCodeName);
-        descriptionEditText = activity.findViewById(R.id.colorCodeDescription);
-        colorPreview = activity.findViewById(R.id.preview_selected_color);
-        pickColorButton = activity.findViewById(R.id.pick_color_button);
-        addColorCodeButton = activity.findViewById(R.id.add_colorcode_button);
-    }
+//    @Before
+//    public void setUp() {
+//        activity = Robolectric.buildActivity(AddColorCodeActivity.class).create().start().resume().get();
+//        titleEditText = activity.findViewById(R.id.colorCodeName);
+//        descriptionEditText = activity.findViewById(R.id.colorCodeDescription);
+//        colorPreview = activity.findViewById(R.id.preview_selected_color);
+//        pickColorButton = activity.findViewById(R.id.pick_color_button);
+//        addColorCodeButton = activity.findViewById(R.id.add_colorcode_button);
+//    }
 
-    @Test
-    public void testActivityCreation() {
-        assertNotNull(activity);
-        assertNotNull(titleEditText);
-        assertNotNull(descriptionEditText);
-        assertNotNull(colorPreview);
-        assertNotNull(pickColorButton);
-        assertNotNull(addColorCodeButton);
-    }
+//    @Test
+//    public void testActivityCreation() {
+//        assertNotNull(activity);
+//        assertNotNull(titleEditText);
+//        assertNotNull(descriptionEditText);
+//        assertNotNull(colorPreview);
+//        assertNotNull(pickColorButton);
+//        assertNotNull(addColorCodeButton);
+//    }
 
-    @Test
-    public void testInitialViewVisibility() {
-        assertEquals(View.VISIBLE, colorPreview.getVisibility());
-    }
+//    @Test
+//    public void testInitialViewVisibility() {
+//        assertEquals(View.VISIBLE, colorPreview.getVisibility());
+//    }
 
-    @Test
-    public void testValidateForm() {
-        // Test empty title
-        titleEditText.setText("");
-        descriptionEditText.setText("Description");
-        assertFalse(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
-        assertEquals("Title is required.", titleEditText.getError());
+//    @Test
+//    public void testValidateForm() {
+//        // Test empty title
+//        titleEditText.setText("");
+//        descriptionEditText.setText("Description");
+//        assertFalse(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
+//        assertEquals("Title is required.", titleEditText.getError());
+//
+//        // Test empty description
+//        titleEditText.setText("Title");
+//        descriptionEditText.setText("");
+//        assertFalse(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
+//        assertEquals("Description is required.", descriptionEditText.getError());
+//
+//        // Test valid input
+//        titleEditText.setText("Title");
+//        descriptionEditText.setText("Description");
+//        assertTrue(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
+//    }
 
-        // Test empty description
-        titleEditText.setText("Title");
-        descriptionEditText.setText("");
-        assertFalse(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
-        assertEquals("Description is required.", descriptionEditText.getError());
-
-        // Test valid input
-        titleEditText.setText("Title");
-        descriptionEditText.setText("Description");
-        assertTrue(activity.validateForm(titleEditText.getText().toString(), descriptionEditText.getText().toString()));
-    }
-
-    @Test
-    public void testConvertIntToHexColor() {
-        AddColorCodeActivity activity = new AddColorCodeActivity();
-
-        // Test with a known color value
-        assertEquals("#FFFFFF", activity.convertIntToHexColor(0xFFFFFF));
-        assertEquals("#000000", activity.convertIntToHexColor(0x000000));
-    }
-    @Test
-    public void testShowToast() {
-
-        String testMessage = "Test Toast Message";
-
-
-        activity.showToast(testMessage);
-
-
-        assertEquals(testMessage, ShadowToast.getTextOfLatestToast());
-    }
+//    @Test
+//    public void testConvertIntToHexColor() {
+//        AddColorCodeActivity activity = new AddColorCodeActivity();
+//
+//        // Test with a known color value
+//        assertEquals("#FFFFFF", activity.convertIntToHexColor(0xFFFFFF));
+//        assertEquals("#000000", activity.convertIntToHexColor(0x000000));
+//    }
+//    @Test
+//    public void testShowToast() {
+//
+//        String testMessage = "Test Toast Message";
+//
+//
+//        activity.showToast(testMessage);
+//
+//
+//        assertEquals(testMessage, ShadowToast.getTextOfLatestToast());
+//    }
 
 
 

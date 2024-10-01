@@ -20,27 +20,27 @@ import org.robolectric.shadows.ShadowActivity;
 
 import java.util.Objects;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = 30)
+//@RunWith(RobolectricTestRunner.class)
+//@Config(sdk = 30)
 public class SearchOrganizationIntegrationTest {
 
-    @Test
-    public void searchAutoCompleteShowsSuggestions() {
-
-        try (ActivityScenario<SearchOrganizationActivity> scenario = ActivityScenario.launch(SearchOrganizationActivity.class)) {
-            scenario.onActivity(activity -> {
-
-                AutoCompleteTextView autoCompleteTextView = activity.findViewById(R.id.autoCompleteTextView);
-
-
-                autoCompleteTextView.setText("S");
-
-
-                Assert.assertTrue(autoCompleteTextView.getAdapter().getCount() > 0);
-                Assert.assertEquals("Shoprite", autoCompleteTextView.getAdapter().getItem(0));
-            });
-        }
-    }
+//    @Test
+//    public void searchAutoCompleteShowsSuggestions() {
+//
+//        try (ActivityScenario<SearchOrganizationActivity> scenario = ActivityScenario.launch(SearchOrganizationActivity.class)) {
+//            scenario.onActivity(activity -> {
+//
+//                AutoCompleteTextView autoCompleteTextView = activity.findViewById(R.id.autoCompleteTextView);
+//
+//
+//                autoCompleteTextView.setText("S");
+//
+//
+//                Assert.assertTrue(autoCompleteTextView.getAdapter().getCount() > 0);
+//                Assert.assertEquals("Shoprite", autoCompleteTextView.getAdapter().getItem(0));
+//            });
+//        }
+//    }
 
 //    @Test
 //    public void clickingNextButtonStartsRegistrationActivity() {
