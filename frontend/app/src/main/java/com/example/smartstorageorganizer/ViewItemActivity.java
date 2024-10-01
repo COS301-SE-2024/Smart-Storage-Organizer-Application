@@ -358,7 +358,7 @@ public class ViewItemActivity extends BaseActivity {
     }
 
     private void setupSortByListener(){
-        String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        String[] dropdownItems = {"Sort by", "A to Z", "Z to A"};
         currentSelectedOption = "Sort by";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -803,7 +803,7 @@ public class ViewItemActivity extends BaseActivity {
                                 }
                                 progressDialog.dismiss();
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
-                                Utils.sendNotificationFromPhoneForUserRole("Delete Item request has been made by "+app.getName()+" "+app.getSurname(), "Item Deletion Request ", "Manager","Delete", app.getOrganizationID());
+                                Utils.sendNotificationFromPhoneForUserRole("Delete Item request for item with name : "+itemName+" has been made by user"+app.getName()+" "+app.getSurname(), "Item Deletion Request ", "Manager","Delete", app.getOrganizationID());
                                 future.complete(true);
                             })
                             .addOnFailureListener(e -> {

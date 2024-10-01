@@ -249,10 +249,12 @@ public class HomeActivity extends BaseActivity  {
     private void hideAdminMenuItems(Menu menu) {
         menu.findItem(R.id.nav_requests).setVisible(false);
         menu.findItem(R.id.nav_users).setVisible(false);
+        menu.findItem(R.id.nav_send_notification).setVisible(false);
     }
     private void showAdminMenuItems(Menu menu) {
         menu.findItem(R.id.nav_requests).setVisible(true);
         menu.findItem(R.id.nav_users).setVisible(true);
+        menu.findItem(R.id.nav_send_notification).setVisible(true);
     }
 
     public CompletableFuture<Boolean> getDetails() {

@@ -112,7 +112,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <RelativeLayout
-            android:id="@+id/nextButton"
+            android:id="@+id/sendButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_below="@id/inputPassword"

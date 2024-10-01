@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -38,7 +37,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStorageOrganizer"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SendNotificationActivity"
+            android:exported="false" />
         <activity
             android:name=".ViewNotificationActivity"
             android:exported="false"
@@ -206,7 +207,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".AppTerminationService"
             android:exported="false"

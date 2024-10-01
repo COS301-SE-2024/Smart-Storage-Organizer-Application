@@ -394,7 +394,7 @@ public class UnitActivity extends BaseActivity {
                     db.collection("unit_requests").document(documentId)
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
-                                Utils.sendNotificationFromPhoneForUserRole("New Unit Request has been made by "+app.getName()+" "+app.getSurname(), "New unit request  " + app.getEmail(), "Manager", "Add",  app.getOrganizationID());
+                                Utils.sendNotificationFromPhoneForUserRole("Create New Unit Request with name :"+unitName +" has been made by user"+app.getName()+" "+app.getSurname(), "New unit request  " + app.getEmail(), "Manager", "Add",  app.getOrganizationID());
                                 Log.i("Firestore", "Request stored successfully with documentId: " + documentId);
                                 future.complete(true);
                             })

@@ -41,6 +41,11 @@
             android:title="Settings"
             android:textColor="@color/colorPrimary"/>
         <item
+            android:id="@+id/nav_send_notification"
+            android:icon="@drawable/notifications_icon"
+            android:title="Send Notifications"
+            android:textColor="@color/colorPrimary"/>
+        <item
             android:id="@+id/nav_code_scanner"
             android:icon="@drawable/scan_icon"
             android:title="Scan QR Code"
