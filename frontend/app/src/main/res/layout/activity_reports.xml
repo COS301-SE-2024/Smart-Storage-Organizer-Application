@@ -272,7 +272,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
-                                    android:text="Generate Location-Based Reports"
+                                    android:text="Generate App Reports"
                                     android:textSize="14sp"
                                     android:textStyle="bold"
                                     android:textColor="@color/white"

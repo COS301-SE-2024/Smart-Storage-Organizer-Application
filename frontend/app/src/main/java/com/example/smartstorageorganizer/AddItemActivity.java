@@ -169,7 +169,7 @@ public class AddItemActivity extends BaseActivity  {
 
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
-        findViewById(R.id.nextButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get values from input fields

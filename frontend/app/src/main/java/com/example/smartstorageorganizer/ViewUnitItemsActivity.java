@@ -630,7 +630,7 @@ public class ViewUnitItemsActivity extends BaseActivity {
                 if (Objects.equals(error.toLowerCase(), "timeout")) {
                     generateProcess(unit_id, unit_name);
                 }
-                Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
+//                Toast.makeText(ViewUnitItemsActivity.this, "Failed to generate Image: " + error, Toast.LENGTH_LONG).show();
             }
         });
     }
