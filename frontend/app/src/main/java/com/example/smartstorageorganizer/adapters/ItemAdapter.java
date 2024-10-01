@@ -315,7 +315,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                             .update("documentId", documentId) // Store documentId within the document itself
                             .addOnSuccessListener(aVoid -> {
                                 ((android.app.Activity) context).runOnUiThread(() -> {
-                                    Utils.sendNotificationFromPhoneForUserRole("Request to delete item has been made by"+app.getName()+" "+app.getSurname(), "You have a new request to delete an item", "Manager","Delete",app.getOrganizationID());
+                                    Utils.sendNotificationFromPhoneForUserRole("Delete Request for item with name :"+itemName +" by user " +app.getName()+" "+app.getSurname(), "Delete Item Request", "Manager","Delete",app.getOrganizationID());
 
 //                                    itemModelList.remove(position);
 //                                    notifyItemRemoved(position);
