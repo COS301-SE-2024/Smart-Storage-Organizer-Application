@@ -76,11 +76,14 @@ Follow the link to instruction to download and install [Java 17](https://www.ora
 - [Software System Requirements version 3.0](https://www.overleaf.com/read/cqzjccyhtwpd#096a0b/)
 - [Software System Requirements version 4.0](https://www.overleaf.com/read/kkywkfykxzpw#d237ae/) 
 - [Coding Standards](https://drive.google.com/file/d/1EAAzcRx2sW9YHFUU5M2FNNSPxxFSiY5M/view?usp=sharing/)
+- [Coding Standards 2.0](https://drive.google.com/file/d/14r-hwuJjXnVS9Ix9AnPxMW8d4zD1GUGQ/view?usp=sharing/)
 - [User Manual](https://drive.google.com/file/d/1rWRu85DgWk7ZRq3zpKyyNtpLU51UL3vP/view?usp=sharing/)
 - [User Manual 2.0](https://drive.google.com/file/d/1R63Bir_I_1ecYIsaaXmQzgY_suTjRW-w/view?usp=sharing/)
+- [User Manual 3.0](https://drive.google.com/file/d/1Q-wyJTNNTTIZN7A-AFYLbxOqj1zUOJ9K/view?usp=sharing/) 
 - [Technical Installation Manual](https://drive.google.com/file/d/1woRUDwXTugFNgcr-kGCzLs28_rjkvmrC/view?usp=sharing/).
 - [Deployment Model](https://www.overleaf.com/read/byjtkdzdpnqn#9add2b/)
-- [Test Policy](https://www.overleaf.com/read/hrcsctbgxkjr#837ada/) 
+- [Test Policy](https://www.overleaf.com/read/hrcsctbgxkjr#837ada/)
+- [App installation](https://drive.google.com/file/d/1rNBDVg4BlMJ7GrQ8uzo0QVxSzYcLPNWQ/view?usp=sharing/) 
 
 ## Video Presentation
  - [Video Demo version 1.0](https://drive.google.com/file/d/1w9az3xmsQlpUj-nXCbXK5JcLUwYoBVSx/view?usp=drive_link/)
