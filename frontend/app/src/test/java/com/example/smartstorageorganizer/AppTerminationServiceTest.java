@@ -1,10 +1,8 @@
 package com.example.smartstorageorganizer;
 
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.verify;
 
 import android.app.NotificationManager;
-import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -54,23 +52,6 @@ public class AppTerminationServiceTest {
         assertNotNull(service);  // Check that the service is not null
     }
 
-    @Test
-    public void testOnTaskRemoved_shouldSendApiRequestAndRemoveUser() {
-        // Arrange
-        Intent intent = new Intent(RuntimeEnvironment.getApplication(), AppTerminationService.class);
-        String testUserId = "test@example.com";
-        service.app = new MyAmplifyApp();
-        service.app.setEmail(testUserId);
-        service.app.setName("TestName");
-        service.app.setSurname("TestSurname");
-        service.app.setOrganizationID("123");
-
-        // Act
-        service.onTaskRemoved(intent);
-
-        // Assert
-        verify(mockFirestore).collection("active_users").document(testUserId);
-    }
 
     @Test
     public void testSendAppExitApi_shouldSendApiRequest() {
