@@ -130,7 +130,7 @@ public class UnitActivity extends BaseActivity {
                 unit = Objects.requireNonNull(unitName.getText()).toString();
 
                 String capacity;
-                capacity = unitCap.getText().toString();
+                capacity = "";
                 String width = inputWidth.getText().toString();
                 String height = inputHeight.getText().toString();
                 String depth = inputDepth.getText().toString();
@@ -233,7 +233,7 @@ public class UnitActivity extends BaseActivity {
 
     public CompletableFuture<Boolean> createUnit(String unitName, String capacity, String constraints, String width, String height, String depth, String maxweight) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + capacity + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\""+width+"\", \"height\":\""+height+"\", \"depth\":\""+depth+"\", \"maxweight\":\""+maxweight+"\", \"username\":\""+app.getEmail()+"\", \"organization_id\":\""+app.getOrganizationID()+"\", \"Unit_QR\":\""+"QR1"+"\"}";
+        String json = "{\"Unit_Name\":\"" + unitName + "\", \"Unit_Capacity\":\"" + "0" + "\", \"constraints\":\"" + constraints + "\",\"Unit_QR\":\"1\",\"unit_capacity_used\":\"0\", \"width\":\""+width+"\", \"height\":\""+height+"\", \"depth\":\""+depth+"\", \"maxweight\":\""+maxweight+"\", \"username\":\""+app.getEmail()+"\", \"organization_id\":\""+app.getOrganizationID()+"\", \"Unit_QR\":\""+"QR1"+"\"}";
         MediaType jsonObject = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         String apiUrl = BuildConfig.AddUnitEndpoint;
