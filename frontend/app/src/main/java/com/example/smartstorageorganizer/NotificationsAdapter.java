@@ -76,8 +76,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         NotificationModel notification = notificationsList.get(position);
 
         // Set data to the views
-        holder.titleTextView.setText(notification.getTitle());
-        holder.messageTextView.setText(notification.getMessage());
+        holder.titleTextView.setText(notification.getUserRole());
+        holder.messageTextView.setText(notification.getOrganizationId());
         holder.dateTextView.setText(notification.getDate());
 
         // Show the correct button based on the read status

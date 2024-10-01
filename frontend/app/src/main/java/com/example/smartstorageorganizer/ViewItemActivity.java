@@ -358,7 +358,7 @@ public class ViewItemActivity extends BaseActivity {
     }
 
     private void setupSortByListener(){
-        String[] dropdownItems = {"Sort by", "Newest to Oldest", "Oldest to Newest", "A to Z", "Z to A"};
+        String[] dropdownItems = {"Sort by", "A to Z", "Z to A"};
         currentSelectedOption = "Sort by";
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ViewItemActivity.this, android.R.layout.simple_spinner_item, dropdownItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

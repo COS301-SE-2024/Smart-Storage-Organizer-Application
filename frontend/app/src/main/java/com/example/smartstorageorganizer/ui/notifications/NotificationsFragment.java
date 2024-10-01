@@ -47,7 +47,6 @@ public class NotificationsFragment extends Fragment {
     private RecyclerView recyclerView;
     private NotificationsAdapter adapter;
     private List<NotificationModel> notificationList;
-    private Button sendNotificationButton; // Declare the button
     private MyAmplifyApp app;
 
     private static final String ONESIGNAL_APP_ID = "152f0f5c-d21d-4e43-89b1-5e02acc42abe";
@@ -87,13 +86,12 @@ public class NotificationsFragment extends Fragment {
         checkSessionState();
 
         // Initialize the send notification button
-        sendNotificationButton = view.findViewById(R.id.send_notification_button);
-        sendNotificationButton.setOnClickListener(v -> {
-            Toast.makeText(requireContext(), "Button Clicked!", Toast.LENGTH_SHORT).show();
-            // Start NotificationActivity
-            Intent intent = new Intent(requireContext(), NotificationsActivity.class);
-            startActivity(intent);
-        });
+//        sendNotificationButton.setOnClickListener(v -> {
+//            Toast.makeText(requireContext(), "Button Clicked!", Toast.LENGTH_SHORT).show();
+//            // Start NotificationActivity
+//            Intent intent = new Intent(requireContext(), NotificationsActivity.class);
+//            startActivity(intent);
+//        });
 
         // Load notifications (from OneSignal)
         loadNotifications(); // The method will fetch from OneSignal
@@ -105,7 +103,7 @@ public class NotificationsFragment extends Fragment {
             if (data != null && !data.isEmpty()) {
                 // Handle the incoming data
                 // Add a new notification with 'isRead' set to false (unread)
-                notificationList.add(new NotificationModel("New Notification", data, "Now", false));
+                notificationList.add(new NotificationModel("New Notification", data, "Now", false, "", ""));
                 adapter.notifyDataSetChanged(); // Refresh the RecyclerView to show new data
             }
         }
@@ -171,6 +169,13 @@ public class NotificationsFragment extends Fragment {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         JSONArray notifications = jsonObject.getJSONArray("notifications");
 
+//                        JSONArray filters = jsonObject.getJSONArray("filters");
+//
+                        requireActivity().runOnUiThread(() -> {
+                            Log.i("Notification Request", "notifications: "+notifications.toString());
+                            Log.i("Notification Request ", "jsonObject: "+jsonObject.toString());
+                        });
+
                         // Clear the existing list to avoid duplicates
                         notificationList.clear();
 
@@ -179,6 +184,22 @@ public class NotificationsFragment extends Fragment {
 
                         for (int i = 0; i < notifications.length(); i++) {
                             JSONObject notification = notifications.getJSONObject(i);
+
+                            JSONArray filters = notification.getJSONArray("filters");
+
+                            requireActivity().runOnUiThread(() -> {
+                                Log.i("Notification Request", "Filters: "+filters.toString());
+//                                Log.i("Notification Request ", "jsonObject: "+jsonObject.toString());
+                            });
+
+                            JSONObject filterObjectOne = filters.getJSONObject(0);
+                            JSONObject filterObjectTwo = filters.getJSONObject(1);
+
+                            String userRole = filterObjectOne.getString("value");
+                            String organizationId = filterObjectTwo.getString("value");
+
+
+
 
                             String title = cleanNotificationString(notification.optString("headings", "No Title"));
                             String message = cleanNotificationString(notification.optString("contents", "No Message"));
@@ -207,18 +228,22 @@ public class NotificationsFragment extends Fragment {
 
 
                             // Add notification with read status
-                            notificationList.add(new NotificationModel(title, message, date, isRead));
+                            notificationList.add(new NotificationModel(title, message, date, isRead, userRole, organizationId));
                     }
 
                         // Notify the adapter (make sure this is done on the UI thread)
                         requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
 
                     } catch (JSONException e) {
+                        requireActivity().runOnUiThread(() -> {
+                            Log.i("Notification Request", "notifications: "+e.toString());
+                        });
                         e.printStackTrace();
                     }
                 } else {
                     // Handle non-successful responses
                     requireActivity().runOnUiThread(() -> {
+                        Log.i("Notification Request", "notifications: "+response.message());
                         Toast.makeText(requireContext(), "Error: " + response.message(), Toast.LENGTH_SHORT).show();
                     });
                 }

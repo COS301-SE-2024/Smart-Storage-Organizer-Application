@@ -2717,6 +2717,7 @@ public class Utils
 
                 }
             }
+        });}
 
     public static void modifyUnit(String unitId, String width, String height, String depth, String maxWeight, Activity activity, OperationCallback<Boolean> callback)
     {

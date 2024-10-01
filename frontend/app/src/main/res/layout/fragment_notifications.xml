@@ -14,14 +14,4 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false" />
 
-        <Button
-            android:id="@+id/send_notification_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send Notification"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/colorPrimary"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:padding="12dp" />
 </LinearLayout>
