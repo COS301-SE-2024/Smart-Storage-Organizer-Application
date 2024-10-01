@@ -241,7 +241,7 @@ public class NotificationsFragment extends Fragment {
 
 
                             // Add notification with read status
-                            if(organizationId.equals(app.getOrganizationID())){
+                            if((organizationId.equals(app.getOrganizationID()) && userRole.equals(app.getUserRole()))|| (organizationId.equals(app.getOrganizationID()) && userRole.equals(""))){
                                 notificationList.add(new NotificationModel(title, message, date, isRead, userRole, organizationId));
                             }
                     }
