@@ -192,11 +192,24 @@ public class NotificationsFragment extends Fragment {
 //                                Log.i("Notification Request ", "jsonObject: "+jsonObject.toString());
                             });
 
-                            JSONObject filterObjectOne = filters.getJSONObject(0);
-                            JSONObject filterObjectTwo = filters.getJSONObject(1);
+                            JSONObject filterObjectOne;
+                            JSONObject filterObjectTwo;
+                            String userRole;
+                            String organizationId;
 
-                            String userRole = filterObjectOne.getString("value");
-                            String organizationId = filterObjectTwo.getString("value");
+                            if(filters.length() == 2){
+                                filterObjectOne = filters.getJSONObject(0);
+                                filterObjectTwo = filters.getJSONObject(1);
+
+                                userRole = filterObjectOne.getString("value");
+                                organizationId = filterObjectTwo.getString("value");
+                            }
+                            else {
+                                filterObjectTwo = filters.getJSONObject(0);
+
+                                userRole = "";
+                                organizationId = filterObjectTwo.getString("value");
+                            }
 
 
 

@@ -64,9 +64,9 @@
         tools:layout="@layout/activity_profile_management" />
     <activity
         android:id="@+id/nav_send_notification"
-        android:name="com.example.smartstorageorganizer.NotificationsActivity"
+        android:name="com.example.smartstorageorganizer.SendNotificationActivity"
         android:label="activity_notifications"
-        tools:layout="@layout/activity_notifications" />
+        tools:layout="@layout/activity_send_notification" />
     <!--    <activity-->
 <!--        android:id="@+id/nav_units"-->
 <!--        android:name="com.example.smartstorageorganizer.ViewUnitsActivity"-->
