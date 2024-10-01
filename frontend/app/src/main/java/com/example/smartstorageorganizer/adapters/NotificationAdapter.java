@@ -28,7 +28,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        holder.notificationTextView.setText((CharSequence) notifications.get(position));
+//        holder.notificationTextView.setText((CharSequence) notifications.get(position));
     }
 
     @Override
@@ -37,11 +37,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     static class NotificationViewHolder extends RecyclerView.ViewHolder {
-        TextView notificationTextView;
+//        TextView notificationTextView;
 
         NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            notificationTextView = itemView.findViewById(R.id.text_notifications);
+//            notificationTextView = itemView.findViewById(R.id.text_notifications);
         }
     }
 }

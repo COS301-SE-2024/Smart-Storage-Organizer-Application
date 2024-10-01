@@ -160,6 +160,7 @@ public class NotificationsFragment extends Fragment {
 
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
+                    notificationList.clear();
                     // Get the response body as a string
                     String jsonData = response.body().string();
                     Log.d("API Response", jsonData);
@@ -177,7 +178,6 @@ public class NotificationsFragment extends Fragment {
                         });
 
                         // Clear the existing list to avoid duplicates
-                        notificationList.clear();
 
                         // Parse the notification details
                         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("Notifications", Context.MODE_PRIVATE);
@@ -228,7 +228,9 @@ public class NotificationsFragment extends Fragment {
 
 
                             // Add notification with read status
-                            notificationList.add(new NotificationModel(title, message, date, isRead, userRole, organizationId));
+                            if(organizationId.equals(app.getOrganizationID())){
+                                notificationList.add(new NotificationModel(title, message, date, isRead, userRole, organizationId));
+                            }
                     }
 
                         // Notify the adapter (make sure this is done on the UI thread)
