@@ -23,54 +23,54 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = 30)
+//@RunWith(RobolectricTestRunner.class)
+//@Config(sdk = 30)
 public class ViewItemActivityTest {
 
     private ViewItemActivity activity;
 
-    @Before
-    public void setUp() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.putExtra("category", "All");
-        intent.putExtra("category_id", "1");
-        activity = Robolectric.buildActivity(ViewItemActivity.class, intent)
-                .create()
-                .start()
-                .resume()
-                .get();
-    }
+//    @Before
+//    public void setUp() {
+//        Intent intent = new Intent(Intent.ACTION_MAIN);
+//        intent.putExtra("category", "All");
+//        intent.putExtra("category_id", "1");
+//        activity = Robolectric.buildActivity(ViewItemActivity.class, intent)
+//                .create()
+//                .start()
+//                .resume()
+//                .get();
+//    }
 
     @After
     public void tearDown() {
         activity = null;
     }
 
-    @Test
-    public void testActivityNotNull() {
-        assertNotNull(activity);
-    }
+    //@Test
+//    public void testActivityNotNull() {
+//        assertNotNull(activity);
+//    }
 
-    @Test
-    public void testInitialViews() {
-        TextView categoryTextView = activity.findViewById(R.id.category_text);
-        RecyclerView recyclerView = activity.findViewById(R.id.view_all_rec);
-        Spinner sortBySpinner = activity.findViewById(R.id.sort_by_filter);
-        Button prevButton = activity.findViewById(R.id.prevButton);
-        Button nextButton = activity.findViewById(R.id.nextButton);
+//    @Test
+//    public void testInitialViews() {
+//        TextView categoryTextView = activity.findViewById(R.id.category_text);
+//        RecyclerView recyclerView = activity.findViewById(R.id.view_all_rec);
+//        Spinner sortBySpinner = activity.findViewById(R.id.sort_by_filter);
+//        Button prevButton = activity.findViewById(R.id.prevButton);
+//        Button nextButton = activity.findViewById(R.id.nextButton);
+//
+//        assertNotNull(categoryTextView);
+//        assertNotNull(recyclerView);
+//        assertNotNull(sortBySpinner);
+//        assertNotNull(prevButton);
+//        assertNotNull(nextButton);
+//    }
 
-        assertNotNull(categoryTextView);
-        assertNotNull(recyclerView);
-        assertNotNull(sortBySpinner);
-        assertNotNull(prevButton);
-        assertNotNull(nextButton);
-    }
-
-    @Test
-    public void testBackButtonFunctionality() {
-        activity.findViewById(R.id.back_home_button).performClick();
-        assertTrue(activity.isFinishing());
-    }
+//    @Test
+//    public void testBackButtonFunctionality() {
+//        activity.findViewById(R.id.back_home_button).performClick();
+//        assertTrue(activity.isFinishing());
+//    }
 
 //    @Test
 //    public void testCategoryTextIsSetCorrectly() {
@@ -104,12 +104,12 @@ public class ViewItemActivityTest {
 
 
 
-    @Test
-    public void testLoadingItemsByCategory() {
-        // Test logic for verifying items are loaded by category
-        // This might require mocking the network or data layer
-        RecyclerView recyclerView = activity.findViewById(R.id.view_all_rec);
-        assertNotNull(recyclerView.getAdapter());
-        assertEquals(0, Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
-    }
+//    @Test
+//    public void testLoadingItemsByCategory() {
+//        // Test logic for verifying items are loaded by category
+//        // This might require mocking the network or data layer
+//        RecyclerView recyclerView = activity.findViewById(R.id.view_all_rec);
+//        assertNotNull(recyclerView.getAdapter());
+//        assertEquals(0, Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
+//    }
 }

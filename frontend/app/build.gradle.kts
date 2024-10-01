@@ -1,20 +1,40 @@
+
 import java.util.Properties
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+import java.util.Locale
+
 
 buildscript {
     repositories {
         google()
         mavenCentral()
+       // maven { url=uri("https://plugins.gradle.org/m2/") }
+//        maven { url=uri( "https://oss.sonatype.org/content/repositories/snapshots") }
+//        maven { url=uri( "https://plugins.gradle.org/m2/") }
     }
     dependencies {
         classpath("com.google.gms:google-services:4.3.10")
+        //classpath("com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0")
     }
 }
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    jacoco
+
 }
-apply(plugin = "com.google.gms.google-services") // Apply Google Services plugin here
+
+// Register the main JaCoCo task to later depend on the per-variant tasks
+val jacocoTestReport = tasks.register("jacocoTestReport")
+
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+
+}
 
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
@@ -24,14 +44,20 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+
+
+
+
 android {
+
 
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
-    }
 
+
+    }
 
 
 
@@ -133,6 +159,12 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -147,6 +179,56 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    applicationVariants.all {
+        val testTaskName = "test${this.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(
+            Locale.US) else it.toString() }}UnitTest"
+
+        val excludes = listOf(
+            // Android
+            "**/R.class",
+            "**/R\$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "android/**/*.*",
+            "**/*Binding.class",
+            "**/*Binding*.*",
+            "**/*Dao_Impl*.class",
+            "**/*Args.class",
+            "**/*Args.Builder.class",
+            "**/*Directions*.class",
+            "**/*Creator.class",
+            "**/*Builder.class"
+        )
+
+        val reportTask = tasks.register("jacoco${testTaskName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}Report", JacocoReport::class) {
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports for the ${testTaskName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }} build."
+            dependsOn(testTaskName)
+
+            reports {
+                xml.required.set(true)
+                html.required.set(true)
+            }
+
+            classDirectories.setFrom(
+                files(
+                    fileTree(javaCompileProvider.get().destinationDirectory) {
+                        exclude(excludes)
+                    },
+                    fileTree("$buildDir/tmp/kotlin-classes/${this.name}") {
+                        exclude(excludes)
+                    }
+                )
+            )
+
+            // Code underneath /src/{variant}/kotlin will also be picked up here
+            sourceDirectories.setFrom(sourceSets.flatMap { it.javaDirectories })
+            executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+        }
+
+        jacocoTestReport.dependsOn(reportTask)
+    }
 
 }
 
@@ -155,6 +237,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.ui.text.android)
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.12.2")
     implementation("com.github.yukuku:ambilwarna:2.0.1")
@@ -254,3 +337,4 @@ dependencies {
     implementation ("com.google.guava:guava:31.1-android")
 
 }
+
