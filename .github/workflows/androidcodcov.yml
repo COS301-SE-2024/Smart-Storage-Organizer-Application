@@ -2,54 +2,62 @@ name: Android CI with Codecov
 
 on:
   push:
-    branches:
-      - master
-      - development
+    branches: [development, master]
   pull_request:
-    branches:
-      - main
-      - development
+    branches: [development, master]
 
 jobs:
-  build:
+  run_tests:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout the code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: '11'
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17.0.11'
+          distribution: 'adopt'
 
-    - name: Cache Gradle
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle
+      - name: Update package list
+        run: sudo apt-get update
 
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Install dos2unix
+        run: sudo apt install dos2unix
 
-    - name: Run Unit Tests
-      run: ./gradlew testDebugUnitTest
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 31
+          build-tools: 31.0.0
 
-    - name: Upload test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: junit-results
-        path: app/build/test-results/testDebugUnitTest
+      - name: Make gradlew executable
+        working-directory: frontend
+        run: chmod +x ./gradlew
 
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./app/build/reports/jacoco/testDebugUnitTestReport/testDebugUnitTestReport.xml
-        flags: unittests
-        fail_ci_if_error: true
+      - name: Convert line endings
+        working-directory: frontend
+        run: dos2unix gradlew
+
+      - name: Set up local.properties
+        working-directory: frontend
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          
+      - name: Run Tests
+        working-directory: frontend         
+        run: ./gradlew test
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with: 
+          name: index.html
+          path: frontend/app/build/reports/tests/testDebugUnitTest/index.html
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: frontend/app/build/reports/jacoco/testDebugUnitTestReport/testDebugUnitTestReport.xml
+          flags: unittests
+          fail_ci_if_error: true
