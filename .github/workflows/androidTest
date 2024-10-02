@@ -1,0 +1,56 @@
+name: Android Test
+
+on:
+  push:
+    branches: [development, master]
+  pull_request:
+    branches: [development, master]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17.0.11'
+          distribution: 'adopt'
+
+      - name: Update package list
+        run: sudo apt-get update
+
+      - name: Install dos2unix
+        run: sudo apt install dos2unix
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 31
+          build-tools: 31.0.0
+
+      - name: Make gradlew executable
+        working-directory: frontend
+        run: chmod +x ./gradlew
+
+      - name: Convert line endings
+        working-directory: frontend
+        run: dos2unix gradlew
+
+      - name: Set up local.properties
+        working-directory: frontend
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+
+      - name: Run Tests
+        working-directory: frontend         
+        run: ./gradlew test
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: frontend/app/build/reports/jacoco/testDebugUnitTestCoverageReport/testDebugUnitTestCoverageReport.xml
+          flags: unittests
+          name: Android Unit Tests Coverage

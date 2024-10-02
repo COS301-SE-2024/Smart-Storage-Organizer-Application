@@ -189,7 +189,7 @@ public class AddOrganizationActivity extends BaseActivity {
         }
     }
 
-    private void moveToVerificationActivity(String email, String password) {
+    void moveToVerificationActivity(String email, String password) {
         runOnUiThread(() -> {
             Intent intent = new Intent(AddOrganizationActivity.this, EmailVerificationActivity.class);
             intent.putExtra("email", email);
@@ -202,7 +202,7 @@ public class AddOrganizationActivity extends BaseActivity {
         });
     }
 
-    private void handleSignUpFailure(String email, String password, Exception error) {
+    void handleSignUpFailure(String email, String password, Exception error) {
         runOnUiThread(() -> {
             if (error.toString().toLowerCase(Locale.ROOT).contains("already exists in the system")) {
                 Toast.makeText(this, "User already exists", Toast.LENGTH_SHORT).show();

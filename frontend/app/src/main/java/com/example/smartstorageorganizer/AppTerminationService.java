@@ -88,7 +88,7 @@ public class AppTerminationService extends Service {
         stopSelf();
     }
 
-    private void sendAppExitApi(String email, String name, String surname, String type, String organization_id, String time) {
+    void sendAppExitApi(String email, String name, String surname, String type, String organization_id, String time) {
         Log.d("AppTerminationService", "Sending API for app exit time");
 
         String json = "{"
@@ -156,7 +156,7 @@ public class AppTerminationService extends Service {
         return null;  // We don't need to bind this service
     }
 
-    private void createNotificationChannel() {
+    void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
