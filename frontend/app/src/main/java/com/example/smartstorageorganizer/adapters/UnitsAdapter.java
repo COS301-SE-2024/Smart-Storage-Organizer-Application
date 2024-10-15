@@ -238,7 +238,7 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         TextView message = dialogView.findViewById(R.id.textView3);
         if(!Objects.equals(text, "")){
             message.setText(text);
-            closeButton.setText("Try Again");
+            closeButton.setText("Close");
         }
         else {
             message.setText("The arrangement could not be generated because one or more items are missing essential dimensions (width, depth, height, or weight). All items must have complete dimensions in order for the system to create an optimized arrangement. Please ensure that each item has the necessary dimensions and try again.");
@@ -246,10 +246,10 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
         }
         closeButton.setOnClickListener(v -> {
             alertDialog.dismiss();
-            if(!Objects.equals(text, "")){
-                progressDialog.dismiss();
-                generateProcess(unit_id, unit_name, holder, progressDialog);
-            }
+//            if(!Objects.equals(text, "")){
+//                progressDialog.dismiss();
+//                generateProcess(unit_id, unit_name, holder, progressDialog);
+//            }
         });
 
 //        alertDialog.setCanceledOnTouchOutside(false);
@@ -266,8 +266,8 @@ public class UnitsAdapter extends RecyclerView.Adapter<UnitsAdapter.UnitViewHold
                     progressDialog.dismiss();
 //                    mainLayout.setVisibility(View.VISIBLE);
 //                    arrangementLoader.setVisibility(View.GONE);
-                    showArrangementDialog("There was an error Generating arrangement", unit_id, unit_name, holder, progressDialog);
-                    generateProcess(unit_id, unit_name, holder, progressDialog);
+                    showArrangementDialog("There was an error generating the arrangement. Please ensure the unit is not empty and contains items before trying again.", unit_id, unit_name, holder, progressDialog);
+//                    generateProcess(unit_id, unit_name, holder, progressDialog);
                 } else {
 //                    progressDialog.dismiss();
 //                    mainLayout.setVisibility(View.VISIBLE);
